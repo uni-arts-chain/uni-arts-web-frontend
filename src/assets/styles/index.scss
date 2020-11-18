@@ -1,0 +1,28 @@
+* {
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    list-style: none;
+    font-family: "PingFang SC Regular, PingFang SC Regular-Regular";
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: "Broadway";
+    src: url("~@/assets/fonts/bro.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,
+body{
+    height: 100%;
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+}

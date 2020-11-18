@@ -1,0 +1,51 @@
+/** * Created by Lay Hunt on 2020-11-17 18:22:12. */
+<template>
+    <nav>
+        <div class="container">
+            <div class="logo">Uniarts</div>
+            <ul class="link-group">
+                <li><router-link to="/">Homepage</router-link></li>
+                <li><router-link to="/market">Market</router-link></li>
+                <li><router-link to="/artist">Artist</router-link></li>
+                <li><router-link to="/account">Account</router-link></li>
+            </ul>
+        </div>
+    </nav>
+</template>
+
+<script>
+export default {
+    name: "navbar",
+};
+</script>
+
+<style lang="scss" scoped>
+nav {
+    height: 91px;
+}
+.logo {
+    font-family: "Broadway";
+    font-size: 34px;
+    font-weight: 400;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 33px;
+    padding-bottom: 33px;
+    height: 100%;
+}
+
+ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    li {
+        padding-left: 23px;
+        padding-right: 23px;
+        font-size: 16px;
+    }
+}
+</style>
