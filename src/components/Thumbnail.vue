@@ -1,39 +1,11 @@
 /** * Created by Lay Hunt on 2020-11-19 11:37:45. */
 <template>
-    <div class="thumbnail">
-        <div class="item">
+    <div class="thumbnail" :class="{ group: isGroup }">
+        <div class="item" v-for="(v, i) in list" :key="i">
             <div class="img-container">
-                <img :src="list[0]" />
+                <img :src="list[i]" />
             </div>
             <h5 class="title">Kevin Barrowman</h5>
-            <div class="desc">Passionate Latin</div>
-            <div class="address-label">
-                Certificate Address:
-                <span class="address"
-                    >0xsbd354sdf44sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf</span
-                >
-            </div>
-            <div class="price">950 UART</div>
-        </div>
-        <div class="item">
-            <div class="img-container">
-                <img :src="list[1]" />
-            </div>
-            <h5 class="title">Mariah Bareilles</h5>
-            <div class="desc">Passionate Latin</div>
-            <div class="address-label">
-                Certificate Address:
-                <span class="address"
-                    >0xsbd354sdf44sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf</span
-                >
-            </div>
-            <div class="price">950 UART</div>
-        </div>
-        <div class="item">
-            <div class="img-container">
-                <img :src="list[2]" />
-            </div>
-            <h5 class="title">Tom Cage</h5>
             <div class="desc">Passionate Latin</div>
             <div class="address-label">
                 Certificate Address:
@@ -53,6 +25,10 @@ export default {
             type: Array,
             default: () => [],
         },
+        isGroup: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {};
@@ -63,12 +39,17 @@ export default {
 .thumbnail {
     overflow: hidden;
 }
+.thumbnail.group {
+    .item {
+        margin-bottom: 115px;
+    }
+}
 .item {
     float: left;
     width: 30%;
     margin-right: 5%;
 }
-.item:last-child {
+.item:nth-child(3n) {
     margin-right: 0;
 }
 
