@@ -2,7 +2,7 @@
 <template>
     <nav>
         <div class="container">
-            <div class="logo">Uniarts</div>
+            <div class="logo" @click="goHome">Uniarts</div>
             <ul class="link-group">
                 <li><router-link to="/">Homepage</router-link></li>
                 <li><router-link to="/market">Market</router-link></li>
@@ -16,6 +16,13 @@
 <script>
 export default {
     name: "navbar",
+    methods: {
+        goHome() {
+            if (this.$route.path !== "/") {
+                this.$router.push("/");
+            }
+        },
+    },
 };
 </script>
 
@@ -27,6 +34,7 @@ nav {
     font-family: "Broadway";
     font-size: 34px;
     font-weight: 400;
+    cursor: pointer;
 }
 
 .container {
