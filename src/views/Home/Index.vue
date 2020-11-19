@@ -68,7 +68,7 @@
         <div class="authors container">
             <h2 class="title">Popular authors</h2>
             <div class="authors-body">
-                <AuthorList :list="authorList"></AuthorList>
+                <ArtGroupList :list="authorList"></ArtGroupList>
                 <button class="more-button">more authors</button>
             </div>
         </div>
@@ -78,7 +78,7 @@
 <script>
 import Carousel from "./Carousel";
 import Thumbnail from "@/components/Thumbnail";
-import AuthorList from "@/components/AuthorList";
+import ArtGroupList from "@/components/ArtGroupList";
 import worklist1 from "@/assets/images/temp/worklist1.jpg";
 import worklist2 from "@/assets/images/temp/worklist2.jpg";
 import worklist3 from "@/assets/images/temp/worklist3.jpg";
@@ -90,7 +90,7 @@ import avatar2 from "@/assets/images/temp/avatar2.webp";
 import avatar3 from "@/assets/images/temp/avatar3.webp";
 export default {
     name: "index",
-    components: { Carousel, Thumbnail, AuthorList },
+    components: { Carousel, Thumbnail, ArtGroupList },
     data() {
         return {
             workList: [worklist1, worklist2, worklist3],

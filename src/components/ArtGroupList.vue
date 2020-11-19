@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-11-19 15:01:35. */
 <template>
-    <div class="authorlist">
+    <div class="artgroupList">
         <div class="card" v-for="(v, k) in list" :key="k">
             <img class="avatar" :src="v" />
             <div class="name">Noah Schnapp</div>
@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-    name: "authorlist",
+    name: "artgroupList",
     props: {
         list: {
             type: Array,
@@ -23,7 +23,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.authorlist {
+.artgroupList {
     display: flex;
     justify-content: space-between;
 }

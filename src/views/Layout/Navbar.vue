@@ -55,5 +55,8 @@ ul {
         padding-right: 23px;
         font-size: 16px;
     }
+    li:last-child {
+        padding-right: 0px;
+    }
 }
 </style>
