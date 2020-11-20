@@ -3,7 +3,10 @@
     <div class="artist">
         <div class="profile">
             <div class="avatar">
-                <img src="@/assets/images/temp/avatar1.webp" />
+                <img
+                    @click="goDetail(1)"
+                    src="@/assets/images/temp/avatar1.webp"
+                />
                 <div class="info">
                     <span class="name">Noah Schnapp</span>
                     <span class="desc"
@@ -34,6 +37,11 @@ export default {
     data() {
         return {};
     },
+    methods: {
+        goDetail(id) {
+            this.$router.push("/artist-detail/" + id);
+        },
+    },
 };
 </script>
 <style lang="scss" scoped>
@@ -47,6 +55,7 @@ export default {
         height: 95px;
         border: 4px solid #020202;
         border-radius: 50%;
+        cursor: pointer;
     }
 }
 .avatar {

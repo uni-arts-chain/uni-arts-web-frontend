@@ -5,9 +5,12 @@
             <div class="header">
                 <div class="bg"></div>
                 <div class="profile">
-                    <div class="avatar-container">
+                    <router-link
+                        class="avatar-container"
+                        :to="`/artist-detail/${1}`"
+                    >
                         <img src="@/assets/images/temp/fashion.jpg" />
-                    </div>
+                    </router-link>
                     <div class="info">
                         <div class="name">CATHERINE QIN</div>
                         <div class="intro">
@@ -43,6 +46,7 @@ export default {
             list: [recommendPage1, recommendPage2, recommendPage3],
         };
     },
+    methods: {},
 };
 </script>
 
@@ -72,6 +76,7 @@ export default {
             overflow: hidden;
             width: 325px;
             height: 430px;
+            cursor: pointer;
         }
         .avatar-container > img {
             position: absolute;
