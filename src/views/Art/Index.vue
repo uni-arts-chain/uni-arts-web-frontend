@@ -18,7 +18,56 @@
                         <i class="qr"></i>
                     </div>
                     <div class="signature">Number of signatures : 3</div>
-                    <button class="buy">BUY NOW</button>
+                    <button class="buy" @click="buy">BUY NOW</button>
+                </div>
+            </div>
+            <div class="bid-history">
+                <div class="title">Bid History</div>
+                <div class="content">
+                    <div class="table">
+                        <div class="tr">
+                            <div class="td username">13****20</div>
+                            <div class="td date">2020.08.06 15:32:26</div>
+                            <div class="td price">Lead 1500 UART</div>
+                            <div class="td address">
+                                0x1342423423423423abcd8493ac98ac89832ddba6dc
+                            </div>
+                        </div>
+                        <div class="tr">
+                            <div class="td username">13****20</div>
+                            <div class="td date">2020.08.06 15:32:26</div>
+                            <div class="td price">Lead 1500 UART</div>
+                            <div class="td address">
+                                0x1342423423423423abcd8493ac98ac89832ddba6dc
+                            </div>
+                        </div>
+                        <div class="tr">
+                            <div class="td username">13****20</div>
+                            <div class="td date">2020.08.06 15:32:26</div>
+                            <div class="td price">Lead 1500 UART</div>
+                            <div class="td address">
+                                0x1342423423423423abcd8493ac98ac89832ddba6dc
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bid-info">
+                        <div class="item">
+                            <span class="label">Starting Price</span>
+                            <span class="value">1000 ART</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">Price Increase Range</span>
+                            <span class="value">1000 ART</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">Start Time</span>
+                            <span class="value">08.05 12:00</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">End Time</span>
+                            <span class="value">08.08 12:00</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="author-info">
@@ -77,14 +126,63 @@
             </div>
             <div class="details">
                 <div class="title">Artwork Details</div>
+                <div class="comment-content"></div>
             </div>
         </div>
+
+        <el-dialog
+            class="dialog"
+            :modal="false"
+            :append-to-body="true"
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            top="0"
+            :visible.sync="dialogVisible"
+            :before-close="handleClose"
+        >
+            <div class="dialog-content">
+                <div class="title">FIRM BID</div>
+                <div class="price">
+                    Current Price: <span class="number">1500 UART</span>
+                </div>
+                <div class="desc">
+                    You have bid <span>1100 ART</span>, at least you need to
+                    increase the price by <span>200 ART</span>.
+                </div>
+                <div class="input-body">
+                    <input type="number" />
+                    <span class="code">ART</span>
+                </div>
+                <div class="note">
+                    If the auction is not successful, the bid amount will be
+                    returned after the auction
+                </div>
+                <button @click="submit">BID NOW</button>
+            </div>
+        </el-dialog>
     </div>
 </template>
-
 <script>
+import { Dialog } from "element-ui";
 export default {
     name: "art",
+    components: { [Dialog.name]: Dialog },
+    data() {
+        return {
+            dialogVisible: false,
+        };
+    },
+    methods: {
+        handleClose() {
+            this.dialogVisible = false;
+        },
+        buy() {
+            this.dialogVisible = true;
+        },
+        submit() {
+            this.dialogVisible = false;
+        },
+    },
 };
 </script>
 
@@ -210,7 +308,8 @@ export default {
 .author-info,
 .infomation,
 .comments,
-.details {
+.details,
+.bid-history {
     margin-bottom: 180px;
     > .title {
         font-size: 48px;
@@ -351,6 +450,156 @@ export default {
         text-align: left;
         line-height: 36px;
         letter-spacing: 1px;
+    }
+}
+
+.details {
+    .comment-content {
+        min-height: 300px;
+    }
+}
+
+.bid-history {
+    .content {
+        .table {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 80px;
+        }
+        .tr {
+            border-bottom: 1px solid #020202;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: center;
+            letter-spacing: 0px;
+            padding: 30px 16px;
+        }
+        .tr:last-child {
+            border-bottom: none;
+        }
+        .address {
+            max-width: 240px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .bid-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            .item {
+                background-color: #eee;
+                padding: 16px 0px;
+                width: 540px;
+                font-size: 18px;
+                font-weight: 400;
+                text-align: center;
+                letter-spacing: 0px;
+                margin-bottom: 37px;
+                overflow: hidden;
+                .label {
+                    float: left;
+                    display: block;
+                    width: 60%;
+                    text-align: center;
+                }
+                .value {
+                    float: left;
+                    display: block;
+                    width: 40%;
+                    text-align: left;
+                }
+            }
+        }
+    }
+}
+
+.dialog {
+    ::v-deep .el-dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        width: 780px;
+        height: 586px;
+        background: #ffffff;
+        box-shadow: 0px 5px 31px 0px rgba(135, 135, 135, 0.73);
+        padding: 10px 100px 66px;
+    }
+    ::v-deep .el-dialog .el-dialog__header {
+        padding: 0;
+    }
+    ::v-deep .el-dialog .el-dialog__close {
+        font-size: 24px;
+    }
+    ::v-deep .el-dialog .el-dialog__headerbtn:hover .el-dialog__close {
+        color: #020202;
+    }
+    ::v-deep .el-dialog .el-dialog__close:hover {
+        color: #020202;
+    }
+    .dialog-content {
+        font-size: 26px;
+        text-align: left;
+        letter-spacing: 0px;
+        text-align: center;
+        color: #020202;
+        .title {
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        .price {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 25px;
+        }
+        .number {
+            font-size: 24px;
+            color: #c61e1e;
+        }
+        .desc {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 37px;
+        }
+        .input-body {
+            position: relative;
+            margin-bottom: 37px;
+            input {
+                width: 100%;
+                height: 75px;
+                font-size: 26px;
+                border: 2px solid #020202;
+                padding: 14px 34px;
+                text-align: center;
+            }
+            .code {
+                font-size: 26px;
+                font-weight: 600;
+                text-align: left;
+                letter-spacing: 0px;
+                position: absolute;
+                right: 34px;
+                top: 19px;
+            }
+        }
+        .note {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+        > button {
+            background: #020202;
+            width: 307px;
+            height: 75px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;
+            letter-spacing: 0px;
+            cursor: pointer;
+        }
     }
 }
 </style>
