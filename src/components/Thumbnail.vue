@@ -2,9 +2,9 @@
 <template>
     <div class="thumbnail" :class="{ group: isGroup }">
         <div class="item" v-for="(v, i) in list" :key="i">
-            <div class="img-container">
+            <router-link :to="`/art/${1}`" class="img-container">
                 <img :src="list[i]" />
-            </div>
+            </router-link>
             <h5 class="title">Kevin Barrowman</h5>
             <div class="desc">Passionate Latin</div>
             <div class="address-label">
@@ -54,6 +54,7 @@ export default {
 }
 
 .img-container {
+    display: block;
     width: 100%;
     height: 270px;
     overflow: hidden;

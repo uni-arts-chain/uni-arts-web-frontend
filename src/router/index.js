@@ -26,6 +26,12 @@ const routes = [
             ),
     },
     {
+        path: "/art/:id",
+        name: "ArtDetail",
+        component: () =>
+            import(/* webpackChunkName: "art" */ "@/views/Art/Index.vue"),
+    },
+    {
         path: "/account",
         name: "Account",
         component: () =>
