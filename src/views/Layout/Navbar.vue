@@ -1,6 +1,7 @@
 /** * Created by Lay Hunt on 2020-11-17 18:22:12. */
 <template>
     <nav>
+        <Alert />
         <div class="container">
             <div class="logo" @click="goHome">Uniarts</div>
             <ul class="link-group">
@@ -14,8 +15,10 @@
 </template>
 
 <script>
+import Alert from "@/components/Alert";
 export default {
     name: "navbar",
+    components: { Alert },
     methods: {
         goHome() {
             if (this.$route.path !== "/") {
@@ -28,7 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 nav {
-    height: 91px;
+    min-height: 91px;
 }
 .logo {
     font-family: "Broadway";
@@ -43,7 +46,7 @@ nav {
     justify-content: space-between;
     padding-top: 33px;
     padding-bottom: 33px;
-    height: 100%;
+    height: 91px;
 }
 
 ul {

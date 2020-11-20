@@ -130,16 +130,7 @@
             </div>
         </div>
 
-        <el-dialog
-            class="dialog"
-            :modal="false"
-            :append-to-body="true"
-            :close-on-click-modal="false"
-            :close-on-press-escape="false"
-            top="0"
-            :visible.sync="dialogVisible"
-            :before-close="handleClose"
-        >
+        <Dialog :visible.sync="dialogVisible" :close="handleClose">
             <div class="dialog-content">
                 <div class="title">FIRM BID</div>
                 <div class="price">
@@ -159,14 +150,14 @@
                 </div>
                 <button @click="submit">BID NOW</button>
             </div>
-        </el-dialog>
+        </Dialog>
     </div>
 </template>
 <script>
-import { Dialog } from "element-ui";
+import Dialog from "@/components/Dialog";
 export default {
     name: "art",
-    components: { [Dialog.name]: Dialog },
+    components: { Dialog },
     data() {
         return {
             dialogVisible: false,
@@ -516,90 +507,65 @@ export default {
     }
 }
 
-.dialog {
-    ::v-deep .el-dialog {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        width: 780px;
-        height: 586px;
-        background: #ffffff;
-        box-shadow: 0px 5px 31px 0px rgba(135, 135, 135, 0.73);
-        padding: 10px 100px 66px;
+.dialog-content {
+    font-size: 26px;
+    text-align: left;
+    letter-spacing: 0px;
+    text-align: center;
+    color: #020202;
+    .title {
+        font-weight: 600;
+        margin-bottom: 30px;
     }
-    ::v-deep .el-dialog .el-dialog__header {
-        padding: 0;
+    .price {
+        font-size: 20px;
+        font-weight: 400;
+        margin-bottom: 25px;
     }
-    ::v-deep .el-dialog .el-dialog__close {
+    .number {
         font-size: 24px;
+        color: #c61e1e;
     }
-    ::v-deep .el-dialog .el-dialog__headerbtn:hover .el-dialog__close {
-        color: #020202;
+    .desc {
+        font-size: 20px;
+        font-weight: 400;
+        margin-bottom: 37px;
     }
-    ::v-deep .el-dialog .el-dialog__close:hover {
-        color: #020202;
-    }
-    .dialog-content {
-        font-size: 26px;
-        text-align: left;
-        letter-spacing: 0px;
-        text-align: center;
-        color: #020202;
-        .title {
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-        .price {
-            font-size: 20px;
-            font-weight: 400;
-            margin-bottom: 25px;
-        }
-        .number {
-            font-size: 24px;
-            color: #c61e1e;
-        }
-        .desc {
-            font-size: 20px;
-            font-weight: 400;
-            margin-bottom: 37px;
-        }
-        .input-body {
-            position: relative;
-            margin-bottom: 37px;
-            input {
-                width: 100%;
-                height: 75px;
-                font-size: 26px;
-                border: 2px solid #020202;
-                padding: 14px 34px;
-                text-align: center;
-            }
-            .code {
-                font-size: 26px;
-                font-weight: 600;
-                text-align: left;
-                letter-spacing: 0px;
-                position: absolute;
-                right: 34px;
-                top: 19px;
-            }
-        }
-        .note {
-            font-size: 20px;
-            margin-bottom: 25px;
-        }
-        > button {
-            background: #020202;
-            width: 307px;
+    .input-body {
+        position: relative;
+        margin-bottom: 37px;
+        input {
+            width: 100%;
             height: 75px;
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 26px;
+            border: 2px solid #020202;
+            padding: 14px 34px;
             text-align: center;
-            color: #ffffff;
-            letter-spacing: 0px;
-            cursor: pointer;
         }
+        .code {
+            font-size: 26px;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0px;
+            position: absolute;
+            right: 34px;
+            top: 19px;
+        }
+    }
+    .note {
+        font-size: 20px;
+        margin-bottom: 25px;
+    }
+    > button {
+        background: #020202;
+        width: 307px;
+        height: 75px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        color: #ffffff;
+        letter-spacing: 0px;
+        cursor: pointer;
     }
 }
 </style>
