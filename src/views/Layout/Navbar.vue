@@ -1,7 +1,6 @@
 /** * Created by Lay Hunt on 2020-11-17 18:22:12. */
 <template>
     <nav>
-        <Alert />
         <div class="container">
             <div class="logo" @click="goHome">Uniarts</div>
             <ul class="link-group">
@@ -15,10 +14,8 @@
 </template>
 
 <script>
-import Alert from "@/components/Alert";
 export default {
     name: "navbar",
-    components: { Alert },
     methods: {
         goHome() {
             if (this.$route.path !== "/") {

@@ -12,18 +12,24 @@
 import Navbar from "@/views/Layout/Navbar.vue";
 import Footer from "@/views/Layout/Footer.vue";
 import { web3Enable } from "@polkadot/extension-dapp";
+
 export default {
     components: { Navbar, Footer },
     name: "App",
     data() {
         return { visible: false };
     },
-    mounted() {
-        web3Enable("Uniarts").then((res) => {
-            if (res.length <= 0) {
-                this.$unidDialog.show();
-            }
-        });
+    created() {
+        this.author();
+    },
+    methods: {
+        author() {
+            web3Enable("Uniarts").then((res) => {
+                if (res.length <= 0) {
+                    this.$uniAlert.show("NeedPlugin");
+                }
+            });
+        },
     },
 };
 </script>

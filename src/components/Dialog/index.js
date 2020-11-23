@@ -1,4 +1,4 @@
-import DialogComponent from "@/components/Dialog";
+import DialogComponent from "./Dialog";
 import Vue from "vue";
 
 const DialogComponentConstructor = Vue.extend(DialogComponent);

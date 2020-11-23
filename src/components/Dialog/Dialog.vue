@@ -17,18 +17,13 @@
         :before-close="handleClose"
         @closed="closed"
     >
-        <div class="content" v-if="displayType == 'PluginError'">
-            <img src="@/assets/images/polkadot-js-logo.jpg" alt="" />
-            <div>
-                Before you start using this application, please install the
-                <span>Polkadot.js</span> browser plugin
-            </div>
-        </div>
-        <slot v-else></slot>
+        <!-- <NeedPlugin v-if="displayType == 'PluginError'"></NeedPlugin> -->
+        <slot></slot>
     </el-dialog>
 </template>
 <script>
 import { Dialog } from "element-ui";
+
 export default {
     components: { [Dialog.name]: Dialog },
     name: "uni-dialog",
@@ -134,19 +129,6 @@ export default {
         display: flex;
         align-items: center;
         padding: 20px 20px;
-    }
-    .content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        > img {
-            width: 90%;
-            margin-bottom: 20px;
-        }
-        > div > span {
-            font-size: 20px;
-            color: #fa8903;
-        }
     }
 }
 </style>

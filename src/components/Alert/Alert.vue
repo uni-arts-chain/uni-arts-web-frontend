@@ -1,13 +1,24 @@
 /** * Created by Lay Hunt on 2020-11-20 15:50:20. */
 <template>
-    <div class="alert" v-if="isShow">
-        <div class="alert-content" v-html="message || defaultMessage"></div>
+    <div class="uni__alert">
+        <div
+            v-if="noteType === 'NeedBrowser'"
+            class="alert-content"
+            v-html="defaultMessage"
+        ></div>
+        <NeedPlugin
+            v-else-if="noteType === 'NeedPlugin'"
+            @author="author"
+        ></NeedPlugin>
+        <div v-else class="alert-content" v-html="message"></div>
     </div>
 </template>
 <script>
-import UAParser from "ua-parser-js";
+import NeedPlugin from "@/components/NeedPlugin";
+
 export default {
     name: "alert",
+    components: { NeedPlugin },
     props: {
         message: {
             type: String,
@@ -16,18 +27,18 @@ export default {
     },
     data() {
         return {
-            browser: new UAParser(window.userAgent),
-            isShow: false,
+            noteType: "",
+            author: () => {},
             defaultMessage:
                 "For a better experience, please use <span>Chrome</span> or <span>Firefox</span>",
         };
     },
     created() {
         if (
-            this.browser.getBrowser().name !== "Chrome" &&
-            this.browser.getBrowser().name !== "Firefox"
+            this.$browser.name !== "Chrome" &&
+            this.$browser.name !== "Firefox"
         ) {
-            this.isShow = true;
+            this.noteType = "NeedBrowser";
         }
     },
 };

@@ -1,10 +1,29 @@
-// const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+
+function resolve(dir) {
+    return path.join(__dirname, dir);
+}
 module.exports = {
     chainWebpack: (config) => {
         config.plugin("html").tap((options) => {
             options[0].title = process.env.VUE_APP_NAME;
             return options;
         });
+        config.module
+            .rule("svg")
+            .exclude.add(resolve("src/assets/icons"))
+            .end();
+        config.module
+            .rule("svgSpriteLoader")
+            .test(/\.svg$/)
+            .include.add(resolve("src/assets/icons"))
+            .end()
+            .use("svg-sprite-loader")
+            .loader("svg-sprite-loader")
+            .options({
+                symbolId: "icon-[name]",
+            })
+            .end();
     },
     devServer: {
         port: 5100,
