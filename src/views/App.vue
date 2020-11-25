@@ -17,10 +17,12 @@ export default {
     components: { Navbar, Footer },
     name: "App",
     data() {
-        return { visible: false };
+        return {};
     },
     created() {
-        this.author();
+        this.$rpc.api.isReady.then((res) => {
+            console.log(res.genesisHash.toHex());
+        });
     },
     methods: {
         author() {

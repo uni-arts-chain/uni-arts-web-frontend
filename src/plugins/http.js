@@ -3,7 +3,7 @@ import _assign from "lodash/assign";
 import API from "@/api/index";
 
 import { assert } from "@polkadot/util";
-import { API_DEFAULT_CONFIG } from "@/config";
+import { HTTP_DEFAULT_CONFIG } from "@/config";
 
 function _normoalize(options, data) {
     if (options.method === "POST") {
@@ -85,5 +85,5 @@ export class MakeApi {
 
 export default new MakeApi({
     apiModules: API,
-    config: API_DEFAULT_CONFIG,
+    config: HTTP_DEFAULT_CONFIG,
 });

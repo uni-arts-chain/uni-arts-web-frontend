@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_DEFAULT_CONFIG } from "@/config/index";
+import { HTTP_DEFAULT_CONFIG } from "@/config/index";
 import {
     requestSuccessFunc,
     requestFailFunc,
@@ -7,7 +7,7 @@ import {
     responseFailFunc,
 } from "@/interceptors/axios";
 
-const axiosInstance = axios.create(API_DEFAULT_CONFIG);
+const axiosInstance = axios.create(HTTP_DEFAULT_CONFIG);
 
 axiosInstance.interceptors.request.use(requestSuccessFunc, requestFailFunc);
 
