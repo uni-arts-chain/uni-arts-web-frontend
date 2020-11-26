@@ -1,24 +1,26 @@
 /** * Created by Lay Hunt on 2020-11-20 15:50:20. */
 <template>
     <div class="uni__alert">
-        <div
-            v-if="noteType === 'NeedBrowser'"
-            class="alert-content"
-            v-html="defaultMessage"
-        ></div>
-        <NeedPlugin
-            v-else-if="noteType === 'NeedPlugin'"
-            @author="author"
-        ></NeedPlugin>
+        <div v-if="noteType === 'NeedBrowser'" class="alert-content">
+            For a better experience, please use
+            <span>Chrome</span> or
+            <span>Firefox</span>
+        </div>
+        <div v-else-if="noteType === 'NeedPlugin'" class="need-plugin">
+            <div>
+                Please authorize the application or install
+                <a target="_blank" :href="pluginUrl()"
+                    >polkadot{.js} extension</a
+                >
+            </div>
+        </div>
         <div v-else class="alert-content" v-html="message"></div>
     </div>
 </template>
 <script>
-import NeedPlugin from "@/components/NeedPlugin";
-
+import Detect from "@/plugins/detect";
 export default {
     name: "alert",
-    components: { NeedPlugin },
     props: {
         message: {
             type: String,
@@ -28,18 +30,24 @@ export default {
     data() {
         return {
             noteType: "",
-            author: () => {},
-            defaultMessage:
-                "For a better experience, please use <span>Chrome</span> or <span>Firefox</span>",
         };
     },
-    created() {
-        if (
-            this.$browser.name !== "Chrome" &&
-            this.$browser.name !== "Firefox"
-        ) {
-            this.noteType = "NeedBrowser";
-        }
+    created() {},
+    methods: {
+        pluginUrl() {
+            let url = "";
+            switch (Detect.browser.name) {
+                case "Chrome":
+                    url =
+                        "https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd";
+                    break;
+                case "Firefox":
+                    url =
+                        "https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/";
+                    break;
+            }
+            return url;
+        },
     },
 };
 </script>
@@ -57,10 +65,23 @@ export default {
     align-items: center;
     justify-content: center;
     transition: opacity 0.2s;
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
     ::v-deep > span {
         color: #c61e1e;
         padding: 0 6px;
+    }
+}
+.need-plugin,
+.need-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    > div > a,
+    .text {
+        cursor: pointer;
+        font-size: 18px;
+        color: #fa8903;
     }
 }
 </style>

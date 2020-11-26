@@ -3,16 +3,11 @@ import Vue from "vue";
 
 const AlertComponentConstructor = Vue.extend(AlertComponent);
 
-let authorCallBack = () => {};
-
-function show(type) {
+function show(type, callback) {
     let instance = new AlertComponentConstructor({
         el: document.createElement("div"),
     });
     type ? (instance.noteType = type) : "";
-    instance.author = () => {
-        authorCallBack();
-    };
     let currentEl = document.querySelector(
         `div.uni__alert[${AlertComponent._scopeId}]`
     );
@@ -23,9 +18,10 @@ function show(type) {
         instance.$el,
         window.document.body.children[0]
     );
+    callback && callback();
 }
 
-function close(visible) {
+function close(visible, callback) {
     if (!visible) {
         let el = document.querySelector(
             `div.uni__alert[${AlertComponent._scopeId}]`
@@ -33,15 +29,11 @@ function close(visible) {
         if (el) {
             window.document.body.removeChild(el);
         }
+        callback && callback();
     }
-}
-
-function setAuthor(callback) {
-    authorCallBack = callback;
 }
 
 export default {
     show,
     close,
-    setAuthor,
 };

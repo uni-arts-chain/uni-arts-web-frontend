@@ -11,7 +11,6 @@
 <script>
 import Navbar from "@/views/Layout/Navbar.vue";
 import Footer from "@/views/Layout/Footer.vue";
-import { web3Enable } from "@polkadot/extension-dapp";
 
 export default {
     components: { Navbar, Footer },
@@ -23,15 +22,6 @@ export default {
         this.$rpc.api.isReady.then((res) => {
             console.log(res.genesisHash.toHex());
         });
-    },
-    methods: {
-        author() {
-            web3Enable("Uniarts").then((res) => {
-                if (res.length <= 0) {
-                    this.$uniAlert.show("NeedPlugin");
-                }
-            });
-        },
     },
 };
 </script>
