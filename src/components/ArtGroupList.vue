@@ -2,7 +2,7 @@
 <template>
     <div class="artgroupList">
         <div class="card" v-for="(v, k) in list" :key="k">
-            <img class="avatar" :src="v" />
+            <img class="avatar" @click="detail" :src="v" />
             <div class="name">Noah Schnapp</div>
             <p>Shanghai people graduated from Stanford University</p>
         </div>
@@ -19,6 +19,11 @@ export default {
     },
     data() {
         return {};
+    },
+    methods: {
+        detail() {
+            this.$router.push("/artist-detail/1");
+        },
     },
 };
 </script>
@@ -40,6 +45,7 @@ export default {
         height: 120px;
         border: 4px solid black;
         border-radius: 50%;
+        cursor: pointer;
     }
     .name {
         margin-top: 50px;

@@ -21,7 +21,7 @@ export const ROUTER_DEFAULT_CONFIG = {
 };
 
 export const CHAIN_DEFAULT_CONFIG = {
-    url: "127.0.0.1",
+    url: "192.168.0.128",
     port: "9944",
     dappName: "Uni-Arts",
 };
