@@ -17,11 +17,11 @@ export function requestSuccessFunc(config) {
 }
 
 export function requestFailFunc(requestError) {
-    return Promise.reject(requestError);
+    return Promise.reject(requestError.data);
 }
 
 export function responseSuccessFunc(responseObj) {
-    return Promise.resolve(responseObj.data);
+    return Promise.resolve(responseObj.data.body);
 }
 
 export function responseFailFunc(responseError) {
@@ -33,9 +33,15 @@ export function responseFailFunc(responseError) {
             return Promise.reject(responseError.response.data);
         }
         if (responseError.response.status >= 500) {
-            return Promise.reject("服务器未知错误，请稍后重试");
+            return Promise.reject({
+                head: {
+                    code: 9999,
+                    msg: "Server unknown error, please try again later",
+                    detail: "",
+                },
+            });
         }
-        return Promise.reject(responseError);
+        return Promise.reject(responseError.response.data);
     } else {
         if (
             responseError.code === "ECONNABORTED" &&
@@ -52,7 +58,7 @@ export function responseFailFunc(responseError) {
             // 检查再次请求次数是否超过设定
             if (config.__retryCount >= config.retry) {
                 // 超时次数超过设定
-                console.log("请求超时，已多次尝试链接");
+                console.log("Request timed out, retried many times");
                 return Promise.reject(responseError);
             }
 

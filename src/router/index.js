@@ -34,9 +34,20 @@ const routes = [
     {
         path: "/account",
         name: "Account",
+        meta: {
+            needAuth: true,
+        },
         component: () =>
             import(
                 /* webpackChunkName: "account" */ "@/views/Account/Index.vue"
+            ),
+    },
+    {
+        path: "/login",
+        name: "Login",
+        component: () =>
+            import(
+                /* webpackChunkName: "account" */ "@/views/Session/Login.vue"
             ),
     },
 ];

@@ -10,7 +10,8 @@
   "dependencies": {
     "@polkadot/api": "^2.8.1",
     "@polkadot/extension-dapp": "^0.34.1",
-    "@polkadot/util": "^4.1.1",
+    "@polkadot/util": "^4.2.1",
+    "@polkadot/vue-identicon": "^0.62.1",
     "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.14.1",

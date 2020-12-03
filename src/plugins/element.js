@@ -1,3 +1,7 @@
-// import ElementPlus from "element-plus";
+import { Notification } from "element-ui";
 
-// export default { ElementPlus;
+export default {
+    install: (vue) => {
+        vue.prototype.$notify = Notification;
+    },
+};

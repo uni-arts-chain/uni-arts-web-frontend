@@ -11,6 +11,9 @@
                             Score:
                             <span class="score-number">0</span>
                             <span class="help">?</span>
+                            <div class="quit" @click="quit">
+                                <icon-svg icon-class="quit"></icon-svg>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,6 +97,7 @@
 </template>
 
 <script>
+import store from "@/store";
 export default {
     name: "index",
     data() {
@@ -101,6 +105,21 @@ export default {
             optionActive: "1",
             menuActive: "0",
         };
+    },
+    beforeRouteEnter(to, from, next) {
+        if (!store.state.user.info.token) {
+            next({
+                path: "/login",
+            });
+        } else {
+            next();
+        }
+    },
+    methods: {
+        quit() {
+            this.$store.dispatch("user/Quit");
+            this.$router.push("/");
+        },
     },
 };
 </script>
@@ -155,6 +174,12 @@ export default {
                 color: #1a7fc6;
                 border: 1px solid #1a7fc6;
                 border-radius: 50%;
+                cursor: pointer;
+            }
+            .quit {
+                margin-left: 15px;
+                display: flex;
+                font-size: 20px;
                 cursor: pointer;
             }
         }

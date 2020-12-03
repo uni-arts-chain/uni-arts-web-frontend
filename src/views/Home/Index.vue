@@ -98,6 +98,7 @@ export default {
             authorList: [avatar1, avatar2, avatar3],
         };
     },
+    mounted() {},
 };
 </script>
 

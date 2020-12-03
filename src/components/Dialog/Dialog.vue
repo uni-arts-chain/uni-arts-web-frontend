@@ -11,8 +11,9 @@
         :visible="dialogVisible"
         :append-to-body="true"
         :lock-scroll="true"
-        :close-on-click-modal="false"
+        :close-on-click-modal="clickModel"
         :close-on-press-escape="false"
+        :show-close="showClose"
         top="0"
         :before-close="handleClose"
         @closed="closed"
@@ -46,6 +47,14 @@ export default {
         type: {
             type: String,
             default: "medium",
+        },
+        clickModel: {
+            type: Boolean,
+            default: false,
+        },
+        showClose: {
+            type: Boolean,
+            default: true,
         },
     },
     watch: {
@@ -85,7 +94,7 @@ export default {
 .dialog {
     ::v-deep .el-dialog {
         position: absolute;
-        top: 50%;
+        top: 40%;
         left: 50%;
         transform: translateX(-50%) translateY(-50%);
         width: 780px;
@@ -105,6 +114,14 @@ export default {
     }
     ::v-deep .el-dialog .el-dialog__close:hover {
         color: #020202;
+    }
+}
+
+.dialog {
+    ::v-deep .el-dialog {
+        display: inline-block;
+        width: auto;
+        height: auto;
     }
 }
 

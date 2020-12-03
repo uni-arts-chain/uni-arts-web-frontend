@@ -7,7 +7,14 @@
                 <li><router-link to="/">Homepage</router-link></li>
                 <li><router-link to="/market">Market</router-link></li>
                 <li><router-link to="/artist">Artist</router-link></li>
-                <li><router-link to="/account">Account</router-link></li>
+                <li v-if="user.token" class="li-info">
+                    <router-link to="/account" class="info">{{
+                        user.address
+                    }}</router-link>
+                </li>
+                <li class="li-login" v-if="!user.token">
+                    <router-link to="/login" class="login">Login</router-link>
+                </li>
             </ul>
         </div>
     </nav>
@@ -16,6 +23,11 @@
 <script>
 export default {
     name: "navbar",
+    computed: {
+        user() {
+            return this.$store.state.user.info;
+        },
+    },
     methods: {
         goHome() {
             if (this.$route.path !== "/") {
@@ -58,5 +70,45 @@ ul {
     li:last-child {
         padding-right: 0px;
     }
+}
+
+.login,
+.register {
+    color: white;
+    background-color: #c61e1e;
+    border: 1px solid rgba(194, 96, 96, 0.537);
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    box-shadow: 0 0 10px 0px rgba(194, 96, 96, 0.07);
+    border-radius: 15px;
+    text-transform: uppercase;
+}
+
+.register {
+    background-color: #c61e1e;
+    color: white;
+}
+
+.li-login {
+    padding-right: 10px;
+}
+.li-register {
+    padding-left: 10px;
+}
+.li-info .info {
+    width: 200px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid rgba(194, 96, 96, 0.537);
+    border-radius: 15px;
+    color: #c61e1e;
+    padding: 4px 10px;
+    transition: all 0.3s ease;
+}
+.li-info .info:hover {
+    border-color: #c61e1e;
 }
 </style>

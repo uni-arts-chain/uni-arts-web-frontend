@@ -11,17 +11,39 @@
 <script>
 import Navbar from "@/views/Layout/Navbar.vue";
 import Footer from "@/views/Layout/Footer.vue";
+import extension from "@/plugins/extension";
+// import { stringToHex } from '@polkadot/util';
 
 export default {
     components: { Navbar, Footer },
     name: "App",
     data() {
-        return {};
+        return {
+            aa: 1,
+        };
     },
     created() {
-        this.$rpc.api.isReady.then((res) => {
-            console.log(res.genesisHash.toHex());
+        this.$rpc.api.isReady.then(() => {
+            console.log(this.$rpc.api.genesisHash.toHex());
         });
+        extension
+            .isReady()
+            .then(() => {
+                this.getAccounts();
+            })
+            .catch(() => {
+                console.log(1);
+            });
+        // this.$http.globalGetCurrencies({}).then((res) => {
+        //     console.log(res);
+        // });
+    },
+    methods: {
+        getAccounts() {
+            // extension.web3Accounts().then((res) => {
+            //     this.register(res[2]);
+            // });
+        },
     },
 };
 </script>

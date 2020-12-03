@@ -86,4 +86,4 @@ export class MakeApi {
 export default new MakeApi({
     apiModules: API,
     config: HTTP_DEFAULT_CONFIG,
-});
+}).request;
