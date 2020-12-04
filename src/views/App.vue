@@ -23,7 +23,9 @@ export default {
     },
     created() {
         this.$rpc.api.isReady.then(() => {
-            console.log(this.$rpc.api.genesisHash.toHex());
+            // console.log(this.$rpc.api.genesisHash.toHex());
+            // console.log(this.$rpc.api.runtimeMetadata);
+            this.initChainInfo();
         });
         extension
             .isReady()
@@ -39,6 +41,24 @@ export default {
             if (this.$store.state.user.info.token) {
                 this.$store.dispatch("user/GetInfo");
             }
+            this.$store.dispatch("art/GetCategories");
+            this.$store.dispatch("art/GetThemes");
+            this.$store.dispatch("art/GetMaterials");
+        },
+        async initChainInfo() {
+            let specVersion = await this.$rpc.api.runtimeVersion.specVersion;
+            let properties = await this.$rpc.api.rpc.system.properties();
+            let object = {};
+            [...properties].forEach((v) => {
+                let key_value = v.toString().split(",");
+                object[key_value[0]] = key_value[1];
+            });
+            this.$store.dispatch("global/SetChain", {
+                specVersion: specVersion.toString(),
+                ...object,
+            });
+            // let result = await this.$rpc.api.query.system.account(this.$store.state.user.info.address);
+            // console.log(result.data.free.toString());
         },
     },
 };

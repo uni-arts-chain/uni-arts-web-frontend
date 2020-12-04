@@ -4,24 +4,38 @@
         <div class="container">
             <div class="art-info">
                 <div class="img-container">
-                    <img src="@/assets/images/temp/art-detail1.webp" />
+                    <img
+                        :src="art.img_main_file1 ? art.img_main_file1.url : ''"
+                    />
                 </div>
                 <div class="info">
-                    <div class="title">Space travel</div>
-                    <div class="price">1500 UART</div>
-                    <p class="intro">Digital oil painting，100.0x100.0cm</p>
-                    <div class="block-title">BLOCKCHAIN INFOMATION</div>
-                    <div class="address">
-                        Certificate address :
+                    <div class="title">{{ art.name }}</div>
+                    <div class="price">{{ art.price }} UART</div>
+                    <p class="intro">
+                        {{ getMaterial(art.material_id).title }}，{{
+                            art.size_width
+                        }}
+                        x {{ art.size_length }}
+                    </p>
+                    <div class="block-title" style="min-height: 37px">
+                        <!-- BLOCKCHAIN INFOMATION -->
+                    </div>
+                    <div class="address" style="min-height: 28px">
+                        <!-- Certificate address :
                         0xsbd354sdf4241d35sdf4241d35sdf4241d35sdf4241d35sdf4241d35
                         <i class="copy"></i>
-                        <i class="qr"></i>
+                        <i class="qr"></i> -->
                     </div>
-                    <div class="signature">Number of signatures : 3</div>
-                    <button class="buy" @click="buy">BUY NOW</button>
+                    <div class="signature" style="min-height: 28px">
+                        <!-- Number of signatures : 3 -->
+                    </div>
+                    <button v-if="isOwner" class="buy" @click="sell">
+                        SELL NOW
+                    </button>
+                    <button v-else class="buy" @click="buy">BUY NOW</button>
                 </div>
             </div>
-            <div class="bid-history">
+            <!-- <div class="bid-history">
                 <div class="title">Bid History</div>
                 <div class="content">
                     <div class="table">
@@ -69,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="author-info">
                 <div class="title">About the author</div>
                 <div class="author">
@@ -131,7 +145,23 @@
         </div>
 
         <Dialog :visible.sync="dialogVisible" :close="handleClose">
-            <div class="dialog-content">
+            <div class="dialog-content" v-if="isOwner">
+                <div class="title">FIRM SELL</div>
+                <div class="price">
+                    Current Price:
+                    <span class="number">{{ art.price }} UART</span>
+                </div>
+                <div class="desc">
+                    <p>Please enter the selling price</p>
+                </div>
+                <div class="input-body">
+                    <input type="number" v-model="form.price" />
+                    <span class="code">UART</span>
+                </div>
+                <div class="note" style="min-height: 56px"></div>
+                <button @click="submitSell">SELL NOW</button>
+            </div>
+            <div class="dialog-content" v-else>
                 <div class="title">FIRM BID</div>
                 <div class="price">
                     Current Price: <span class="number">1500 UART</span>
@@ -141,20 +171,21 @@
                     increase the price by <span>200 ART</span>.
                 </div>
                 <div class="input-body">
-                    <input type="number" />
+                    <input type="number" v-model="form.price" />
                     <span class="code">ART</span>
                 </div>
                 <div class="note">
                     If the auction is not successful, the bid amount will be
                     returned after the auction
                 </div>
-                <button @click="submit">BID NOW</button>
+                <button @click="submitBuy">BID NOW</button>
             </div>
         </Dialog>
     </div>
 </template>
 <script>
 import Dialog from "@/components/Dialog/Dialog";
+import extension from "@/plugins/extension";
 export default {
     name: "art",
     components: { Dialog },
@@ -162,10 +193,18 @@ export default {
         return {
             dialogVisible: false,
             art: {},
+            form: {
+                price: "",
+            },
         };
     },
     created() {
         this.requestData();
+    },
+    computed: {
+        isOwner() {
+            return this.art.member_id == this.$store.state.user.info.id;
+        },
     },
     methods: {
         requestData() {
@@ -194,8 +233,63 @@ export default {
         buy() {
             this.dialogVisible = true;
         },
+        sell() {
+            this.dialogVisible = true;
+        },
         submit() {
             this.dialogVisible = false;
+        },
+        getMaterial(id) {
+            let item = this.$store.state.art.materials.find((v) => (v.id = id));
+            return item ? item : {};
+        },
+        async submitSell() {
+            let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
+                this.art.collection_index,
+                this.art.item_index,
+                0,
+                this.form.price * 10 ** 12
+            );
+            await extension.isReady();
+            let accountList = await extension.web3Accounts();
+            console.log(accountList);
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            const injector = await extension.web3FromSource(
+                currentAccount.meta.source
+            );
+
+            // passing the injected account address as the first argument of signAndSend
+            // will allow the api to retrieve the signer and the user will see the extension
+            // popup asking to sign the balance transfer transaction
+            extrinsic
+                .signAndSend(
+                    currentAccount.address,
+                    { signer: injector.signer },
+                    ({ status }) => {
+                        if (status.isInBlock) {
+                            console.log(
+                                `Completed at block hash #${status.asInBlock.toString()}`
+                            );
+                        } else {
+                            console.log(`Current status: ${status.type}`);
+                        }
+                    }
+                )
+                .catch((error) => {
+                    console.log(":( transaction failed", error);
+                });
+        },
+        submitBuy() {
+            // this.$rpc.api.tx.nft.create_sale_order(
+            //     this.art.collection_index,
+            //     this.art.item_index,
+            //     0,
+            //     this.form.price
+            // ).then(res => {
+            //     console.log(res)
+            // })
         },
     },
 };
@@ -320,6 +414,7 @@ export default {
         background: transparent;
     }
 }
+
 .author-info,
 .infomation,
 .comments,
@@ -554,6 +649,7 @@ export default {
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
+        min-height: 30px;
     }
     .input-body {
         position: relative;
