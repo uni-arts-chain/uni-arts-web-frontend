@@ -107,6 +107,7 @@ export default {
                         message: "Login Successful",
                     });
                     this.$store.dispatch("user/SetInfo", res);
+                    this.$router.push("/account");
                 })
                 .catch((err) => {
                     this.$notify({

@@ -12,7 +12,6 @@
 import Navbar from "@/views/Layout/Navbar.vue";
 import Footer from "@/views/Layout/Footer.vue";
 import extension from "@/plugins/extension";
-// import { stringToHex } from '@polkadot/util';
 
 export default {
     components: { Navbar, Footer },
@@ -29,20 +28,17 @@ export default {
         extension
             .isReady()
             .then(() => {
-                this.getAccounts();
+                this.getInfo();
             })
             .catch(() => {
                 console.log(1);
             });
-        // this.$http.globalGetCurrencies({}).then((res) => {
-        //     console.log(res);
-        // });
     },
     methods: {
-        getAccounts() {
-            // extension.web3Accounts().then((res) => {
-            //     this.register(res[2]);
-            // });
+        getInfo() {
+            if (this.$store.state.user.info.token) {
+                this.$store.dispatch("user/GetInfo");
+            }
         },
     },
 };

@@ -1,10 +1,10 @@
 const apiList = [
     {
-        name: "register",
+        name: "login",
         method: "POST",
-        desc: "注册",
-        path: "/members/address_user_create",
-        mockPath: "/members/address_user_create",
+        desc: "登录",
+        path: "/members/user_address_login",
+        mockPath: "/members/user_address_login",
         params: {
             address: "",
             message: "",
@@ -13,11 +13,20 @@ const apiList = [
         options: {},
     },
     {
-        name: "login",
-        method: "POST",
+        name: "getInfo",
+        method: "GET",
         desc: "登录",
-        path: "/members/user_address_login",
-        mockPath: "/members/user_address_login",
+        path: "/members/user_info",
+        mockPath: "/members/user_info",
+        params: {},
+        options: {},
+    },
+    {
+        name: "ownArts",
+        method: "GET",
+        desc: "获取所属作品集",
+        path: "/arts/mine",
+        mockPath: "/arts/mine",
         params: {
             address: "",
             message: "",

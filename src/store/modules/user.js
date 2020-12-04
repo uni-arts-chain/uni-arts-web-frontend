@@ -3,6 +3,7 @@ import {
     getLocalStore,
     removeLocalStore,
 } from "@/plugins/storage";
+import http from "@/plugins/http";
 
 export default {
     namespaced: true,
@@ -22,6 +23,17 @@ export default {
         },
     },
     actions: {
+        GetInfo({ commit }) {
+            http.userGetInfo({}).then((info) => {
+                let tokens = {
+                    token: info.token,
+                    expire_at: info.expire_at,
+                    address: info.address,
+                };
+                setLocalStore("user_token", tokens);
+                commit("SET_INFO", info);
+            });
+        },
         SetInfo({ commit }, info) {
             let tokens = {
                 token: info.token,

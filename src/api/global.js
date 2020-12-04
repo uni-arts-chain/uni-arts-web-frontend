@@ -1,10 +1,10 @@
 const apiList = [
     {
-        name: "getCurrencies",
+        name: "getArtById",
         method: "GET",
-        desc: "获取币种列表",
-        path: "/currencies",
-        mockPath: "/currencies",
+        desc: "获取指定ID作品",
+        path: "/arts/{:id}",
+        mockPath: "/arts/{:id}",
         params: {},
         options: {
             unSignature: true,

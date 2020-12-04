@@ -161,9 +161,33 @@ export default {
     data() {
         return {
             dialogVisible: false,
+            art: {},
         };
     },
+    created() {
+        this.requestData();
+    },
     methods: {
+        requestData() {
+            this.$http
+                .globalGetArtById(
+                    {},
+                    {
+                        id: 1,
+                    }
+                )
+                .then((res) => {
+                    this.art = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
+                });
+        },
         handleClose() {
             this.dialogVisible = false;
         },

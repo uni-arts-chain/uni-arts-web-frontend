@@ -1,4 +1,9 @@
 import axios from "@/plugins/axios";
+import crypto from "crypto";
+import axiosInstance from "@/plugins/router";
+import { getLocalStore } from "@/plugins/storage";
+import store from "@/store";
+import { HTTP_DEFAULT_CONFIG } from "@/config";
 
 function _isJSON(str) {
     try {
@@ -11,7 +16,62 @@ function _isJSON(str) {
 }
 
 export function requestSuccessFunc(config) {
-    const languageStr = "en";
+    // 自定义请求拦截逻辑，可以处理权限，请求发送监控等
+    const method = config.method.toUpperCase();
+
+    let tokenObj = JSON.parse(getLocalStore("user_token") || "{}");
+    // 单独两步验证，强制登录时进行两步验证
+    if (!tokenObj.token) tokenObj = false;
+    if (config.signature) {
+        tokenObj = config.signature;
+    }
+    if (!config.unSignature && tokenObj) {
+        let url =
+            (config.baseURL.replace("/test/api/", "/api/") ||
+                HTTP_DEFAULT_CONFIG.baseURL) + config.url;
+        let queryStr = "";
+        let tonce = Date.parse(new Date()) / 1000;
+        if (method === "GET" || method === "DELETE") {
+            const params = {
+                tonce,
+                ...config.params,
+            };
+            let keys = Object.keys(params);
+            let keysArray = keys.sort();
+            keysArray.forEach((v) => {
+                queryStr += v + "=" + params[v] + "&";
+            });
+        } else {
+            const params = {
+                tonce,
+                ...config.paramsObj,
+            };
+            let keys = Object.keys(params).sort();
+            keys.forEach((v) => {
+                queryStr += v + "=" + encodeURI(params[v]) + "&";
+            });
+        }
+        queryStr = queryStr.substr(0, queryStr.length - 1);
+        config.headers["Authorization"] = tokenObj.token;
+        config.headers["Tonce"] = tonce;
+        config.headers["Sign"] = _getHmacSHA256(
+            method,
+            url,
+            queryStr,
+            tokenObj.expire_at
+        );
+    }
+    let languageStr = "en";
+    // switch (store.state.global.language) {
+    //     case "jap":
+    //         languageStr = "ja-JP";
+    //         break;
+    //     case "kor":
+    //         languageStr = "ko";
+    //         break;
+    //     default:
+    //         languageStr = store.state.global.language;
+    // }
     config.headers["Accept-Language"] = languageStr;
     return config;
 }
@@ -26,6 +86,14 @@ export function responseSuccessFunc(responseObj) {
 
 export function responseFailFunc(responseError) {
     if (responseError.response) {
+        if (responseError.response.status == 400) {
+            let errorHead = responseError.response.data.head;
+            if (errorHead.code == 1070) {
+                store.dispatch("user/Quit");
+                axiosInstance.push("/login");
+            }
+            return Promise.reject(responseError.response.data);
+        }
         if (responseError.response.status == 404) {
             return Promise.reject(responseError.response.data);
         }
@@ -85,4 +153,14 @@ export function responseFailFunc(responseError) {
         }
         return Promise.reject(responseError);
     }
+}
+
+// 签名算法
+function _getHmacSHA256(method, url, fields, expire_at) {
+    let message = method + "|" + url + "|" + fields;
+    let str = crypto
+        .createHmac("sha256", expire_at)
+        .update(message)
+        .digest("hex");
+    return str;
 }

@@ -6,7 +6,7 @@
                 <div class="profile">
                     <img src="@/assets/images/yin@2x.png" alt="" />
                     <div class="profile-info">
-                        <span class="name">OLIVIA PALERMO</span>
+                        <span class="name">{{ user.address }}</span>
                         <div class="score">
                             Score:
                             <span class="score-number">0</span>
@@ -23,7 +23,7 @@
                         @click="optionActive = '1'"
                         :class="{ active: optionActive == '1' }"
                     >
-                        My Homepage
+                        Own Arts
                     </div>
                     <div
                         class="option-title"
@@ -80,7 +80,7 @@
                     </ul>
                 </div>
                 <div class="content">
-                    <div class="homepage">
+                    <!-- <div class="homepage">
                         Born in Nanjing <br /><br />
                         Studying in Nanjing University of the Arts <br /><br />
                         Learning from famous contemporary masters such as Li
@@ -89,7 +89,8 @@
                         Association
                         <i class="update"></i>
                         <button class="more-button">My Work</button>
-                    </div>
+                    </div> -->
+                    <OwnArts v-if="optionActive == '1'" />
                 </div>
             </div>
         </div>
@@ -98,13 +99,23 @@
 
 <script>
 import store from "@/store";
+import OwnArts from "./OwnArts";
 export default {
     name: "index",
     data() {
         return {
             optionActive: "1",
             menuActive: "0",
+            list: [],
         };
+    },
+    components: {
+        OwnArts,
+    },
+    computed: {
+        user() {
+            return this.$store.state.user.info;
+        },
     },
     beforeRouteEnter(to, from, next) {
         if (!store.state.user.info.token) {
@@ -115,6 +126,7 @@ export default {
             next();
         }
     },
+    created() {},
     methods: {
         quit() {
             this.$store.dispatch("user/Quit");
@@ -152,6 +164,11 @@ export default {
                 font-weight: 600;
                 letter-spacing: 0px;
                 margin-bottom: 20px;
+                max-width: 300px;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .score {
                 font-size: 22px;

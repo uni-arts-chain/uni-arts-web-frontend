@@ -38,13 +38,12 @@ export class MakeApi {
     }
     apiBuilder(options) {
         options.api.forEach((api) => {
-            const apiName = `${options.namespace}${_firstUpperCase(api.name)}`,
-                url = api.path;
-
-            api.baseUrl = api.baseUrl ? api.baseUrl : options.config.baseURL;
-            api.baseUrl = options.config.isProd
-                ? api.baseUrl
-                : `/test${api.baseUrl}`;
+            const apiName = `${options.namespace}${_firstUpperCase(api.name)}`;
+            const url = api.path;
+            api.baseURL = api.baseURL ? api.baseURL : options.config.baseURL;
+            api.baseURL = options.config.isProd
+                ? api.baseURL
+                : `/test${api.baseURL}`;
             options.config.debug &&
                 assert(api.name, `${url} :接口name属性不能为空`);
             options.config.debug &&
@@ -65,12 +64,16 @@ export class MakeApi {
                         });
                         _data = formData;
                     }
+                    const URL = url.replace(/\{:[a-zA-Z]{1,}\}/g, (match) => {
+                        let fieldsName = match.slice(2, match.length - 1);
+                        return outerOptions ? outerOptions[fieldsName] : match;
+                    });
                     const obj = {
-                        url: url,
+                        url: URL,
                         method: api.method,
                     };
-                    console.log("api.baseUrl: ", api.baseUrl);
-                    api.baseUrl && (obj["baseURL"] = api.baseUrl);
+                    console.log("api.baseURL: ", api.baseURL);
+                    api.baseURL && (obj["baseURL"] = api.baseURL);
                     return axios(
                         _normoalize(
                             _assign(obj, _assign({}, outerOptions)),
