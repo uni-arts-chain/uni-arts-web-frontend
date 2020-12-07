@@ -29,10 +29,10 @@
                     <div class="signature" style="min-height: 28px">
                         <!-- Number of signatures : 3 -->
                     </div>
-                    <button v-if="isOwner" class="buy" @click="sell">
+                    <button v-if="isOwner" class="buy" @click="confirm">
                         SELL NOW
                     </button>
-                    <button v-else class="buy" @click="buy">BUY NOW</button>
+                    <button v-else class="buy" @click="confirm">BUY NOW</button>
                 </div>
             </div>
             <!-- <div class="bid-history">
@@ -135,7 +135,7 @@
                     same.Her painting style has decorative elements. The
                     composition of this painting is complete and the colors are
                     bright，She is used to using the cool silver tone. Although
-                    noble and elegant, she makes people feel friendly. 。
+                    noble and elegant, she makes people feel friendly.
                 </div>
             </div>
             <div class="details">
@@ -203,7 +203,7 @@ export default {
     },
     computed: {
         isOwner() {
-            return this.art.member_id == this.$store.state.user.info.id;
+            return !this.art.member_id == this.$store.state.user.info.id;
         },
     },
     methods: {
@@ -230,10 +230,7 @@ export default {
         handleClose() {
             this.dialogVisible = false;
         },
-        buy() {
-            this.dialogVisible = true;
-        },
-        sell() {
+        confirm() {
             this.dialogVisible = true;
         },
         submit() {
@@ -245,8 +242,8 @@ export default {
         },
         async submitSell() {
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
-                this.art.collection_index,
-                this.art.item_index,
+                this.art.collection_id,
+                this.art.item_id,
                 0,
                 this.form.price * 10 ** 12
             );
@@ -256,40 +253,35 @@ export default {
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            const injector = await extension.web3FromSource(
-                currentAccount.meta.source
-            );
-
-            // passing the injected account address as the first argument of signAndSend
-            // will allow the api to retrieve the signer and the user will see the extension
-            // popup asking to sign the balance transfer transaction
-            extrinsic
-                .signAndSend(
-                    currentAccount.address,
-                    { signer: injector.signer },
-                    ({ status }) => {
-                        if (status.isInBlock) {
-                            console.log(
-                                `Completed at block hash #${status.asInBlock.toString()}`
-                            );
-                        } else {
-                            console.log(`Current status: ${status.type}`);
-                        }
-                    }
-                )
-                .catch((error) => {
-                    console.log(":( transaction failed", error);
-                });
+            await extension.signAndSend(currentAccount, extrinsic);
         },
-        submitBuy() {
-            // this.$rpc.api.tx.nft.create_sale_order(
-            //     this.art.collection_index,
-            //     this.art.item_index,
-            //     0,
-            //     this.form.price
-            // ).then(res => {
-            //     console.log(res)
-            // })
+        async cancelOrder() {
+            let extrinsic = this.$rpc.api.tx.nft.cancelSaleOrder(
+                this.art.collection_id,
+                this.art.item_id,
+                0
+            );
+            await extension.isReady();
+            let accountList = await extension.web3Accounts();
+            console.log(accountList);
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            await extension.signAndSend(currentAccount, extrinsic);
+        },
+        async submitBuy() {
+            console.log("创建买单");
+            let extrinsic = this.$rpc.api.tx.nft.acceptSaleOrder(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            await extension.isReady();
+            let accountList = await extension.web3Accounts();
+            console.log(accountList);
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            await extension.signAndSend(currentAccount, extrinsic);
         },
     },
 };

@@ -6,6 +6,7 @@ import {
     web3ListRpcProviders,
     web3FromSource,
     web3EnablePromise,
+    web3AccountsSubscribe,
 } from "@polkadot/extension-dapp";
 import { stringToHex } from "@polkadot/util";
 import Alert from "@/components/Alert";
@@ -35,6 +36,7 @@ class Extension {
                 this.web3UseRpcProvider = web3UseRpcProvider;
                 this.web3ListRpcProviders = web3ListRpcProviders;
                 this.web3FromSource = web3FromSource;
+                this.web3AccountsSubscribe = web3AccountsSubscribe;
                 return;
             }
         }
@@ -58,6 +60,35 @@ class Extension {
             });
             return signature;
         }
+    }
+    async signAndSend(account, extrinsic, cb) {
+        const injector = await this.web3FromSource(account.meta.source);
+        extrinsic
+            .signAndSend(
+                account.address,
+                { signer: injector.signer },
+                ({ events = [], status }) => {
+                    if (status.isInBlock) {
+                        console.log(
+                            `Completed at block hash #${status.asInBlock.toString()}`
+                        );
+                    } else {
+                        console.log(`Current status: ${status.type}`);
+                        // Loop through Vec<EventRecord> to display all events
+                        events.forEach(
+                            ({ phase, event: { data, method, section } }) => {
+                                console.log(
+                                    `\t' ${phase}: ${section}.${method}:: ${data}`
+                                );
+                            }
+                        );
+                        cb && cb();
+                    }
+                }
+            )
+            .catch((error) => {
+                console.log(":( transaction failed", error);
+            });
     }
 }
 

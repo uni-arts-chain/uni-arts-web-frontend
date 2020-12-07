@@ -3,7 +3,12 @@
     <div class="own-arts">
         <div class="art-item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${v.id}`" class="img-container">
-                <img :src="v.img_main_file1.url" />
+                <!-- <img ref="img" @load="imgOnLoad(i)" :src="v.img_main_file1.url" /> -->
+                <AdaptiveImage
+                    :url="v.img_main_file1.url"
+                    width="100%"
+                    height="230px"
+                ></AdaptiveImage>
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <div class="desc">{{ v.details }}</div>
@@ -15,8 +20,12 @@
     </div>
 </template>
 <script>
+import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
     name: "own-arts",
+    components: {
+        AdaptiveImage,
+    },
     data() {
         return {
             list: [],
@@ -25,6 +34,7 @@ export default {
     created() {
         this.requestData();
     },
+    mounted() {},
     methods: {
         requestData() {
             this.$http
@@ -70,7 +80,7 @@ export default {
     margin-bottom: 20px;
     position: relative;
     img {
-        height: 100%;
+        /* height: 100%; */
         position: absolute;
         left: 50%;
         top: 50%;
