@@ -193,6 +193,7 @@ export default {
         return {
             dialogVisible: false,
             art: {},
+            currentArtId: this.$route.params.id,
             form: {
                 price: "",
             },
@@ -212,7 +213,7 @@ export default {
                 .globalGetArtById(
                     {},
                     {
-                        id: 1,
+                        id: this.currentArtId,
                     }
                 )
                 .then((res) => {
