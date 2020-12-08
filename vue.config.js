@@ -3,6 +3,11 @@ const path = require("path");
 function resolve(dir) {
     return path.join(__dirname, dir);
 }
+
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const productionGzipExtensions = ["js", "css"];
+
 module.exports = {
     chainWebpack: (config) => {
         config.plugin("html").tap((options) => {
@@ -24,6 +29,48 @@ module.exports = {
                 symbolId: "icon-[name]",
             })
             .end();
+    },
+    configureWebpack: (config) => {
+        if (process.env.NODE_ENV === "production") {
+            // 生产环境 开启gzip
+            config.plugins.push(
+                new CompressionWebpackPlugin({
+                    filename: "[path].gz[query]",
+                    algorithm: "gzip",
+                    test: new RegExp(
+                        "\\.(" + productionGzipExtensions.join("|") + ")$"
+                    ),
+                    threshold: 10240,
+                    minRatio: 0.8,
+                })
+            );
+            // 添加source map
+            config.devtool = "cheap-module-source-map";
+            config.optimization = {
+                minimizer: [
+                    new TerserPlugin({
+                        terserOptions: {
+                            warnings: false,
+                            compress: {
+                                // drop_console: true,//console
+                                drop_debugger: true,
+                                // pure_funcs: ['console.log']//移除console
+                            },
+                            ie8: true,
+                            safari10: true,
+                        },
+                    }),
+                ],
+            };
+        }
+        // 解析命令行打包参数
+        // const envObj = {}
+        // Object.keys(environment).forEach(v =>{
+        //     envObj[`process.env.${v}`] = JSON.stringify(environment[v])
+        // })
+        // config.plugins.push(
+        //     new webpack.DefinePlugin(envObj)
+        // );
     },
     devServer: {
         port: 5100,

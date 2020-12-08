@@ -1,6 +1,6 @@
 window.NODE_CONFIG = {
-    protocol: "ws",
+    protocol: "wss",
     url: "testnet.uniarts.me",
-    port: "9944",
+    port: "",
     dappName: "Uni-Arts",
 };
