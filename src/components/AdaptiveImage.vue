@@ -27,11 +27,11 @@ export default {
         },
         width: {
             type: String,
-            required: true,
+            default: "100%",
         },
         height: {
             type: String,
-            required: true,
+            default: "100%",
         },
     },
     data() {
@@ -75,7 +75,6 @@ export default {
     height: 230px;
     overflow: hidden;
     border-radius: 4px;
-    margin-bottom: 20px;
     position: relative;
     > img {
         position: absolute;

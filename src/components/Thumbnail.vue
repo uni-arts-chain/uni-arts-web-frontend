@@ -3,7 +3,7 @@
     <div class="thumbnail" :class="{ group: isGroup }">
         <div class="item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${1}`" class="img-container">
-                <img :src="list[i]" />
+                <AdaptiveImage :url="list[i]"></AdaptiveImage>
             </router-link>
             <h5 class="title">Kevin Barrowman</h5>
             <div class="desc">Passionate Latin</div>
@@ -18,8 +18,12 @@
     </div>
 </template>
 <script>
+import AdaptiveImage from "./AdaptiveImage";
 export default {
     name: "thumbnail",
+    components: {
+        AdaptiveImage,
+    },
     props: {
         list: {
             type: Array,
