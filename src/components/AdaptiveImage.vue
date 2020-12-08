@@ -3,6 +3,7 @@
     <div
         class="adaptive-image"
         ref="imgBox"
+        :class="{ 'img-loading': isLoading }"
         :style="`width:${width};height:${height};`"
     >
         <img
@@ -36,6 +37,7 @@ export default {
     data() {
         return {
             isHorizontal: false,
+            isLoading: true,
         };
     },
     methods: {
@@ -61,6 +63,7 @@ export default {
             } else {
                 this.isHorizontal = width < boxWidth ? true : false;
             }
+            this.isLoading = false;
         },
     },
 };
@@ -79,6 +82,8 @@ export default {
         left: 50%;
         top: 50%;
         transform: translateY(-50%) translateX(-50%);
+        transition: opacity 0.3s ease;
+        opacity: 1;
     }
 
     > img.img-horizontal {
@@ -89,6 +94,11 @@ export default {
     > img.img-vertical {
         height: 100%;
         width: auto;
+    }
+}
+.img-loading {
+    > img {
+        opacity: 0;
     }
 }
 </style>

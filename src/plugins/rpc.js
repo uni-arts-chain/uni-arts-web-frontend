@@ -1,12 +1,13 @@
-import { CHAIN_DEFAULT_CONFIG, RPC_DEFAULT_CONFIG } from "@/config";
+import { RPC_DEFAULT_CONFIG } from "@/config";
+import { CHAIN_DEFAULT_CONFIG } from "@/config";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
 import Detect from "@/plugins/detect";
 import Alert from "@/components/Alert";
 class Rpc {
-    constructor({ url, port }) {
+    constructor({ url, port, protocol }) {
         this.api = new ApiPromise({
-            provider: new WsProvider(`ws://${url}:${port}`),
+            provider: new WsProvider(`${protocol}://${url}:${port}`),
             ...RPC_DEFAULT_CONFIG,
         });
         this.apiConnectedListener = () => {};
