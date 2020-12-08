@@ -6,7 +6,7 @@ function resolve(dir) {
 
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const productionGzipExtensions = ["js", "css"];
+const productionGzipExtensions = ["js", "css", "png", "webp"];
 
 module.exports = {
     chainWebpack: (config) => {
@@ -47,10 +47,10 @@ module.exports = {
             // 添加source map
             config.devtool = "cheap-module-source-map";
             config.optimization = {
+                minimize: true,
                 minimizer: [
                     new TerserPlugin({
                         terserOptions: {
-                            warnings: false,
                             compress: {
                                 // drop_console: true,//console
                                 drop_debugger: true,
