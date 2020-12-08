@@ -21,7 +21,7 @@
             :showClose="false"
         >
             <h2 class="dialog-title">Choose different account</h2>
-            <ul class="address-list">
+            <ul class="address-list" v-if="list.length > 0">
                 <li
                     class="address-item"
                     v-for="(v, i) in list"
@@ -43,6 +43,18 @@
                         </div>
                         <div class="address-value">{{ v.address }}</div>
                     </div>
+                </li>
+            </ul>
+            <ul class="address-list" v-else>
+                <li
+                    style="
+                        height: 90px;
+                        text-align: center;
+                        line-height: 90px;
+                        font-size: 18px;
+                    "
+                >
+                    Please add an available account
                 </li>
             </ul>
         </Dialog>

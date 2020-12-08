@@ -204,7 +204,7 @@ export default {
     },
     computed: {
         isOwner() {
-            return !this.art.member_id == this.$store.state.user.info.id;
+            return this.art.member_id == this.$store.state.user.info.id;
         },
     },
     methods: {
