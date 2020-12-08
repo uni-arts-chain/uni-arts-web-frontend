@@ -7,7 +7,9 @@ import Alert from "@/components/Alert";
 class Rpc {
     constructor({ url, port, protocol }) {
         this.api = new ApiPromise({
-            provider: new WsProvider(`${protocol}://${url}:${port}`),
+            provider: new WsProvider(
+                `${protocol}://${url}${port ? ":" + port : ""}`
+            ),
             ...RPC_DEFAULT_CONFIG,
         });
         this.apiConnectedListener = () => {};
