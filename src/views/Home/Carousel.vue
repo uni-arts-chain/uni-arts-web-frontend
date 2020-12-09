@@ -7,6 +7,10 @@
                 v-for="item in 3"
                 :key="item"
             >
+                <div class="info-body">
+                    <div>Time limited auction</div>
+                    <div>23 : 08 : 02</div>
+                </div>
             </el-carousel-item>
         </el-carousel>
     </div>
@@ -52,5 +56,26 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    .info-body {
+        position: absolute;
+        width: 464px;
+        height: 182px;
+        top: 50%;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        > div {
+            font-family: "Broadway";
+            font-size: 30px;
+            font-weight: 400;
+            text-align: left;
+            color: #ffffff;
+            letter-spacing: 2px;
+        }
+    }
 }
 </style>
