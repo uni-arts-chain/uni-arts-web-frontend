@@ -3,6 +3,7 @@ import App from "@/views/App.vue";
 import router from "@/plugins/router";
 import store from "@/store/index";
 import inject from "@/inject/index";
+import "@/filters";
 
 import "element-ui/lib/theme-chalk/index.css";
 

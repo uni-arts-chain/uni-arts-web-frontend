@@ -4,8 +4,8 @@
         <div class="container">
             <div class="art-info">
                 <div class="img-container">
-                    <img
-                        :src="art.img_main_file1 ? art.img_main_file1.url : ''"
+                    <AdaptiveImage
+                        :url="art.img_main_file1 ? art.img_main_file1.url : ''"
                     />
                 </div>
                 <div class="info">
@@ -106,22 +106,32 @@
                 <div class="information-body">
                     <div class="img-container">
                         <div class="img-content">
-                            <img
-                                src="@/assets/images/temp/art-detail1.webp"
+                            <AdaptiveImage
+                                :url="
+                                    art.img_main_file1
+                                        ? art.img_main_file1.url
+                                        : ''
+                                "
                                 alt=""
                             />
                         </div>
                     </div>
                     <div class="art-information">
                         <div class="title">Space travel</div>
-                        <div class="size">Size：100.0x100.0cm</div>
+                        <div class="size">
+                            Size：{{ art.size_width }} x {{ art.size_length }}cm
+                        </div>
                         <div class="quality">
-                            Material quality：Virtual Digital
+                            Material quality：{{
+                                getMaterial(art.material_id).title
+                            }}
                         </div>
                         <div class="type">
                             Type of work：Digital oil painting
                         </div>
-                        <div class="date">Creation time：2020.02.20</div>
+                        <div class="date">
+                            Creation time：{{ art.created_at | dateFormat }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -186,9 +196,10 @@
 <script>
 import Dialog from "@/components/Dialog/Dialog";
 import extension from "@/plugins/extension";
+import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
     name: "art",
-    components: { Dialog },
+    components: { Dialog, AdaptiveImage },
     data() {
         return {
             dialogVisible: false,
