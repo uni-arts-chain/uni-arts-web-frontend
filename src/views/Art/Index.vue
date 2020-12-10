@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="art-information">
-                        <div class="title">Space travel</div>
+                        <div class="title">{{ art.name }}</div>
                         <div class="size">
                             Size：{{ art.size_width }} x {{ art.size_length }}cm
                         </div>
