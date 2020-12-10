@@ -265,7 +265,14 @@ export default {
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await extension.signAndSend(currentAccount, extrinsic);
+            await extension.signAndSend(currentAccount, extrinsic, () => {
+                this.$notify({
+                    title: "success",
+                    message: "Application submitted",
+                    type: "success",
+                });
+                this.dialogVisible = false;
+            });
         },
         async cancelOrder() {
             let extrinsic = this.$rpc.api.tx.nft.cancelSaleOrder(
@@ -293,7 +300,14 @@ export default {
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await extension.signAndSend(currentAccount, extrinsic);
+            await extension.signAndSend(currentAccount, extrinsic, () => {
+                this.$notify({
+                    title: "success",
+                    message: "Application submitted",
+                    type: "success",
+                });
+                this.dialogVisible = false;
+            });
         },
     },
 };

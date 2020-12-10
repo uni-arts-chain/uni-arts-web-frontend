@@ -72,6 +72,7 @@ class Extension {
                         console.log(
                             `Completed at block hash #${status.asInBlock.toString()}`
                         );
+                        cb && cb();
                     } else {
                         console.log(`Current status: ${status.type}`);
                         // Loop through Vec<EventRecord> to display all events
@@ -82,7 +83,6 @@ class Extension {
                                 );
                             }
                         );
-                        cb && cb();
                     }
                 }
             )
