@@ -154,7 +154,7 @@
             </div>
         </div>
 
-        <Dialog :visible.sync="dialogVisible" :close="handleClose">
+        <Dialog :visible.sync="dialogVisible" type="small" :close="handleClose">
             <div class="dialog-content" v-if="isOwner">
                 <div class="title">FIRM SELL</div>
                 <div class="price">
@@ -174,9 +174,10 @@
             <div class="dialog-content" v-else>
                 <div class="title">FIRM BID</div>
                 <div class="price">
-                    Current Price: <span class="number">1500 UART</span>
+                    Current Price:
+                    <span class="number">{{ art.price }} UART</span>
                 </div>
-                <div class="desc">
+                <!-- <div class="desc">
                     You have bid <span>1100 ART</span>, at least you need to
                     increase the price by <span>200 ART</span>.
                 </div>
@@ -187,7 +188,7 @@
                 <div class="note">
                     If the auction is not successful, the bid amount will be
                     returned after the auction
-                </div>
+                </div> -->
                 <button @click="submitBuy">BID NOW</button>
             </div>
         </Dialog>
@@ -195,7 +196,6 @@
 </template>
 <script>
 import Dialog from "@/components/Dialog/Dialog";
-import extension from "@/plugins/extension";
 import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
     name: "art",
@@ -259,13 +259,13 @@ export default {
                 0,
                 this.form.price * 10 ** 12
             );
-            await extension.isReady();
-            let accountList = await extension.web3Accounts();
+            // await extension.isReady();
+            let accountList = await this.$extension.accounts();
             console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await extension.signAndSend(currentAccount, extrinsic, () => {
+            await this.$extension.signAndSend(currentAccount, extrinsic, () => {
                 this.$notify({
                     title: "success",
                     message: "Application submitted",
@@ -280,13 +280,13 @@ export default {
                 this.art.item_id,
                 0
             );
-            await extension.isReady();
-            let accountList = await extension.web3Accounts();
+            // await extension.isReady();
+            let accountList = await this.$extension.accounts();
             console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await extension.signAndSend(currentAccount, extrinsic);
+            await this.$extension.signAndSend(currentAccount, extrinsic);
         },
         async submitBuy() {
             console.log("创建买单");
@@ -294,13 +294,13 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            await extension.isReady();
-            let accountList = await extension.web3Accounts();
+            // await extension.isReady();
+            let accountList = await this.$extension.accounts();
             console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await extension.signAndSend(currentAccount, extrinsic, () => {
+            await this.$extension.signAndSend(currentAccount, extrinsic, () => {
                 this.$notify({
                     title: "success",
                     message: "Application submitted",
@@ -643,7 +643,11 @@ export default {
         }
     }
 }
-
+.dialog ::v-deep .el-dialog {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+}
 .dialog-content {
     font-size: 26px;
     text-align: left;
@@ -657,6 +661,7 @@ export default {
     .price {
         font-size: 20px;
         font-weight: 400;
+        min-height: 30px;
         margin-bottom: 25px;
     }
     .number {
@@ -672,6 +677,7 @@ export default {
     .input-body {
         position: relative;
         margin-bottom: 37px;
+        height: 40px;
         input {
             width: 100%;
             height: 75px;

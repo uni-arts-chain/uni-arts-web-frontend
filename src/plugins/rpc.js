@@ -17,7 +17,7 @@ class Rpc {
         this.apiDisconnectedListener = () => {};
         this.apiErrorListener = () => {};
         this.setListener();
-        this.initExtension();
+        this.initDetect();
     }
     setListener() {
         this.api.on("connected", () => {
@@ -38,7 +38,7 @@ class Rpc {
             this.apiErrorListener();
         });
     }
-    initExtension() {
+    initDetect() {
         if (
             Detect.browser.name !== "Chrome" &&
             Detect.browser.name !== "Firefox"

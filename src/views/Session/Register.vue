@@ -51,7 +51,6 @@
 <script>
 import Dialog from "@/components/Dialog/Dialog";
 import Identicon from "@polkadot/vue-identicon";
-import extension from "@/plugins/extension";
 export default {
     name: "register",
     components: {
@@ -72,10 +71,9 @@ export default {
             this.isShow = true;
         },
         async getAccounts() {
-            await extension.isReady();
-            extension.web3Accounts().then((res) => {
-                this.list = res.length ? res : [];
-            });
+            // await extension.isReady();
+            let res = this.$extension.accounts();
+            this.list = res.length ? res : [];
         },
         selectAccount(account) {
             this.isShow = false;
@@ -83,7 +81,7 @@ export default {
         },
         async register(account) {
             let message = "register";
-            let signature = await extension.sign(account, message);
+            let signature = await this.$extension.sign(account, message);
             this.$http
                 .userRegister({
                     message: message,

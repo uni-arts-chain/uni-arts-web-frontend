@@ -15,7 +15,6 @@ import { CHAIN_DEFAULT_CONFIG } from "@/config";
 class Extension {
     constructor() {
         this.web3 = {};
-        this.web3Accounts = {};
         this.web3FromAddress = () => {};
         this.web3FromSource = () => {};
         this.web3UseRpcProvider = {};
@@ -30,6 +29,7 @@ class Extension {
                 Alert.show("NeedPlugin");
                 return;
             } else {
+                console.log("扩展初始化完成");
                 this.web3 = result[0];
                 this.web3Accounts = web3Accounts;
                 this.web3FromAddress = web3FromAddress;
@@ -40,6 +40,10 @@ class Extension {
                 return;
             }
         }
+    }
+    async accounts() {
+        await this.isReady();
+        return await web3Accounts();
     }
     async sign(account, message) {
         const injector = await this.web3FromSource(account.meta.source);
