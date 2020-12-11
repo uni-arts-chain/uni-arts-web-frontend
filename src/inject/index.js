@@ -7,6 +7,7 @@ import http from "@/plugins/http";
 import extension from "@/plugins/extension";
 import rpc from "@/plugins/rpc";
 import element from "@/plugins/element";
+import copy from "clipboard-copy";
 
 const requireAll = (requireContext) =>
     requireContext.keys().map(requireContext);
@@ -23,5 +24,6 @@ export default {
         vue.prototype.$http = http;
         vue.prototype.$extension = extension;
         vue.prototype.$rpc = rpc;
+        vue.prototype.$copy = copy;
     },
 };

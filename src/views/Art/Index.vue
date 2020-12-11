@@ -18,13 +18,36 @@
                         x {{ art.size_length }}
                     </p>
                     <div class="block-title" style="min-height: 37px">
-                        <!-- BLOCKCHAIN INFOMATION -->
+                        BLOCK INFORMATION
                     </div>
                     <div class="address" style="min-height: 28px">
-                        <!-- Certificate address :
-                        0xsbd354sdf4241d35sdf4241d35sdf4241d35sdf4241d35sdf4241d35
-                        <i class="copy"></i>
-                        <i class="qr"></i> -->
+                        Owner: {{ member.address }}
+                        <el-tooltip
+                            effect="dark"
+                            :content="!copyStatus ? 'Copy' : 'Copied'"
+                            placement="top"
+                        >
+                            <i
+                                class="copy"
+                                @mouseleave="copyLeave"
+                                @click="copy(member.address)"
+                            ></i>
+                        </el-tooltip>
+                        <el-tooltip
+                            popper-class="qrcode-tooltip"
+                            effect="light"
+                            placement="bottom"
+                        >
+                            <div slot="content">
+                                <Qrcode
+                                    style="border: none"
+                                    :scale="5"
+                                    :data="member.address ? member.address : ''"
+                                    :typeNumber="8"
+                                ></Qrcode>
+                            </div>
+                            <i class="qr"></i>
+                        </el-tooltip>
                     </div>
                     <div class="signature" style="min-height: 28px">
                         <!-- Number of signatures : 3 -->
@@ -88,15 +111,23 @@
                 <div class="title">About the author</div>
                 <div class="author">
                     <div class="author-container">
-                        <img src="@/assets/images/temp/avatar1.webp" />
+                        <img src="@/assets/images/yin@2x.png" />
                     </div>
-                    <div class="name">Noah Schnapp</div>
+                    <div class="name">
+                        {{
+                            author.display_name
+                                ? author.display_name
+                                : "Anonymous"
+                        }}
+                    </div>
                 </div>
                 <div class="author-intro-info">
-                    <div class="author-intro">
+                    <!-- <div class="author-intro">
                         Shanghai people graduated from Stanford University
-                    </div>
-                    <router-link class="go-detail" :to="`/art/${1}`"
+                    </div> -->
+                    <router-link
+                        class="go-detail"
+                        :to="`/artist-detail/${author.id}`"
                         >Go to the creator's home page<i class="arrow"></i
                     ></router-link>
                 </div>
@@ -138,23 +169,116 @@
             <div class="comments">
                 <div class="title">Comments on works</div>
                 <div class="comment-content">
-                    At all times and in all over the world, no matter what era,
-                    there are few representative paintings. However, the eastern
-                    and Western cultural traditions are not quite the same.
-                    However, their pursuit and appreciation of beauty are the
-                    same.Her painting style has decorative elements. The
-                    composition of this painting is complete and the colors are
-                    bright，She is used to using the cool silver tone. Although
-                    noble and elegant, she makes people feel friendly.
+                    {{ art.details }}
                 </div>
             </div>
             <div class="details">
                 <div class="title">Artwork Details</div>
-                <div class="comment-content"></div>
+                <div class="comment-content">
+                    <div class="item" v-if="art.img_detail_file1">
+                        <div class="img-content">
+                            <AdaptiveImage
+                                :url="
+                                    art.img_detail_file1
+                                        ? art.img_detail_file1.url
+                                        : ''
+                                "
+                            ></AdaptiveImage>
+                        </div>
+                        <div class="img-desc">
+                            {{ art.img_detail_file1_desc }}
+                        </div>
+                        <img
+                            src="@/assets/images/xiangqing1@2x.png"
+                            style="bottom: -10px; right: 0"
+                            class="xq"
+                        />
+                    </div>
+                    <div class="item" v-if="art.img_detail_file2">
+                        <div class="img-desc">
+                            {{ art.img_detail_file2_desc }}
+                        </div>
+                        <div class="img-content">
+                            <AdaptiveImage
+                                :url="
+                                    art.img_detail_file2
+                                        ? art.img_detail_file2.url
+                                        : ''
+                                "
+                            ></AdaptiveImage>
+                        </div>
+                        <img
+                            src="@/assets/images/xiangqing2@2x.png"
+                            style="bottom: -10px; left: 50px"
+                            class="xq"
+                        />
+                    </div>
+                    <div class="item" v-if="art.img_detail_file3">
+                        <div class="img-content">
+                            <AdaptiveImage
+                                :url="
+                                    art.img_detail_file3
+                                        ? art.img_detail_file3.url
+                                        : ''
+                                "
+                            ></AdaptiveImage>
+                        </div>
+                        <div class="img-desc">
+                            {{ art.img_detail_file3_desc }}
+                        </div>
+                        <img
+                            src="@/assets/images/xiangqing1@2x.png"
+                            style="bottom: -10px; right: 0"
+                            class="xq"
+                        />
+                    </div>
+                    <div class="item" v-if="art.img_detail_file4">
+                        <div class="img-desc">
+                            {{ art.img_detail_file4_desc }}
+                        </div>
+                        <div class="img-content">
+                            <AdaptiveImage
+                                :url="
+                                    art.img_detail_file4
+                                        ? art.img_detail_file4.url
+                                        : ''
+                                "
+                            ></AdaptiveImage>
+                        </div>
+                        <img
+                            src="@/assets/images/xiangqing2@2x.png"
+                            style="bottom: -10px; left: 50px"
+                            class="xq"
+                        />
+                    </div>
+                    <div class="item" v-if="art.img_detail_file5">
+                        <div class="img-content">
+                            <AdaptiveImage
+                                :url="
+                                    art.img_detail_file5
+                                        ? art.img_detail_file5.url
+                                        : ''
+                                "
+                            ></AdaptiveImage>
+                        </div>
+                        <div class="img-desc">
+                            {{ art.img_detail_file5_desc }}
+                        </div>
+                        <img
+                            src="@/assets/images/xiangqing1@2x.png"
+                            style="bottom: -10px; right: 0"
+                            class="xq"
+                        />
+                    </div>
+                </div>
             </div>
         </div>
 
-        <Dialog :visible.sync="dialogVisible" type="small" :close="handleClose">
+        <Dialog
+            :visible.sync="dialogVisible"
+            :type="isOwner ? 'medium' : 'small'"
+            :close="handleClose"
+        >
             <div class="dialog-content" v-if="isOwner">
                 <div class="title">FIRM SELL</div>
                 <div class="price">
@@ -197,14 +321,20 @@
 <script>
 import Dialog from "@/components/Dialog/Dialog";
 import AdaptiveImage from "@/components/AdaptiveImage";
+import Qrcode from "@/components/Qrcode";
+import { Tooltip } from "element-ui";
+
 export default {
     name: "art",
-    components: { Dialog, AdaptiveImage },
+    components: { Dialog, AdaptiveImage, [Tooltip.name]: Tooltip, Qrcode },
     data() {
         return {
             dialogVisible: false,
             art: {},
+            member: {},
+            author: {},
             currentArtId: this.$route.params.id,
+            copyStatus: false,
             form: {
                 price: "",
             },
@@ -229,6 +359,8 @@ export default {
                 )
                 .then((res) => {
                     this.art = res;
+                    this.member = res.member;
+                    this.author = res.author;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -251,6 +383,13 @@ export default {
         getMaterial(id) {
             let item = this.$store.state.art.materials.find((v) => (v.id = id));
             return item ? item : {};
+        },
+        copyLeave() {
+            setTimeout(() => (this.copyStatus = false), 500);
+        },
+        copy(value) {
+            this.copyStatus = true;
+            this.$copy(value);
         },
         async submitSell() {
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
@@ -385,12 +524,12 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        padding-right: 50px;
+        padding-right: 55px;
         position: relative;
         i.copy {
             position: absolute;
             top: 3px;
-            right: 33px;
+            right: 35px;
             display: inline-block;
             width: 19px;
             height: 19px;
@@ -477,7 +616,11 @@ export default {
         }
         .name {
             font-size: 26px;
+            max-width: 300px;
             font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-align: center;
             letter-spacing: 0px;
         }
@@ -490,7 +633,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
         .author-intro {
             font-size: 24px;
             font-weight: 400;
@@ -585,6 +728,33 @@ export default {
     .comment-content {
         min-height: 300px;
     }
+    .img-content {
+        width: 456px;
+        height: 456px;
+    }
+    .item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 130px;
+        position: relative;
+        margin-bottom: 120px;
+        padding: 0 70px;
+    }
+    .img-desc {
+        max-width: 489px;
+        font-size: 24px;
+        font-weight: 400;
+        text-align: left;
+        color: #020202;
+        line-height: 36px;
+        letter-spacing: 1px;
+    }
+    .xq {
+        position: absolute;
+        height: 230px;
+        z-index: -1;
+    }
 }
 
 .bid-history {
@@ -644,8 +814,8 @@ export default {
     }
 }
 .dialog ::v-deep .el-dialog {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
     padding-bottom: 10px;
 }
 .dialog-content {
@@ -711,5 +881,11 @@ export default {
         letter-spacing: 0px;
         cursor: pointer;
     }
+}
+</style>
+
+<style>
+.qrcode-tooltip {
+    padding: 2px;
 }
 </style>

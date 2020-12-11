@@ -59,8 +59,12 @@ export default {
                 ? this.$refs.imgBox.offsetHeight
                 : boxHeight;
             if (width < height) {
+                // console.log("height: ", height);
+                // console.log("boxHeight: ", boxHeight);
                 this.isHorizontal = height < boxHeight ? false : true;
             } else {
+                // console.log("width: ", width);
+                // console.log("boxWidth: ", boxWidth);
                 this.isHorizontal = width < boxWidth ? true : false;
             }
             this.isLoading = false;

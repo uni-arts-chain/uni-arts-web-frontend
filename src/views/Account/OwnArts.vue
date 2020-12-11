@@ -11,9 +11,15 @@
                 ></AdaptiveImage>
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
-            <div class="desc">{{ v.details }}</div>
+            <!-- <div class="desc">{{ v.details }}</div> -->
             <div class="address-label">
-                {{ v.aasm_state }}
+                {{
+                    v.aasm_state == "bidding"
+                        ? "Bidding"
+                        : v.aasm_state == "prepare"
+                        ? "Prepare"
+                        : "Online"
+                }}
             </div>
             <div class="price">{{ v.price }} UART</div>
         </div>
@@ -101,6 +107,7 @@ export default {
     font-weight: 400;
     text-align: left;
     line-height: 27px;
+    margin-top: 10px;
     letter-spacing: 0px;
 }
 

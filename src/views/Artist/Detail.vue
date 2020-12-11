@@ -6,7 +6,9 @@
                 <div class="profile">
                     <img src="@/assets/images/yin@2x.png" alt="" />
                     <div class="profile-info">
-                        <span class="name">OLIVIA PALERMO</span>
+                        <span class="name">{{
+                            this.$store.state.user.info.address
+                        }}</span>
                         <div class="score">
                             Score:
                             <span class="score-number">0</span>
@@ -20,7 +22,7 @@
                         @click="optionActive = '1'"
                         :class="{ active: optionActive == '1' }"
                     >
-                        Work collection
+                        Work Collection
                     </div>
                 </div>
             </div>
@@ -50,7 +52,26 @@ export default {
         return {
             optionActive: "1",
             menuActive: "0",
+            authorId: this.$route.params.id,
+            list: [],
+            author: {},
         };
+    },
+    created() {
+        this.requestData();
+    },
+    methods: {
+        requestData() {
+            this.$http
+                .globalGetAuthorArts({}, { id: this.authorId })
+                .then((res) => {
+                    this.list = res;
+                    this.author = res[0] ? res[0] : {};
+                })
+                .cache((err) => {
+                    console.log(err);
+                });
+        },
     },
 };
 </script>
@@ -84,6 +105,11 @@ export default {
                 font-weight: 600;
                 letter-spacing: 0px;
                 margin-bottom: 20px;
+                max-width: 300px;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .score {
                 font-size: 22px;
