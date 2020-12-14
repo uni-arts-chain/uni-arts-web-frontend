@@ -7,7 +7,9 @@
                     <img src="@/assets/images/yin@2x.png" alt="" />
                     <div class="profile-info">
                         <span class="name">{{
-                            this.$store.state.user.info.address
+                            author.display_name
+                                ? author.display_name
+                                : author.address
                         }}</span>
                         <div class="score">
                             Score:
@@ -27,18 +29,11 @@
                 </div>
             </div>
             <div class="body">
-                <div class="menu-container">
+                <!-- <div class="menu-container">
                     <ul class="menu"></ul>
-                </div>
+                </div> -->
                 <div class="content">
-                    <div class="homepage">
-                        Born in Nanjing <br /><br />
-                        Studying in Nanjing University of the Arts <br /><br />
-                        Learning from famous contemporary masters such as Li
-                        Xiaoxuan and Li Jin <br /><br />
-                        Member of Nanjing fine brushwork Heavy Color Painting
-                        Association
-                    </div>
+                    <OwnArts style="padding-left: 0" :list="list"></OwnArts>
                 </div>
             </div>
         </div>
@@ -46,8 +41,12 @@
 </template>
 
 <script>
+import OwnArts from "@/views/Account/Order";
 export default {
     name: "detail",
+    components: {
+        OwnArts,
+    },
     data() {
         return {
             optionActive: "1",
@@ -66,9 +65,9 @@ export default {
                 .globalGetAuthorArts({}, { id: this.authorId })
                 .then((res) => {
                     this.list = res;
-                    this.author = res[0] ? res[0] : {};
+                    this.author = res[0] ? res[0].author : {};
                 })
-                .cache((err) => {
+                .catch((err) => {
                     console.log(err);
                 });
         },
@@ -167,9 +166,10 @@ export default {
 
 .body {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     .content {
-        width: calc(100% - 170px);
+        /* width: calc(100% - 170px); */
+        width: 90%;
         .homepage {
             padding-top: 78px;
             font-size: 18px;

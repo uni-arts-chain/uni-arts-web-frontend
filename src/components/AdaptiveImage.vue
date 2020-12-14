@@ -42,21 +42,25 @@ export default {
     },
     methods: {
         imgOnLoad() {
-            let width = this.$refs.img.width;
-            let height = this.$refs.img.height;
+            let width = this.$refs.img ? this.$refs.img.width : "100%";
+            let height = this.$refs.img ? this.$refs.img.height : "230px";
             let boxWidth = this.width;
             let boxHeight = this.height;
             boxWidth = boxWidth.includes("px")
                 ? boxWidth.split("px")[0]
                 : boxWidth;
             boxWidth = boxWidth.includes("%")
-                ? this.$refs.imgBox.offsetWidth
+                ? this.$refs.imgBox
+                    ? this.$refs.imgBox.offsetWidth
+                    : 0
                 : boxWidth;
             boxHeight = boxHeight.includes("px")
                 ? boxHeight.split("px")[0]
                 : boxHeight;
             boxHeight = boxHeight.includes("%")
-                ? this.$refs.imgBox.offsetHeight
+                ? this.$refs.imgBox
+                    ? this.$refs.imgBox.offsetHeight
+                    : 0
                 : boxHeight;
             if (width < height) {
                 // console.log("height: ", height);

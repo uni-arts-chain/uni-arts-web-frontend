@@ -27,11 +27,7 @@ const apiList = [
         desc: "获取所属作品集",
         path: "/arts/mine",
         mockPath: "/arts/mine",
-        params: {
-            address: "",
-            message: "",
-            signature: "",
-        },
+        params: {},
         options: {},
     },
 ];

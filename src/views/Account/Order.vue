@@ -28,34 +28,19 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
-    name: "own-arts",
+    name: "order",
+    props: {
+        list: {
+            type: Array,
+            default: () => [],
+        },
+        type: {
+            type: String,
+            default: "all",
+        },
+    },
     components: {
         AdaptiveImage,
-    },
-    data() {
-        return {
-            list: [],
-        };
-    },
-    created() {
-        this.requestData();
-    },
-    mounted() {},
-    methods: {
-        requestData() {
-            this.$http
-                .userOwnArts({})
-                .then((res) => {
-                    this.list = res;
-                })
-                .catch((error) => {
-                    this.$notify({
-                        title: "Error",
-                        message: error.head && error.head.msg,
-                        type: "error",
-                    });
-                });
-        },
     },
 };
 </script>

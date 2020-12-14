@@ -18,39 +18,41 @@
                     </div>
                 </div>
                 <div class="option">
-                    <div
+                    <router-link
+                        to="/account"
                         class="option-title"
-                        @click="optionActive = '1'"
                         :class="{ active: optionActive == '1' }"
                     >
                         Own Arts
-                    </div>
-                    <div
+                    </router-link>
+                    <router-link
+                        to="/account"
                         class="option-title"
-                        @click="optionActive = '2'"
                         :class="{ active: optionActive == '2' }"
                     >
                         Upload Works
-                    </div>
-                    <div
+                    </router-link>
+                    <router-link
+                        to="/account"
                         class="option-title"
-                        @click="optionActive = '3'"
                         :class="{ active: optionActive == '3' }"
                     >
                         Launch An Auction
-                    </div>
+                    </router-link>
                 </div>
             </div>
             <div class="body">
                 <div class="menu-container">
                     <ul class="menu">
                         <li>
-                            <router-link to="/account"
+                            <router-link to="/account/purchase"
                                 >Purchase Order</router-link
                             >
                         </li>
                         <li>
-                            <router-link to="/account">Sales Order</router-link>
+                            <router-link to="/account/sale"
+                                >Sales Order</router-link
+                            >
                         </li>
                         <li>
                             <router-link to="/account"
@@ -80,17 +82,7 @@
                     </ul>
                 </div>
                 <div class="content">
-                    <!-- <div class="homepage">
-                        Born in Nanjing <br /><br />
-                        Studying in Nanjing University of the Arts <br /><br />
-                        Learning from famous contemporary masters such as Li
-                        Xiaoxuan and Li Jin <br /><br />
-                        Member of Nanjing fine brushwork Heavy Color Painting
-                        Association
-                        <i class="update"></i>
-                        <button class="more-button">My Work</button>
-                    </div> -->
-                    <OwnArts v-if="optionActive == '1'" />
+                    <router-view></router-view>
                 </div>
             </div>
         </div>
@@ -99,22 +91,33 @@
 
 <script>
 import store from "@/store";
-import OwnArts from "./OwnArts";
 export default {
     name: "index",
     data() {
         return {
-            optionActive: "1",
             menuActive: "0",
             list: [],
         };
     },
-    components: {
-        OwnArts,
-    },
     computed: {
         user() {
             return this.$store.state.user.info;
+        },
+        optionActive() {
+            let index = "";
+            switch (this.$route.path) {
+                case "/account":
+                case "/account/":
+                    index = "1";
+                    break;
+                case "/account/upload":
+                    index = "2";
+                    break;
+                case "/account/launch":
+                    index = "3";
+                    break;
+            }
+            return index;
         },
     },
     beforeRouteEnter(to, from, next) {

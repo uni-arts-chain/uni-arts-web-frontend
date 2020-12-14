@@ -175,7 +175,7 @@
             <div class="details">
                 <div class="title">Artwork Details</div>
                 <div class="comment-content">
-                    <div class="item" v-if="art.img_detail_file1">
+                    <div class="item" v-if="art.img_detail_file1.url">
                         <div class="img-content">
                             <AdaptiveImage
                                 :url="
@@ -194,7 +194,7 @@
                             class="xq"
                         />
                     </div>
-                    <div class="item" v-if="art.img_detail_file2">
+                    <div class="item" v-if="art.img_detail_file2.url">
                         <div class="img-desc">
                             {{ art.img_detail_file2_desc }}
                         </div>
@@ -213,7 +213,7 @@
                             class="xq"
                         />
                     </div>
-                    <div class="item" v-if="art.img_detail_file3">
+                    <div class="item" v-if="art.img_detail_file3.url">
                         <div class="img-content">
                             <AdaptiveImage
                                 :url="
@@ -232,7 +232,7 @@
                             class="xq"
                         />
                     </div>
-                    <div class="item" v-if="art.img_detail_file4">
+                    <div class="item" v-if="art.img_detail_file4.url">
                         <div class="img-desc">
                             {{ art.img_detail_file4_desc }}
                         </div>
@@ -251,7 +251,7 @@
                             class="xq"
                         />
                     </div>
-                    <div class="item" v-if="art.img_detail_file5">
+                    <div class="item" v-if="art.img_detail_file5.url">
                         <div class="img-content">
                             <AdaptiveImage
                                 :url="
@@ -322,6 +322,7 @@
 import Dialog from "@/components/Dialog/Dialog";
 import AdaptiveImage from "@/components/AdaptiveImage";
 import Qrcode from "@/components/Qrcode";
+import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
 
 export default {
@@ -330,7 +331,13 @@ export default {
     data() {
         return {
             dialogVisible: false,
-            art: {},
+            art: {
+                img_detail_file1: {},
+                img_detail_file2: {},
+                img_detail_file3: {},
+                img_detail_file4: {},
+                img_detail_file5: {},
+            },
             member: {},
             author: {},
             currentArtId: this.$route.params.id,
@@ -396,7 +403,10 @@ export default {
                 this.art.collection_id,
                 this.art.item_id,
                 0,
-                this.form.price * 10 ** 12
+                new BigNumber(10)
+                    .pow(this.$store.state.global.chain.tokenDecimals)
+                    .times(this.form.price)
+                    .toNumber()
             );
             // await extension.isReady();
             let accountList = await this.$extension.accounts();

@@ -41,6 +41,41 @@ const routes = [
             import(
                 /* webpackChunkName: "account" */ "@/views/Account/Index.vue"
             ),
+        children: [
+            {
+                path: "/",
+                name: "AccountIndex",
+                meta: {
+                    needAuth: true,
+                },
+                component: () =>
+                    import(
+                        /* webpackChunkName: "accountIndex" */ "@/views/Account/Own.vue"
+                    ),
+            },
+            {
+                path: "purchase",
+                name: "AccountPurchase",
+                meta: {
+                    needAuth: true,
+                },
+                component: () =>
+                    import(
+                        /* webpackChunkName: "accountPurchase" */ "@/views/Account/Purchase.vue"
+                    ),
+            },
+            {
+                path: "sale",
+                name: "AccountSale",
+                meta: {
+                    needAuth: true,
+                },
+                component: () =>
+                    import(
+                        /* webpackChunkName: "accountSale" */ "@/views/Account/Sale.vue"
+                    ),
+            },
+        ],
     },
     {
         path: "/login",

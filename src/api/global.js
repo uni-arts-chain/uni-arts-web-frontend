@@ -47,8 +47,8 @@ const apiList = [
         name: "getAuthorArts",
         method: "GET",
         desc: "获取作品材质",
-        path: "/member/{:id}/arts",
-        mockPath: "/member/{:id}/arts",
+        path: "/members/{:id}/arts",
+        mockPath: "/members/{:id}/arts",
         params: {},
         options: {
             unSignature: true,

@@ -13,6 +13,7 @@
     "@polkadot/util": "^4.2.1",
     "@polkadot/vue-identicon": "^0.62.1",
     "axios": "^0.21.0",
+    "bignumber.js": "^9.0.1",
     "clipboard-copy": "^4.0.1",
     "core-js": "^3.6.5",
     "crypto": "^1.0.1",
