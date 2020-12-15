@@ -68,7 +68,7 @@
         <div class="authors container">
             <h2 class="title">Popular authors</h2>
             <div class="authors-body">
-                <ArtGroupList :list="authorList"></ArtGroupList>
+                <ArtistGroupList :list="authorList"></ArtistGroupList>
                 <button class="more-button">more authors</button>
             </div>
         </div>
@@ -78,27 +78,40 @@
 <script>
 import Carousel from "./Carousel";
 import Thumbnail from "@/components/Thumbnail";
-import ArtGroupList from "@/components/ArtGroupList";
-import worklist1 from "@/assets/images/temp/worklist1.jpg";
-import worklist2 from "@/assets/images/temp/worklist2.jpg";
-import worklist3 from "@/assets/images/temp/worklist3.jpg";
-import recommendPage1 from "@/assets/images/temp/recommend-page1.jpg";
-import recommendPage2 from "@/assets/images/temp/recommend-page2.jpg";
-import recommendPage3 from "@/assets/images/temp/recommend-page3.jpg";
-import avatar1 from "@/assets/images/temp/avatar1.webp";
-import avatar2 from "@/assets/images/temp/avatar2.webp";
-import avatar3 from "@/assets/images/temp/avatar3.webp";
+import ArtistGroupList from "@/components/ArtistGroupList";
 export default {
     name: "index",
-    components: { Carousel, Thumbnail, ArtGroupList },
+    components: { Carousel, Thumbnail, ArtistGroupList },
     data() {
         return {
-            workList: [worklist1, worklist2, worklist3],
-            recommendList: [recommendPage1, recommendPage2, recommendPage3],
-            authorList: [avatar1, avatar2, avatar3],
+            workList: [],
+            recommendList: [],
+            authorList: [],
         };
     },
+    created() {
+        this.requestAuthorData();
+        this.requestWorkData();
+        this.requestRecommendData();
+    },
     mounted() {},
+    methods: {
+        requestAuthorData() {
+            this.$http.globalGetPopularAuthor({}).then((res) => {
+                this.authorList = res;
+            });
+        },
+        requestWorkData() {
+            this.$http.globalGetPopArts({}).then((res) => {
+                this.workList = res;
+            });
+        },
+        requestRecommendData() {
+            this.$http.globalGetTopicArts({}).then((res) => {
+                this.recommendList = res;
+            });
+        },
+    },
 };
 </script>
 

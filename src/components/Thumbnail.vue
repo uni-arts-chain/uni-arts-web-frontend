@@ -3,15 +3,13 @@
     <div class="thumbnail" :class="{ group: isGroup }">
         <div class="item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${1}`" class="img-container">
-                <AdaptiveImage :url="list[i]"></AdaptiveImage>
+                <AdaptiveImage :url="v.img_main_file1.url"></AdaptiveImage>
             </router-link>
-            <h5 class="title">Kevin Barrowman</h5>
-            <div class="desc">Passionate Latin</div>
+            <h5 class="title">{{ v.name }}</h5>
+            <div class="desc">{{ materialType(v.material_id) }}</div>
             <div class="address-label">
-                Certificate Address:
-                <span class="address"
-                    >0xsbd354sdf44sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf4sdf</span
-                >
+                Address:
+                <span class="address">{{ v.member.address }}</span>
             </div>
             <div class="price">950 UART</div>
         </div>
@@ -36,6 +34,14 @@ export default {
     },
     data() {
         return {};
+    },
+    methods: {
+        materialType(id) {
+            let item = this.$store.state.art.materials.find(
+                (v) => v.code == id + ""
+            );
+            return item ? item.title : "";
+        },
     },
 };
 </script>

@@ -22,9 +22,7 @@ export default {
     methods: {
         requestData() {
             this.$http
-                .userOwnArts({
-                    aasm_state: "paid",
-                })
+                .userOwnArts({})
                 .then((res) => {
                     this.list = res;
                 })

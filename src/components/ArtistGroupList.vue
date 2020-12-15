@@ -2,15 +2,20 @@
 <template>
     <div class="artgroupList">
         <div class="card" v-for="(v, k) in list" :key="k">
-            <img class="avatar" @click="detail" :src="v" />
-            <div class="name">Noah Schnapp</div>
-            <p>Shanghai people graduated from Stanford University</p>
+            <div class="avatar" @click="detail">
+                <AdaptiveImage :url="userImage"></AdaptiveImage>
+            </div>
+            <div class="name">{{ v.display_name || "Anonymous" }}</div>
+            <p>{{ v.address }}</p>
         </div>
     </div>
 </template>
 <script>
+import AdaptiveImage from "@/components/AdaptiveImage";
+import userImage from "@/assets/images/yin@2x.png";
 export default {
     name: "artgroupList",
+    components: { AdaptiveImage },
     props: {
         list: {
             type: Array,
@@ -18,7 +23,9 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+            userImage,
+        };
     },
     methods: {
         detail() {
@@ -43,6 +50,7 @@ export default {
     .avatar {
         width: 120px;
         height: 120px;
+        overflow: hidden;
         border: 4px solid black;
         border-radius: 50%;
         cursor: pointer;
@@ -51,6 +59,10 @@ export default {
         margin-top: 50px;
         font-size: 22px;
         font-weight: 600;
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         text-align: center;
         letter-spacing: 0px;
         text-transform: uppercase;
@@ -60,9 +72,13 @@ export default {
         font-size: 14px;
         font-weight: 400;
         text-align: center;
-        letter-spacing: 0px;
+        width: 100%;
+        display: block;
+        word-wrap: break-word;
+        padding-left: 20px;
+        padding-right: 20px;
         text-transform: uppercase;
-        max-width: 225px;
+        max-width: 100%;
     }
 }
 </style>

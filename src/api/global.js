@@ -54,6 +54,39 @@ const apiList = [
             unSignature: true,
         },
     },
+    {
+        name: "getPopArts",
+        method: "GET",
+        desc: "获取热门作品",
+        path: "/arts/popular",
+        mockPath: "/arts/popular",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
+    {
+        name: "getTopicArts",
+        method: "GET",
+        desc: "获取推荐主题作品",
+        path: "/arts/topic",
+        mockPath: "/arts/topic",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
+    {
+        name: "getPopularAuthor",
+        method: "GET",
+        desc: "获取推荐艺术家",
+        path: "/members/popular",
+        mockPath: "/members/popular",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
 ];
 
 export default apiList;
