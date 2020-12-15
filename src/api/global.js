@@ -87,6 +87,28 @@ const apiList = [
             unSignature: true,
         },
     },
+    {
+        name: "getSellingArt",
+        method: "GET",
+        desc: "正在售卖的作品",
+        path: "/arts/selling",
+        mockPath: "/arts/selling",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
+    {
+        name: "getAllArt",
+        method: "GET",
+        desc: "所有艺术家",
+        path: "/members/artists",
+        mockPath: "/members/artists",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
 ];
 
 export default apiList;

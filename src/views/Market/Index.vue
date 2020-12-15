@@ -5,23 +5,28 @@
             <h2 class="title">market</h2>
             <div class="filter">
                 <div class="name">
-                    <div class="name-item">Classification</div>
-                    <div class="name-item">Theme</div>
-                    <div class="name-item">Price</div>
+                    <div class="name-item" @click="active_cate = 'materials'">
+                        Classification
+                    </div>
+                    <div class="name-item" @click="active_cate = 'themes'">
+                        Theme
+                    </div>
+                    <div class="name-item" @click="active_cate = 'price'">
+                        Price
+                    </div>
                 </div>
-                <div class="catetory">
-                    <div class="catetory-item">oil painting</div>
-                    <div class="catetory-item">print</div>
-                    <div class="catetory-item">watercolor</div>
-                    <div class="catetory-item">ink painting</div>
+                <div class="catetory" v-for="(v, i) in categoryList" :key="i">
+                    <div class="catetory-item" @click="requestFilterData(v)">
+                        {{ v.title || "unknown" }}
+                    </div>
                 </div>
             </div>
             <div class="content">
                 <Thumbnail :list="list" :isGroup="true"></Thumbnail>
             </div>
             <div class="pagenation">
-                <div class="prev"></div>
-                <div class="next"></div>
+                <div class="prev" @click="prev"></div>
+                <div class="next" @click="next"></div>
             </div>
         </div>
     </div>
@@ -34,18 +39,96 @@ export default {
     components: { Thumbnail },
     data() {
         return {
-            list: [
-                require("@/assets/images/temp/home-page1.jpg"),
-                require("@/assets/images/temp/home-page2.jpg"),
-                require("@/assets/images/temp/home-page3.jpg"),
-                require("@/assets/images/temp/recommend-page1.jpg"),
-                require("@/assets/images/temp/recommend-page2.jpg"),
-                require("@/assets/images/temp/recommend-page3.jpg"),
-                require("@/assets/images/temp/worklist1.jpg"),
-                require("@/assets/images/temp/worklist2.jpg"),
-                require("@/assets/images/temp/worklist3.jpg"),
-            ],
+            list: [],
+            page: 1,
+            total_count: 0,
+            category_id: "",
+            theme_id: "",
+            material_id: "",
+            price_gte: "",
+            price_lt: "",
+            active_cate: "materials",
         };
+    },
+    created() {
+        // this.requestData();
+    },
+    computed: {
+        categoryList() {
+            return this.$store.state.art[this.active_cate];
+        },
+        materials() {
+            return this.$store.state.art.materials;
+        },
+    },
+    watch: {
+        materials(value) {
+            if (value.length > 0) {
+                this.material_id = value[0].code;
+                this.requestData();
+            }
+        },
+    },
+    methods: {
+        requestData() {
+            let obj = {
+                page: this.page,
+            };
+            if (this.category_id) {
+                obj.category_id = this.category_id;
+            } else if (this.theme_id) {
+                obj.theme_id = this.theme_id;
+            } else if (this.material_id) {
+                obj.material_id = this.material_id;
+            }
+            if (this.price_gte) {
+                obj.price_gte = this.price_gte;
+            } else if (this.price_lt) {
+                obj.price_lt = this.price_lt;
+            }
+            this.$http.globalGetSellingArt(obj).then((res) => {
+                this.list = res.list;
+                this.total_count = res.total_count;
+            });
+        },
+        next() {
+            this.page++;
+            this.requestData();
+        },
+        prev() {
+            this.page--;
+            this.requestData();
+        },
+        requestFilterData(item) {
+            this.page = 1;
+            this.resetActive_cate(item);
+            this.requestData();
+        },
+        resetActive_cate(item) {
+            switch (this.active_cate) {
+                case "materials":
+                    this.category_id = "";
+                    this.material_id = item.code;
+                    this.price_gte = "";
+                    this.price_lt = "";
+                    this.theme_id = "";
+                    break;
+                case "themes":
+                    this.theme_id = item.code;
+                    this.material_id = "";
+                    this.price_gte = "";
+                    this.price_lt = "";
+                    this.category_id = "";
+                    break;
+                case "price":
+                    this.price_gte = "";
+                    this.price_lt = "";
+                    this.material_id = "";
+                    this.category_id = "";
+                    this.theme_id = "";
+                    break;
+            }
+        },
     },
 };
 </script>

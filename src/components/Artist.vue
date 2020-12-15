@@ -4,15 +4,14 @@
         <div class="profile">
             <div class="avatar">
                 <img
-                    @click="goDetail(1)"
-                    src="@/assets/images/temp/avatar1.webp"
+                    @click="goDetail(member.id)"
+                    src="@/assets/images/yin@2x.png"
                 />
                 <div class="info">
-                    <span class="name">Noah Schnapp</span>
-                    <span class="desc"
-                        >Shanghai people graduated from Stanford
-                        University</span
-                    >
+                    <span class="name">{{
+                        member.display_name || "Anonymous"
+                    }}</span>
+                    <span class="desc">{{ member.address }}</span>
                 </div>
             </div>
             <div class="works">
@@ -32,6 +31,10 @@ export default {
         list: {
             type: Array,
             default: () => [],
+        },
+        member: {
+            type: Object,
+            default: () => {},
         },
     },
     data() {

@@ -2,16 +2,16 @@
 <template>
     <div class="thumbnail" :class="{ group: isGroup }">
         <div class="item" v-for="(v, i) in list" :key="i">
-            <router-link :to="`/art/${1}`" class="img-container">
+            <router-link :to="`/art/${v.id}`" class="img-container">
                 <AdaptiveImage :url="v.img_main_file1.url"></AdaptiveImage>
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <div class="desc">{{ materialType(v.material_id) }}</div>
-            <div class="address-label">
+            <div class="address-label" v-if="v.member">
                 Address:
                 <span class="address">{{ v.member.address }}</span>
             </div>
-            <div class="price">950 UART</div>
+            <div class="price">{{ v.price }} UART</div>
         </div>
     </div>
 </template>

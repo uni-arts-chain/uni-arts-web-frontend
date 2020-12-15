@@ -24,9 +24,12 @@
             <div class="recommendations">
                 <h4 class="title">Previous recommendations</h4>
                 <div class="artist-list">
-                    <Artist :list="list"></Artist>
-                    <Artist :list="list"></Artist>
-                    <Artist :list="list"></Artist>
+                    <Artist
+                        :member="v.member"
+                        :list="v.arts"
+                        v-for="(v, i) in artList"
+                        :key="i"
+                    ></Artist>
                 </div>
             </div>
         </div>
@@ -44,9 +47,21 @@ export default {
     data() {
         return {
             list: [recommendPage1, recommendPage2, recommendPage3],
+            artList: [],
+            total_count: 0,
         };
     },
-    methods: {},
+    created() {
+        this.requestData();
+    },
+    methods: {
+        requestData() {
+            this.$http.globalGetAllArt({}).then((res) => {
+                this.artList = res.list;
+                this.total_count = res.total_count;
+            });
+        },
+    },
 };
 </script>
 
