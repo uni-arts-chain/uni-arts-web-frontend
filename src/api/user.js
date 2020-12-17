@@ -30,6 +30,26 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "postArt",
+        method: "POST",
+        desc: "上传艺术品",
+        path: "/arts",
+        mockPath: "/arts",
+        params: {},
+        options: {
+            upload: [
+                "img_main_file1",
+                "img_main_file2",
+                "img_main_file3",
+                "img_detail_file1",
+                "img_detail_file2",
+                "img_detail_file3",
+                "img_detail_file4",
+                "img_detail_file5",
+            ],
+        },
+    },
 ];
 
 export default apiList;

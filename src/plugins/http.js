@@ -59,9 +59,26 @@ export class MakeApi {
                             api.options.paramsObj = outerParams;
                         }
                         const formData = new FormData();
-                        Object.keys(outerParams).forEach((v) => {
-                            formData.append(v, outerParams[v]);
-                        });
+                        if (api.options.upload) {
+                            Object.keys(outerParams).forEach((v) => {
+                                let uploadFile = api.options.upload.find(
+                                    (f) => f == v
+                                );
+                                if (uploadFile) {
+                                    formData.append(
+                                        v,
+                                        outerParams[v][0],
+                                        outerParams[v][1]
+                                    );
+                                } else {
+                                    formData.append(v, outerParams[v]);
+                                }
+                            });
+                        } else {
+                            Object.keys(outerParams).forEach((v) => {
+                                formData.append(v, outerParams[v]);
+                            });
+                        }
                         _data = formData;
                     }
                     const URL = url.replace(/\{:[a-zA-Z]{1,}\}/g, (match) => {
@@ -72,11 +89,13 @@ export class MakeApi {
                         url: URL,
                         method: api.method,
                     };
-                    console.log("api.baseURL: ", api.baseURL);
                     api.baseURL && (obj["baseURL"] = api.baseURL);
                     return axios(
                         _normoalize(
-                            _assign(obj, _assign({}, outerOptions)),
+                            _assign(
+                                obj,
+                                _assign({}, api.options, outerOptions)
+                            ),
                             _data
                         )
                     );

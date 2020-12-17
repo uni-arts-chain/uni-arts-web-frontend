@@ -75,6 +75,17 @@ const routes = [
                         /* webpackChunkName: "accountSale" */ "@/views/Account/Sale.vue"
                     ),
             },
+            {
+                path: "upload",
+                name: "AccountUpload",
+                meta: {
+                    needAuth: true,
+                },
+                component: () =>
+                    import(
+                        /* webpackChunkName: "accountUpload" */ "@/views/Account/Upload.vue"
+                    ),
+            },
         ],
     },
     {

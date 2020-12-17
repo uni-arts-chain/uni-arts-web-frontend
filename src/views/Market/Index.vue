@@ -76,7 +76,7 @@ export default {
     },
     created() {
         if (this.materials.length > 0) {
-            this.material_id = this.materials[0].code;
+            this.material_id = this.materials[0].id;
             this.requestData();
         }
         this.requsetPriceLimit();
@@ -101,7 +101,7 @@ export default {
     watch: {
         materials(value) {
             if (value.length > 0) {
-                this.material_id = value[0].code;
+                this.material_id = value[0].id;
                 this.requestData();
             }
         },
@@ -181,13 +181,13 @@ export default {
             switch (this.active_cate) {
                 case "materials":
                     this.category_id = "";
-                    this.material_id = item.code;
+                    this.material_id = item.id;
                     this.price_gte = "";
                     this.price_lt = "";
                     this.theme_id = "";
                     break;
                 case "themes":
-                    this.theme_id = item.code;
+                    this.theme_id = item.id;
                     this.material_id = "";
                     this.price_gte = "";
                     this.price_lt = "";

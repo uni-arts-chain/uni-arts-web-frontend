@@ -164,6 +164,7 @@ export function responseFailFunc(responseError) {
 // 签名算法
 function _getHmacSHA256(method, url, fields, expire_at) {
     let message = method + "|" + url + "|" + fields;
+    console.log(message);
     let str = crypto
         .createHmac("sha256", expire_at)
         .update(message)

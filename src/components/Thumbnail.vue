@@ -59,6 +59,7 @@ export default {
     float: left;
     width: 30%;
     margin-right: 5%;
+    margin-bottom: 35px;
 }
 .item:nth-child(3n) {
     margin-right: 0;

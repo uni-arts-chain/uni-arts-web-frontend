@@ -26,7 +26,7 @@
                         Own Arts
                     </router-link>
                     <router-link
-                        to="/account"
+                        to="/account/upload"
                         class="option-title"
                         :class="{ active: optionActive == '2' }"
                     >
@@ -142,6 +142,7 @@ export default {
 <style lang="scss" scoped>
 .index {
     padding-top: 80px;
+    padding-bottom: 80px;
 }
 .header {
     display: flex;

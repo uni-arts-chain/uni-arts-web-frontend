@@ -76,7 +76,7 @@ module.exports = {
         port: 5100,
         proxy: {
             "/test/api": {
-                target: "https://service.uniarts.me", // 接口的域名 测试
+                target: "192.168.0.128:5000", // 接口的域名 测试
                 pathRewrite: {
                     "^/test/api": "/api",
                 },
