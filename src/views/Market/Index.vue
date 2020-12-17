@@ -24,9 +24,17 @@
             <div class="content">
                 <Thumbnail :list="list" :isGroup="true"></Thumbnail>
             </div>
-            <div class="pagenation">
-                <div class="prev" @click="prev"></div>
-                <div class="next" @click="next"></div>
+            <div class="pagenation" v-if="hasPrev || hasNext">
+                <div
+                    class="prev"
+                    @click="prev"
+                    :class="{ 'no-prev': !hasPrev }"
+                ></div>
+                <div
+                    class="next"
+                    @click="next"
+                    :class="{ 'no-next': !hasNext }"
+                ></div>
             </div>
         </div>
     </div>
@@ -41,6 +49,8 @@ export default {
         return {
             list: [],
             page: 1,
+            per_page: 18,
+            total_pages: 0,
             total_count: 0,
             category_id: "",
             theme_id: "",
@@ -51,7 +61,10 @@ export default {
         };
     },
     created() {
-        // this.requestData();
+        if (this.materials.length > 0) {
+            this.material_id = this.materials[0].code;
+            this.requestData();
+        }
     },
     computed: {
         categoryList() {
@@ -59,6 +72,12 @@ export default {
         },
         materials() {
             return this.$store.state.art.materials;
+        },
+        hasPrev() {
+            return this.page > 1;
+        },
+        hasNext() {
+            return this.page < this.total_pages;
         },
     },
     watch: {
@@ -70,9 +89,11 @@ export default {
         },
     },
     methods: {
+        // need to fix
         requestData() {
             let obj = {
                 page: this.page,
+                per_page: this.per_page,
             };
             if (this.category_id) {
                 obj.category_id = this.category_id;
@@ -89,15 +110,20 @@ export default {
             this.$http.globalGetSellingArt(obj).then((res) => {
                 this.list = res.list;
                 this.total_count = res.total_count;
+                this.total_pages = Math.ceil(this.total_count / this.per_page);
             });
         },
         next() {
-            this.page++;
-            this.requestData();
+            if (this.hasNext) {
+                this.page++;
+                this.requestData();
+            }
         },
         prev() {
-            this.page--;
-            this.requestData();
+            if (this.hasPrev) {
+                this.page--;
+                this.requestData();
+            }
         },
         requestFilterData(item) {
             this.page = 1;
@@ -181,6 +207,7 @@ h2.title {
 }
 
 .content {
+    margin-bottom: 100px;
 }
 
 .pagenation {
@@ -204,6 +231,11 @@ h2.title {
         background-size: 100% auto;
         margin: 0 91px;
         cursor: pointer;
+    }
+    .prev.no-prev,
+    .next.no-next {
+        opacity: 0.3;
+        cursor: not-allowed;
     }
 }
 </style>

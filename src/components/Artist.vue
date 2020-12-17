@@ -16,7 +16,7 @@
             </div>
             <div class="works">
                 <i class="zp"></i>
-                <span>12 works</span>
+                <span>{{ art_count }} works</span>
             </div>
         </div>
         <Thumbnail class="thumbnail" :list="list"></Thumbnail>
@@ -35,6 +35,10 @@ export default {
         member: {
             type: Object,
             default: () => {},
+        },
+        art_count: {
+            type: Number,
+            default: 0,
         },
     },
     data() {

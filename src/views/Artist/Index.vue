@@ -2,14 +2,14 @@
 <template>
     <div class="index">
         <div class="container">
-            <div class="header">
+            <div class="header" v-if="topAuthor.member">
                 <div class="bg"></div>
                 <div class="profile">
                     <router-link
                         class="avatar-container"
-                        :to="`/artist-detail/${1}`"
+                        :to="`/artist-detail/${topAuhtor.id}`"
                     >
-                        <img src="@/assets/images/temp/fashion.jpg" />
+                        <!-- <img src="@/assets/images/temp/fashion.jpg" /> -->
                     </router-link>
                     <div class="info">
                         <div class="name">CATHERINE QIN</div>
@@ -27,9 +27,22 @@
                     <Artist
                         :member="v.member"
                         :list="v.arts"
+                        :art_count="v.art_count"
                         v-for="(v, i) in artList"
                         :key="i"
                     ></Artist>
+                </div>
+                <div class="pagenation" v-if="hasPrev || hasNext">
+                    <div
+                        class="prev"
+                        :class="{ 'no-prev': !hasPrev }"
+                        @click="prev"
+                    ></div>
+                    <div
+                        class="next"
+                        :class="{ 'no-next': !hasNext }"
+                        @click="next"
+                    ></div>
                 </div>
             </div>
         </div>
@@ -38,28 +51,58 @@
 
 <script>
 import Artist from "@/components/Artist";
-import recommendPage1 from "@/assets/images/temp/recommend-page1.jpg";
-import recommendPage2 from "@/assets/images/temp/recommend-page2.jpg";
-import recommendPage3 from "@/assets/images/temp/recommend-page3.jpg";
 export default {
     name: "index",
     components: { Artist },
     data() {
         return {
-            list: [recommendPage1, recommendPage2, recommendPage3],
+            list: [],
             artList: [],
-            total_count: 0,
+            total_pages: 0,
+            per_page: 18,
+            page: 1,
+            topAuthor: {},
         };
     },
     created() {
         this.requestData();
     },
+    computed: {
+        hasPrev() {
+            return this.page > 1;
+        },
+        hasNext() {
+            return this.page < this.total_pages;
+        },
+    },
     methods: {
         requestData() {
-            this.$http.globalGetAllArt({}).then((res) => {
-                this.artList = res.list;
-                this.total_count = res.total_count;
-            });
+            this.$http
+                .globalGetAllArt({
+                    per_page: this.per_page,
+                    page: this.page,
+                })
+                .then((res) => {
+                    if (res.list.length > 0 && res.list[0].member.address) {
+                        this.topAuhtor = res.list.shift();
+                    }
+                    this.artList = res.list;
+                    this.total_pages = Math.ceil(
+                        res.total_count / this.per_page
+                    );
+                });
+        },
+        next() {
+            if (this.hasNext) {
+                this.page++;
+                this.requestData();
+            }
+        },
+        prev() {
+            if (this.hasPrev) {
+                this.page--;
+                this.requestData();
+            }
         },
     },
 };
@@ -68,6 +111,7 @@ export default {
 <style lang="scss" scoped>
 .index {
     padding-top: 50px;
+    padding-bottom: 50px;
 }
 .header {
     position: relative;
@@ -154,6 +198,35 @@ export default {
         letter-spacing: 2px;
         text-align: left;
         margin-bottom: 115px;
+    }
+
+    .pagenation {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 50px;
+        .prev {
+            width: 110px;
+            height: 70px;
+            background: url("~@/assets/images/zuo@2x.png") no-repeat;
+            background-size: 100% auto;
+            margin: 0 91px;
+            cursor: pointer;
+        }
+        .prev.no-prev,
+        .next.no-next {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .next {
+            width: 110px;
+            height: 70px;
+            background: url("~@/assets/images/you@2x.png") no-repeat;
+            background-size: 100% auto;
+            margin: 0 91px;
+            cursor: pointer;
+        }
     }
 }
 </style>

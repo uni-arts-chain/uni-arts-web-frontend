@@ -1,6 +1,7 @@
 /** * Created by Lay Hunt on 2020-12-03 18:20:48. */
 <template>
     <div class="own-arts">
+        <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="art-item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${v.id}`" class="img-container">
                 <!-- <img ref="img" @load="imgOnLoad(i)" :src="v.img_main_file1.url" /> -->
@@ -41,6 +42,20 @@ export default {
     },
     components: {
         AdaptiveImage,
+    },
+    methods: {
+        next() {
+            if (this.hasNext) {
+                this.page++;
+                this.requestData();
+            }
+        },
+        prev() {
+            if (this.hasPrev) {
+                this.page--;
+                this.requestData();
+            }
+        },
     },
 };
 </script>
@@ -109,5 +124,13 @@ export default {
     line-height: 30px;
     letter-spacing: 0px;
     margin-top: 0px;
+}
+.no-data {
+    color: #666;
+    width: 100%;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

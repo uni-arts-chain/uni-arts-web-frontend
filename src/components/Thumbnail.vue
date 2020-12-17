@@ -1,6 +1,7 @@
 /** * Created by Lay Hunt on 2020-11-19 11:37:45. */
 <template>
     <div class="thumbnail" :class="{ group: isGroup }">
+        <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${v.id}`" class="img-container">
                 <AdaptiveImage :url="v.img_main_file1.url"></AdaptiveImage>
@@ -109,5 +110,9 @@ export default {
     line-height: 30px;
     letter-spacing: 0px;
     margin-top: 8px;
+}
+
+.no-data {
+    color: #666;
 }
 </style>

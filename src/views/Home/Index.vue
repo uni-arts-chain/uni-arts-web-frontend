@@ -62,14 +62,18 @@
                     <div class="post-text"></div>
                 </div>
                 <Thumbnail :list="recommendList"></Thumbnail>
-                <button class="more-button">more works</button>
+                <button class="more-button" @click="$router.push('/market')">
+                    more works
+                </button>
             </div>
         </div>
         <div class="authors container">
             <h2 class="title">Popular authors</h2>
             <div class="authors-body">
                 <ArtistGroupList :list="authorList"></ArtistGroupList>
-                <button class="more-button">more authors</button>
+                <button class="more-button" @click="$router.push('/artist')">
+                    more authors
+                </button>
             </div>
         </div>
     </div>

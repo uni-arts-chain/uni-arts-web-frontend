@@ -19,8 +19,6 @@
 <script>
 import { Carousel, CarouselItem } from "element-ui";
 import page1 from "@/assets/images/temp/home-page1.jpg";
-import page2 from "@/assets/images/temp/home-page2.jpg";
-import page3 from "@/assets/images/temp/home-page3.jpg";
 export default {
     name: "carousel",
     components: {
@@ -29,7 +27,7 @@ export default {
     },
     data() {
         return {
-            pageList: [page1, page2, page3],
+            pageList: [page1, page1, page1],
         };
     },
 };
