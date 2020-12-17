@@ -9,7 +9,7 @@
                         class="avatar-container"
                         :to="`/artist-detail/${topAuhtor.id}`"
                     >
-                        <!-- <img src="@/assets/images/temp/fashion.jpg" /> -->
+                        <img :src="topAuthor.recommend_image" />
                     </router-link>
                     <div class="info">
                         <div class="name">CATHERINE QIN</div>
