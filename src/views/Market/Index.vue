@@ -15,13 +15,25 @@
                         Price
                     </div>
                 </div>
-                <div class="catetory" v-for="(v, i) in categoryList" :key="i">
-                    <div class="catetory-item" @click="requestFilterData(v)">
-                        {{ v.title || "unknown" }}
+                <div class="catetory">
+                    <div
+                        class="catetory-item"
+                        @click="requestFilterData(v)"
+                        v-for="(v, i) in categoryList"
+                        :key="i"
+                    >
+                        <div v-if="active_cate == 'price'">
+                            {{ v.gte ? v.gte : "低于" }}
+                            {{ v.gte && v.lt ? " - " : "" }}
+                            {{ v.lt ? v.lt : "以上" }}
+                        </div>
+                        <div v-else>
+                            {{ v.title || "unknown" }}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="content">
+            <div class="content" v-loading="isLoading">
                 <Thumbnail :list="list" :isGroup="true"></Thumbnail>
             </div>
             <div class="pagenation" v-if="hasPrev || hasNext">
@@ -49,6 +61,7 @@ export default {
         return {
             list: [],
             page: 1,
+            priceInterval: [],
             per_page: 18,
             total_pages: 0,
             total_count: 0,
@@ -58,6 +71,7 @@ export default {
             price_gte: "",
             price_lt: "",
             active_cate: "materials",
+            isLoading: true,
         };
     },
     created() {
@@ -65,9 +79,13 @@ export default {
             this.material_id = this.materials[0].code;
             this.requestData();
         }
+        this.requsetPriceLimit();
     },
     computed: {
         categoryList() {
+            if (this.active_cate == "price") {
+                return this.priceInterval;
+            }
             return this.$store.state.art[this.active_cate];
         },
         materials() {
@@ -91,6 +109,7 @@ export default {
     methods: {
         // need to fix
         requestData() {
+            this.isLoading = true;
             let obj = {
                 page: this.page,
                 per_page: this.per_page,
@@ -104,14 +123,28 @@ export default {
             }
             if (this.price_gte) {
                 obj.price_gte = this.price_gte;
-            } else if (this.price_lt) {
+            }
+            if (this.price_lt) {
                 obj.price_lt = this.price_lt;
             }
-            this.$http.globalGetSellingArt(obj).then((res) => {
-                this.list = res.list;
-                this.total_count = res.total_count;
-                this.total_pages = Math.ceil(this.total_count / this.per_page);
-            });
+            this.$http
+                .globalGetSellingArt(obj)
+                .then((res) => {
+                    this.isLoading = false;
+                    this.list = res.list;
+                    this.total_count = res.total_count;
+                    this.total_pages = Math.ceil(
+                        this.total_count / this.per_page
+                    );
+                })
+                .catch((err) => {
+                    this.isLoading = false;
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
+                });
         },
         next() {
             if (this.hasNext) {
@@ -130,6 +163,20 @@ export default {
             this.resetActive_cate(item);
             this.requestData();
         },
+        requsetPriceLimit() {
+            this.$http
+                .globalGetPriceInterval({})
+                .then((res) => {
+                    this.priceInterval = res;
+                })
+                .catch((err) => {
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
+                });
+        },
         resetActive_cate(item) {
             switch (this.active_cate) {
                 case "materials":
@@ -147,8 +194,8 @@ export default {
                     this.category_id = "";
                     break;
                 case "price":
-                    this.price_gte = "";
-                    this.price_lt = "";
+                    this.price_gte = item.gte || "";
+                    this.price_lt = item.lt || "";
                     this.material_id = "";
                     this.category_id = "";
                     this.theme_id = "";
@@ -162,6 +209,9 @@ export default {
 <style lang="scss" scoped>
 .index {
     padding-top: 60px;
+}
+.container {
+    min-height: 100px;
 }
 h2.title {
     font-family: "Broadway";
@@ -208,6 +258,7 @@ h2.title {
 
 .content {
     margin-bottom: 100px;
+    min-height: 100px;
 }
 
 .pagenation {

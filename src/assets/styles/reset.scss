@@ -3,3 +3,12 @@
         text-align: inherit;
     }
 }
+
+.el-loading-mask{
+    .el-loading-spinner{
+        .circular .path{
+            stroke: black;
+        }
+    }
+}
+    

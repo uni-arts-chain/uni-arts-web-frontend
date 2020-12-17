@@ -68,7 +68,11 @@ export default {
                     this.author = res[0] ? res[0].author : {};
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
                 });
         },
     },

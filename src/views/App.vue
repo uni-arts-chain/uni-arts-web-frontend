@@ -20,15 +20,8 @@ export default {
             aa: 1,
         };
     },
-    async beforeCreate() {
-        // console.log(3);
-        // await this.$extension.isReady();
-        // console.log(4);
-    },
     created() {
         this.$rpc.api.isReady.then(() => {
-            // console.log(this.$rpc.api.genesisHash.toHex());
-            // console.log(this.$rpc.api.runtimeMetadata);
             this.initChainInfo();
         });
         this.$extension
@@ -39,13 +32,6 @@ export default {
             .catch(() => {
                 console.log(1);
             });
-        // extension
-        //     .then(() => {
-        // this.getInfo();
-        //     })
-        //     .catch(() => {
-        //         console.log(1);
-        //     });
     },
     methods: {
         getInfo() {

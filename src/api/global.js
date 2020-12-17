@@ -109,6 +109,17 @@ const apiList = [
             unSignature: true,
         },
     },
+    {
+        name: "getPriceInterval",
+        method: "GET",
+        desc: "价格过滤区间",
+        path: "/arts/prices",
+        mockPath: "/arts​/prices",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
 ];
 
 export default apiList;
