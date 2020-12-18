@@ -12,10 +12,12 @@
                         <img :src="topAuthor.recommend_image" />
                     </router-link>
                     <div class="info">
-                        <div class="name">CATHERINE QIN</div>
+                        <div class="name">
+                            {{ topAuhtor.display_name || "Anonymous" }}
+                        </div>
                         <div class="intro">
                             <i class="quote1"></i>
-                            Guangzhou people graduated from Stanford University
+                            No introduction
                             <i class="quote2"></i>
                         </div>
                     </div>
