@@ -54,17 +54,6 @@ const routes = [
                     ),
             },
             {
-                path: "purchase",
-                name: "AccountPurchase",
-                meta: {
-                    needAuth: true,
-                },
-                component: () =>
-                    import(
-                        /* webpackChunkName: "accountPurchase" */ "@/views/Account/Purchase.vue"
-                    ),
-            },
-            {
                 path: "sale",
                 name: "AccountSale",
                 meta: {
@@ -75,18 +64,29 @@ const routes = [
                         /* webpackChunkName: "accountSale" */ "@/views/Account/Sale.vue"
                     ),
             },
-            {
-                path: "upload",
-                name: "AccountUpload",
-                meta: {
-                    needAuth: true,
-                },
-                component: () =>
-                    import(
-                        /* webpackChunkName: "accountUpload" */ "@/views/Account/Upload.vue"
-                    ),
-            },
         ],
+    },
+    {
+        path: "/account/upload",
+        name: "AccountUpload",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "accountUpload" */ "@/views/Account/Upload.vue"
+            ),
+    },
+    {
+        path: "/account/purchase",
+        name: "AccountPurchase",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "accountPurchase" */ "@/views/Account/Purchase.vue"
+            ),
     },
     {
         path: "/login",

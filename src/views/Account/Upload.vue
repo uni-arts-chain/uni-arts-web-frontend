@@ -281,28 +281,6 @@ export default {
                         details: this.form.details,
                         price: this.form.price,
                     };
-                    // if (this.img_main_list.length > 0) {
-                    //     this.img_main_list.forEach((v) => {
-                    //         let reader = new FileReader();
-                    //         reader.onload = (event) =>
-                    //             (obj[v.field] = [
-                    //                 this.dataURLtoBlob(event.target.result),
-                    //                 `${v.field}.png`,
-                    //             ]);
-                    //         reader.readAsDataURL(v.file.raw);
-                    //     });
-                    // }
-                    // if (this.img_detail_list.length > 0) {
-                    //     this.img_detail_list.forEach((v) => {
-                    //         let reader = new FileReader();
-                    //         reader.onload = (event) =>
-                    //             (obj[v.field] = [
-                    //                 this.dataURLtoBlob(event.target.result),
-                    //                 `${v.field}.png`,
-                    //             ]);
-                    //         reader.readAsDataURL(v.file.raw);
-                    //     });
-                    // }
                     this.filetoBlob(this.img_main_list, obj).then(() => {
                         this.filetoBlob(this.img_detail_list, obj).then(() => {
                             console.log(obj);

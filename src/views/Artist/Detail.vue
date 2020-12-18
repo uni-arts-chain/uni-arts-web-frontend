@@ -29,11 +29,20 @@
                 </div>
             </div>
             <div class="body">
-                <!-- <div class="menu-container">
-                    <ul class="menu"></ul>
-                </div> -->
                 <div class="content">
                     <OwnArts style="padding-left: 0" :list="list"></OwnArts>
+                    <div class="pagenation" v-if="hasPrev || hasNext">
+                        <div
+                            class="prev"
+                            @click="prev"
+                            :class="{ 'no-prev': !hasPrev }"
+                        ></div>
+                        <div
+                            class="next"
+                            @click="next"
+                            :class="{ 'no-next': !hasNext }"
+                        ></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,12 +68,20 @@ export default {
     created() {
         this.requestData();
     },
+    computed: {
+        hasPrev() {
+            return this.page > 1;
+        },
+        hasNext() {
+            return this.page < this.total_pages;
+        },
+    },
     methods: {
         requestData() {
             this.$http
                 .globalGetAuthorArts({}, { id: this.authorId })
                 .then((res) => {
-                    this.list = res;
+                    this.list = res.list;
                     this.author = res[0] ? res[0].author : {};
                 })
                 .catch((err) => {
@@ -75,6 +92,18 @@ export default {
                     });
                 });
         },
+        next() {
+            if (this.hasNext) {
+                this.page++;
+                this.requestData();
+            }
+        },
+        prev() {
+            if (this.hasPrev) {
+                this.page--;
+                this.requestData();
+            }
+        },
     },
 };
 </script>
@@ -82,6 +111,7 @@ export default {
 <style lang="scss" scoped>
 .detail {
     padding-top: 80px;
+    padding-bottom: 80px;
 }
 .header {
     display: flex;
@@ -201,6 +231,36 @@ export default {
                 cursor: pointer;
             }
         }
+    }
+}
+
+.pagenation {
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 133px;
+    .prev {
+        width: 110px;
+        height: 70px;
+        background: url("~@/assets/images/zuo@2x.png") no-repeat;
+        background-size: 100% auto;
+        margin: 0 91px;
+        cursor: pointer;
+    }
+    .next {
+        width: 110px;
+        height: 70px;
+        background: url("~@/assets/images/you@2x.png") no-repeat;
+        background-size: 100% auto;
+        margin: 0 91px;
+        cursor: pointer;
+    }
+    .prev.no-prev,
+    .next.no-next {
+        opacity: 0.3;
+        cursor: not-allowed;
     }
 }
 </style>

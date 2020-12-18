@@ -2,7 +2,7 @@
 <template>
     <div class="index">
         <div class="container">
-            <div class="header">
+            <div class="body">
                 <div class="profile">
                     <img src="@/assets/images/yin@2x.png" alt="" />
                     <div class="profile-info">
@@ -17,31 +17,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="option">
-                    <router-link
-                        to="/account"
-                        class="option-title"
-                        :class="{ active: optionActive == '1' }"
-                    >
-                        Own Arts
-                    </router-link>
-                    <router-link
-                        to="/account/upload"
-                        class="option-title"
-                        :class="{ active: optionActive == '2' }"
-                    >
-                        Upload Works
-                    </router-link>
-                    <router-link
-                        to="/account"
-                        class="option-title"
-                        :class="{ active: optionActive == '3' }"
-                    >
-                        Launch An Auction
-                    </router-link>
-                </div>
-            </div>
-            <div class="body">
                 <div class="menu-container">
                     <ul class="menu">
                         <li>
@@ -65,21 +40,46 @@
                         style="padding-top: 25px; margin-bottom: 70px"
                     >
                         <li>
-                            <router-link to="/account"
+                            <router-link to="/account/sale"
                                 >Account Setting</router-link
                             >
                         </li>
                         <li>
-                            <router-link to="/account"
+                            <router-link to="/account/sale"
                                 >Message Center</router-link
                             >
                         </li>
-                        <li>
-                            <router-link to="/account"
-                                >Customer Service</router-link
-                            >
+                        <li
+                            style="
+                                border-radius: 25px;
+                                background-color: black;
+                                color: white;
+                                padding: 12px 25px;
+                            "
+                        >
+                            <router-link to="/account/upload">
+                                Upload Works
+                            </router-link>
                         </li>
                     </ul>
+                </div>
+            </div>
+            <div class="header">
+                <div class="option">
+                    <router-link
+                        to="/account/sale"
+                        class="option-title"
+                        :class="{ active: optionActive == '3' }"
+                    >
+                        For sale
+                    </router-link>
+                    <router-link
+                        to="/account"
+                        class="option-title"
+                        :class="{ active: optionActive == '1' }"
+                    >
+                        Stock
+                    </router-link>
                 </div>
                 <div class="content">
                     <router-view></router-view>
@@ -110,10 +110,7 @@ export default {
                 case "/account/":
                     index = "1";
                     break;
-                case "/account/upload":
-                    index = "2";
-                    break;
-                case "/account/launch":
+                case "/account/sale":
                     index = "3";
                     break;
             }
@@ -138,77 +135,23 @@ export default {
     },
 };
 </script>
-
 <style lang="scss" scoped>
 .index {
     padding-top: 80px;
     padding-bottom: 80px;
 }
+.container {
+    display: flex;
+    justify-content: space-between;
+}
 .header {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    .profile {
-        display: flex;
-        align-items: center;
-        > img {
-            overflow: hidden;
-            border-radius: 50%;
-            border: 4px solid #020202;
-            width: 109px;
-            height: 109px;
-            margin-right: 40px;
-            margin-left: 30px;
-        }
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            .name {
-                font-size: 22px;
-                font-weight: 600;
-                letter-spacing: 0px;
-                margin-bottom: 20px;
-                max-width: 300px;
-                display: block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            .score {
-                font-size: 22px;
-                font-weight: 400;
-                letter-spacing: 0px;
-                display: flex;
-                align-items: center;
-            }
-            .score-number {
-                margin-left: 15px;
-                font-weight: 600;
-            }
-            .help {
-                display: block;
-                margin-left: 15px;
-                width: 19px;
-                height: 19px;
-                font-size: 16px;
-                line-height: 18px;
-                color: #1a7fc6;
-                border: 1px solid #1a7fc6;
-                border-radius: 50%;
-                cursor: pointer;
-            }
-            .quit {
-                margin-left: 15px;
-                display: flex;
-                font-size: 20px;
-                cursor: pointer;
-            }
-        }
-    }
+    flex-direction: column;
+    width: calc(100% - 230px);
     .option {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         .option-title {
             font-size: 20px;
             font-weight: 400;
@@ -232,27 +175,8 @@ export default {
             transform: translateX(-50%);
         }
     }
-}
-
-.body {
-    display: flex;
-    justify-content: space-between;
-    .menu {
-        width: 170px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-        padding-top: 103px;
-        li {
-            font-size: 18px;
-            font-weight: 400;
-            letter-spacing: 0px;
-            margin-bottom: 51px;
-        }
-    }
     .content {
-        width: calc(100% - 170px);
+        width: 100%;
         .homepage {
             padding-top: 78px;
             font-size: 18px;
@@ -277,6 +201,87 @@ export default {
                 border: 3px solid black;
                 text-transform: uppercase;
                 margin-top: 93px;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.body {
+    width: 230px;
+    display: flex;
+    flex-direction: column;
+    .menu {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 73px;
+        li {
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: 0px;
+            margin-bottom: 51px;
+        }
+    }
+    .profile {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        > img {
+            overflow: hidden;
+            border-radius: 50%;
+            border: 4px solid #020202;
+            width: 109px;
+            height: 109px;
+            margin-right: 40px;
+            margin-left: 30px;
+            margin-bottom: 41px;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            .name {
+                font-size: 22px;
+                font-weight: 600;
+                letter-spacing: 0px;
+                margin-bottom: 20px;
+                max-width: 200px;
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .score {
+                font-size: 22px;
+                font-weight: 400;
+                letter-spacing: 0px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .score-number {
+                margin-left: 15px;
+                font-weight: 600;
+            }
+            .help {
+                display: block;
+                margin-left: 15px;
+                width: 19px;
+                height: 19px;
+                font-size: 16px;
+                line-height: 18px;
+                color: #1a7fc6;
+                border: 1px solid #1a7fc6;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+            .quit {
+                margin-left: 15px;
+                display: flex;
+                font-size: 20px;
                 cursor: pointer;
             }
         }
