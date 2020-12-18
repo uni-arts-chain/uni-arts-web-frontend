@@ -282,8 +282,6 @@ export default {
                     };
                     this.filetoBlob(this.img_main_list, obj).then(() => {
                         this.filetoBlob(this.img_detail_list, obj).then(() => {
-                            console.log(obj);
-                            debugger;
                             this.$http.userPostArt(obj).then((res) => {
                                 console.log(res);
                             });

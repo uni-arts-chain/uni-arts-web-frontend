@@ -53,7 +53,7 @@
                         <!-- Number of signatures : 3 -->
                     </div>
                     <button v-if="isOwner" class="buy" @click="confirm">
-                        SELL NOW
+                        {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
                     </button>
                     <button v-else class="buy" @click="confirm">BUY NOW</button>
                 </div>
@@ -276,10 +276,25 @@
 
         <Dialog
             :visible.sync="dialogVisible"
-            :type="isOwner ? 'medium' : 'small'"
+            :type="isOwner ? (isOwnerOrder ? 'small' : 'medium') : 'small'"
             :close="handleClose"
         >
-            <div class="dialog-content" v-if="isOwner">
+            <div class="dialog-content" v-if="isOwnerOrder">
+                <div class="title">FIRM CANCEL</div>
+                <div class="price">
+                    Current Price:
+                    <span class="number">{{ art.price }} UART</span>
+                </div>
+                <button
+                    @click="submitBuy"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    CANCEL NOW
+                </button>
+            </div>
+            <div class="dialog-content" v-else-if="isOwner">
                 <div class="title">FIRM SELL</div>
                 <div class="price">
                     Current Price:
@@ -293,7 +308,14 @@
                     <span class="code">UART</span>
                 </div>
                 <div class="note" style="min-height: 56px"></div>
-                <button @click="submitSell">SELL NOW</button>
+                <button
+                    @click="submitSell"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    SELL NOW
+                </button>
             </div>
             <div class="dialog-content" v-else>
                 <div class="title">FIRM BID</div>
@@ -313,7 +335,14 @@
                     If the auction is not successful, the bid amount will be
                     returned after the auction
                 </div> -->
-                <button @click="submitBuy">BID NOW</button>
+                <button
+                    @click="submitBuy"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    BID NOW
+                </button>
             </div>
         </Dialog>
     </div>
@@ -331,6 +360,7 @@ export default {
     data() {
         return {
             dialogVisible: false,
+            isSubmiting: false,
             art: {
                 img_detail_file1: {},
                 img_detail_file2: {},
@@ -353,6 +383,12 @@ export default {
     computed: {
         isOwner() {
             return this.art.member_id == this.$store.state.user.info.id;
+        },
+        isOwnerOrder() {
+            return (
+                this.art.member_id == this.$store.state.user.info.id &&
+                this.art.aasm_state == "bidding"
+            );
         },
     },
     methods: {
@@ -399,6 +435,8 @@ export default {
             this.$copy(value);
         },
         async submitSell() {
+            if (!this.form.price) return;
+            this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
                 this.art.collection_id,
                 this.art.item_id,
@@ -408,13 +446,12 @@ export default {
                     .times(this.form.price)
                     .toNumber()
             );
-            // await extension.isReady();
             let accountList = await this.$extension.accounts();
-            console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
             await this.$extension.signAndSend(currentAccount, extrinsic, () => {
+                this.isSubmiting = false;
                 this.$notify({
                     title: "success",
                     message: "Application submitted",
@@ -424,32 +461,34 @@ export default {
             });
         },
         async cancelOrder() {
+            this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.cancelSaleOrder(
                 this.art.collection_id,
                 this.art.item_id,
                 0
             );
-            // await extension.isReady();
             let accountList = await this.$extension.accounts();
             console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
             await this.$extension.signAndSend(currentAccount, extrinsic);
+            this.isSubmiting = false;
         },
         async submitBuy() {
             console.log("创建买单");
+            this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.acceptSaleOrder(
                 this.art.collection_id,
                 this.art.item_id
             );
-            // await extension.isReady();
             let accountList = await this.$extension.accounts();
             console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
             await this.$extension.signAndSend(currentAccount, extrinsic, () => {
+                this.isSubmiting = false;
                 this.$notify({
                     title: "success",
                     message: "Application submitted",

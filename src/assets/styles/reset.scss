@@ -6,8 +6,12 @@
 
 .el-loading-mask{
     .el-loading-spinner{
+        margin-top: -15px;
         .circular .path{
             stroke: black;
+        }
+        .el-icon-loading{
+            color:  white;
         }
     }
 }
