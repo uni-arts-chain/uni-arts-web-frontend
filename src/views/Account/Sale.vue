@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-12-14 14:12:54. */
 <template>
-    <div class="purchase">
+    <div class="sale" v-loading="isLoading">
         <Order type="sala" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
@@ -19,13 +19,14 @@
 <script>
 import Order from "./Order";
 export default {
-    name: "purchase",
+    name: "sale",
     components: {
         Order,
     },
     data() {
         return {
             list: [],
+            isLoading: false,
             page: 1,
             per_page: 18,
             total_pages: 0,
@@ -45,6 +46,7 @@ export default {
     },
     methods: {
         requestData() {
+            this.isLoading = true;
             this.$http
                 .userOwnArts({
                     aasm_state: "bidding",
@@ -52,6 +54,7 @@ export default {
                     per_page: this.per_page,
                 })
                 .then((res) => {
+                    this.isLoading = false;
                     this.list = res.list;
                     this.total_count = res.total_count;
                     this.total_pages = Math.ceil(
@@ -60,6 +63,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
+                    this.isLoading = false;
                     this.$notify({
                         title: "Error",
                         message: err.head ? err.head.msg : err,
@@ -82,4 +86,9 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.sale {
+    padding-left: 10%;
+    padding-top: 40px;
+}
+</style>

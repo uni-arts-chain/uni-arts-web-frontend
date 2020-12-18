@@ -23,7 +23,7 @@
             </div>
             <div class="recommendations">
                 <h4 class="title">Previous recommendations</h4>
-                <div class="artist-list">
+                <div class="artist-list" v-loading="isLoading">
                     <Artist
                         :member="v.member"
                         :list="v.arts"
@@ -58,6 +58,7 @@ export default {
         return {
             list: [],
             artList: [],
+            isLoading: false,
             total_pages: 0,
             per_page: 18,
             page: 1,
@@ -77,12 +78,14 @@ export default {
     },
     methods: {
         requestData() {
+            this.isLoading = true;
             this.$http
                 .globalGetAllArt({
                     per_page: this.per_page,
                     page: this.page,
                 })
                 .then((res) => {
+                    this.isLoading = false;
                     if (res.list.length > 0 && res.list[0].member.address) {
                         this.topAuhtor = res.list.shift();
                     }
@@ -90,6 +93,15 @@ export default {
                     this.total_pages = Math.ceil(
                         res.total_count / this.per_page
                     );
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isLoading = false;
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
                 });
         },
         next() {

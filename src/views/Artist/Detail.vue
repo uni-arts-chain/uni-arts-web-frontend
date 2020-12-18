@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="body">
-                <div class="content">
+                <div class="content" v-loading="isLoading">
                     <OwnArts style="padding-left: 0" :list="list"></OwnArts>
                     <div class="pagenation" v-if="hasPrev || hasNext">
                         <div
@@ -62,6 +62,7 @@ export default {
             menuActive: "0",
             authorId: this.$route.params.id,
             list: [],
+            isLoading: false,
             author: {},
         };
     },
@@ -78,13 +79,16 @@ export default {
     },
     methods: {
         requestData() {
+            this.isLoading = true;
             this.$http
                 .globalGetAuthorArts({}, { id: this.authorId })
                 .then((res) => {
+                    this.isLoading = false;
                     this.list = res.list;
                     this.author = res[0] ? res[0].author : {};
                 })
                 .catch((err) => {
+                    this.isLoading = false;
                     this.$notify({
                         title: "Error",
                         message: err.head ? err.head.msg : err,

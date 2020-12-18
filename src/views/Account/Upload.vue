@@ -3,9 +3,9 @@
     <div class="upload">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/account' }"
-                >个人主页</el-breadcrumb-item
+                >Profile</el-breadcrumb-item
             >
-            <el-breadcrumb-item>上传艺术品</el-breadcrumb-item>
+            <el-breadcrumb-item>Upload</el-breadcrumb-item>
         </el-breadcrumb>
         <el-form
             ref="form"
@@ -178,8 +178,6 @@ import {
     DatePicker,
     Upload,
     Dialog,
-    Breadcrumb,
-    BreadcrumbItem,
 } from "element-ui";
 export default {
     name: "upload",
@@ -193,8 +191,6 @@ export default {
         [DatePicker.name]: DatePicker,
         [Upload.name]: Upload,
         [Dialog.name]: Dialog,
-        [Breadcrumb.name]: Breadcrumb,
-        [BreadcrumbItem.name]: BreadcrumbItem,
     },
     data() {
         return {
@@ -321,6 +317,8 @@ export default {
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
+            this.img_main_list = [];
+            this.img_detail_list = [];
         },
         handleRemove(file) {
             console.log(this.img_main_list);
@@ -393,6 +391,8 @@ export default {
                         };
                         reader.readAsDataURL(list[i].file.raw);
                     }
+                } else {
+                    resolve();
                 }
             });
         },

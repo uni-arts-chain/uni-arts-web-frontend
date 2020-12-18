@@ -1,7 +1,13 @@
 /** * Created by Lay Hunt on 2020-12-14 14:12:54. */
 <template>
-    <div class="purchase">
-        <Order type="purchase" :list="list"></Order>
+    <div class="purchase container">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/account' }"
+                >Profile</el-breadcrumb-item
+            >
+            <el-breadcrumb-item>Purchase Order</el-breadcrumb-item>
+        </el-breadcrumb>
+        <Order v-loading="isLoading" type="purchase" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
                 class="prev"
@@ -27,6 +33,7 @@ export default {
         return {
             list: [],
             page: 1,
+            isLoading: false,
             per_page: 18,
             total_pages: 0,
             total_count: 0,
@@ -45,6 +52,7 @@ export default {
     },
     methods: {
         requestData() {
+            this.isLoading = true;
             this.$http
                 .userOwnArts({
                     aasm_state: "paid",
@@ -52,6 +60,7 @@ export default {
                     per_page: this.per_page,
                 })
                 .then((res) => {
+                    this.isLoading = false;
                     this.list = res.list;
                     this.total_count = res.total_count;
                     this.total_pages = Math.ceil(
@@ -60,6 +69,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
+                    this.isLoading = false;
                     this.$notify({
                         title: "Error",
                         message: err.head ? err.head.msg : err,
@@ -82,4 +92,8 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.purchase {
+    margin-top: 20px;
+}
+</style>

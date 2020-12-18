@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-12-14 14:41:18. */
 <template>
-    <div class="own">
+    <div class="own" v-loading="isLoading">
         <Order type="all" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
@@ -27,6 +27,7 @@ export default {
         return {
             list: [],
             page: 1,
+            isLoading: false,
             per_page: 18,
             total_pages: 0,
             total_count: 0,
@@ -45,12 +46,14 @@ export default {
     },
     methods: {
         requestData() {
+            this.isLoading = true;
             this.$http
                 .userOwnArts({
                     page: this.page,
                     per_page: this.per_page,
                 })
                 .then((res) => {
+                    this.isLoading = false;
                     this.list = res.list;
                     this.total_count = res.total_count;
                     this.total_pages = Math.ceil(
@@ -59,6 +62,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
+                    this.isLoading = false;
                     this.$notify({
                         title: "Error",
                         message: err.head ? err.head.msg : err,
@@ -82,6 +86,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.own {
+    padding-left: 10%;
+    padding-top: 40px;
+}
 .pagenation {
     margin-top: 100px;
     width: 100%;

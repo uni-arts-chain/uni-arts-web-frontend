@@ -13,16 +13,12 @@
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <!-- <div class="desc">{{ v.details }}</div> -->
-            <div class="address-label">
-                {{
-                    v.aasm_state == "bidding"
-                        ? "Bidding"
-                        : v.aasm_state == "prepare"
-                        ? "Prepare"
-                        : "Online"
-                }}
-            </div>
             <div class="price">{{ v.price }} UART</div>
+            <div class="address-label">
+                <span class="tag">
+                    {{ v.aasm_state }}
+                </span>
+            </div>
         </div>
     </div>
 </template>
@@ -62,7 +58,6 @@ export default {
 <style lang="scss" scoped>
 .own-arts {
     min-height: 100%;
-    padding-left: 10%;
     padding-top: 30px;
     display: flex;
     justify-content: flex-start;
@@ -87,7 +82,6 @@ export default {
     margin-bottom: 20px;
     position: relative;
     img {
-        /* height: 100%; */
         position: absolute;
         left: 50%;
         top: 50%;
@@ -107,15 +101,24 @@ export default {
     font-size: 16px;
     font-weight: 400;
     text-align: left;
-    line-height: 27px;
-    margin-top: 10px;
-    letter-spacing: 0px;
-}
-
-.address-label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.tag {
+    border: 2px solid #020202;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    color: #020202;
+    letter-spacing: 0px;
+    padding: 4px 10px;
+    margin-right: 10px;
+    text-transform: capitalize;
 }
 
 .price {
@@ -124,7 +127,7 @@ export default {
     text-align: left;
     line-height: 30px;
     letter-spacing: 0px;
-    margin-top: 0px;
+    margin-top: 5px;
 }
 .no-data {
     color: #666;
