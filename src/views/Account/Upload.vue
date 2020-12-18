@@ -138,7 +138,6 @@
             </el-form-item>
             <el-form-item
                 :label="`细节图${i + 1}说明`"
-                required
                 v-for="(v, i) in img_detail_list"
                 :key="i"
                 error="请输入细节描述"
@@ -359,13 +358,9 @@ export default {
                         reader.onload = (event) => {
                             obj[list[i].field] = [
                                 this.dataURLtoBlob(event.target.result),
-                                `${list[i].field}.png`,
+                                `${list[i].file.raw.name}`,
                             ];
-                            // obj[list[i].field] = this.dataURLtoBlob(
-                            //     event.target.result
-                            // );
                             if (i >= list.length - 1) {
-                                // debugger
                                 resolve();
                             }
                         };

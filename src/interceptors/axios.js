@@ -48,7 +48,13 @@ export function requestSuccessFunc(config) {
             };
             let keys = Object.keys(params).sort();
             keys.forEach((v) => {
-                queryStr += v + "=" + encodeURI(params[v]) + "&";
+                let temp = "";
+                if (Array.isArray(params[v])) {
+                    temp = encodeURI(params[v][1]);
+                } else {
+                    temp = encodeURI(params[v]);
+                }
+                queryStr += v + "=" + temp + "&";
             });
         }
         queryStr = queryStr.substr(0, queryStr.length - 1);
