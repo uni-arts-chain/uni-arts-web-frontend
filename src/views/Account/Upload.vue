@@ -1,6 +1,12 @@
 /** * Created by Lay Hunt on 2020-12-17 15:04:15. */
 <template>
     <div class="upload">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item :to="{ path: '/account' }"
+                >个人主页</el-breadcrumb-item
+            >
+            <el-breadcrumb-item>上传艺术品</el-breadcrumb-item>
+        </el-breadcrumb>
         <el-form
             ref="form"
             :model="form"
@@ -145,8 +151,15 @@
                 ></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                <el-button>取消</el-button>
+                <el-button
+                    type="primary"
+                    @click="onSubmit"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                    >立即创建</el-button
+                >
+                <el-button @click="$router.push('/account')">取消</el-button>
             </el-form-item>
         </el-form>
         <el-dialog :visible.sync="dialogVisible">
@@ -165,6 +178,8 @@ import {
     DatePicker,
     Upload,
     Dialog,
+    Breadcrumb,
+    BreadcrumbItem,
 } from "element-ui";
 export default {
     name: "upload",
@@ -178,6 +193,8 @@ export default {
         [DatePicker.name]: DatePicker,
         [Upload.name]: Upload,
         [Dialog.name]: Dialog,
+        [Breadcrumb.name]: Breadcrumb,
+        [BreadcrumbItem.name]: BreadcrumbItem,
     },
     data() {
         return {
@@ -198,6 +215,7 @@ export default {
                 img_detail_file4_desc: "",
                 img_detail_file5_desc: "",
             },
+            isSubmiting: false,
             img_main_list: [],
             img_detail_list: [],
             dialogImageUrl: "",
@@ -267,6 +285,7 @@ export default {
         onSubmit() {
             this.$refs["form"].validate((valid) => {
                 if (valid) {
+                    this.isSubmiting = true;
                     let obj = {
                         name: this.form.name,
                         category_id: this.form.category_id,
@@ -280,9 +299,21 @@ export default {
                     };
                     this.filetoBlob(this.img_main_list, obj).then(() => {
                         this.filetoBlob(this.img_detail_list, obj).then(() => {
-                            this.$http.userPostArt(obj).then((res) => {
-                                console.log(res);
-                            });
+                            this.$http
+                                .userPostArt(obj)
+                                .then(() => {
+                                    this.isSubmiting = false;
+                                    this.resetForm("form");
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                    this.isSubmiting = false;
+                                    this.$notify({
+                                        title: "Error",
+                                        message: err.head ? err.head.msg : err,
+                                        type: "error",
+                                    });
+                                });
                         });
                     });
                 }
@@ -377,5 +408,14 @@ export default {
 }
 .el-form {
     width: 70%;
+}
+.el-breadcrumb {
+    margin-bottom: 60px;
+}
+
+.el-button {
+    ::v-deep .el-loading-spinner {
+        margin-top: -7px;
+    }
 }
 </style>
