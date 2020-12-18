@@ -10,26 +10,32 @@ import {
 } from "@polkadot/extension-dapp";
 import { stringToHex } from "@polkadot/util";
 import Alert from "@/components/Alert";
+import store from "@/store";
 import { CHAIN_DEFAULT_CONFIG } from "@/config";
 
 class Extension {
     constructor() {
         this.web3 = {};
+        this.isConnect = false;
         this.web3FromAddress = () => {};
         this.web3FromSource = () => {};
         this.web3UseRpcProvider = {};
         this.web3ListRpcProviders = [];
     }
     async isReady() {
-        if (web3EnablePromise) {
+        if (web3EnablePromise && store.state.user.info.token) {
             this.web3 = (await web3EnablePromise)[0];
+            this.isConnect = true;
         } else {
             let result = await web3Enable(CHAIN_DEFAULT_CONFIG.dappName);
             if (result.length <= 0) {
                 Alert.show("NeedPlugin");
+                store.dispatch("user/Quit");
+                this.isConnect = false;
                 return;
             } else {
                 console.log("扩展初始化完成");
+                this.isConnect = true;
                 this.web3 = result[0];
                 this.web3Accounts = web3Accounts;
                 this.web3FromAddress = web3FromAddress;

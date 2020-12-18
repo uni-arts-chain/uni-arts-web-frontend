@@ -20,43 +20,59 @@
             :clickModel="true"
             :showClose="false"
         >
-            <h2 class="dialog-title">Choose different account</h2>
-            <ul class="address-list" v-if="list.length > 0">
-                <li
-                    class="address-item"
-                    v-for="(v, i) in list"
-                    :key="i"
-                    @click="selectAccount(v)"
-                >
-                    <Identicon
-                        class="icon"
-                        :size="50"
-                        :theme="'polkadot'"
-                        :value="v.address"
-                    />
-                    <div class="address-content">
-                        <div class="address-name">
-                            <span class="name">{{ v.meta.name }}</span>
-                            <span class="source">{{
-                                v.meta.source ? v.meta.source : "unkown"
-                            }}</span>
+            <div v-if="!needReset">
+                <h2 class="dialog-title">Choose different account</h2>
+                <ul class="address-list" v-if="list.length > 0">
+                    <li
+                        class="address-item"
+                        v-for="(v, i) in list"
+                        :key="i"
+                        @click="selectAccount(v)"
+                    >
+                        <Identicon
+                            class="icon"
+                            :size="50"
+                            :theme="'polkadot'"
+                            :value="v.address"
+                        />
+                        <div class="address-content">
+                            <div class="address-name">
+                                <span class="name">{{ v.meta.name }}</span>
+                                <span class="source">{{
+                                    v.meta.source ? v.meta.source : "unkown"
+                                }}</span>
+                            </div>
+                            <div class="address-value">{{ v.address }}</div>
                         </div>
-                        <div class="address-value">{{ v.address }}</div>
-                    </div>
-                </li>
-            </ul>
-            <ul class="address-list" v-else>
-                <li
-                    style="
-                        height: 90px;
-                        text-align: center;
-                        line-height: 90px;
-                        font-size: 18px;
-                    "
-                >
-                    Please add an available account
-                </li>
-            </ul>
+                    </li>
+                </ul>
+                <ul class="address-list" v-else>
+                    <li
+                        style="
+                            height: 90px;
+                            text-align: center;
+                            line-height: 90px;
+                            font-size: 18px;
+                        "
+                    >
+                        Please add an available account
+                    </li>
+                </ul>
+            </div>
+            <div
+                v-else
+                style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 200px;
+                "
+            >
+                <h2 class="dialog-title">
+                    Please restart your browser and authorize the polkadot.js
+                    extension again
+                </h2>
+            </div>
         </Dialog>
     </div>
 </template>
@@ -73,6 +89,7 @@ export default {
     data() {
         return {
             isShow: false,
+            needReset: false,
             list: [],
         };
     },
@@ -89,11 +106,13 @@ export default {
         }
     },
     methods: {
-        showList() {
+        async showList() {
+            if (!this.$extension.isConnect) {
+                this.needReset = true;
+            }
             this.isShow = true;
         },
         getAccounts() {
-            // await extension.isReady();
             this.$extension.accounts().then((res) => {
                 this.list = res.length ? res : [];
             });
