@@ -181,7 +181,10 @@
                 <div class="title">Artwork Details</div>
                 <div class="comment-content">
                     <div class="item" v-if="art.img_detail_file1.url">
-                        <div class="img-content">
+                        <div
+                            class="img-content"
+                            @click="enterPreview(art.img_detail_file1)"
+                        >
                             <AdaptiveImage
                                 :isOrigin="true"
                                 :url="
@@ -204,7 +207,10 @@
                         <div class="img-desc">
                             {{ art.img_detail_file2_desc }}
                         </div>
-                        <div class="img-content">
+                        <div
+                            class="img-content"
+                            @click="enterPreview(art.img_detail_file2)"
+                        >
                             <AdaptiveImage
                                 :isOrigin="true"
                                 :url="
@@ -221,7 +227,10 @@
                         />
                     </div>
                     <div class="item" v-if="art.img_detail_file3.url">
-                        <div class="img-content">
+                        <div
+                            class="img-content"
+                            @click="enterPreview(art.img_detail_file3)"
+                        >
                             <AdaptiveImage
                                 :isOrigin="true"
                                 :url="
@@ -244,7 +253,10 @@
                         <div class="img-desc">
                             {{ art.img_detail_file4_desc }}
                         </div>
-                        <div class="img-content">
+                        <div
+                            class="img-content"
+                            @click="enterPreview(art.img_detail_file4)"
+                        >
                             <AdaptiveImage
                                 :isOrigin="true"
                                 :url="
@@ -260,7 +272,11 @@
                             class="xq"
                         />
                     </div>
-                    <div class="item" v-if="art.img_detail_file5.url">
+                    <div
+                        class="item"
+                        v-if="art.img_detail_file5.url"
+                        @click="enterPreview(art.img_detail_file5)"
+                    >
                         <div class="img-content">
                             <AdaptiveImage
                                 :isOrigin="true"
@@ -283,10 +299,18 @@
                 </div>
             </div>
         </div>
-
+        <Dialog
+            :visible.sync="isDialogPreview"
+            type="fullscreen"
+            :close="handlePreviewClose"
+        >
+            <div class="dialog-content preview">
+                <img :src="dialogPreviewUrl" alt="" />
+            </div>
+        </Dialog>
         <Dialog
             :visible.sync="dialogVisible"
-            :type="isOwner ? (isOwnerOrder ? 'small' : 'medium') : 'small'"
+            :type="dialogType"
             :close="handleClose"
         >
             <div class="dialog-content" v-if="isOwnerOrder">
@@ -370,6 +394,8 @@ export default {
     data() {
         return {
             dialogVisible: false,
+            isDialogPreview: false,
+            dialogPreviewUrl: "",
             isSubmiting: false,
             art: {
                 img_detail_file1: {},
@@ -400,6 +426,15 @@ export default {
                 this.art.aasm_state == "bidding"
             );
         },
+        dialogType() {
+            return this.isDialogPreview
+                ? "fullscreen"
+                : this.isOwner
+                ? this.isOwnerOrder
+                    ? "small"
+                    : "medium"
+                : "small";
+        },
     },
     methods: {
         requestData() {
@@ -423,6 +458,16 @@ export default {
                         type: "error",
                     });
                 });
+        },
+        enterPreview(obj) {
+            if (obj) {
+                this.dialogPreviewUrl = obj.url;
+                this.isDialogPreview = true;
+            }
+        },
+        handlePreviewClose() {
+            this.dialogPreviewUrl = "";
+            this.isDialogPreview = false;
         },
         handleClose() {
             this.dialogVisible = false;
@@ -602,7 +647,7 @@ export default {
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
-        line-height: 40px;
+        line-height: 48px;
         text-align: left;
         letter-spacing: 0px;
         margin-bottom: 35px;
@@ -672,7 +717,7 @@ export default {
         font-weight: 400;
         text-align: left;
         letter-spacing: 0px;
-        margin-bottom: 94px;
+        margin-bottom: 86px;
     }
 
     .buy {
@@ -852,6 +897,7 @@ export default {
     .img-content {
         width: 456px;
         height: 456px;
+        cursor: pointer;
     }
     .item {
         display: flex;
@@ -1001,6 +1047,23 @@ export default {
         color: #ffffff;
         letter-spacing: 0px;
         cursor: pointer;
+    }
+}
+
+.dialog-content.preview {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 0;
+    background-color: black;
+    > img {
+        max-width: 100%;
+        max-height: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 0;
+        transform: translateX(-50%) translateY(-50%);
     }
 }
 </style>

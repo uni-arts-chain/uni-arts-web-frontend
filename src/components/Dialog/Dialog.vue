@@ -5,6 +5,7 @@
         :class="{
             medium: type == 'medium',
             small: type == 'small',
+            fullscreen: type == 'fullscreen',
             message: displayType == 'PluginError',
         }"
         :modal="false"
@@ -136,6 +137,31 @@ export default {
     ::v-deep .el-dialog {
         width: 500px;
         height: 300px;
+    }
+}
+
+.dialog.fullscreen {
+    width: 100%;
+    height: 100%;
+    ::v-deep .el-dialog,
+    ::v-deep .el-dialog__body {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transform: none;
+        padding: 0;
+        margin: 0;
+    }
+    ::v-deep .el-dialog .el-dialog__close {
+        position: relative;
+        z-index: 1;
+    }
+    ::v-deep .el-dialog .el-dialog__headerbtn:hover .el-dialog__close {
+        color: #999;
+    }
+    ::v-deep .el-dialog .el-dialog__close:hover {
+        color: #999;
     }
 }
 
