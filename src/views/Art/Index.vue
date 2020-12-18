@@ -183,6 +183,7 @@
                     <div class="item" v-if="art.img_detail_file1.url">
                         <div class="img-content">
                             <AdaptiveImage
+                                :isOrigin="true"
                                 :url="
                                     art.img_detail_file1
                                         ? art.img_detail_file1.url
@@ -205,6 +206,7 @@
                         </div>
                         <div class="img-content">
                             <AdaptiveImage
+                                :isOrigin="true"
                                 :url="
                                     art.img_detail_file2
                                         ? art.img_detail_file2.url
@@ -221,6 +223,7 @@
                     <div class="item" v-if="art.img_detail_file3.url">
                         <div class="img-content">
                             <AdaptiveImage
+                                :isOrigin="true"
                                 :url="
                                     art.img_detail_file3
                                         ? art.img_detail_file3.url
@@ -243,6 +246,7 @@
                         </div>
                         <div class="img-content">
                             <AdaptiveImage
+                                :isOrigin="true"
                                 :url="
                                     art.img_detail_file4
                                         ? art.img_detail_file4.url
@@ -259,6 +263,7 @@
                     <div class="item" v-if="art.img_detail_file5.url">
                         <div class="img-content">
                             <AdaptiveImage
+                                :isOrigin="true"
                                 :url="
                                     art.img_detail_file5
                                         ? art.img_detail_file5.url
@@ -445,6 +450,13 @@ export default {
             }
             if (!this.form.price) return;
             this.isSubmiting = true;
+            console.log(
+                "result: ",
+                new BigNumber(10)
+                    .pow(this.$store.state.global.chain.tokenDecimals)
+                    .times(this.form.price)
+                    .toNumber()
+            );
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
                 this.art.collection_id,
                 this.art.item_id,
@@ -504,6 +516,7 @@ export default {
                         message: "Success",
                         type: "success",
                     });
+                    this.dialogVisible = false;
                 },
                 () => {
                     this.isSubmiting = false;

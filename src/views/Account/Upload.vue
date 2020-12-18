@@ -93,7 +93,7 @@
                         <span class="el-upload-list__item-actions">
                             <span
                                 class="el-upload-list__item-preview"
-                                @click="handlePictureCardPreview(file)"
+                                @click="handlePictureCardPreview(file.file)"
                             >
                                 <i class="el-icon-zoom-in"></i>
                             </span>
@@ -281,6 +281,7 @@ export default {
         onSubmit() {
             this.$refs["form"].validate((valid) => {
                 if (valid) {
+                    if (this.isSubmiting) return;
                     this.isSubmiting = true;
                     let obj = {
                         name: this.form.name,
@@ -299,6 +300,11 @@ export default {
                                 .userPostArt(obj)
                                 .then(() => {
                                     this.isSubmiting = false;
+                                    this.$notify({
+                                        title: "Success",
+                                        message: "Submitted",
+                                        type: "success",
+                                    });
                                     this.resetForm("form");
                                 })
                                 .catch((err) => {

@@ -9,8 +9,9 @@
         <img
             ref="img"
             :class="{
-                'img-horizontal': isHorizontal,
-                'img-vertical': !isHorizontal,
+                'img-horizontal': !isOrigin && isHorizontal,
+                'img-vertical': !isOrigin && !isHorizontal,
+                'img-origin': isOrigin,
             }"
             @load="imgOnLoad"
             :src="url"
@@ -33,6 +34,10 @@ export default {
             type: String,
             default: "100%",
         },
+        isOrigin: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -42,6 +47,10 @@ export default {
     },
     methods: {
         imgOnLoad() {
+            if (this.isOrigin) {
+                this.isLoading = false;
+                return;
+            }
             let width = this.$refs.img ? this.$refs.img.width : "100%";
             let height = this.$refs.img ? this.$refs.img.height : "230px";
             let boxWidth = this.width;
@@ -100,6 +109,11 @@ export default {
 
     > img.img-vertical {
         height: 100%;
+        width: auto;
+    }
+
+    > img.img-origin {
+        height: auto;
         width: auto;
     }
 }

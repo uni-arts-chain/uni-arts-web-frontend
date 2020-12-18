@@ -101,6 +101,7 @@ class Extension {
             )
             .catch((error) => {
                 console.log(":( transaction failed", error);
+                err && err();
             });
     }
 }
