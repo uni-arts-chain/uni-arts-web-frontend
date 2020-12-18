@@ -50,9 +50,9 @@ export function requestSuccessFunc(config) {
             keys.forEach((v) => {
                 let temp = "";
                 if (Array.isArray(params[v])) {
-                    temp = encodeURI(params[v][1]);
+                    temp = params[v][1];
                 } else {
-                    temp = encodeURI(params[v]);
+                    temp = params[v];
                 }
                 queryStr += v + "=" + temp + "&";
             });
