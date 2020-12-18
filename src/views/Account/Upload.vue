@@ -49,7 +49,6 @@
             </el-form-item>
             <el-form-item label="创作日期" prop="produce_at">
                 <el-date-picker
-                    value-format="yyyy-MM-dd HH-mm-ss"
                     v-model="form.produce_at"
                     type="date"
                     placeholder="选择日期"
@@ -102,7 +101,7 @@
                     </div>
                 </el-upload>
             </el-form-item>
-            <el-form-item label="细节图" required>
+            <el-form-item label="细节图">
                 <el-upload
                     action="#"
                     :limit="5"
@@ -140,7 +139,6 @@
                 :label="`细节图${i + 1}说明`"
                 v-for="(v, i) in img_detail_list"
                 :key="i"
-                error="请输入细节描述"
             >
                 <el-input
                     v-model="form[`img_detail_file${i + 1}_desc`]"
@@ -274,7 +272,7 @@ export default {
                         category_id: this.form.category_id,
                         theme_id: this.form.theme_id,
                         material_id: this.form.material_id,
-                        produce_at: this.form.produce_at,
+                        produce_at: this.form.produce_at / 1000,
                         size_length: this.form.size_length,
                         size_width: this.form.size_width,
                         details: this.form.details,

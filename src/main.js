@@ -5,7 +5,7 @@ import store from "@/store/index";
 import inject from "@/inject/index";
 import "@/filters";
 
-import "element-ui/lib/theme-chalk/index.css";
+import "@/assets/styles/reset.scss";
 
 Vue.config.productionTip = false;
 
