@@ -52,7 +52,12 @@
                     <div class="signature" style="min-height: 28px">
                         <!-- Number of signatures : 3 -->
                     </div>
-                    <button v-if="isOwner" class="buy" @click="confirm">
+                    <button
+                        :disabled="art.aasm_state == 'prepare'"
+                        v-if="isOwner"
+                        class="buy"
+                        @click="confirm"
+                    >
                         {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
                     </button>
                     <button v-else class="buy" @click="confirm">BUY NOW</button>
@@ -286,7 +291,7 @@
                     <span class="number">{{ art.price }} UART</span>
                 </div>
                 <button
-                    @click="submitBuy"
+                    @click="cancelOrder"
                     v-loading="isSubmiting"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
@@ -435,6 +440,9 @@ export default {
             this.$copy(value);
         },
         async submitSell() {
+            if (this.isSubmiting) {
+                return;
+            }
             if (!this.form.price) return;
             this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
@@ -450,17 +458,32 @@ export default {
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await this.$extension.signAndSend(currentAccount, extrinsic, () => {
-                this.isSubmiting = false;
-                this.$notify({
-                    title: "success",
-                    message: "Application submitted",
-                    type: "success",
-                });
-                this.dialogVisible = false;
-            });
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "success",
+                        message: "Submitted",
+                        type: "success",
+                    });
+                    this.dialogVisible = false;
+                },
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
         },
         async cancelOrder() {
+            if (this.isSubmiting) {
+                return;
+            }
             this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.cancelSaleOrder(
                 this.art.collection_id,
@@ -468,14 +491,34 @@ export default {
                 0
             );
             let accountList = await this.$extension.accounts();
-            console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await this.$extension.signAndSend(currentAccount, extrinsic);
-            this.isSubmiting = false;
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Success",
+                        message: "Success",
+                        type: "success",
+                    });
+                },
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
         },
         async submitBuy() {
+            if (this.isSubmiting) {
+                return;
+            }
             console.log("创建买单");
             this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.acceptSaleOrder(
@@ -487,15 +530,27 @@ export default {
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
-            await this.$extension.signAndSend(currentAccount, extrinsic, () => {
-                this.isSubmiting = false;
-                this.$notify({
-                    title: "success",
-                    message: "Application submitted",
-                    type: "success",
-                });
-                this.dialogVisible = false;
-            });
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "success",
+                        message: "Application submitted",
+                        type: "success",
+                    });
+                    this.dialogVisible = false;
+                },
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
         },
     },
 };
@@ -618,6 +673,10 @@ export default {
         padding: 17px 40px;
         width: 400px;
         background: transparent;
+    }
+    button.buy:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
     }
 }
 

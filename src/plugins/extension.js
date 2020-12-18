@@ -71,7 +71,7 @@ class Extension {
             return signature;
         }
     }
-    async signAndSend(account, extrinsic, cb) {
+    async signAndSend(account, extrinsic, cb, err) {
         const injector = await this.web3FromSource(account.meta.source);
         extrinsic
             .signAndSend(
@@ -85,6 +85,9 @@ class Extension {
                         cb && cb();
                     } else {
                         console.log(`Current status: ${status.type}`);
+                        if (status.type == "Invalid") {
+                            err && err();
+                        }
                         // Loop through Vec<EventRecord> to display all events
                         events.forEach(
                             ({ phase, event: { data, method, section } }) => {
