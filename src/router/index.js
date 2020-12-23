@@ -32,6 +32,17 @@ const routes = [
             import(/* webpackChunkName: "art" */ "@/views/Art/Index.vue"),
     },
     {
+        path: "/certificate",
+        name: "Certificate",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "certificate" */ "@/views/Certificate/Index.vue"
+            ),
+    },
+    {
         path: "/account",
         name: "Account",
         meta: {

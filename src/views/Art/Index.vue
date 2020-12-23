@@ -21,7 +21,7 @@
                         BLOCK INFORMATION
                     </div>
                     <div class="address" style="min-height: 28px">
-                        Owner: {{ member.address }}
+                        Certificate Address: {{ art.online_extrinsic_hash }}
                         <el-tooltip
                             effect="dark"
                             :content="!copyStatus ? 'Copy' : 'Copied'"
