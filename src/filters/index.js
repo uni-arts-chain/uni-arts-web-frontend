@@ -117,6 +117,24 @@ let filter = [
             );
         },
     },
+    {
+        name: "dateDayFormat",
+        /**
+         * 格式化日期
+         * @param time
+         * @returns {*}
+         */
+        callback: (inputTime) => {
+            if (!inputTime) return "";
+            var date = new Date(inputTime * 1000);
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? "0" + m : m;
+            var d = date.getDate();
+            d = d < 10 ? "0" + d : d;
+            return y + "-" + m + "-" + d;
+        },
+    },
 ];
 
 filter.forEach((v) => Vue.filter(v.name, v.callback));

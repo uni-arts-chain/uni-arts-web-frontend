@@ -3,11 +3,14 @@ import Vue from "vue";
 
 const DialogComponentConstructor = Vue.extend(DialogComponent);
 
-function show() {
+function show(collectionId, itemId) {
     let instance = new DialogComponentConstructor({
         el: document.createElement("div"),
+        data: {
+            collectionId: collectionId,
+            itemId: itemId,
+        },
     });
-    instance.displayType = "PluginError";
     instance.dialogVisible = true;
     instance.$on("closed", close);
     window.document.body.appendChild(instance.$el);

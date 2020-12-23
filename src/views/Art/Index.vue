@@ -21,7 +21,14 @@
                         BLOCK INFORMATION
                     </div>
                     <div class="address" style="min-height: 28px">
-                        Certificate Address: {{ art.online_extrinsic_hash }}
+                        Certificate Address:
+                        <span
+                            class="address-value"
+                            @click="
+                                showCertificate(art.collection_id, art.item_id)
+                            "
+                            >{{ art.online_extrinsic_hash }}</span
+                        >
                         <el-tooltip
                             effect="dark"
                             :content="!copyStatus ? 'Copy' : 'Copied'"
@@ -465,6 +472,9 @@ export default {
                 this.isDialogPreview = true;
             }
         },
+        showCertificate(collection_id, item_id) {
+            this.$uniCerDialog.show(collection_id, item_id);
+        },
         handlePreviewClose() {
             this.dialogPreviewUrl = "";
             this.isDialogPreview = false;
@@ -688,6 +698,12 @@ export default {
         text-overflow: ellipsis;
         padding-right: 55px;
         position: relative;
+        .address-value {
+            cursor: pointer;
+        }
+        .address-value:hover {
+            text-decoration: underline;
+        }
         i.copy {
             position: absolute;
             top: 3px;

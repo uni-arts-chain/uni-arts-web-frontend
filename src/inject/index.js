@@ -1,5 +1,6 @@
 import IconSvg from "@/components/IconSvg";
 import Dialog from "@/components/Dialog";
+import Certificate from "@/components/Certificate";
 import Alert from "@/components/Alert";
 
 import detect from "@/plugins/detect";
@@ -20,6 +21,7 @@ export default {
         vue.use(element);
         vue.prototype.$browser = detect.browser;
         vue.prototype.$uniDialog = Dialog;
+        vue.prototype.$uniCerDialog = Certificate;
         vue.prototype.$uniAlert = Alert;
         vue.prototype.$http = http;
         vue.prototype.$extension = extension;
