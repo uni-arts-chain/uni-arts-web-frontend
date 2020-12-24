@@ -240,16 +240,19 @@ export default {
         }
         .label {
             display: block;
-            min-width: 110px;
             text-align: left;
+            width: 240px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
-        .value {
+        /* .value {
             width: 240px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             display: block;
-        }
+        } */
     }
 }
 .signed-time {
