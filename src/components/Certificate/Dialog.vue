@@ -206,20 +206,20 @@ export default {
     }
 }
 .info {
-    width: 690px;
+    width: 670px;
     position: absolute;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     top: 255px;
-    left: 160px;
+    left: 190px;
     .item {
         margin-top: 20px;
         display: flex;
         justify-content: flex-start;
         width: 313px;
         > span {
-            font-size: 38px;
+            font-size: 31px;
             font-weight: 400;
             text-align: left;
             color: #010034;
@@ -244,8 +244,8 @@ export default {
 .signed-time {
     position: absolute;
     top: 423px;
-    left: 340px;
-    font-size: 34px;
+    left: 354px;
+    font-size: 31px;
     font-family: "Monotype";
     font-weight: 400;
     text-align: left;
@@ -256,12 +256,12 @@ export default {
 .address {
     position: absolute;
     top: 500px;
-    left: 135px;
-    width: 730px;
+    left: 150px;
+    width: 700px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    font-size: 38px;
+    font-size: 31px;
     font-family: "Monotype";
     font-weight: 400;
     text-align: left;
