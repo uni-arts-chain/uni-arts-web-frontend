@@ -2,6 +2,8 @@
  * Created by Lay Hunt on 2019-09-05.
  */
 import Vue from "vue";
+import { BigNumber } from "bignumber.js";
+import store from "@/store";
 
 let filter = [
     {
@@ -133,6 +135,25 @@ let filter = [
             var d = date.getDate();
             d = d < 10 ? "0" + d : d;
             return y + "-" + m + "-" + d;
+        },
+    },
+    {
+        name: "priceFormat",
+        /**
+         * 格式化小数位
+         * @param price
+         * @returns {*}
+         */
+        callback: (price) => {
+            if (!price) return "";
+            var priceObj = new BigNumber(price);
+            return priceObj
+                .div(
+                    new BigNumber(10).pow(
+                        store.state.global.chain.tokenDecimals
+                    )
+                )
+                .toString();
         },
     },
 ];

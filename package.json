@@ -17,6 +17,7 @@
     "clipboard-copy": "^4.0.1",
     "core-js": "^3.6.5",
     "crypto": "^1.0.1",
+    "echarts": "^4.1.0",
     "element-ui": "^2.14.1",
     "nprogress": "^0.2.0",
     "ua-parser-js": "^0.7.22",

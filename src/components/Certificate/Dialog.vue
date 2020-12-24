@@ -107,6 +107,7 @@ export default {
         },
     },
     async created() {
+        await this.$rpc.api.isReady;
         let obj = await this.$rpc.api.query.nft.nftItemList(
             this.collectionId,
             this.itemId

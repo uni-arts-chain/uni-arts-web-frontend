@@ -70,6 +70,36 @@
                     <button v-else class="buy" @click="confirm">BUY NOW</button>
                 </div>
             </div>
+            <div class="transaction-info" v-if="transactionList.length > 0">
+                <div class="title">Transaction records</div>
+                <div class="transaction-body">
+                    <div class="recent-bid">
+                        <div class="bid-title">Recent bid records</div>
+                        <div class="ul">
+                            <li v-for="(v, i) in transactionList" :key="i">
+                                <span
+                                    style="
+                                        display: inline-block;
+                                        width: 410px;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    "
+                                    >{{ v.buyer }}</span
+                                >
+                                bought it for {{ v.price | priceFormat }} UART
+                            </li>
+                        </div>
+                    </div>
+                    <div class="recent-price">
+                        <div class="bid-title">
+                            Price trend of recent five transactions
+                        </div>
+                        <div class="chart">
+                            <Chart :list="transactionList"></Chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- <div class="bid-history">
                 <div class="title">Bid History</div>
                 <div class="content">
@@ -394,10 +424,17 @@ import AdaptiveImage from "@/components/AdaptiveImage";
 import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
+import Chart from "./Chart";
 
 export default {
     name: "art",
-    components: { Dialog, AdaptiveImage, [Tooltip.name]: Tooltip, Qrcode },
+    components: {
+        Dialog,
+        AdaptiveImage,
+        [Tooltip.name]: Tooltip,
+        Qrcode,
+        Chart,
+    },
     data() {
         return {
             dialogVisible: false,
@@ -413,6 +450,7 @@ export default {
             },
             member: {},
             author: {},
+            transactionList: [],
             currentArtId: this.$route.params.id,
             copyStatus: false,
             form: {
@@ -456,6 +494,7 @@ export default {
                     this.art = res;
                     this.member = res.member;
                     this.author = res.author;
+                    this.getTransactionData();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -498,6 +537,14 @@ export default {
         copy(value) {
             this.copyStatus = true;
             this.$copy(value);
+        },
+        async getTransactionData() {
+            await this.$rpc.api.isReady;
+            let obj = await this.$rpc.api.query.nft.historySaleOrderList(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            this.transactionList = obj.toJSON();
         },
         async submitSell() {
             if (this.isSubmiting) {
@@ -652,7 +699,7 @@ export default {
     width: 550px;
     margin-left: 50px;
     text-align: left;
-    margin-bottom: 171px;
+    margin-bottom: 151px;
     .title {
         font-size: 48px;
         font-family: "Broadway";
@@ -758,6 +805,7 @@ export default {
 .infomation,
 .comments,
 .details,
+.transaction-info,
 .bid-history {
     margin-bottom: 180px;
     > .title {
@@ -937,6 +985,34 @@ export default {
         position: absolute;
         height: 230px;
         z-index: -1;
+    }
+}
+
+.transaction-info {
+    margin-bottom: 100px;
+    .title {
+        margin-bottom: 70px;
+    }
+    .transaction-body {
+        display: flex;
+        justify-content: space-between;
+        .bid-title {
+            font-size: 22px;
+            font-weight: 600;
+            text-align: left;
+            margin-bottom: 39px;
+            color: #020202;
+        }
+        .ul {
+            li {
+                font-size: 18px;
+                font-weight: 400;
+                text-align: left;
+                margin-bottom: 25px;
+                color: #020202;
+                display: flex;
+            }
+        }
     }
 }
 

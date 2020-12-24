@@ -95,6 +95,7 @@ export default {
         Collection: "u64",
         Owner: "AccountId",
         Data: "Vec<u8>",
+        item_hash: "H160",
     },
     FungibleItemType: {
         Collection: "u64",
@@ -114,6 +115,15 @@ export default {
         value: "u64",
         owner: "AccountId",
         price: "u64",
+    },
+    SaleOrderHistory: {
+        collection_id: "u64",
+        item_id: "u64",
+        value: "u64",
+        seller: "AccountId",
+        buyer: "AccountId",
+        price: "u64",
+        buy_time: "BlockNumber",
     },
     Ownership: {
         owner: "AccountId",
@@ -144,12 +154,6 @@ export default {
         last_reward_block: "BlockNumber",
         asset_id: "Id",
         total_balance: "Balance",
-    },
-    TreasuryProposal: {
-        proposer: "AccountId",
-        beneficiary: "AccountId",
-        value: "Balance",
-        bond: "Balance",
     },
     Staker: {
         amount: "Balance",
