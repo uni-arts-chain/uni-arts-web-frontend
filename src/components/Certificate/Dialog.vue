@@ -15,19 +15,15 @@
     >
         <div class="info">
             <div class="item">
-                <!-- <span class="label">Name: {{ certificateData.name }}</span> -->
-                <span class="label">Name: {{ "Space Travel" }}</span>
-                <!-- <span class="value"></span> -->
+                <span class="label">Name: {{ certificateData.name }}</span>
             </div>
             <div class="item">
-                <span class="label">Painter: {{ "Noah Schnapp" }}</span>
-                <!-- <span class="label">Painter:</span>
-                <span class="value">{{ certificateData.author }}</span> -->
+                <span class="label">Painter: {{ certificateData.author }}</span>
             </div>
             <div class="item">
-                <span class="label">Texture: {{ "Oil on canvas" }}</span>
-                <!-- <span class="label">Texture:</span>
-                <span class="value">{{ certificateData.material }}</span> -->
+                <span class="label"
+                    >Texture: {{ certificateData.material }}</span
+                >
             </div>
             <div class="item">
                 <span class="label"
@@ -42,12 +38,6 @@
                     {{ certificateData.size_width
                     }}{{ certificateData.unit }}</span
                 >
-                <!-- <span class="label">Size:</span>
-                <span class="value"
-                    >{{ certificateData.size_length }}<span style="font-family: PingFang SC Regular;margin-left: 10px;">x</span>
-                    {{ certificateData.size_width
-                    }}{{ certificateData.unit }}</span
-                > -->
             </div>
         </div>
         <div class="signed-time">
