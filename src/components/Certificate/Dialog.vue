@@ -15,31 +15,51 @@
     >
         <div class="info">
             <div class="item">
-                <span class="label">Name:</span>
-                <span class="value">{{ certificateData.name }}</span>
+                <!-- <span class="label">Name: {{ certificateData.name }}</span> -->
+                <span class="label">Name: {{ "Space Travel" }}</span>
+                <!-- <span class="value"></span> -->
             </div>
             <div class="item">
-                <span class="label">Painter:</span>
-                <span class="value">{{ certificateData.author }}</span>
+                <span class="label">Painter: {{ "Noah Schnapp" }}</span>
+                <!-- <span class="label">Painter:</span>
+                <span class="value">{{ certificateData.author }}</span> -->
             </div>
             <div class="item">
-                <span class="label">Texture:</span>
-                <span class="value">{{ certificateData.material }}</span>
+                <span class="label">Texture: {{ "Oil on canvas" }}</span>
+                <!-- <span class="label">Texture:</span>
+                <span class="value">{{ certificateData.material }}</span> -->
             </div>
             <div class="item">
-                <span class="label">Size:</span>
-                <span class="value"
-                    >{{ certificateData.size_length }} x
+                <span class="label"
+                    >Size: {{ certificateData.size_length
+                    }}<span
+                        style="
+                            font-family: PingFang SC Regular;
+                            margin-left: 10px;
+                        "
+                        >x</span
+                    >
                     {{ certificateData.size_width
                     }}{{ certificateData.unit }}</span
                 >
+                <!-- <span class="label">Size:</span>
+                <span class="value"
+                    >{{ certificateData.size_length }}<span style="font-family: PingFang SC Regular;margin-left: 10px;">x</span>
+                    {{ certificateData.size_width
+                    }}{{ certificateData.unit }}</span
+                > -->
             </div>
         </div>
         <div class="signed-time">
             Signing time: {{ certificateData.created_at | dateDayFormat }}
         </div>
         <div class="address">
-            Certificate address: {{ certificateData.author }}
+            Certificate address:
+            {{
+                certificateData.author
+                    ? certificateData.author.toLowerCase()
+                    : ""
+            }}
         </div>
     </el-dialog>
 </template>
@@ -126,8 +146,8 @@ export default {
     ::v-deep .el-dialog {
         background-image: url("./certificate-bg@2x.png");
         background-repeat: no-repeat;
-        background-size: 1060px 767px;
-        background-position: -30px -20px;
+        background-size: 1184px 861px;
+        background-position: -33px -20px;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -152,8 +172,8 @@ export default {
 .dialog {
     ::v-deep .el-dialog {
         display: inline-block;
-        width: 1000px;
-        height: 706px;
+        width: 1116px;
+        height: 796px;
     }
 }
 
@@ -206,20 +226,20 @@ export default {
     }
 }
 .info {
-    width: 670px;
+    width: 730px;
     position: absolute;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    top: 255px;
-    left: 190px;
+    top: 295px;
+    left: 230px;
     .item {
         margin-top: 20px;
         display: flex;
         justify-content: flex-start;
-        width: 313px;
+        width: 323px;
         > span {
-            font-size: 31px;
+            font-size: 30px;
             font-weight: 400;
             text-align: left;
             color: #010034;
@@ -229,11 +249,11 @@ export default {
         }
         .label {
             display: block;
-            min-width: 113px;
+            min-width: 110px;
             text-align: left;
         }
         .value {
-            max-width: 230px;
+            width: 240px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -243,9 +263,9 @@ export default {
 }
 .signed-time {
     position: absolute;
-    top: 423px;
-    left: 354px;
-    font-size: 31px;
+    top: 480px;
+    left: 397px;
+    font-size: 34px;
     font-family: "Monotype";
     font-weight: 400;
     text-align: left;
@@ -255,16 +275,16 @@ export default {
 }
 .address {
     position: absolute;
-    top: 500px;
-    left: 150px;
-    width: 700px;
+    top: 570px;
+    left: 144px;
+    width: 820px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    font-size: 31px;
+    font-size: 30px;
     font-family: "Monotype";
     font-weight: 400;
-    text-align: left;
+    text-align: center;
     color: #010034;
     line-height: 60px;
     letter-spacing: 0px;
