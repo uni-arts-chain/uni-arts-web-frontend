@@ -18,6 +18,11 @@ export default {
             myChart: {},
         };
     },
+    watch: {
+        list() {
+            this.initChart();
+        },
+    },
     mounted() {
         this.initChart();
         window.addEventListener("resize", () => {
@@ -31,11 +36,7 @@ export default {
                 tooltip: {
                     backgroundColor: "rgba(2,2,2,0.8)",
                     formatter: (params) =>
-                        `<div style="text-align: left;font-size: .85rem">Date: ${new Date(
-                            params[0].name
-                        ).toLocaleDateString()}<br/>Price: ${
-                            params[0].data
-                        }</div>`,
+                        `<div style="text-align: left;font-size: .85rem">Block Height: ${params[0].name}<br/>Price: ${params[0].data}</div>`,
                     trigger: "axis",
                     axisPointer: {
                         type: "line",
@@ -64,12 +65,7 @@ export default {
                         },
                         axisLabel: {
                             formatter: function (value) {
-                                var date = new Date(value);
-                                var texts = [
-                                    date.getMonth() + 1,
-                                    date.getDate(),
-                                ];
-                                return texts.join("/");
+                                return value;
                             },
                         },
                         data: this.list.map((v) => v.buy_time),
@@ -125,7 +121,7 @@ export default {
                                 .div(
                                     new BigNumber(10).pow(
                                         this.$store.state.global.chain
-                                            .tokenDecimals
+                                            .tokenDecimals || 12
                                     )
                                 )
                                 .toNumber();
@@ -141,6 +137,7 @@ export default {
 <style lang="scss" scoped>
 .box {
     height: 200px;
+    /* width: 400px; */
     span {
         display: block;
         height: 15%;

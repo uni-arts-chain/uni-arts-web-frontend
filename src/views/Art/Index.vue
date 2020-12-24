@@ -80,13 +80,14 @@
                                 <span
                                     style="
                                         display: inline-block;
-                                        width: 410px;
+                                        width: 270px;
                                         overflow: hidden;
                                         text-overflow: ellipsis;
                                     "
                                     >{{ v.buyer }}</span
                                 >
-                                bought it for {{ v.price | priceFormat }} UART
+                                bought it for {{ v.price | priceFormat }} UART,
+                                Block heigh #{{ v.buy_time }}
                             </li>
                         </div>
                     </div>
