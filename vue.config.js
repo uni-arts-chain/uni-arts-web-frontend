@@ -29,6 +29,13 @@ module.exports = {
                 symbolId: "icon-[name]",
             })
             .end();
+        config.module
+            .rule("mjs")
+            .test(/\.mjs$/)
+            .include.add(/node_modules/)
+            .end()
+            .type("javascript/auto")
+            .end();
     },
     configureWebpack: (config) => {
         if (process.env.NODE_ENV === "production") {

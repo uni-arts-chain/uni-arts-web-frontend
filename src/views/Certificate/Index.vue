@@ -27,9 +27,7 @@
                         </div>
                         <div class="address-label" v-if="v.member">
                             Certificate Address:
-                            <span class="address">{{
-                                v.online_extrinsic_hash
-                            }}</span>
+                            <span class="address">{{ v.item_hash }}</span>
                         </div>
                         <div class="address-label">
                             Sign Time: 2020/08/22 17:32:30

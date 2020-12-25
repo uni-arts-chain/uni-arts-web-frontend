@@ -12,9 +12,7 @@
                 ></AdaptiveImage>
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
-            <div class="desc">
-                Certificate Address: {{ v.online_extrinsic_hash }}
-            </div>
+            <div class="desc">Certificate Address: {{ v.item_hash }}</div>
             <div class="price">{{ v.price }} UART</div>
             <div class="address-label">
                 <span class="tag">

@@ -8,9 +8,9 @@
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <div class="desc">{{ materialType(v.material_id) }}</div>
-            <div class="address-label" v-if="v.online_extrinsic_hash">
+            <div class="address-label" v-if="v.item_hash">
                 Certificate Address:
-                <span class="address">{{ v.online_extrinsic_hash }}</span>
+                <span class="address">{{ v.item_hash }}</span>
             </div>
             <div class="price">{{ v.price }} UART</div>
         </div>

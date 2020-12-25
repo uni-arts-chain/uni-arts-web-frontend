@@ -27,7 +27,7 @@
                             @click="
                                 showCertificate(art.collection_id, art.item_id)
                             "
-                            >{{ art.online_extrinsic_hash }}</span
+                            >{{ art.item_hash }}</span
                         >
                         <el-tooltip
                             effect="dark"
@@ -425,6 +425,7 @@ import AdaptiveImage from "@/components/AdaptiveImage";
 import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
+import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
 import Chart from "./Chart";
 
 export default {
@@ -545,7 +546,11 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            this.transactionList = obj.toJSON();
+            this.transactionList = obj.toJSON().map((v) => {
+                v.buyer = encodeAddress(decodeAddress(v.buyer, true, -1));
+                v.seller = encodeAddress(decodeAddress(v.seller, true, -1));
+                return v;
+            });
         },
         async submitSell() {
             if (this.isSubmiting) {
@@ -642,7 +647,6 @@ export default {
                 this.art.item_id
             );
             let accountList = await this.$extension.accounts();
-            console.log(accountList);
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
             );
