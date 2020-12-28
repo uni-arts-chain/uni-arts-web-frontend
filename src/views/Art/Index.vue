@@ -553,6 +553,10 @@ export default {
             });
         },
         async submitSell() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
             if (this.isSubmiting) {
                 return;
             }
@@ -637,6 +641,10 @@ export default {
             );
         },
         async submitBuy() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
             if (this.isSubmiting) {
                 return;
             }
