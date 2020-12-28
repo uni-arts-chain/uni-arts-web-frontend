@@ -566,13 +566,6 @@ export default {
             }
             if (!this.form.price) return;
             this.isSubmiting = true;
-            console.log(
-                "result: ",
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.price)
-                    .toNumber()
-            );
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
                 this.art.collection_id,
                 this.art.item_id,
