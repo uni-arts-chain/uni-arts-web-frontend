@@ -45,11 +45,7 @@
         </div>
         <div class="address">
             Certificate address:
-            {{
-                certificateData.author
-                    ? certificateData.author.toLowerCase()
-                    : ""
-            }}
+            {{ itemHash ? itemHash.toLowerCase() : "" }}
         </div>
     </el-dialog>
 </template>
@@ -78,6 +74,10 @@ export default {
                 this.$emit("update:visible", false);
                 this.dialogVisible = false;
             },
+        },
+        itemHash: {
+            type: String,
+            require: true,
         },
         displayType: {
             type: String,

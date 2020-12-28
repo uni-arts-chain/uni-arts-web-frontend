@@ -3,7 +3,7 @@ import Vue from "vue";
 
 const DialogComponentConstructor = Vue.extend(DialogComponent);
 
-function show(collectionId, itemId) {
+function show(collectionId, itemId, itemHash) {
     let instance = new DialogComponentConstructor({
         el: document.createElement("div"),
         data: {
@@ -11,6 +11,7 @@ function show(collectionId, itemId) {
             itemId: itemId,
         },
     });
+    instance.itemHash = itemHash;
     instance.dialogVisible = true;
     instance.$on("closed", close);
     window.document.body.appendChild(instance.$el);

@@ -25,7 +25,11 @@
                         <span
                             class="address-value"
                             @click="
-                                showCertificate(art.collection_id, art.item_id)
+                                showCertificate(
+                                    art.collection_id,
+                                    art.item_id,
+                                    art.item_hash
+                                )
                             "
                             >{{ art.item_hash }}</span
                         >
@@ -513,8 +517,8 @@ export default {
                 this.isDialogPreview = true;
             }
         },
-        showCertificate(collection_id, item_id) {
-            this.$uniCerDialog.show(collection_id, item_id);
+        showCertificate(collection_id, item_id, item_hash) {
+            this.$uniCerDialog.show(collection_id, item_id, item_hash);
         },
         handlePreviewClose() {
             this.dialogPreviewUrl = "";
