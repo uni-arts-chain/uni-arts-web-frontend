@@ -50,6 +50,17 @@ const apiList = [
             ],
         },
     },
+    {
+        name: "postOrganization",
+        method: "POST",
+        desc: "注册机构",
+        path: "/organizations",
+        mockPath: "/organizations",
+        params: {},
+        options: {
+            upload: ["img_file"],
+        },
+    },
 ];
 
 export default apiList;

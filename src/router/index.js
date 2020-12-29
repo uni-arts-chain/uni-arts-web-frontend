@@ -43,6 +43,28 @@ const routes = [
             ),
     },
     {
+        path: "/certificate/sign",
+        name: "Sign",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "certificate" */ "@/views/Certificate/Sign.vue"
+            ),
+    },
+    {
+        path: "/certificate/apply",
+        name: "Apply",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "certificate" */ "@/views/Certificate/ApplyOrg.vue"
+            ),
+    },
+    {
         path: "/account",
         name: "Account",
         meta: {

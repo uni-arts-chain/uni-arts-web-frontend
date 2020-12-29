@@ -3,10 +3,10 @@
     <div class="index container">
         <div class="sign-head">
             <div class="title">Sign your works</div>
-            <div class="apply-link">
+            <router-link to="/certificate/sign" class="apply-link">
                 APPLY NOW
                 <div class="icon"></div>
-            </div>
+            </router-link>
         </div>
         <div class="sign-item">
             <div class="title">SIGNED WORKS</div>
@@ -43,19 +43,19 @@
         <div class="sign-item">
             <div class="title">ADD SIGNS</div>
             <div class="item-body">
-                <AddSign :list="addList"></AddSign>
+                <Organization :list="addList"></Organization>
             </div>
         </div>
     </div>
 </template>
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
-import AddSign from "./AddSign";
+import Organization from "./Organization";
 export default {
     name: "index",
     components: {
         AdaptiveImage,
-        AddSign,
+        Organization,
     },
     data() {
         return {

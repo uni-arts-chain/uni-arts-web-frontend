@@ -45,8 +45,8 @@
                             >
                         </li>
                         <li>
-                            <router-link to="/account/sale"
-                                >Message Center</router-link
+                            <router-link to="/certificate/apply"
+                                >Certificate Authority</router-link
                             >
                         </li>
                         <li

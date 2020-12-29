@@ -39,7 +39,7 @@
 import AdaptiveImage from "@/components/AdaptiveImage";
 import img from "@/assets/images/temp/home-page1.jpg";
 export default {
-    name: "addsign",
+    name: "organization",
     components: {
         AdaptiveImage,
     },
