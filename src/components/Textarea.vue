@@ -2,8 +2,9 @@
 <template>
     <el-input
         type="textarea"
-        :autosize="{ minRows: minRows }"
-        placeholder="请输入内容"
+        :autosize="{ minRows: minRows, maxRows: maxRows }"
+        :rows="rows"
+        :placeholder="placeholder"
         v-model="inputData"
     >
     </el-input>
@@ -27,6 +28,18 @@ export default {
             type: Number,
             default: 2,
         },
+        maxRows: {
+            type: Number,
+            default: 8,
+        },
+        rows: {
+            type: Number,
+            default: 4,
+        },
+        placeholder: {
+            type: String,
+            dafault: "请输入相关内容",
+        },
     },
     watch: {
         inputData() {
@@ -48,6 +61,7 @@ export default {
         border-radius: 0px;
         font-size: 17px;
         color: #020202;
+        max-height: 100%;
     }
 }
 </style>

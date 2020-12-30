@@ -154,6 +154,24 @@
                     </div>
                 </div>
             </div> -->
+            <div class="signature-info">
+                <div class="title">SIGNING RECORDS</div>
+                <div class="signature-body">
+                    <div class="recent-signature">
+                        <div class="ul">
+                            <li v-for="(v, i) in signatureList" :key="i">
+                                <div class="header">
+                                    <div class="org-img"></div>
+                                    <div class="org-name">
+                                        {{ hexTostring(v.names) }}
+                                    </div>
+                                </div>
+                                <div class="address">{{ v.names }}</div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="author-info">
                 <div class="title">About the author</div>
                 <div class="author">
@@ -429,6 +447,7 @@ import AdaptiveImage from "@/components/AdaptiveImage";
 import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
+import { hexToString } from "@polkadot/util";
 // import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
 import Chart from "./Chart";
 
@@ -457,6 +476,7 @@ export default {
             member: {},
             author: {},
             transactionList: [],
+            signatureList: [],
             currentArtId: this.$route.params.id,
             copyStatus: false,
             form: {
@@ -501,6 +521,7 @@ export default {
                     this.member = res.member;
                     this.author = res.author;
                     this.getTransactionData();
+                    this.getSignatureData();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -537,6 +558,9 @@ export default {
             let item = this.$store.state.art.materials.find((v) => (v.id = id));
             return item ? item : {};
         },
+        hexTostring(hex) {
+            return hexToString(hex);
+        },
         copyLeave() {
             setTimeout(() => (this.copyStatus = false), 500);
         },
@@ -551,6 +575,15 @@ export default {
                 this.art.item_id
             );
             this.transactionList = obj.toJSON();
+        },
+        async getSignatureData() {
+            await this.$rpc.api.isReady;
+            let obj = await this.$rpc.api.query.nft.signatureList(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            console.log(obj.toJSON());
+            this.signatureList = obj.toJSON();
         },
         async submitSell() {
             if (!this.$store.state.user.info.address) {
@@ -812,6 +845,7 @@ export default {
 .comments,
 .details,
 .transaction-info,
+.signature-info,
 .bid-history {
     margin-bottom: 180px;
     > .title {
@@ -1018,6 +1052,44 @@ export default {
                 color: #020202;
                 display: flex;
             }
+        }
+    }
+}
+
+.signature-info .title {
+    margin-bottom: 70px;
+}
+.signature-info .recent-signature {
+    .ul {
+        li {
+            border-bottom: 1px solid #272727;
+            padding: 31px 0;
+        }
+        .header {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 22px;
+            .org-img {
+                height: 30px;
+                width: 39px;
+                background: url(~@/assets/images/jianzhu@2x.png) no-repeat;
+                background-size: 100% 100%;
+                margin-right: 18px;
+            }
+            .org-name {
+                font-size: 22px;
+                font-weight: 600;
+                text-align: left;
+                color: #020202;
+                letter-spacing: 0px;
+            }
+        }
+        .address {
+            font-size: 20px;
+            font-weight: 400;
+            text-align: left;
+            color: #020202;
+            letter-spacing: 0px;
         }
     }
 }

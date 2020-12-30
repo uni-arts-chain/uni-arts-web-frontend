@@ -43,7 +43,7 @@
         <div class="sign-item">
             <div class="title">ADD SIGNS</div>
             <div class="item-body">
-                <Organization :list="addList"></Organization>
+                <Organization :list="organizationList"></Organization>
             </div>
         </div>
     </div>
@@ -51,6 +51,7 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 import Organization from "./Organization";
+import { hexToString, isJsonObject } from "@polkadot/util";
 export default {
     name: "index",
     components: {
@@ -60,13 +61,32 @@ export default {
     data() {
         return {
             list: [],
-            addList: [],
+            organizationList: [],
         };
     },
     created() {
         this.requestWorkData();
+        this.requestOrganizationInfo();
     },
     methods: {
+        async requestOrganizationInfo() {
+            await this.$rpc.api.isReady;
+            let objList = await this.$rpc.api.query.names.names.entries();
+            objList.forEach((v) => {
+                v[1] = v[1].toJSON();
+                let expiration = v[1].expiration;
+                let owner = v[1].owner;
+                let value = hexToString(v[1].value);
+                value = isJsonObject(value) ? JSON.parse(value) : {};
+                this.organizationList.push({
+                    name: hexToString(v[0].toHuman()[0]),
+                    hash: v[0].toHuman()[0],
+                    expiration,
+                    owner,
+                    value,
+                });
+            });
+        },
         requestWorkData() {
             this.$http.globalGetPopArts({}).then((res) => {
                 this.list = res;

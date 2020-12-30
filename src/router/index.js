@@ -54,6 +54,17 @@ const routes = [
             ),
     },
     {
+        path: "/certificate/orgsign/:hash",
+        name: "OrgSign",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "certificate" */ "@/views/Certificate/Sign.vue"
+            ),
+    },
+    {
         path: "/certificate/apply",
         name: "Apply",
         meta: {

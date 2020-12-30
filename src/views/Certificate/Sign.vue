@@ -3,10 +3,16 @@
     <div class="sign">
         <div class="container">
             <div class="sign-item">
-                <div class="title">WALLET ADDRESS</div>
+                <div class="title">
+                    {{ isOrg ? "organization" : "WALLET ADDRESS" }}
+                </div>
                 <div class="content">
                     <div class="address">
-                        {{ $store.state.user.info.address }}
+                        {{
+                            isOrg
+                                ? hexTostring(name)
+                                : $store.state.user.info.address
+                        }}
                     </div>
                 </div>
             </div>
@@ -33,17 +39,45 @@
                         </div>
                     </div>
                 </div>
-                <button class="apply">Apply Now</button>
+                <button class="apply" @click="addSignature">Apply Now</button>
             </div>
         </div>
+        <Dialog type="medium" :visible.sync="dialogVisible">
+            <div class="dialog-body">
+                <div class="tip">TIPS</div>
+                <div class="label">
+                    Please enter the information attached to the signature
+                </div>
+                <Textarea
+                    class="dialog-textarea"
+                    placeholder="Please enter the information attached to the signature"
+                    v-model="signContent"
+                    :minRows="4"
+                    :maxRows="4"
+                />
+                <button
+                    @click="submit"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    Signature
+                </button>
+            </div>
+        </Dialog>
     </div>
 </template>
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
+import Textarea from "@/components/Textarea";
+import { hexToString, stringToHex } from "@polkadot/util";
+import Dialog from "@/components/Dialog/Dialog";
 export default {
     name: "sign",
     components: {
         AdaptiveImage,
+        Textarea,
+        Dialog,
     },
     data() {
         return {
@@ -54,10 +88,20 @@ export default {
             per_page: 18,
             total_pages: 0,
             total_count: 0,
+
+            signContent: "",
+            dialogVisible: false,
+            isSubmiting: false,
+            name: this.$route.params.hash,
         };
     },
     created() {
         this.requestData();
+    },
+    computed: {
+        isOrg() {
+            return this.$route.name == "OrgSign";
+        },
     },
     methods: {
         requestData() {
@@ -89,6 +133,51 @@ export default {
             let item = this.$store.state.art.materials.find((v) => (v.id = id));
             return item ? item : {};
         },
+        hexTostring(hex) {
+            return hexToString(hex);
+        },
+        addSignature() {
+            if (!this.selectArt.id) return;
+            this.dialogVisible = true;
+        },
+        async submit() {
+            this.isSubmiting = true;
+            await this.$rpc.api.isReady;
+            let extrinsic = await this.$rpc.api.tx.nft.addSignature(
+                this.selectArt.collection_id,
+                this.selectArt.item_id,
+                this.name,
+                this.signContent,
+                null
+            );
+            console.log(stringToHex(encodeURI(this.signContent)));
+            let accountList = await this.$extension.accounts();
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "success",
+                        message: "Application submitted",
+                        type: "success",
+                    });
+                    this.signContent = "";
+                    this.dialogVisible = false;
+                },
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
+        },
     },
 };
 </script>
@@ -107,6 +196,7 @@ export default {
     }
     .content {
         text-align: left;
+        overflow: hidden;
         .address {
             font-size: 26px;
             font-weight: 400;
@@ -210,6 +300,42 @@ export default {
         margin-top: 100px;
         margin-bottom: 100px;
         background-color: transparent;
+    }
+}
+
+.dialog-body {
+    text-align: center;
+    .tip {
+        font-size: 26px;
+        font-weight: 600;
+        text-align: center;
+        color: #020202;
+        letter-spacing: 0px;
+        margin-top: 14px;
+        margin-bottom: 84px;
+    }
+    .label {
+        font-size: 20px;
+        font-weight: 400;
+        text-align: center;
+        color: #020202;
+        letter-spacing: 0px;
+        margin-bottom: 50px;
+    }
+    .dialog-textarea {
+        height: 114px;
+        margin-bottom: 79px;
+    }
+    > button {
+        cursor: pointer;
+        width: 307px;
+        height: 75px;
+        background: #020202;
+        color: white;
+        font-size: 21px;
+        font-weight: 400;
+        text-align: center;
+        letter-spacing: 0px;
     }
 }
 </style>
