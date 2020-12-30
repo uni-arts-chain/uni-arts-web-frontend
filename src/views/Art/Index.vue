@@ -429,7 +429,7 @@ import AdaptiveImage from "@/components/AdaptiveImage";
 import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
-import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
+// import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
 import Chart from "./Chart";
 
 export default {
@@ -550,11 +550,7 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            this.transactionList = obj.toJSON().map((v) => {
-                v.buyer = encodeAddress(decodeAddress(v.buyer, true, -1));
-                v.seller = encodeAddress(decodeAddress(v.seller, true, -1));
-                return v;
-            });
+            this.transactionList = obj.toJSON();
         },
         async submitSell() {
             if (!this.$store.state.user.info.address) {

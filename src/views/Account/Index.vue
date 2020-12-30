@@ -126,12 +126,23 @@ export default {
             next();
         }
     },
-    created() {},
+    created() {
+        // this.requestAccoutInfo();
+    },
     methods: {
         quit() {
             this.$store.dispatch("user/Quit");
             this.$router.push("/");
         },
+        // async requestAccoutInfo() {
+        //     await this.$rpc.api.isReady;
+        //     let list = await this.$rpc.api.query.names.names.entries();
+        //     console.log(list);
+        //     list.forEach((v) => {
+        //         console.log(v[0].toHuman());
+        //         console.log(v[1].toHuman());
+        //     });
+        // },
     },
 };
 </script>
