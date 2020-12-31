@@ -154,7 +154,7 @@
                     </div>
                 </div>
             </div> -->
-            <div class="signature-info">
+            <div class="signature-info" v-if="signatureList.length > 0">
                 <div class="title">SIGNING RECORDS</div>
                 <div class="signature-body">
                     <div class="recent-signature">
@@ -574,7 +574,10 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            this.transactionList = obj.toJSON();
+            console.log(obj.toJSON());
+            this.transactionList = obj
+                .toJSON()
+                .sort((a, b) => b.buy_time - a.buy_time);
         },
         async getSignatureData() {
             await this.$rpc.api.isReady;
@@ -582,7 +585,7 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            console.log(obj.toJSON());
+            // console.log(obj.toJSON());
             this.signatureList = obj.toJSON();
         },
         async submitSell() {

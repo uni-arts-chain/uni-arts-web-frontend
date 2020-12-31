@@ -3,7 +3,7 @@
     <div class="index container">
         <div class="sign-head">
             <div class="title">Sign your works</div>
-            <router-link to="/certificate/sign" class="apply-link">
+            <router-link to="#" class="apply-link">
                 APPLY NOW
                 <div class="icon"></div>
             </router-link>
@@ -51,7 +51,7 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 import Organization from "./Organization";
-import { hexToString, isJsonObject } from "@polkadot/util";
+import { hexToString, stringToHex, isJsonObject } from "@polkadot/util";
 export default {
     name: "index",
     components: {
@@ -79,8 +79,8 @@ export default {
                 let value = hexToString(v[1].value);
                 value = isJsonObject(value) ? JSON.parse(value) : {};
                 this.organizationList.push({
-                    name: hexToString(v[0].toHuman()[0]),
-                    hash: v[0].toHuman()[0],
+                    name: v[0].toHuman()[0],
+                    hash: stringToHex(v[0].toHuman()[0]),
                     expiration,
                     owner,
                     value,

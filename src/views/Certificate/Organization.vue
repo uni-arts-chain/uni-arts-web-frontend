@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-12-23 15:39:28. */
 <template>
-    <div class="addsign">
+    <div class="addsign" v-if="list.length > 0">
         <div class="item" v-for="(v, i) in list" :key="i">
             <div class="img">
                 <AdaptiveImage :url="v.value.img_file || img"></AdaptiveImage>
@@ -81,6 +81,10 @@ export default {
                 color: #020202;
                 letter-spacing: 0px;
                 margin-bottom: 18px;
+                max-width: 500px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .cost {
                 font-size: 18px;
