@@ -57,6 +57,7 @@ export default {
         border-color: black;
         position: relative;
         height: 45px;
+        color: #020202;
     }
     ::v-deep .el-icon-arrow-up:before {
         content: "";
@@ -70,17 +71,27 @@ export default {
         border-right: 8px solid transparent;
     }
 }
+.el-select-dropdown__item {
+    color: #020202;
+}
 </style>
 <style lang="scss">
 .el-select-dropdown.uni-select {
     border-radius: 0px;
     border-color: black;
+    border-width: 2px;
 }
 
+.el-select-dropdown[x-placement^="bottom"] .popper__arrow {
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-bottom-color: black;
+}
 .el-select-dropdown[x-placement^="bottom"] .popper__arrow::after {
-    top: 1px;
-    margin-left: -6px;
-    border-top-width: 2px;
-    border-bottom-color: #ffffff;
+    top: 0px;
+    margin-left: -10px;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-bottom-color: white;
 }
 </style>
