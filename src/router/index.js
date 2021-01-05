@@ -108,6 +108,17 @@ const routes = [
                         /* webpackChunkName: "accountSale" */ "@/views/Account/Sale.vue"
                     ),
             },
+            {
+                path: "sign",
+                name: "AccountSign",
+                meta: {
+                    needAuth: true,
+                },
+                component: () =>
+                    import(
+                        /* webpackChunkName: "accountSale" */ "@/views/Account/Signs.vue"
+                    ),
+            },
         ],
     },
     {

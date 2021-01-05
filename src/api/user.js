@@ -61,6 +61,33 @@ const apiList = [
             upload: ["img_file"],
         },
     },
+    {
+        name: "getSignedWorks",
+        method: "GET",
+        desc: "当前用户已签名作品",
+        path: "/arts/my_signatures",
+        mockPath: "/arts/my_signatures",
+        params: {},
+        options: {},
+    },
+    {
+        name: "postApplySignature",
+        method: "POST",
+        desc: "申请其他机构签名",
+        path: "/arts/{:id}/apply_signature",
+        mockPath: "/arts/{:id}/apply_signature",
+        params: {},
+        options: {},
+    },
+    {
+        name: "getApplySignature",
+        method: "GET",
+        desc: "申请签名列表",
+        path: "/arts/applying_signatures",
+        mockPath: "/arts/applying_signatures",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;

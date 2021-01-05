@@ -70,7 +70,7 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 import Textarea from "@/components/Textarea";
-import { hexToString, stringToHex } from "@polkadot/util";
+import { hexToString } from "@polkadot/util";
 import Dialog from "@/components/Dialog/Dialog";
 export default {
     name: "sign",
@@ -93,10 +93,13 @@ export default {
             dialogVisible: false,
             isSubmiting: false,
             name: this.$route.params.hash,
+
+            organization: {},
         };
     },
     created() {
         this.requestData();
+        this.getOrgInfo();
     },
     computed: {
         isOrg() {
@@ -140,7 +143,18 @@ export default {
             if (!this.selectArt.id) return;
             this.dialogVisible = true;
         },
+        async getOrgInfo() {
+            await this.$rpc.api.isReady;
+            let result = await this.$rpc.api.query.names.names(this.name);
+            this.organization = result.toJSON();
+        },
         async submit() {
+            if (
+                this.organization.owner !== this.$store.state.user.info.address
+            ) {
+                this.applyOrgSignature(this.selectArt.id, this.name);
+                return;
+            }
             this.isSubmiting = true;
             await this.$rpc.api.isReady;
             let extrinsic = await this.$rpc.api.tx.nft.addSignature(
@@ -150,7 +164,6 @@ export default {
                 this.signContent,
                 null
             );
-            console.log(stringToHex(encodeURI(this.signContent)));
             let accountList = await this.$extension.accounts();
             let currentAccount = accountList.find(
                 (v) => v.address === this.$store.state.user.info.address
@@ -177,6 +190,38 @@ export default {
                     });
                 }
             );
+        },
+        applyOrgSignature(id, organization_name) {
+            this.isSubmiting = true;
+            this.$http
+                .userPostApplySignature(
+                    {
+                        id: id,
+                        organization_name: hexToString(organization_name),
+                        memo: this.signContent,
+                    },
+                    {
+                        id: id,
+                    }
+                )
+                .then(() => {
+                    this.isSubmiting = false;
+                    this.dialogVisible = false;
+                    this.$notify({
+                        title: "success",
+                        message: "Application submitted",
+                        type: "success",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
+                });
         },
     },
 };

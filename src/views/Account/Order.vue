@@ -4,7 +4,6 @@
         <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="art-item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${v.id}`" class="img-container">
-                <!-- <img ref="img" @load="imgOnLoad(i)" :src="v.img_main_file1.url" /> -->
                 <AdaptiveImage
                     :url="v.img_main_file1.url"
                     width="100%"
@@ -13,12 +12,15 @@
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <div class="desc">Certificate Address: {{ v.item_hash }}</div>
-            <div class="price">{{ v.price }} UART</div>
-            <div class="address-label">
+            <div class="price" v-if="type !== 'signature'">
+                {{ v.price }} UART
+            </div>
+            <div class="address-label" v-if="type !== 'signature'">
                 <span class="tag">
                     {{ v.aasm_state }}
                 </span>
             </div>
+            <div class="action" v-else @click="show">Check</div>
         </div>
     </div>
 </template>
@@ -51,6 +53,9 @@ export default {
                 this.page--;
                 this.requestData();
             }
+        },
+        show() {
+            this.$emit("show");
         },
     },
 };
@@ -104,9 +109,23 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin-top: 20px;
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
+}
+.action {
+    border: 2px solid #020202;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: 400;
+    text-align: center;
+    background: transparent;
+    color: #020202;
+    letter-spacing: 0px;
+    padding: 6px 10px;
+    margin-right: 10px;
+    text-transform: capitalize;
 }
 .desc {
     display: block;

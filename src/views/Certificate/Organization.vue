@@ -8,7 +8,12 @@
             <div class="content">
                 <div class="content-top">
                     <div class="left">
-                        <div class="title">{{ v.name }}</div>
+                        <div class="title">
+                            {{ v.name }}
+                            <span class="mine-org" v-if="isOwner(v.owner)"
+                                >MINE</span
+                            >
+                        </div>
                         <div class="cost">
                             Cost:
                             <span style="color: #c61e1e">{{
@@ -53,6 +58,9 @@ export default {
         apply(item) {
             this.$router.push("/certificate/orgsign/" + item.hash);
         },
+        isOwner(v) {
+            return v === this.$store.state.user.info.address;
+        },
     },
 };
 </script>
@@ -85,6 +93,19 @@ export default {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
+                display: flex;
+                align-items: center;
+            }
+            .mine-org {
+                border: 1px solid #c61e1e;
+                padding-top: 1px;
+                padding-bottom: 1px;
+                padding-left: 4px;
+                padding-right: 4px;
+                color: #c61e1e;
+                margin-left: 12px;
+                border-radius: 4px;
+                font-size: 16px;
             }
             .cost {
                 font-size: 18px;

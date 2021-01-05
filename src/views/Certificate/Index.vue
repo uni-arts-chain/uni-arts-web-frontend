@@ -30,7 +30,7 @@
                             <span class="address">{{ v.item_hash }}</span>
                         </div>
                         <div class="address-label">
-                            Sign Time: 2020/08/22 17:32:30
+                            Sign Time: {{ v.last_sign_at | dateFormat }}
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 import Organization from "./Organization";
-import { hexToString, stringToHex, isJsonObject } from "@polkadot/util";
+import { hexToString, isJsonObject } from "@polkadot/util";
 export default {
     name: "index",
     components: {
@@ -78,9 +78,10 @@ export default {
                 let owner = v[1].owner;
                 let value = hexToString(v[1].value);
                 value = isJsonObject(value) ? JSON.parse(value) : {};
+                let hash = v[0].args[0].toString();
                 this.organizationList.push({
-                    name: v[0].toHuman()[0],
-                    hash: stringToHex(v[0].toHuman()[0]),
+                    name: hexToString(hash),
+                    hash: hash,
                     expiration,
                     owner,
                     value,
@@ -88,8 +89,8 @@ export default {
             });
         },
         requestWorkData() {
-            this.$http.globalGetPopArts({}).then((res) => {
-                this.list = res;
+            this.$http.userGetSignedWorks({}).then((res) => {
+                this.list = res.list.splice(0, 3);
             });
         },
         materialType(id) {

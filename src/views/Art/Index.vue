@@ -585,7 +585,7 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            // console.log(obj.toJSON());
+            console.log(obj.toJSON());
             this.signatureList = obj.toJSON();
         },
         async submitSell() {

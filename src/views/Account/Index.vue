@@ -80,6 +80,13 @@
                     >
                         Stock
                     </router-link>
+                    <router-link
+                        to="/account/sign"
+                        class="option-title"
+                        :class="{ active: optionActive == '2' }"
+                    >
+                        Add signs
+                    </router-link>
                 </div>
                 <div class="content">
                     <router-view></router-view>
@@ -112,6 +119,9 @@ export default {
                     break;
                 case "/account/sale":
                     index = "3";
+                    break;
+                case "/account/sign":
+                    index = "2";
                     break;
             }
             return index;
