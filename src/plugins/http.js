@@ -64,7 +64,7 @@ export class MakeApi {
                                 let uploadFile = api.options.upload.find(
                                     (f) => f == v
                                 );
-                                if (uploadFile) {
+                                if (uploadFile && outerParams[v]) {
                                     formData.append(
                                         v,
                                         outerParams[v][0],

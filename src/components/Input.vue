@@ -1,11 +1,14 @@
 /** * Created by Lay Hunt on 2020-12-29 10:17:33. */
 <template>
-    <input
-        class="el-input__inner"
-        type="text"
-        @blur="onBlur"
-        v-model="inputData"
-    />
+    <div class="input-box">
+        <input
+            class="el-input__inner"
+            :type="type"
+            @blur="onBlur"
+            v-model="inputData"
+        />
+        <div class="append" v-if="append">{{ append }}</div>
+    </div>
 </template>
 <script>
 export default {
@@ -18,6 +21,14 @@ export default {
         value: {
             default: "",
         },
+        type: {
+            type: String,
+            default: "text",
+        },
+        append: {
+            type: String,
+            default: "",
+        },
     },
     data() {
         return {
@@ -27,6 +38,9 @@ export default {
     watch: {
         inputData() {
             this.$emit("change", this.inputData);
+        },
+        value(value) {
+            this.inputData = value;
         },
     },
     methods: {
@@ -58,10 +72,25 @@ input {
     border: 2px solid #020202;
     color: #020202;
     padding: 5px 15px;
+    padding-right: 55px;
     border-radius: 0;
     font-size: 17px;
 }
 input:hover {
     border-color: #020202;
+}
+.input-box {
+    display: inline-block;
+    position: relative;
+}
+.append {
+    position: absolute;
+    top: 3px;
+    right: 10px;
+    font-size: 17px;
+    font-weight: 400;
+    text-align: center;
+    color: #020202;
+    letter-spacing: 0px;
 }
 </style>

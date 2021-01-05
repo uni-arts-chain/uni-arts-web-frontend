@@ -1,12 +1,13 @@
 /** * Created by Lay Hunt on 2020-12-17 15:04:15. */
 <template>
-    <div class="upload">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
+    <div class="upload container">
+        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/account' }"
                 >Profile</el-breadcrumb-item
             >
             <el-breadcrumb-item>Upload</el-breadcrumb-item>
-        </el-breadcrumb>
+        </el-breadcrumb> -->
+        <div class="title">Upload works</div>
         <el-form
             ref="form"
             :model="form"
@@ -17,149 +18,130 @@
             <el-form-item label="画作标题" prop="name">
                 <Input v-model="form.name" />
             </el-form-item>
-            <el-form-item label="作品分类" prop="category_id">
-                <!-- <el-select
-                    v-model="form.category_id"
-                    placeholder="请选择作品分类"
-                >
-                    <el-option
-                        :key="i"
-                        :label="v.title"
-                        :value="v.id"
-                        v-for="(v, i) in categories"
-                    ></el-option>
-                </el-select> -->
+            <el-form-item label="作品分类" prop="category_id" required>
                 <Select
                     v-model="form.category_id"
                     placeholder="请选择作品分类"
                     :options="categories"
-                    label="title"
-                    value="id"
-                    key="id"
+                    optionLabel="title"
+                    optionValue="id"
+                    optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="作品主题" prop="theme_id">
-                <el-select v-model="form.theme_id" placeholder="请选择作品主题">
-                    <el-option
-                        :key="i"
-                        :label="v.title"
-                        :value="v.id"
-                        v-for="(v, i) in themes"
-                    ></el-option>
-                </el-select>
+            <el-form-item label="作品主题" prop="theme_id" required>
+                <Select
+                    v-model="form.theme_id"
+                    placeholder="请选择作品主题"
+                    :options="themes"
+                    optionLabel="title"
+                    optionValue="id"
+                    optionKey="id"
+                ></Select>
             </el-form-item>
-            <el-form-item label="作品材质" prop="material_id">
-                <el-select
+            <el-form-item label="作品材质" prop="material_id" required>
+                <Select
                     v-model="form.material_id"
                     placeholder="请选择作品材质"
-                >
-                    <el-option
-                        :key="i"
-                        :label="v.title"
-                        :value="v.id"
-                        v-for="(v, i) in materials"
-                    ></el-option>
-                </el-select>
+                    :options="materials"
+                    optionLabel="title"
+                    optionValue="id"
+                    optionKey="id"
+                ></Select>
             </el-form-item>
             <el-form-item label="创作日期" prop="produce_at">
-                <el-date-picker
-                    v-model="form.produce_at"
-                    type="date"
-                    placeholder="选择日期"
-                >
-                </el-date-picker>
+                <DatePicker v-model="form.produce_at" placeholder="选择日期" />
             </el-form-item>
-            <el-form-item label="作品尺寸(长 cm)" prop="size_length">
-                <el-input v-model="form.size_length" type="number"></el-input>
-            </el-form-item>
-            <el-form-item label="作品尺寸(宽 cm)" prop="size_width">
-                <el-input v-model="form.size_width" type="number"></el-input>
-            </el-form-item>
-            <el-form-item label="作品说明" prop="details">
-                <el-input type="textarea" v-model="form.details"></el-input>
+            <el-form-item label="尺寸" class="size-form-item" prop="size_width">
+                <Input
+                    class="size-input"
+                    style="margin-right: 10px"
+                    v-model="form.size_length"
+                    type="number"
+                />
+                cm X
+                <Input
+                    class="size-input"
+                    style="margin-left: 10px; margin-right: 10px"
+                    v-model="form.size_width"
+                    type="number"
+                />
+                cm
             </el-form-item>
             <el-form-item label="价格" prop="price">
-                <el-input v-model="form.price"></el-input>
+                <Input v-model="form.price" append="UART" />
             </el-form-item>
-            <el-form-item label="主图" required>
-                <el-upload
-                    action="#"
-                    :limit="3"
-                    list-type="picture-card"
-                    :file-list="img_main_list"
-                    :on-exceed="onExceed"
-                    :on-change="onChange"
-                    :auto-upload="false"
-                >
-                    <i slot="default" class="el-icon-plus"></i>
-                    <div slot="file" slot-scope="{ file }">
-                        <img
-                            class="el-upload-list__item-thumbnail"
-                            :src="file.file.url"
-                            alt=""
-                        />
-                        <span class="el-upload-list__item-actions">
-                            <span
-                                class="el-upload-list__item-preview"
-                                @click="handlePictureCardPreview(file.file)"
-                            >
-                                <i class="el-icon-zoom-in"></i>
-                            </span>
-                            <span
-                                class="el-upload-list__item-delete"
-                                @click="handleRemove(file)"
-                            >
-                                <i class="el-icon-delete"></i>
-                            </span>
-                        </span>
-                    </div>
-                </el-upload>
-            </el-form-item>
-            <el-form-item label="细节图">
-                <el-upload
-                    action="#"
-                    :limit="5"
-                    :file-list="img_detail_list"
-                    list-type="picture-card"
-                    :on-exceed="onDetailExceed"
-                    :on-change="onDetailChange"
-                    :auto-upload="false"
-                >
-                    <i slot="default" class="el-icon-plus"></i>
-                    <div slot="file" slot-scope="{ file }">
-                        <img
-                            class="el-upload-list__item-thumbnail"
-                            :src="file.file.url"
-                            alt=""
-                        />
-                        <span class="el-upload-list__item-actions">
-                            <span
-                                class="el-upload-list__item-preview"
-                                @click="handlePictureCardPreview(file)"
-                            >
-                                <i class="el-icon-zoom-in"></i>
-                            </span>
-                            <span
-                                class="el-upload-list__item-delete"
-                                @click="handleDetailRemove(file)"
-                            >
-                                <i class="el-icon-delete"></i>
-                            </span>
-                        </span>
-                    </div>
-                </el-upload>
+            <el-form-item label="作品说明" prop="details">
+                <Textarea
+                    v-model="form.details"
+                    :minRows="5"
+                    :maxRows="5"
+                    :rows="5"
+                />
             </el-form-item>
             <el-form-item
-                :label="`细节图${i + 1}说明`"
-                v-for="(v, i) in img_detail_list"
-                :key="i"
+                class="main-upload"
+                label="主图"
+                prop="img_main_file1"
             >
-                <el-input
-                    v-model="form[`img_detail_file${i + 1}_desc`]"
-                ></el-input>
+                <Upload v-model="form.img_main_file1" :limit="1" />
+                <Upload v-model="form.img_main_file2" :limit="1" />
+                <Upload v-model="form.img_main_file3" :limit="1" />
             </el-form-item>
-            <el-form-item>
+            <el-form-item class="detail-upload" label="细节图">
+                <div class="detail-box">
+                    <Upload v-model="form.img_detail_file1" :limit="1" />
+                    <Textarea
+                        placeholder="Enter the Detailed description"
+                        v-model="form.img_detail_file1_desc"
+                        :rows="10"
+                        :minRows="10"
+                        :maxRows="10"
+                    />
+                </div>
+                <div class="detail-box">
+                    <Upload v-model="form.img_detail_file2" :limit="1" />
+                    <Textarea
+                        placeholder="Enter the Detailed description"
+                        v-model="form.img_detail_file2_desc"
+                        :rows="10"
+                        :minRows="10"
+                        :maxRows="10"
+                    />
+                </div>
+                <div class="detail-box">
+                    <Upload v-model="form.img_detail_file3" :limit="1" />
+                    <Textarea
+                        placeholder="Enter the Detailed description"
+                        v-model="form.img_detail_file3_desc"
+                        :rows="10"
+                        :minRows="10"
+                        :maxRows="10"
+                    />
+                </div>
+                <div class="detail-box">
+                    <Upload v-model="form.img_detail_file4" :limit="1" />
+                    <Textarea
+                        placeholder="Enter the Detailed description"
+                        v-model="form.img_detail_file4_desc"
+                        :rows="10"
+                        :minRows="10"
+                        :maxRows="10"
+                    />
+                </div>
+                <div class="detail-box">
+                    <Upload v-model="form.img_detail_file5" :limit="1" />
+                    <Textarea
+                        placeholder="Enter the Detailed description"
+                        v-model="form.img_detail_file5_desc"
+                        :rows="10"
+                        :minRows="10"
+                        :maxRows="10"
+                    />
+                </div>
+            </el-form-item>
+            <el-form-item style="width: 100%">
                 <el-button
+                    class="submit-button"
                     type="primary"
                     @click="onSubmit"
                     v-loading="isSubmiting"
@@ -167,42 +149,34 @@
                     element-loading-background="rgba(0, 0, 0, 0.8)"
                     >立即创建</el-button
                 >
-                <el-button @click="$router.push('/account')">取消</el-button>
+                <el-button
+                    class="cancel-button"
+                    @click="$router.push('/account')"
+                    >取消</el-button
+                >
             </el-form-item>
         </el-form>
-        <el-dialog :visible.sync="dialogVisible">
-            <img width="100%" :src="dialogImageUrl" alt="" />
-        </el-dialog>
     </div>
 </template>
 <script>
-import {
-    Form,
-    FormItem,
-    Button,
-    // Select,
-    // Option,
-    // Input,
-    DatePicker,
-    Upload,
-    Dialog,
-} from "element-ui";
+import { Form, FormItem, Button, Dialog } from "element-ui";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
+import DatePicker from "@/components/DatePicker";
+import Textarea from "@/components/Textarea";
+import Upload from "@/components/Upload";
 export default {
     name: "upload",
     components: {
         [Form.name]: Form,
         [FormItem.name]: FormItem,
         [Button.name]: Button,
-        [Select.name]: Select,
-        [Option.name]: Option,
-        [Input.name]: Input,
-        [DatePicker.name]: DatePicker,
-        [Upload.name]: Upload,
         [Dialog.name]: Dialog,
         Input,
         Select,
+        DatePicker,
+        Textarea,
+        Upload,
     },
     data() {
         return {
@@ -217,6 +191,9 @@ export default {
                 details: "",
                 price: "",
                 fee: "",
+                img_main_file1: "",
+                img_main_file2: "",
+                img_main_file3: "",
                 img_detail_file1_desc: "",
                 img_detail_file2_desc: "",
                 img_detail_file3_desc: "",
@@ -224,10 +201,6 @@ export default {
                 img_detail_file5_desc: "",
             },
             isSubmiting: false,
-            img_main_list: [],
-            img_detail_list: [],
-            dialogImageUrl: "",
-            dialogVisible: false,
             rules: {
                 name: [
                     { required: true, message: "请输入标题", trigger: "blur" },
@@ -305,114 +278,60 @@ export default {
                         size_width: this.form.size_width,
                         details: this.form.details,
                         price: this.form.price,
+                        img_main_file1: this.form.img_main_file1[0],
+                        img_main_file2: this.form.img_main_file2
+                            ? this.form.img_main_file2[0]
+                            : "",
+                        img_main_file3: this.form.img_main_file3
+                            ? this.form.img_main_file3[0]
+                            : "",
+                        img_detail_file1: this.form.img_detail_file1
+                            ? this.form.img_detail_file1[0]
+                            : "",
+                        img_detail_file2: this.form.img_detail_file2
+                            ? this.form.img_detail_file2[0]
+                            : "",
+                        img_detail_file3: this.form.img_detail_file3
+                            ? this.form.img_detail_file3[0]
+                            : "",
+                        img_detail_file4: this.form.img_detail_file4
+                            ? this.form.img_detail_file4[0]
+                            : "",
+                        img_detail_file5: this.form.img_detail_file5
+                            ? this.form.img_detail_file5[0]
+                            : "",
+                        img_detail_file1_desc: this.form.img_detail_file1_desc,
+                        img_detail_file2_desc: this.form.img_detail_file2_desc,
+                        img_detail_file3_desc: this.form.img_detail_file3_desc,
+                        img_detail_file4_desc: this.form.img_detail_file4_desc,
+                        img_detail_file5_desc: this.form.img_detail_file5_desc,
                     };
-                    this.filetoBlob(this.img_main_list, obj).then(() => {
-                        this.filetoBlob(this.img_detail_list, obj).then(() => {
-                            this.$http
-                                .userPostArt(obj)
-                                .then(() => {
-                                    this.isSubmiting = false;
-                                    this.$notify({
-                                        title: "Success",
-                                        message: "Submitted",
-                                        type: "success",
-                                    });
-                                    this.resetForm("form");
-                                })
-                                .catch((err) => {
-                                    console.log(err);
-                                    this.isSubmiting = false;
-                                    this.$notify({
-                                        title: "Error",
-                                        message: err.head ? err.head.msg : err,
-                                        type: "error",
-                                    });
-                                });
+                    console.log(obj);
+                    this.$http
+                        .userPostArt(obj)
+                        .then(() => {
+                            this.isSubmiting = false;
+                            this.$notify({
+                                title: "Success",
+                                message: "Submitted",
+                                type: "success",
+                            });
+                            this.resetForm();
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            this.isSubmiting = false;
+                            this.$notify({
+                                title: "Error",
+                                message: err.head ? err.head.msg : err,
+                                type: "error",
+                            });
                         });
-                    });
                 }
             });
         },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            this.img_main_list = [];
-            this.img_detail_list = [];
-        },
-        handleRemove(file) {
-            console.log(this.img_main_list);
-            console.log(file);
-            let index = this.img_main_list.findIndex((v) => v.uid == file.uid);
-            index >= 0 ? this.img_main_list.splice(index, 1) : "";
-        },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-
-        handleDetailRemove(file) {
-            console.log(this.img_detail_list);
-            let index = this.img_detail_list.findIndex(
-                (v) => v.uid == file.uid
-            );
-            index >= 0 ? this.img_detail_list.splice(index, 1) : "";
-        },
-        onExceed() {
-            this.$notify({
-                title: "Warning",
-                type: "warning",
-                message: "超出可上传数量",
-            });
-        },
-        onDetailExceed() {
-            this.$notify({
-                title: "Warning",
-                type: "warning",
-                message: "超出可上传数量",
-            });
-        },
-        onChange(file) {
-            this.img_main_list.push({
-                field: "img_main_file" + (this.img_main_list.length + 1),
-                file: file,
-            });
-        },
-        onDetailChange(file) {
-            this.img_detail_list.push({
-                field: "img_detail_file" + (this.img_detail_list.length + 1),
-                file: file,
-            });
-        },
-        dataURLtoBlob(dataurl) {
-            var arr = dataurl.split(",");
-            var mime = arr[0].match(/:(.*?);/)[1];
-            var bstr = atob(arr[1].replace(/\s/g, ""));
-            var n = bstr.length;
-            var u8arr = new Uint8Array(n);
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], { type: mime });
-        },
-        filetoBlob(list, obj) {
-            return new Promise((resolve) => {
-                if (list.length > 0) {
-                    for (let i = 0; i < list.length; i++) {
-                        let reader = new FileReader();
-                        reader.onload = (event) => {
-                            obj[list[i].field] = [
-                                this.dataURLtoBlob(event.target.result),
-                                `${list[i].file.raw.name}`,
-                            ];
-                            if (i >= list.length - 1) {
-                                resolve();
-                            }
-                        };
-                        reader.readAsDataURL(list[i].file.raw);
-                    }
-                } else {
-                    resolve();
-                }
-            });
+        resetForm() {
+            Object.keys(this.form).forEach((v) => (this.form[v] = ""));
         },
     },
 };
@@ -421,17 +340,102 @@ export default {
 .upload {
     padding: 40px;
     padding-top: 70px;
-    padding-left: 60px;
+    padding-left: 0px;
+    padding-right: 0px;
     text-align: left;
+    > .title {
+        font-family: "Broadway";
+        font-size: 38px;
+        font-weight: 400;
+        text-align: left;
+        color: #020202;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 83px;
+    }
 }
 .el-form {
-    width: 70%;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
 }
-.el-breadcrumb {
+.el-form-item {
+    width: 40%;
+    margin-right: 10%;
+    margin-bottom: 50px;
+    ::v-deep .el-form-item__label {
+        font-size: 17px;
+        font-weight: 400;
+        text-align: center;
+        color: #020202;
+        letter-spacing: 0px;
+    }
+    .size-input {
+        width: 90px;
+    }
+}
+.size-form-item ::v-deep .el-form-item__content {
+    font-size: 17px;
+    font-weight: 400;
+    color: #020202;
+    letter-spacing: 0px;
+}
+.main-upload {
+    width: 100%;
+    ::v-deep .el-form-item__content {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .uni-upload {
+        width: 300px;
+    }
+}
+.detail-upload {
+    width: 100%;
+    .uni-upload {
+        width: 300px;
+        margin-bottom: 30px;
+    }
+    .detail-box {
+        display: flex;
+    }
+    /* ::v-deep .el-form-item__content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    } */
+}
+/* .el-breadcrumb {
     margin-bottom: 60px;
-}
+} */
 
-.el-button {
+.el-button.cancel-button {
+    height: 65px;
+    width: 300px;
+    background: transparent;
+    border: 2px solid #020202;
+    font-size: 18px;
+    border-radius: 0;
+    font-weight: 600;
+    text-align: center;
+    color: #020202;
+    letter-spacing: 0px;
+    ::v-deep .el-loading-spinner {
+        margin-top: -7px;
+    }
+}
+.el-button.submit-button {
+    height: 65px;
+    width: 300px;
+    margin-right: 30px;
+    border-radius: 0;
+    background: #020202;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    color: #ffffff;
+    letter-spacing: 0px;
     ::v-deep .el-loading-spinner {
         margin-top: -7px;
     }

@@ -45,6 +45,9 @@ export default {
         inputData() {
             this.$emit("change", this.inputData);
         },
+        value(value) {
+            this.inputData = value;
+        },
     },
     data() {
         return {

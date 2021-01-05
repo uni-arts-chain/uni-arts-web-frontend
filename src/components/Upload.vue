@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-12-29 11:11:36. */
 <template>
-    <div class="upload">
+    <div class="uni-upload">
         <div
             class="box-boder selected"
             @click="selectFile"
@@ -24,7 +24,7 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
-    name: "upload",
+    name: "uni-upload",
     model: {
         prop: "value",
         event: "change",
@@ -41,6 +41,9 @@ export default {
     watch: {
         fileDataList(value) {
             this.$emit("change", value);
+        },
+        value(value) {
+            this.fileDataList = value ? value : [];
         },
     },
     methods: {
@@ -77,10 +80,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.upload {
+.uni-upload {
     display: flex;
     .box-boder {
         width: 360px;
+        max-width: 100%;
+        max-height: 100%;
         height: 270px;
         cursor: pointer;
         position: relative;

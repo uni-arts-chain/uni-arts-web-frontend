@@ -1,51 +1,25 @@
 /** * Created by Lay Hunt on 2020-12-29 09:48:09. */
 <template>
-    <el-select
+    <el-date-picker
         v-model="inputData"
+        type="date"
         :placeholder="placeholder"
-        popper-class="uni-select"
+        popper-class="uni-date-picker"
         @blur="onBlur"
     >
-        <el-option
-            v-for="item in options"
-            :key="item[optionKey]"
-            :label="item[optionLabel]"
-            :value="item[optionValue]"
-        >
-        </el-option>
-    </el-select>
+    </el-date-picker>
 </template>
 <script>
-import { Select, Option } from "element-ui";
+import { DatePicker } from "element-ui";
 export default {
-    name: "uni-select",
+    name: "uni-data-picker",
     components: {
-        [Select.name]: Select,
-        [Option.name]: Option,
+        [DatePicker.name]: DatePicker,
     },
+    props: ["value", "placeholder"],
     model: {
         prop: "value",
         event: "change",
-    },
-    props: {
-        value: null,
-        options: {
-            type: Array,
-            default: () => [],
-        },
-        optionLabel: {
-            type: String,
-            default: "label",
-        },
-        optionKey: {
-            type: String,
-            default: "label",
-        },
-        optionValue: {},
-        placeholder: {
-            type: String,
-            default: "Select",
-        },
     },
     data() {
         return {
@@ -56,16 +30,11 @@ export default {
         inputData() {
             this.$emit("change", this.inputData);
         },
-        value(value) {
-            this.inputData = value;
-        },
     },
     methods: {
         onBlur() {
-            if (this.inputData >= 0) {
-                this.$emit("blur", this.inputData);
-                this.dispatch("ElFormItem", "el.form.blur", this.inputData);
-            }
+            this.$emit("blur", this.inputData);
+            this.dispatch("ElFormItem", "el.form.blur", this.inputData);
         },
         dispatch(componentName, eventName, params) {
             var parent = this.$parent || this.$root;
@@ -94,35 +63,20 @@ export default {
     height: 45px;
     color: #020202;
 }
-::v-deep .el-icon-arrow-up:before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 5px;
-    z-index: 1;
-    border-top: 8px solid transparent;
-    border-left: 8px solid transparent;
-    border-bottom: 8px solid black;
-    border-right: 8px solid transparent;
-}
-
-.el-select-dropdown__item {
-    color: #020202;
-}
 </style>
 <style lang="scss">
-.el-select-dropdown.uni-select {
+.el-date-picker.uni-date-picker {
     border-radius: 0px;
     border-color: black;
     border-width: 2px;
 }
 
-.el-select-dropdown[x-placement^="bottom"] .popper__arrow {
+.el-date-picker[x-placement^="bottom"] .popper__arrow {
     border-left-width: 10px;
     border-right-width: 10px;
     border-bottom-color: black;
 }
-.el-select-dropdown[x-placement^="bottom"] .popper__arrow::after {
+.el-date-picker[x-placement^="bottom"] .popper__arrow::after {
     top: 2px;
     margin-left: -10px;
     border-left-width: 10px;
