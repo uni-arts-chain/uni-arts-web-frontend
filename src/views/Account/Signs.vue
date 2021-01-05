@@ -14,20 +14,42 @@
                 :class="{ 'no-next': !hasNext }"
             ></div>
         </div>
-        <Dialog :visible.sync="dialogVisible">
+        <Dialog :visible.sync="dialogVisible" @closed="closeDialog">
             <div class="content">
                 <div class="head">Application Signature</div>
                 <div class="body">
                     <div class="label">Organization:</div>
-                    <div class="label-org">Black Palermo Account Center</div>
+                    <div class="label-org">
+                        {{
+                            selectItem.organization
+                                ? selectItem.organization.name
+                                : ""
+                        }}
+                    </div>
                     <div class="label">Signature information:</div>
                     <div class="label-desc">
-                        我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。我这个作品很厉害，快点给我签名。
+                        {{ selectItem.memo }}
                     </div>
                 </div>
                 <div class="button-group">
-                    <button class="refuse">Refuse</button>
-                    <button class="signature">Signature</button>
+                    <button
+                        class="refuse"
+                        v-loading="refuseLoading"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        @click="refuse"
+                    >
+                        Refuse
+                    </button>
+                    <button
+                        class="signature"
+                        v-loading="signatureLoading"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        @click="signature"
+                    >
+                        Signature
+                    </button>
                 </div>
             </div>
         </Dialog>
@@ -36,6 +58,7 @@
 <script>
 import Order from "@/views/Account/Order";
 import Dialog from "@/components/Dialog/Dialog";
+import { stringToHex } from "@polkadot/util";
 export default {
     name: "signs",
     components: {
@@ -52,6 +75,9 @@ export default {
             total_count: 0,
 
             dialogVisible: false,
+            selectItem: {},
+            refuseLoading: false,
+            signatureLoading: false,
         };
     },
     mounted() {
@@ -103,11 +129,80 @@ export default {
                 this.requestData();
             }
         },
-        showDialog() {
+        showDialog(item) {
+            this.selectItem = item;
             this.dialogVisible = true;
         },
         closeDialog() {
+            this.selectItem = {};
             this.dialogVisible = false;
+        },
+        refuse() {
+            this.refuseLoading = true;
+            this.$http
+                .userPostRefuseSignature(
+                    {
+                        organization_name: this.selectItem.organization.name,
+                    },
+                    {
+                        id: this.selectItem.art.id,
+                    }
+                )
+                .then(() => {
+                    this.refuseLoading = false;
+                    this.dialogVisible = false;
+                    this.$notify({
+                        title: "Success",
+                        message: "Success",
+                        type: "success",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.refuseLoading = false;
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
+                });
+        },
+        async signature() {
+            this.signatureLoading = true;
+            await this.$rpc.api.isReady;
+            let extrinsic = await this.$rpc.api.tx.nft.addSignature(
+                this.selectItem.art.collection_id,
+                this.selectItem.art.item_id,
+                stringToHex(this.selectItem.organization.name),
+                this.selectItem.memo,
+                null
+            );
+            let accountList = await this.$extension.accounts();
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.signatureLoading = false;
+                    this.$notify({
+                        title: "success",
+                        message: "Application submitted",
+                        type: "success",
+                    });
+                    this.selectItem = {};
+                    this.dialogVisible = false;
+                },
+                () => {
+                    this.signatureLoading = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
         },
     },
 };

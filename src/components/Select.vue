@@ -1,11 +1,15 @@
 /** * Created by Lay Hunt on 2020-12-29 09:48:09. */
 <template>
-    <el-select v-model="value" placeholder="请选择">
+    <el-select
+        v-model="value"
+        :placeholder="placeholder"
+        popper-class="uni-select"
+    >
         <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :key="item[key]"
+            :label="item[label]"
+            :value="item[value]"
         >
         </el-option>
     </el-select>
@@ -22,6 +26,22 @@ export default {
         options: {
             type: Array,
             default: () => [],
+        },
+        label: {
+            type: String,
+            default: "label",
+        },
+        value: {
+            type: String,
+            default: "value",
+        },
+        key: {
+            type: String,
+            default: "value",
+        },
+        placeholder: {
+            type: String,
+            default: "Select",
         },
     },
     data() {
@@ -49,5 +69,18 @@ export default {
         border-bottom: 8px solid black;
         border-right: 8px solid transparent;
     }
+}
+</style>
+<style lang="scss">
+.el-select-dropdown.uni-select {
+    border-radius: 0px;
+    border-color: black;
+}
+
+.el-select-dropdown[x-placement^="bottom"] .popper__arrow::after {
+    top: 1px;
+    margin-left: -6px;
+    border-top-width: 2px;
+    border-bottom-color: #ffffff;
 }
 </style>

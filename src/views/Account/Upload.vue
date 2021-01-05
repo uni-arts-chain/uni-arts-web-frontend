@@ -15,10 +15,10 @@
             label-position="left"
         >
             <el-form-item label="画作标题" prop="name">
-                <el-input v-model="form.name"></el-input>
+                <Input v-model="form.name" />
             </el-form-item>
             <el-form-item label="作品分类" prop="category_id">
-                <el-select
+                <!-- <el-select
                     v-model="form.category_id"
                     placeholder="请选择作品分类"
                 >
@@ -28,7 +28,15 @@
                         :value="v.id"
                         v-for="(v, i) in categories"
                     ></el-option>
-                </el-select>
+                </el-select> -->
+                <Select
+                    v-model="form.category_id"
+                    placeholder="请选择作品分类"
+                    :options="categories"
+                    label="title"
+                    value="id"
+                    key="id"
+                ></Select>
             </el-form-item>
             <el-form-item label="作品主题" prop="theme_id">
                 <el-select v-model="form.theme_id" placeholder="请选择作品主题">
@@ -172,13 +180,15 @@ import {
     Form,
     FormItem,
     Button,
-    Select,
-    Option,
-    Input,
+    // Select,
+    // Option,
+    // Input,
     DatePicker,
     Upload,
     Dialog,
 } from "element-ui";
+import Input from "@/components/Input";
+import Select from "@/components/Select";
 export default {
     name: "upload",
     components: {
@@ -191,6 +201,8 @@ export default {
         [DatePicker.name]: DatePicker,
         [Upload.name]: Upload,
         [Dialog.name]: Dialog,
+        Input,
+        Select,
     },
     data() {
         return {

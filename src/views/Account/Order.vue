@@ -3,15 +3,30 @@
     <div class="own-arts">
         <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="art-item" v-for="(v, i) in list" :key="i">
-            <router-link :to="`/art/${v.id}`" class="img-container">
+            <router-link
+                :to="`/art/${type !== 'signature' ? v.id : v.art.id}`"
+                class="img-container"
+            >
                 <AdaptiveImage
-                    :url="v.img_main_file1.url"
+                    :url="
+                        type !== 'signature'
+                            ? v.img_main_file1.url
+                            : v.art.img_main_file1.url
+                    "
                     width="100%"
                     height="230px"
                 ></AdaptiveImage>
             </router-link>
-            <h5 class="title">{{ v.name }}</h5>
-            <div class="desc">Certificate Address: {{ v.item_hash }}</div>
+            <h5 class="title">
+                {{ type !== "signature" ? v.name : v.art.name }}
+            </h5>
+            <div class="desc">
+                Certificate Address:
+                {{ type !== "signature" ? v.item_hash : v.art.item_hash }}
+            </div>
+            <div class="organization-name" v-if="type === 'signature'">
+                {{ v.organization.name }}
+            </div>
             <div class="price" v-if="type !== 'signature'">
                 {{ v.price }} UART
             </div>
@@ -20,7 +35,7 @@
                     {{ v.aasm_state }}
                 </span>
             </div>
-            <div class="action" v-else @click="show">Check</div>
+            <div class="action" v-else @click="show(v)">Check</div>
         </div>
     </div>
 </template>
@@ -54,8 +69,8 @@ export default {
                 this.requestData();
             }
         },
-        show() {
-            this.$emit("show");
+        show(item) {
+            this.$emit("show", item);
         },
     },
 };
@@ -100,6 +115,17 @@ export default {
     font-weight: 600;
     text-align: left;
     letter-spacing: 0px;
+}
+.organization-name {
+    font-size: 17px;
+    margin-top: 10px;
+    font-weight: 500;
+    text-align: left;
+    letter-spacing: 0px;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .desc,
 .address-label {

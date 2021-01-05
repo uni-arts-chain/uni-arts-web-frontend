@@ -88,6 +88,17 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "postRefuseSignature",
+        method: "POST",
+        desc: "拒绝指定签名请求",
+        path: "/arts/{:id}/reject_signature",
+        mockPath: "/arts/{:id}/reject_signature",
+        params: {
+            organization_name: "",
+        },
+        options: {},
+    },
 ];
 
 export default apiList;
