@@ -21,10 +21,13 @@
                 <div class="content">
                     <div
                         class="item"
+                        :class="{
+                            offline: !v.item_id,
+                            active: selectArt.id == v.id,
+                        }"
                         v-for="(v, i) in list"
                         :key="i"
-                        :class="{ active: selectArt.id == v.id }"
-                        @click="selectArt = v"
+                        @click="clickArt(v)"
                     >
                         <AdaptiveImage
                             width="250px"
@@ -223,6 +226,11 @@ export default {
                     });
                 });
         },
+        clickArt(item) {
+            if (item.item_id) {
+                this.selectArt = item;
+            }
+        },
     },
 };
 </script>
@@ -298,6 +306,10 @@ export default {
             height: 25px;
             background: url(~@/assets/images/gou_ico@2x.png) no-repeat;
             background-size: 25px;
+        }
+        .item.offline {
+            cursor: not-allowed;
+            box-shadow: none;
         }
         .adaptive-image {
             margin-bottom: 24px;

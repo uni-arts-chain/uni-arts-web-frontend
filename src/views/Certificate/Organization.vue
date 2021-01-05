@@ -11,7 +11,7 @@
                         <div class="title">
                             {{ v.name }}
                             <span class="mine-org" v-if="isOwner(v.owner)"
-                                >MINE</span
+                                >OWNER</span
                             >
                         </div>
                         <div class="cost">
