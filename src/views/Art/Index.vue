@@ -572,6 +572,7 @@ export default {
             this.$copy(value);
         },
         async getTransactionData() {
+            if (this.art.aasm_state == "prepare") return [];
             await this.$rpc.api.isReady;
             let obj = await this.$rpc.api.query.nft.historySaleOrderList(
                 this.art.collection_id,
@@ -591,6 +592,7 @@ export default {
             this.transactionList = obj;
         },
         async getSignatureData() {
+            if (this.art.aasm_state == "prepare") return [];
             await this.$rpc.api.isReady;
             let obj = await this.$rpc.api.query.nft.signatureList(
                 this.art.collection_id,
