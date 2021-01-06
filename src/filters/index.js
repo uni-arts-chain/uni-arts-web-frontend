@@ -4,6 +4,7 @@
 import Vue from "vue";
 import { BigNumber } from "bignumber.js";
 import store from "@/store";
+import { DateFormat } from "@/utils";
 
 let filter = [
     {
@@ -100,24 +101,7 @@ let filter = [
          * @param time
          * @returns {*}
          */
-        callback: (inputTime) => {
-            if (!inputTime) return "";
-            var date = new Date(inputTime * 1000);
-            var y = date.getFullYear();
-            var m = date.getMonth() + 1;
-            m = m < 10 ? "0" + m : m;
-            var d = date.getDate();
-            d = d < 10 ? "0" + d : d;
-            var h = date.getHours();
-            h = h < 10 ? "0" + h : h;
-            var minute = date.getMinutes();
-            var second = date.getSeconds();
-            minute = minute < 10 ? "0" + minute : minute;
-            second = second < 10 ? "0" + second : second;
-            return (
-                y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second
-            );
-        },
+        callback: DateFormat,
     },
     {
         name: "dateDayFormat",
@@ -146,6 +130,7 @@ let filter = [
          */
         callback: (price) => {
             if (!price) return "";
+            BigNumber.config({ EXPONENTIAL_AT: [-9, 20] });
             var priceObj = new BigNumber(price);
             return priceObj
                 .div(

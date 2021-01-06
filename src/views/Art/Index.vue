@@ -91,7 +91,7 @@
                                     >{{ v.buyer }}</span
                                 >
                                 bought it for {{ v.price | priceFormat }} UART,
-                                Block heigh #{{ v.buy_time }}
+                                {{ v.sign_timestamp | dateFormat }}
                             </li>
                         </div>
                     </div>
@@ -164,6 +164,9 @@
                                     <div class="org-img"></div>
                                     <div class="org-name">
                                         {{ hexTostring(v.names) }}
+                                    </div>
+                                    <div class="timestamp">
+                                        {{ v.sign_timestamp | dateFormat }}
                                     </div>
                                 </div>
                                 <div class="address">{{ v.names }}</div>
@@ -448,7 +451,7 @@ import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
 import { hexToString } from "@polkadot/util";
-// import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
+import { getBlockTimestamp } from "@/utils";
 import Chart from "./Chart";
 
 export default {
@@ -574,10 +577,18 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            console.log(obj.toJSON());
-            this.transactionList = obj
+            obj = obj
                 .toJSON()
-                .sort((a, b) => b.buy_time - a.buy_time);
+                .sort((a, b) => b.buy_time - a.buy_time)
+                .map((v) => {
+                    v.sign_timestamp = getBlockTimestamp(
+                        v.buy_time,
+                        this.$store.state.global.chain.blockHeight,
+                        this.$store.state.global.chain.timestamp
+                    );
+                    return v;
+                });
+            this.transactionList = obj;
         },
         async getSignatureData() {
             await this.$rpc.api.isReady;
@@ -585,8 +596,16 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            console.log(obj.toJSON());
-            this.signatureList = obj.toJSON();
+            let jsonData = obj.toJSON();
+            jsonData.map((v) => {
+                v.sign_timestamp = getBlockTimestamp(
+                    v.sign_time,
+                    this.$store.state.global.chain.blockHeight,
+                    this.$store.state.global.chain.timestamp
+                );
+                return v;
+            });
+            this.signatureList = jsonData.reverse();
         },
         async submitSell() {
             if (!this.$store.state.user.info.address) {
@@ -1080,11 +1099,19 @@ export default {
                 margin-right: 18px;
             }
             .org-name {
+                width: calc(100% - 200px);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 font-size: 22px;
                 font-weight: 600;
                 text-align: left;
                 color: #020202;
                 letter-spacing: 0px;
+            }
+            .timestamp {
+                width: 200px;
+                line-height: 30px;
             }
         }
         .address {

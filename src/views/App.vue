@@ -1,9 +1,10 @@
 <template>
     <div id="app">
         <Navbar class="navbar" />
-        <main class="main">
+        <main class="main" v-if="!isLoading">
             <router-view />
         </main>
+        <main class="main loading" v-else v-loading="true"></main>
         <Footer class="footer" />
     </div>
 </template>
@@ -17,42 +18,38 @@ export default {
     name: "App",
     data() {
         return {
-            aa: 1,
+            isLoading: false,
         };
     },
-    created() {
-        this.$rpc.api.isReady.then(() => {
-            this.initChainInfo();
-        });
-        this.$extension
-            .isReady()
-            .then(() => {
-                this.getInfo();
-            })
-            .catch(() => {
-                console.log(1);
-            });
+    async created() {
+        this.isLoading = true;
+        await this.$rpc.api.isReady;
+        await this.initChainInfo();
+        await this.$extension.isReady();
+        await this.getInfo();
+        this.isLoading = false;
     },
     methods: {
-        getInfo() {
+        async getInfo() {
             if (this.$store.state.user.info.token) {
-                this.$store.dispatch("user/GetInfo");
+                await this.$store.dispatch("user/GetInfo");
             }
-            this.$store.dispatch("art/GetCategories");
-            this.$store.dispatch("art/GetThemes");
-            this.$store.dispatch("art/GetMaterials");
+            await this.$store.dispatch("art/GetCategories");
+            await this.$store.dispatch("art/GetThemes");
+            await this.$store.dispatch("art/GetMaterials");
         },
         async initChainInfo() {
             let specVersion = await this.$rpc.api.runtimeVersion.specVersion;
             let properties = await this.$rpc.api.rpc.system.properties();
-            let object = {};
-            [...properties].forEach((v) => {
-                let key_value = v.toString().split(",");
-                object[key_value[0]] = key_value[1];
-            });
-            this.$store.dispatch("global/SetChain", {
+            properties = properties.toJSON();
+            let initialBlcok = await this.$rpc.api.rpc.chain.getBlock();
+            let blockHeight = initialBlcok.block.header.number.toString();
+            let timestamp = initialBlcok.block.extrinsics[0].method.args[0].toString();
+            properties.timestamp = timestamp;
+            properties.blockHeight = blockHeight;
+            await this.$store.dispatch("global/SetChain", {
                 specVersion: specVersion.toString(),
-                ...object,
+                ...properties,
             });
             let result = await this.$rpc.api.query.system.account(
                 this.$store.state.user.info.address

@@ -8,6 +8,8 @@ export default {
             ss58Format: "",
             tokenDecimals: "",
             tokenSymbol: "",
+            blockHeight: "",
+            timestamp: "",
         },
     },
     mutations: {
