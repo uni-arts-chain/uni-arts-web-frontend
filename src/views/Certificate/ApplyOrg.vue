@@ -25,7 +25,7 @@
                             >
                         </el-form-item>
                         <el-form-item label="Picture" prop="img_file">
-                            <Upload v-model="form.img_file" :limit="1" />
+                            <Upload v-model="form.img_file" />
                         </el-form-item>
                         <el-form-item>
                             <button
@@ -62,7 +62,7 @@ export default {
             form: {
                 name: "",
                 desc: "",
-                img_file: "",
+                img_file: [],
                 fee: "",
             },
             rules: {
@@ -84,13 +84,16 @@ export default {
                         .userPostOrganization({
                             name: this.form.name,
                             desc: this.form.desc,
-                            img_file: this.form.img_file[0],
+                            img_file:
+                                this.form.img_file.length > 0
+                                    ? this.form.img_file
+                                    : "",
                             fee: this.form.fee,
                         })
                         .then(async (res) => {
                             await this.registerOrg(res);
                             this.isSubmiting = false;
-                            this.$refs["form"].resetForm("form");
+                            this.$refs["form"].resetFields();
                         })
                         .catch((err) => {
                             console.log(err);

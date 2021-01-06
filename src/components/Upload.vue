@@ -4,15 +4,14 @@
         <div
             class="box-boder selected"
             @click="selectFile"
-            v-for="(v, i) in fileDataList"
-            :key="i"
+            v-if="fileDataList.length > 0"
         >
-            <AdaptiveImage width="100%" height="100%" :url="v[2]" />
+            <AdaptiveImage width="100%" height="100%" :url="fileDataList[2]" />
         </div>
         <div
             class="box-boder"
             @click="selectFile"
-            v-if="fileDataList.length < limit"
+            v-if="fileDataList.length <= 0"
         >
             <div class="bg">
                 <div class="plus"></div>
@@ -41,6 +40,7 @@ export default {
     watch: {
         fileDataList(value) {
             this.$emit("change", value);
+            this.dispatch("ElFormItem", "el.form.change", this.fileDataList);
         },
         value(value) {
             this.fileDataList = value ? value : [];
@@ -74,7 +74,22 @@ export default {
                 };
                 reader.readAsDataURL(fileData);
             });
-            this.fileDataList.push([fileData, fileData.name, fileDataURL]);
+            this.fileDataList = [fileData, fileData.name, fileDataURL];
+        },
+        dispatch(componentName, eventName, params) {
+            var parent = this.$parent || this.$root;
+            var name = parent.$options.componentName;
+
+            while (parent && (!name || name !== componentName)) {
+                parent = parent.$parent;
+
+                if (parent) {
+                    name = parent.$options.componentName;
+                }
+            }
+            if (parent) {
+                parent.$emit.apply(parent, [eventName].concat(params));
+            }
         },
     },
 };

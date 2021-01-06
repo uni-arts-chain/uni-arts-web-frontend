@@ -4,6 +4,7 @@
         <input
             class="el-input__inner"
             :type="type"
+            :class="{ 'unit-input': append }"
             @blur="onBlur"
             v-model="inputData"
         />
@@ -72,9 +73,11 @@ input {
     border: 2px solid #020202;
     color: #020202;
     padding: 5px 15px;
-    padding-right: 55px;
     border-radius: 0;
     font-size: 17px;
+}
+input.unit-input {
+    padding-right: 55px;
 }
 input:hover {
     border-color: #020202;

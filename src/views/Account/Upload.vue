@@ -1,12 +1,6 @@
 /** * Created by Lay Hunt on 2020-12-17 15:04:15. */
 <template>
     <div class="upload container">
-        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/account' }"
-                >Profile</el-breadcrumb-item
-            >
-            <el-breadcrumb-item>Upload</el-breadcrumb-item>
-        </el-breadcrumb> -->
         <div class="title">Upload works</div>
         <el-form
             ref="form"
@@ -18,7 +12,7 @@
             <el-form-item label="画作标题" prop="name">
                 <Input v-model="form.name" />
             </el-form-item>
-            <el-form-item label="作品分类" prop="category_id" required>
+            <el-form-item label="作品分类" prop="category_id">
                 <Select
                     v-model="form.category_id"
                     placeholder="请选择作品分类"
@@ -28,7 +22,7 @@
                     optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="作品主题" prop="theme_id" required>
+            <el-form-item label="作品主题" prop="theme_id">
                 <Select
                     v-model="form.theme_id"
                     placeholder="请选择作品主题"
@@ -38,7 +32,7 @@
                     optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="作品材质" prop="material_id" required>
+            <el-form-item label="作品材质" prop="material_id">
                 <Select
                     v-model="form.material_id"
                     placeholder="请选择作品材质"
@@ -51,20 +45,24 @@
             <el-form-item label="创作日期" prop="produce_at">
                 <DatePicker v-model="form.produce_at" placeholder="选择日期" />
             </el-form-item>
-            <el-form-item label="尺寸" class="size-form-item" prop="size_width">
-                <Input
-                    class="size-input"
-                    style="margin-right: 10px"
-                    v-model="form.size_length"
-                    type="number"
-                />
+            <el-form-item label="尺寸" class="size-form-item">
+                <el-form-item class="size-length" prop="size_length">
+                    <Input
+                        class="size-input"
+                        style="margin-right: 10px"
+                        v-model="form.size_length"
+                        type="number"
+                    />
+                </el-form-item>
                 cm X
-                <Input
-                    class="size-input"
-                    style="margin-left: 10px; margin-right: 10px"
-                    v-model="form.size_width"
-                    type="number"
-                />
+                <el-form-item class="size-width" prop="size_width">
+                    <Input
+                        class="size-input"
+                        style="margin-left: 10px; margin-right: 10px"
+                        v-model="form.size_width"
+                        type="number"
+                    />
+                </el-form-item>
                 cm
             </el-form-item>
             <el-form-item label="价格" prop="price">
@@ -78,65 +76,117 @@
                     :rows="5"
                 />
             </el-form-item>
-            <el-form-item
-                class="main-upload"
-                label="主图"
-                prop="img_main_file1"
-            >
-                <Upload v-model="form.img_main_file1" :limit="1" />
-                <Upload v-model="form.img_main_file2" :limit="1" />
-                <Upload v-model="form.img_main_file3" :limit="1" />
+            <el-form-item class="main-upload" label="主图">
+                <el-form-item class="upload-form-item" prop="img_main_file1">
+                    <Upload v-model="form.img_main_file1" />
+                </el-form-item>
+                <el-form-item class="upload-form-item" prop="img_main_file2">
+                    <Upload v-model="form.img_main_file2" />
+                </el-form-item>
+                <el-form-item class="upload-form-item" prop="img_main_file3">
+                    <Upload v-model="form.img_main_file3" />
+                </el-form-item>
             </el-form-item>
             <el-form-item class="detail-upload" label="细节图">
                 <div class="detail-box">
-                    <Upload v-model="form.img_detail_file1" :limit="1" />
-                    <Textarea
-                        placeholder="Enter the Detailed description"
-                        v-model="form.img_detail_file1_desc"
-                        :rows="10"
-                        :minRows="10"
-                        :maxRows="10"
-                    />
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_detail_file1"
+                    >
+                        <Upload v-model="form.img_detail_file1" />
+                    </el-form-item>
+                    <el-form-item
+                        class="textarea-form-item"
+                        prop="img_detail_file1_desc"
+                    >
+                        <Textarea
+                            placeholder="Enter the Detailed description"
+                            v-model="form.img_detail_file1_desc"
+                            :rows="10"
+                            :minRows="10"
+                            :maxRows="10"
+                        />
+                    </el-form-item>
                 </div>
                 <div class="detail-box">
-                    <Upload v-model="form.img_detail_file2" :limit="1" />
-                    <Textarea
-                        placeholder="Enter the Detailed description"
-                        v-model="form.img_detail_file2_desc"
-                        :rows="10"
-                        :minRows="10"
-                        :maxRows="10"
-                    />
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_detail_file2"
+                    >
+                        <Upload v-model="form.img_detail_file2" />
+                    </el-form-item>
+                    <el-form-item
+                        class="textarea-form-item"
+                        prop="img_detail_file2_desc"
+                    >
+                        <Textarea
+                            placeholder="Enter the Detailed description"
+                            v-model="form.img_detail_file2_desc"
+                            :rows="10"
+                            :minRows="10"
+                            :maxRows="10"
+                        />
+                    </el-form-item>
                 </div>
                 <div class="detail-box">
-                    <Upload v-model="form.img_detail_file3" :limit="1" />
-                    <Textarea
-                        placeholder="Enter the Detailed description"
-                        v-model="form.img_detail_file3_desc"
-                        :rows="10"
-                        :minRows="10"
-                        :maxRows="10"
-                    />
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_detail_file3"
+                    >
+                        <Upload v-model="form.img_detail_file3" />
+                    </el-form-item>
+                    <el-form-item
+                        class="textarea-form-item"
+                        prop="img_detail_file3_desc"
+                    >
+                        <Textarea
+                            placeholder="Enter the Detailed description"
+                            v-model="form.img_detail_file3_desc"
+                            :rows="10"
+                            :minRows="10"
+                            :maxRows="10"
+                        />
+                    </el-form-item>
                 </div>
                 <div class="detail-box">
-                    <Upload v-model="form.img_detail_file4" :limit="1" />
-                    <Textarea
-                        placeholder="Enter the Detailed description"
-                        v-model="form.img_detail_file4_desc"
-                        :rows="10"
-                        :minRows="10"
-                        :maxRows="10"
-                    />
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_detail_file4"
+                    >
+                        <Upload v-model="form.img_detail_file4" />
+                    </el-form-item>
+                    <el-form-item
+                        class="textarea-form-item"
+                        prop="img_detail_file4_desc"
+                    >
+                        <Textarea
+                            placeholder="Enter the Detailed description"
+                            v-model="form.img_detail_file4_desc"
+                            :rows="10"
+                            :minRows="10"
+                            :maxRows="10"
+                        />
+                    </el-form-item>
                 </div>
                 <div class="detail-box">
-                    <Upload v-model="form.img_detail_file5" :limit="1" />
-                    <Textarea
-                        placeholder="Enter the Detailed description"
-                        v-model="form.img_detail_file5_desc"
-                        :rows="10"
-                        :minRows="10"
-                        :maxRows="10"
-                    />
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_detail_file5"
+                    >
+                        <Upload v-model="form.img_detail_file5" />
+                    </el-form-item>
+                    <el-form-item
+                        class="textarea-form-item"
+                        prop="img_detail_file5_desc"
+                    >
+                        <Textarea
+                            placeholder="Enter the Detailed description"
+                            v-model="form.img_detail_file5_desc"
+                            :rows="10"
+                            :minRows="10"
+                            :maxRows="10"
+                        />
+                    </el-form-item>
                 </div>
             </el-form-item>
             <el-form-item style="width: 100%">
@@ -191,9 +241,14 @@ export default {
                 details: "",
                 price: "",
                 fee: "",
-                img_main_file1: "",
-                img_main_file2: "",
-                img_main_file3: "",
+                img_main_file1: [],
+                img_main_file2: [],
+                img_main_file3: [],
+                img_detail_file1: [],
+                img_detail_file2: [],
+                img_detail_file3: [],
+                img_detail_file4: [],
+                img_detail_file5: [],
                 img_detail_file1_desc: "",
                 img_detail_file2_desc: "",
                 img_detail_file3_desc: "",
@@ -206,13 +261,25 @@ export default {
                     { required: true, message: "请输入标题", trigger: "blur" },
                 ],
                 category_id: [
-                    { required: true, message: "请选择分类", trigger: "blur" },
+                    {
+                        required: true,
+                        message: "请选择分类",
+                        trigger: "change",
+                    },
                 ],
                 theme_id: [
-                    { required: true, message: "请选择主题", trigger: "blur" },
+                    {
+                        required: true,
+                        message: "请选择主题",
+                        trigger: "change",
+                    },
                 ],
                 material_id: [
-                    { required: true, message: "请选择材质", trigger: "blur" },
+                    {
+                        required: true,
+                        message: "请选择材质",
+                        trigger: "change",
+                    },
                 ],
                 produce_at: [
                     {
@@ -223,29 +290,29 @@ export default {
                 ],
                 size_length: [
                     {
-                        required: true,
+                        required: false,
                         message: "请输入作品长度",
                         trigger: "blur",
                     },
                 ],
                 size_width: [
                     {
-                        required: true,
+                        required: false,
                         message: "请输入作品宽度",
                         trigger: "blur",
                     },
                 ],
                 details: [
-                    { required: true, message: "请输入说明", trigger: "blur" },
+                    { required: false, message: "请输入说明", trigger: "blur" },
                 ],
                 price: [
-                    { required: true, message: "请输入价格", trigger: "blur" },
+                    { required: false, message: "请输入价格", trigger: "blur" },
                 ],
                 img_main_file1: [
                     {
                         required: true,
                         message: "请至少上传一张主图",
-                        trigger: "blur",
+                        trigger: "change",
                     },
                 ],
             },
@@ -278,27 +345,29 @@ export default {
                         size_width: this.form.size_width,
                         details: this.form.details,
                         price: this.form.price,
-                        img_main_file1: this.form.img_main_file1[0],
-                        img_main_file2: this.form.img_main_file2
-                            ? this.form.img_main_file2[0]
+                        img_main_file1: this.form.img_main_file1[0]
+                            ? this.form.img_main_file1
                             : "",
-                        img_main_file3: this.form.img_main_file3
-                            ? this.form.img_main_file3[0]
+                        img_main_file2: this.form.img_main_file2[0]
+                            ? this.form.img_main_file2
                             : "",
-                        img_detail_file1: this.form.img_detail_file1
-                            ? this.form.img_detail_file1[0]
+                        img_main_file3: this.form.img_main_file3[0]
+                            ? this.form.img_main_file3
                             : "",
-                        img_detail_file2: this.form.img_detail_file2
-                            ? this.form.img_detail_file2[0]
+                        img_detail_file1: this.form.img_detail_file1[0]
+                            ? this.form.img_detail_file1
                             : "",
-                        img_detail_file3: this.form.img_detail_file3
-                            ? this.form.img_detail_file3[0]
+                        img_detail_file2: this.form.img_detail_file2[0]
+                            ? this.form.img_detail_file2
                             : "",
-                        img_detail_file4: this.form.img_detail_file4
-                            ? this.form.img_detail_file4[0]
+                        img_detail_file3: this.form.img_detail_file3[0]
+                            ? this.form.img_detail_file3
                             : "",
-                        img_detail_file5: this.form.img_detail_file5
-                            ? this.form.img_detail_file5[0]
+                        img_detail_file4: this.form.img_detail_file4[0]
+                            ? this.form.img_detail_file4
+                            : "",
+                        img_detail_file5: this.form.img_detail_file5[0]
+                            ? this.form.img_detail_file5
                             : "",
                         img_detail_file1_desc: this.form.img_detail_file1_desc,
                         img_detail_file2_desc: this.form.img_detail_file2_desc,
@@ -331,7 +400,7 @@ export default {
             });
         },
         resetForm() {
-            Object.keys(this.form).forEach((v) => (this.form[v] = ""));
+            this.$refs.form.resetFields();
         },
     },
 };
@@ -374,11 +443,20 @@ export default {
         width: 90px;
     }
 }
-.size-form-item ::v-deep .el-form-item__content {
-    font-size: 17px;
-    font-weight: 400;
-    color: #020202;
-    letter-spacing: 0px;
+.size-form-item {
+    .size-length,
+    .size-width {
+        width: 90px;
+        margin-right: 10px;
+        display: inline-block;
+        margin-bottom: 0;
+    }
+    ::v-deep .el-form-item__content {
+        font-size: 17px;
+        font-weight: 400;
+        color: #020202;
+        letter-spacing: 0px;
+    }
 }
 .main-upload {
     width: 100%;
@@ -390,25 +468,35 @@ export default {
     .uni-upload {
         width: 300px;
     }
+    .upload-form-item {
+        width: 300px;
+        margin-right: 0;
+        margin-bottom: 0;
+    }
+    .textarea-form-item {
+        margin-right: 0;
+        width: calc(100% - 300px);
+    }
 }
 .detail-upload {
     width: 100%;
-    .uni-upload {
-        width: 300px;
-        margin-bottom: 30px;
-    }
     .detail-box {
-        display: flex;
-    }
-    /* ::v-deep .el-form-item__content {
+        width: 100%;
         display: flex;
         align-items: center;
-        justify-content: center;
-    } */
+        .uni-upload {
+            width: 300px;
+        }
+        .upload-form-item {
+            width: 300px;
+            margin-right: 0;
+        }
+        .textarea-form-item {
+            margin-right: 0;
+            width: calc(100% - 300px);
+        }
+    }
 }
-/* .el-breadcrumb {
-    margin-bottom: 60px;
-} */
 
 .el-button.cancel-button {
     height: 65px;
