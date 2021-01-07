@@ -6,7 +6,7 @@
                 <div class="avatar-container">
                     <div class="avatar">
                         <AdaptiveImage
-                            :url="avatar"
+                            :url="getImg(author)"
                             width="236px"
                             height="236px"
                         ></AdaptiveImage>
@@ -20,7 +20,11 @@
                                 : author.address || "Anonymous"
                         }}
                     </h2>
-                    <div class="desc">No introduction</div>
+                    <RowText
+                        class="desc"
+                        :textLength="100"
+                        :text="author.desc"
+                    />
                 </div>
             </div>
             <div class="content">
@@ -51,12 +55,14 @@
 <script>
 import Thumbnail from "@/components/Thumbnail";
 import AdaptiveImage from "@/components/AdaptiveImage";
+import RowText from "@/components/RowText";
 import avatar from "@/assets/images/yin@2x.png";
 export default {
     name: "detail",
     components: {
         Thumbnail,
         AdaptiveImage,
+        RowText,
     },
     data() {
         return {
@@ -88,7 +94,7 @@ export default {
                 .then((res) => {
                     this.isLoading = false;
                     this.list = res.list;
-                    this.author = res[0] ? res[0].author : {};
+                    this.author = this.list[0] ? this.list[0].author : {};
                 })
                 .catch((err) => {
                     this.isLoading = false;
@@ -98,6 +104,11 @@ export default {
                         type: "error",
                     });
                 });
+        },
+        getImg(obj) {
+            return obj.recommend_image && obj.recommend_image.url
+                ? obj.recommend_image.url
+                : avatar;
         },
         next() {
             if (this.hasNext) {
@@ -167,6 +178,7 @@ export default {
     }
 }
 .content {
+    min-height: 400px;
     .title {
         font-size: 48px;
         font-family: "Broadway";

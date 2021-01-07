@@ -9,7 +9,15 @@
                         class="avatar-container"
                         :to="`/artist-detail/${topAuhtor.id}`"
                     >
-                        <img :src="topAuthor.recommend_image" />
+                        <div class="avatar">
+                            <AdaptiveImage
+                                :url="
+                                    topAuthor.recommend_image.url
+                                        ? topAuthor.recommend_image.url
+                                        : yin_2x
+                                "
+                            />
+                        </div>
                     </router-link>
                     <div class="info">
                         <div class="name">
@@ -53,9 +61,11 @@
 
 <script>
 import Artist from "@/components/Artist";
+import AdaptiveImage from "@/components/AdaptiveImage";
+import yin_2x from "@/assets/images/yin@2x.png";
 export default {
     name: "index",
-    components: { Artist },
+    components: { Artist, AdaptiveImage },
     data() {
         return {
             list: [],
@@ -65,6 +75,7 @@ export default {
             per_page: 18,
             page: 1,
             topAuthor: {},
+            yin_2x,
         };
     },
     created() {

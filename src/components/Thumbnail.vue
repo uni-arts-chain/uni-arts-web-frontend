@@ -8,7 +8,7 @@
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <div class="desc">{{ materialType(v.material_id) }}</div>
-            <div class="address-label" v-if="v.item_hash">
+            <div class="address-label">
                 Certificate Address:
                 <span class="address">{{ v.item_hash }}</span>
             </div>
@@ -102,6 +102,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-height: 35px;
 }
 
 .price {

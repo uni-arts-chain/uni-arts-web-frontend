@@ -3,15 +3,28 @@
     <div class="artist">
         <div class="profile">
             <div class="avatar">
-                <img
-                    @click="goDetail(member.id)"
-                    src="@/assets/images/yin@2x.png"
-                />
+                <router-link
+                    :to="`/artist-detail/${member.id}`"
+                    class="avatar-img"
+                    :class="{ empty: member.recommend_image.url }"
+                >
+                    <AdaptiveImage
+                        :url="
+                            member.recommend_image.url
+                                ? member.recommend_image.url
+                                : yin_2x
+                        "
+                    />
+                </router-link>
                 <div class="info">
                     <span class="name">{{
                         member.display_name || "Anonymous"
                     }}</span>
-                    <span class="desc">{{ member.address }}</span>
+                    <RowText
+                        class="desc"
+                        :textLength="70"
+                        :text="member.desc || member.address"
+                    />
                 </div>
             </div>
             <div class="works">
@@ -24,9 +37,12 @@
 </template>
 <script>
 import Thumbnail from "@/components/Thumbnail";
+import AdaptiveImage from "@/components/AdaptiveImage";
+import RowText from "@/components/RowText";
+import yin_2x from "@/assets/images/yin@2x.png";
 export default {
     name: "artist",
-    components: { Thumbnail },
+    components: { Thumbnail, AdaptiveImage, RowText },
     props: {
         list: {
             type: Array,
@@ -42,7 +58,9 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+            yin_2x,
+        };
     },
     methods: {
         goDetail(id) {
@@ -57,12 +75,16 @@ export default {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 97px;
-    img {
+    .avatar-img {
         width: 95px;
         height: 95px;
+        overflow: hidden;
         border: 4px solid #020202;
         border-radius: 50%;
         cursor: pointer;
+    }
+    .avatar-img.empty {
+        border-color: transparent;
     }
 }
 .avatar {
@@ -86,7 +108,7 @@ export default {
         font-weight: 400;
         text-align: left;
         letter-spacing: 1px;
-        max-width: 233px;
+        width: 800px;
         line-height: 20px;
     }
 }

@@ -2,20 +2,31 @@
 <template>
     <div class="artgroupList">
         <div class="card" v-for="(v, k) in list" :key="k">
-            <div class="avatar" @click="detail">
-                <AdaptiveImage :url="userImage"></AdaptiveImage>
+            <div
+                class="avatar"
+                :class="{ empty: v.recommend_image.url }"
+                @click="detail"
+            >
+                <AdaptiveImage
+                    :url="
+                        v.recommend_image.url
+                            ? v.recommend_image.url
+                            : userImage
+                    "
+                ></AdaptiveImage>
             </div>
             <div class="name">{{ v.display_name || "Anonymous" }}</div>
-            <p>{{ v.address }}</p>
+            <RowText class="desc" :text="v.desc || v.address" />
         </div>
     </div>
 </template>
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
+import RowText from "@/components/RowText";
 import userImage from "@/assets/images/yin@2x.png";
 export default {
     name: "artgroupList",
-    components: { AdaptiveImage },
+    components: { AdaptiveImage, RowText },
     props: {
         list: {
             type: Array,
@@ -55,6 +66,9 @@ export default {
         border-radius: 50%;
         cursor: pointer;
     }
+    .avatar.empty {
+        border-color: transparent;
+    }
     .name {
         margin-top: 50px;
         font-size: 22px;
@@ -67,7 +81,7 @@ export default {
         letter-spacing: 0px;
         text-transform: uppercase;
     }
-    > p {
+    > .desc {
         margin-top: 29px;
         font-size: 14px;
         font-weight: 400;
@@ -79,6 +93,7 @@ export default {
         padding-right: 20px;
         text-transform: uppercase;
         max-width: 100%;
+        overflow: hidden;
     }
 }
 </style>
