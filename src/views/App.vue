@@ -51,11 +51,6 @@ export default {
                 specVersion: specVersion.toString(),
                 ...properties,
             });
-            let result = await this.$rpc.api.query.system.account(
-                this.$store.state.user.info.address
-            );
-            console.log(this.$store.state.user.info.address);
-            console.log(result.data.free.toString());
         },
     },
 };

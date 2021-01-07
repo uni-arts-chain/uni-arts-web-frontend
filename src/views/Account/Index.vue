@@ -6,11 +6,30 @@
                 <div class="profile">
                     <div class="avatar">
                         <AdaptiveImage
-                            :url="user.avatar.url ? user.avatar.url : yin_2x"
+                            :url="
+                                user.avatar && user.avatar.url
+                                    ? user.avatar.url
+                                    : yin_2x
+                            "
                         />
                     </div>
                     <div class="profile-info">
                         <span class="name">{{ user.address }}</span>
+
+                        <el-tooltip
+                            popper-class="balance"
+                            :content="
+                                balance.free +
+                                ' ' +
+                                $store.state.global.chain.tokenSymbol
+                            "
+                            placement="top"
+                        >
+                            <div class="balance">
+                                Balance: {{ balance.free }}
+                            </div>
+                        </el-tooltip>
+
                         <div class="score">
                             Score:
                             <span class="score-number">0</span>
@@ -103,17 +122,21 @@
 <script>
 import store from "@/store";
 import AdaptiveImage from "@/components/AdaptiveImage";
+import { BigNumber } from "bignumber.js";
+import { Tooltip } from "element-ui";
 import yin_2x from "@/assets/images/yin@2x.png";
 export default {
     name: "index",
     components: {
         AdaptiveImage,
+        [Tooltip.name]: Tooltip,
     },
     data() {
         return {
             yin_2x,
             menuActive: "0",
             list: [],
+            balance: {},
         };
     },
     computed: {
@@ -146,11 +169,56 @@ export default {
             next();
         }
     },
-    created() {},
+    created() {
+        this.requestBalance();
+    },
+    watch: {
+        user() {
+            this.requestBalance();
+        },
+    },
     methods: {
         quit() {
             this.$store.dispatch("user/Quit");
             this.$router.push("/");
+        },
+        async requestBalance() {
+            if (!this.user.address) return;
+            await this.$rpc.api.isReady;
+            let result = await this.$rpc.api.query.system.account(
+                this.user.address
+            );
+            result = result.data.toJSON();
+            this.balance = {
+                feeFrozen: new BigNumber(result.feeFrozen)
+                    .div(
+                        new BigNumber(10).pow(
+                            this.$store.state.global.chain.tokenDecimals || 15
+                        )
+                    )
+                    .toFixed(4),
+                free: new BigNumber(result.free)
+                    .div(
+                        new BigNumber(10).pow(
+                            this.$store.state.global.chain.tokenDecimals || 15
+                        )
+                    )
+                    .toFixed(4),
+                miscFrozen: new BigNumber(result.miscFrozen)
+                    .div(
+                        new BigNumber(10).pow(
+                            this.$store.state.global.chain.tokenDecimals || 15
+                        )
+                    )
+                    .toFixed(4),
+                reserved: new BigNumber(result.reserved)
+                    .div(
+                        new BigNumber(10).pow(
+                            this.$store.state.global.chain.tokenDecimals || 15
+                        )
+                    )
+                    .toFixed(4),
+            };
         },
     },
 };
@@ -281,6 +349,16 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+            }
+            .balance {
+                font-size: 20px;
+                font-weight: 400;
+                letter-spacing: 0px;
+                margin-bottom: 13px;
+                white-space: nowrap;
+                width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .score-number {
                 margin-left: 15px;
