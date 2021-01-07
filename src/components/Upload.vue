@@ -1,18 +1,10 @@
 /** * Created by Lay Hunt on 2020-12-29 11:11:36. */
 <template>
-    <div class="uni-upload">
-        <div
-            class="box-boder selected"
-            @click="selectFile"
-            v-if="fileDataList.length > 0"
-        >
+    <div class="uni-upload" @click="selectFile">
+        <div class="box-boder selected" v-if="fileDataList.length > 0">
             <AdaptiveImage width="100%" height="100%" :url="fileDataList[2]" />
         </div>
-        <div
-            class="box-boder"
-            @click="selectFile"
-            v-if="fileDataList.length <= 0"
-        >
+        <div class="box-boder" v-if="fileDataList.length <= 0">
             <div class="bg">
                 <div class="plus"></div>
                 <div class="text">choose a picture</div>
@@ -97,6 +89,7 @@ export default {
 <style lang="scss" scoped>
 .uni-upload {
     display: flex;
+    width: 360px;
     .box-boder {
         width: 360px;
         max-width: 100%;

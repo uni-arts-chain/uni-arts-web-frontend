@@ -99,6 +99,34 @@ const apiList = [
         },
         options: {},
     },
+    {
+        name: "postChangeUserInfo",
+        method: "POST",
+        desc: "修改用户信息",
+        path: "/members/change_user_info",
+        mockPath: "/members/change_user_info",
+        params: {
+            avatar: "",
+            display_name: "",
+            desc: "",
+            sex: "",
+            real_name: "",
+            phone_number: "",
+            id_document_number: "",
+        },
+        options: {
+            upload: ["avatar"],
+        },
+    },
+    {
+        name: "getUserInfo",
+        method: "GET",
+        desc: "获取用户信息",
+        path: "/members/user_info",
+        mockPath: "/members/user_info",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;

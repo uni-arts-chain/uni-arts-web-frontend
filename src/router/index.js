@@ -133,6 +133,17 @@ const routes = [
             ),
     },
     {
+        path: "/account/profile",
+        name: "AccountProfile",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "accountProfile" */ "@/views/Account/Profile.vue"
+            ),
+    },
+    {
         path: "/account/purchase",
         name: "AccountPurchase",
         meta: {

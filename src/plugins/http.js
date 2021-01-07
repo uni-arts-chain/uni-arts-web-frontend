@@ -67,8 +67,12 @@ export class MakeApi {
                                 if (uploadFile && outerParams[v]) {
                                     formData.append(
                                         v,
-                                        outerParams[v][0],
+                                        outerParams[v][0]
+                                            ? outerParams[v][0]
+                                            : outerParams[v][2],
                                         outerParams[v][1]
+                                            ? outerParams[v][1]
+                                            : outerParams[v][2]
                                     );
                                 } else {
                                     formData.append(v, outerParams[v]);

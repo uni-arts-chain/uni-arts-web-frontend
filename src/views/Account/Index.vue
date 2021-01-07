@@ -4,7 +4,11 @@
         <div class="container">
             <div class="body">
                 <div class="profile">
-                    <img src="@/assets/images/yin@2x.png" alt="" />
+                    <div class="avatar" :clas="{ empty: user.avatar.url }">
+                        <AdaptiveImage
+                            :url="user.avatar.url ? user.avatar.url : yin_2x"
+                        />
+                    </div>
                     <div class="profile-info">
                         <span class="name">{{ user.address }}</span>
                         <div class="score">
@@ -40,7 +44,7 @@
                         style="padding-top: 25px; margin-bottom: 70px"
                     >
                         <li>
-                            <router-link to="/account/sale"
+                            <router-link to="/account/profile"
                                 >Account Setting</router-link
                             >
                         </li>
@@ -98,10 +102,16 @@
 
 <script>
 import store from "@/store";
+import AdaptiveImage from "@/components/AdaptiveImage";
+import yin_2x from "@/assets/images/yin@2x.png";
 export default {
     name: "index",
+    components: {
+        AdaptiveImage,
+    },
     data() {
         return {
+            yin_2x,
             menuActive: "0",
             list: [],
         };
@@ -136,23 +146,12 @@ export default {
             next();
         }
     },
-    created() {
-        // this.requestAccoutInfo();
-    },
+    created() {},
     methods: {
         quit() {
             this.$store.dispatch("user/Quit");
             this.$router.push("/");
         },
-        // async requestAccoutInfo() {
-        //     await this.$rpc.api.isReady;
-        //     let list = await this.$rpc.api.query.names.names.entries();
-        //     console.log(list);
-        //     list.forEach((v) => {
-        //         console.log(v[0].toHuman());
-        //         console.log(v[1].toHuman());
-        //     });
-        // },
     },
 };
 </script>
@@ -251,15 +250,18 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        > img {
+        > .avatar {
             overflow: hidden;
             border-radius: 50%;
-            border: 4px solid #020202;
+            border: 4px solid transparent;
             width: 109px;
             height: 109px;
             margin-right: 40px;
             margin-left: 30px;
             margin-bottom: 41px;
+        }
+        > .avatar.empty {
+            border: 4px solid #020202;
         }
         .profile-info {
             display: flex;
