@@ -4,7 +4,7 @@
         <div class="container">
             <div class="body">
                 <div class="profile">
-                    <div class="avatar" :clas="{ empty: user.avatar.url }">
+                    <div class="avatar">
                         <AdaptiveImage
                             :url="user.avatar.url ? user.avatar.url : yin_2x"
                         />
@@ -253,15 +253,12 @@ export default {
         > .avatar {
             overflow: hidden;
             border-radius: 50%;
-            border: 4px solid transparent;
+            border: 4px solid #020202;
             width: 109px;
             height: 109px;
             margin-right: 40px;
             margin-left: 30px;
             margin-bottom: 41px;
-        }
-        > .avatar.empty {
-            border: 4px solid #020202;
         }
         .profile-info {
             display: flex;

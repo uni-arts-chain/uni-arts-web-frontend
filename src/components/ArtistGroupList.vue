@@ -2,11 +2,7 @@
 <template>
     <div class="artgroupList">
         <div class="card" v-for="(v, k) in list" :key="k">
-            <div
-                class="avatar"
-                :class="{ empty: v.recommend_image.url }"
-                @click="detail"
-            >
+            <div class="avatar" @click="detail">
                 <AdaptiveImage
                     :url="
                         v.recommend_image.url

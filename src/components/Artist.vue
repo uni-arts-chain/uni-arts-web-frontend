@@ -6,7 +6,6 @@
                 <router-link
                     :to="`/artist-detail/${member.id}`"
                     class="avatar-img"
-                    :class="{ empty: member.recommend_image.url }"
                 >
                     <AdaptiveImage
                         :url="

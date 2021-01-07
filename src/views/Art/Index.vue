@@ -179,6 +179,14 @@
                 <div class="title">About the author</div>
                 <div class="author">
                     <div class="author-container">
+                        <AdaptiveImage
+                            :url="
+                                author.recommend_image &&
+                                author.recommend_image.url
+                                    ? author.recommend_image.url
+                                    : yin_2x
+                            "
+                        ></AdaptiveImage>
                         <img src="@/assets/images/yin@2x.png" />
                     </div>
                     <div class="name">
@@ -190,9 +198,11 @@
                     </div>
                 </div>
                 <div class="author-intro-info">
-                    <!-- <div class="author-intro">
-                        Shanghai people graduated from Stanford University
-                    </div> -->
+                    <RowText
+                        class="author-intro"
+                        :textLength="60"
+                        :text="author.desc"
+                    />
                     <router-link
                         class="go-detail"
                         :to="`/artist-detail/${author.id}`"
@@ -445,8 +455,10 @@
     </div>
 </template>
 <script>
+import yin_2x from "@/assets/images/yin@2x.png";
 import Dialog from "@/components/Dialog/Dialog";
 import AdaptiveImage from "@/components/AdaptiveImage";
+import RowText from "@/components/RowText";
 import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
@@ -462,6 +474,7 @@ export default {
         [Tooltip.name]: Tooltip,
         Qrcode,
         Chart,
+        RowText,
     },
     data() {
         return {
@@ -485,6 +498,7 @@ export default {
             form: {
                 price: "",
             },
+            yin_2x,
         };
     },
     created() {
@@ -900,13 +914,9 @@ export default {
             border-radius: 50%;
             border: 3px solid #020202;
             margin-bottom: 26px;
-            img {
-                height: 100%;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translateY(-50%) translateX(-50%);
-            }
+        }
+        .author-container.empty {
+            border-color: transparent;
         }
         .name {
             font-size: 26px;
