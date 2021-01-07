@@ -193,28 +193,28 @@ export default {
                 feeFrozen: new BigNumber(result.feeFrozen)
                     .div(
                         new BigNumber(10).pow(
-                            this.$store.state.global.chain.tokenDecimals || 15
+                            this.$store.state.global.chain.tokenDecimals || 12
                         )
                     )
                     .toFixed(4),
                 free: new BigNumber(result.free)
                     .div(
                         new BigNumber(10).pow(
-                            this.$store.state.global.chain.tokenDecimals || 15
+                            this.$store.state.global.chain.tokenDecimals || 12
                         )
                     )
                     .toFixed(4),
                 miscFrozen: new BigNumber(result.miscFrozen)
                     .div(
                         new BigNumber(10).pow(
-                            this.$store.state.global.chain.tokenDecimals || 15
+                            this.$store.state.global.chain.tokenDecimals || 12
                         )
                     )
                     .toFixed(4),
                 reserved: new BigNumber(result.reserved)
                     .div(
                         new BigNumber(10).pow(
-                            this.$store.state.global.chain.tokenDecimals || 15
+                            this.$store.state.global.chain.tokenDecimals || 12
                         )
                     )
                     .toFixed(4),
