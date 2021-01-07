@@ -31,12 +31,22 @@ export default {
     },
     methods: {
         initChart() {
+            let dataArray = this.list;
+            dataArray =
+                dataArray.length > 5
+                    ? dataArray.splice(dataArray.length - 6, 5)
+                    : dataArray.concat([]);
+            dataArray.reverse();
             this.myChart = echarts.init(this.$refs.myChart);
             this.myChart.setOption({
                 tooltip: {
                     backgroundColor: "rgba(2,2,2,0.8)",
                     formatter: (params) =>
-                        `<div style="text-align: left;font-size: .85rem">Block Height: ${params[0].name}<br/>Price: ${params[0].data}</div>`,
+                        `<div style="text-align: left;font-size: .85rem">Block Height: ${
+                            params[0].name
+                        }<br/>Price: ${new BigNumber(
+                            params[0].data
+                        ).toString()}</div>`,
                     trigger: "axis",
                     axisPointer: {
                         type: "line",
@@ -47,7 +57,7 @@ export default {
                 },
                 grid: {
                     top: "10%",
-                    left: "15%",
+                    left: "19%",
                     right: "3%",
                     bottom: "15%",
                 },
@@ -68,7 +78,7 @@ export default {
                                 return value;
                             },
                         },
-                        data: this.list.map((v) => v.buy_time),
+                        data: dataArray.map((v) => v.buy_time),
                         max: "dataMax",
                     },
                 ],
@@ -116,7 +126,7 @@ export default {
                         symbol: "circle",
                         symbolSize: 3,
                         lineStyle: { color: "#020202", width: 2 },
-                        data: this.list.map((v) => {
+                        data: dataArray.map((v) => {
                             return new BigNumber(v.price)
                                 .div(
                                     new BigNumber(10).pow(
