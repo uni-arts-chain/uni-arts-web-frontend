@@ -2,7 +2,7 @@
 <template>
     <div class="artgroupList">
         <div class="card" v-for="(v, k) in list" :key="k">
-            <div class="avatar" @click="detail">
+            <div class="avatar" @click="detail(v.id)">
                 <AdaptiveImage
                     :url="
                         v.recommend_image.url
@@ -35,8 +35,8 @@ export default {
         };
     },
     methods: {
-        detail() {
-            this.$router.push("/artist-detail/1");
+        detail(id) {
+            this.$router.push(`/artist-detail/${id}`);
         },
     },
 };
