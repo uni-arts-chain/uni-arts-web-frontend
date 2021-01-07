@@ -47,6 +47,11 @@
             Certificate address:
             {{ itemHash ? itemHash.toLowerCase() : "" }}
         </div>
+        <div class="logos">
+            <img src="@/assets/images/1@2x.png" />
+            <img src="@/assets/images/2@2x.png" />
+            <img src="@/assets/images/3@2x.png" />
+        </div>
     </el-dialog>
 </template>
 <script>
@@ -222,7 +227,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    top: 295px;
+    top: 280px;
     left: 230px;
     .item {
         margin-top: 20px;
@@ -257,8 +262,8 @@ export default {
 }
 .signed-time {
     position: absolute;
-    top: 480px;
-    left: 397px;
+    top: 453px;
+    left: 393px;
     font-size: 34px;
     font-family: "Monotype";
     font-weight: 400;
@@ -269,7 +274,7 @@ export default {
 }
 .address {
     position: absolute;
-    top: 570px;
+    top: 530px;
     left: 144px;
     width: 820px;
     text-overflow: ellipsis;
@@ -282,5 +287,24 @@ export default {
     color: #010034;
     line-height: 60px;
     letter-spacing: 0px;
+}
+.logos {
+    position: absolute;
+    top: 595px;
+    left: 50%;
+    transform: translateX(-50%);
+    img:nth-child(1) {
+        margin-right: 17px;
+        width: 55px;
+    }
+    img:nth-child(2) {
+        transform: translateY(2px);
+        margin-right: 17px;
+        width: 47px;
+    }
+    img:nth-child(3) {
+        transform: translateY(-1px);
+        width: 72px;
+    }
 }
 </style>
