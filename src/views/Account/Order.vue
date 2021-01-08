@@ -35,6 +35,14 @@
                     {{ v.aasm_state }}
                 </span>
             </div>
+            <router-link
+                :to="`/art/${v.id}`"
+                class="action"
+                v-if="type == 'all'"
+                @click="show(v)"
+            >
+                Auction Now
+            </router-link>
             <div class="action" v-if="type == 'signature'" @click="show(v)">
                 Check
             </div>
@@ -145,6 +153,7 @@ export default {
     border: 2px solid #020202;
     font-size: 16px;
     margin-top: 20px;
+    display: block;
     cursor: pointer;
     font-weight: 400;
     text-align: center;
@@ -160,11 +169,11 @@ export default {
 }
 
 .tag {
-    border: 2px solid #020202;
+    border: 2px solid #c3c3c3;
     font-size: 14px;
     font-weight: 400;
     text-align: center;
-    color: #020202;
+    color: #999;
     letter-spacing: 0px;
     padding: 4px 10px;
     margin-right: 10px;

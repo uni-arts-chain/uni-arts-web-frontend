@@ -61,17 +61,31 @@
                         </el-tooltip>
                     </div>
                     <div class="signature" style="min-height: 28px">
-                        <!-- Number of signatures : 3 -->
+                        Number of signatures : {{ signatureList.length }}
                     </div>
-                    <button
-                        :disabled="art.aasm_state == 'prepare'"
-                        v-if="isOwner"
-                        class="buy"
-                        @click="confirm"
-                    >
-                        {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
-                    </button>
-                    <button v-else class="buy" @click="confirm">BUY NOW</button>
+                    <div class="button-group">
+                        <button
+                            :disabled="art.aasm_state == 'prepare'"
+                            v-if="isOwner"
+                            class="buy"
+                            @click="confirm"
+                        >
+                            {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
+                        </button>
+                        <button v-else class="buy" @click="confirm">
+                            BUY NOW
+                        </button>
+                        <button
+                            :disabled="art.aasm_state == 'prepare'"
+                            v-if="isOwner"
+                            class="auction"
+                            @click="confirm"
+                        >
+                            {{
+                                isOwnerOrder ? "CANCEL AUCTION" : "AUCTION NOW"
+                            }}
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="transaction-info" v-if="transactionList.length > 0">
@@ -181,9 +195,8 @@
                     <div class="author-container">
                         <AdaptiveImage
                             :url="
-                                author.recommend_image &&
-                                author.recommend_image.url
-                                    ? author.recommend_image.url
+                                author.avatar && author.avatar.url
+                                    ? author.avatar.url
                                     : yin_2x
                             "
                         ></AdaptiveImage>
@@ -860,21 +873,30 @@ export default {
         margin-bottom: 86px;
     }
 
-    .buy {
-        cursor: pointer;
-        border: 3px solid #020202;
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-        color: #020202;
-        letter-spacing: 0px;
-        padding: 17px 40px;
-        width: 400px;
-        background: transparent;
-    }
-    button.buy:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
+    .button-group {
+        display: block;
+
+        .buy,
+        .auction {
+            cursor: pointer;
+            border: 3px solid #020202;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            color: #020202;
+            letter-spacing: 0px;
+            padding: 17px 0px;
+            width: 260px;
+            background: transparent;
+        }
+        .buy {
+            margin-right: 30px;
+        }
+        button.buy:disabled,
+        button.auction:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
     }
 }
 
