@@ -13,7 +13,7 @@
                     {{ computeBlockTimestamp(v.auction_end_time) | dateFormat }}
                 </div>
                 <div class="aution-label" v-if="v.aasm_state == 'auctioning'">
-                    AUCTIONING
+                    IN AUCTION
                 </div>
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
