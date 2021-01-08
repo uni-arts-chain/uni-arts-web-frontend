@@ -4,11 +4,7 @@
         <div class="card" v-for="(v, k) in list" :key="k">
             <div class="avatar" @click="detail(v.id)">
                 <AdaptiveImage
-                    :url="
-                        v.recommend_image.url
-                            ? v.recommend_image.url
-                            : userImage
-                    "
+                    :url="v.avatar.url ? v.avatar.url : userImage"
                 ></AdaptiveImage>
             </div>
             <div class="name">{{ v.display_name || "Anonymous" }}</div>

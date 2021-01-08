@@ -35,7 +35,9 @@
                     {{ v.aasm_state }}
                 </span>
             </div>
-            <div class="action" v-else @click="show(v)">Check</div>
+            <div class="action" v-if="type == 'signature'" @click="show(v)">
+                Check
+            </div>
         </div>
     </div>
 </template>

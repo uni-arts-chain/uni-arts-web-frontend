@@ -8,11 +8,7 @@
                     class="avatar-img"
                 >
                     <AdaptiveImage
-                        :url="
-                            member.recommend_image.url
-                                ? member.recommend_image.url
-                                : yin_2x
-                        "
+                        :url="member.avatar.url ? member.avatar.url : yin_2x"
                     />
                 </router-link>
                 <div class="info">

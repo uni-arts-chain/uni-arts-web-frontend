@@ -106,9 +106,7 @@ export default {
                 });
         },
         getImg(obj) {
-            return obj.recommend_image && obj.recommend_image.url
-                ? obj.recommend_image.url
-                : avatar;
+            return obj.avatar && obj.avatar.url ? obj.avatar.url : avatar;
         },
         next() {
             if (this.hasNext) {
@@ -166,6 +164,11 @@ export default {
             color: #ffffff;
             letter-spacing: 0px;
             margin-bottom: 30px;
+            width: 600px;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .desc {
             font-size: 24px;
