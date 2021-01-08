@@ -2,7 +2,7 @@
 <template>
     <el-date-picker
         v-model="inputData"
-        type="date"
+        :type="type ? type : 'date'"
         :placeholder="placeholder"
         popper-class="uni-date-picker"
         @blur="onBlur"
@@ -16,7 +16,7 @@ export default {
     components: {
         [DatePicker.name]: DatePicker,
     },
-    props: ["value", "placeholder"],
+    props: ["value", "placeholder", "type"],
     model: {
         prop: "value",
         event: "change",

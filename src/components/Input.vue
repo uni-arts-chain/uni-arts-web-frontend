@@ -88,7 +88,8 @@ input:hover {
 }
 .append {
     position: absolute;
-    top: 3px;
+    top: 50%;
+    transform: translateY(-50%);
     right: 10px;
     font-size: 17px;
     font-weight: 400;

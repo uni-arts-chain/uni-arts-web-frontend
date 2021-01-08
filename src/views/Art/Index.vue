@@ -65,7 +65,10 @@
                     </div>
                     <div class="button-group">
                         <button
-                            :disabled="art.aasm_state == 'prepare'"
+                            :disabled="
+                                art.aasm_state == 'prepare' ||
+                                art.aasm_state == 'auctioning'
+                            "
                             v-if="isOwner"
                             class="buy"
                             @click="confirm"
@@ -76,13 +79,20 @@
                             BUY NOW
                         </button>
                         <button
-                            :disabled="art.aasm_state == 'prepare'"
+                            :disabled="
+                                art.aasm_state == 'prepare' ||
+                                art.aasm_state == 'bidding'
+                            "
                             v-if="isOwner"
                             class="auction"
-                            @click="confirm"
+                            @click="
+                                art.aasm_state == 'auctioning'
+                                    ? cancelAuction()
+                                    : createAuction()
+                            "
                         >
                             {{
-                                isOwnerOrder ? "CANCEL AUCTION" : "AUCTION NOW"
+                                isAuction ? "CANCEL AUCTION" : "CREATE AUCTION"
                             }}
                         </button>
                     </div>
@@ -119,55 +129,62 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="bid-history">
+            <div class="bid-history" v-if="isAuction">
                 <div class="title">Bid History</div>
                 <div class="content">
                     <div class="table">
-                        <div class="tr">
-                            <div class="td username">13****20</div>
-                            <div class="td date">2020.08.06 15:32:26</div>
-                            <div class="td price">Lead 1500 UART</div>
-                            <div class="td address">
-                                0x1342423423423423abcd8493ac98ac89832ddba6dc
-                            </div>
+                        <div class="no-data" v-if="auctionList.length == 0">
+                            No Auction Data
                         </div>
-                        <div class="tr">
-                            <div class="td username">13****20</div>
-                            <div class="td date">2020.08.06 15:32:26</div>
-                            <div class="td price">Lead 1500 UART</div>
-                            <div class="td address">
-                                0x1342423423423423abcd8493ac98ac89832ddba6dc
+                        <div class="tr" v-for="(v, i) in auctionList" :key="i">
+                            <div class="td date">
+                                {{ formatBlockNumber(v.bid_time) | dateFormat }}
                             </div>
-                        </div>
-                        <div class="tr">
-                            <div class="td username">13****20</div>
-                            <div class="td date">2020.08.06 15:32:26</div>
-                            <div class="td price">Lead 1500 UART</div>
+                            <div class="td price">
+                                Lead {{ v.bid_price | priceFormat }}
+                                {{ $store.state.global.chain.tokenSymbol }}
+                            </div>
                             <div class="td address">
-                                0x1342423423423423abcd8493ac98ac89832ddba6dc
+                                {{ v.bidder }}
                             </div>
                         </div>
                     </div>
                     <div class="bid-info">
                         <div class="item">
                             <span class="label">Starting Price</span>
-                            <span class="value">1000 ART</span>
+                            <span class="value"
+                                >{{ auctionInfo.current_price | priceFormat }}
+                                {{
+                                    $store.state.global.chain.tokenSymbol
+                                }}</span
+                            >
                         </div>
                         <div class="item">
                             <span class="label">Price Increase Range</span>
-                            <span class="value">1000 ART</span>
+                            <span class="value"
+                                >{{ auctionInfo.increment | priceFormat }}
+                                {{
+                                    $store.state.global.chain.tokenSymbol
+                                }}</span
+                            >
                         </div>
                         <div class="item">
                             <span class="label">Start Time</span>
-                            <span class="value">08.05 12:00</span>
+                            <span class="value">{{
+                                formatBlockNumber(auctionInfo.start_time)
+                                    | dateFormat
+                            }}</span>
                         </div>
                         <div class="item">
                             <span class="label">End Time</span>
-                            <span class="value">08.08 12:00</span>
+                            <span class="value">{{
+                                formatBlockNumber(auctionInfo.end_time)
+                                    | dateFormat
+                            }}</span>
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <div class="signature-info" v-if="signatureList.length > 0">
                 <div class="title">SIGNING RECORDS</div>
                 <div class="signature-body">
@@ -398,8 +415,16 @@
             :visible.sync="dialogVisible"
             :type="dialogType"
             :close="handleClose"
+            @closed="handleClosed"
         >
-            <div class="dialog-content" v-if="isOwnerOrder">
+            <div class="dialog-content" v-if="dialogAuctionVisible">
+                <Auction
+                    @finishAuction="finishAuction"
+                    @cancelAuction="finishAuction"
+                    :art="art"
+                />
+            </div>
+            <div class="dialog-content" v-else-if="isOwnerOrder">
                 <div class="title">FIRM CANCEL</div>
                 <div class="price">
                     Current Price:
@@ -476,7 +501,8 @@ import Qrcode from "@/components/Qrcode";
 import { BigNumber } from "bignumber.js";
 import { Tooltip } from "element-ui";
 import { hexToString } from "@polkadot/util";
-import { getBlockTimestamp } from "@/utils";
+import { ComputeBlockTimestamp } from "@/utils";
+import Auction from "./Auction";
 import Chart from "./Chart";
 
 export default {
@@ -488,6 +514,7 @@ export default {
         Qrcode,
         Chart,
         RowText,
+        Auction,
     },
     data() {
         return {
@@ -495,6 +522,7 @@ export default {
             isDialogPreview: false,
             dialogPreviewUrl: "",
             isSubmiting: false,
+            dialogAuctionVisible: false,
             art: {
                 img_detail_file1: {},
                 img_detail_file2: {},
@@ -506,6 +534,8 @@ export default {
             author: {},
             transactionList: [],
             signatureList: [],
+            auctionInfo: {},
+            auctionList: [],
             currentArtId: this.$route.params.id,
             copyStatus: false,
             form: {
@@ -527,11 +557,17 @@ export default {
                 this.art.aasm_state == "bidding"
             );
         },
+        isAuction() {
+            return (
+                this.art.member_id == this.$store.state.user.info.id &&
+                this.art.aasm_state == "auctioning"
+            );
+        },
         dialogType() {
             return this.isDialogPreview
                 ? "fullscreen"
                 : this.isOwner
-                ? this.isOwnerOrder
+                ? this.isOwnerOrder || this.isAuction
                     ? "small"
                     : "medium"
                 : "small";
@@ -550,8 +586,11 @@ export default {
                     this.art = res;
                     this.member = res.member;
                     this.author = res.author;
-                    this.getTransactionData();
-                    this.getSignatureData();
+                    if (this.art.aasm_state !== "prepare") {
+                        this.getTransactionData();
+                        this.getSignatureData();
+                        this.getAuctionInfo();
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -578,6 +617,9 @@ export default {
         handleClose() {
             this.dialogVisible = false;
         },
+        handleClosed() {
+            this.dialogAuctionVisible = false;
+        },
         confirm() {
             this.dialogVisible = true;
         },
@@ -598,6 +640,38 @@ export default {
             this.copyStatus = true;
             this.$copy(value);
         },
+        finishAuction() {
+            this.dialogVisible = false;
+        },
+        formatBlockNumber(blockNumber) {
+            let timestamp = ComputeBlockTimestamp(
+                blockNumber,
+                this.$store.state.global.chain.timestamp,
+                this.$store.state.global.chain.blockHeight
+            );
+            return timestamp;
+        },
+        async getAuctionInfo() {
+            await this.$rpc.api.isReady;
+            let currentAuction = await this.$rpc.api.query.nft.auctionList(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            this.auctionInfo = currentAuction.toJSON();
+
+            let list = await this.$rpc.api.query.nft.bidHistoryList(
+                this.auctionInfo.id
+            );
+            this.auctionList = list.toJSON();
+        },
+        createAuction() {
+            this.dialogVisible = true;
+            this.dialogAuctionVisible = true;
+        },
+        cancelAuction() {
+            this.dialogVisible = true;
+            this.dialogAuctionVisible = true;
+        },
         async getTransactionData() {
             if (this.art.aasm_state == "prepare") return [];
             await this.$rpc.api.isReady;
@@ -609,10 +683,10 @@ export default {
                 .toJSON()
                 .sort((a, b) => b.buy_time - a.buy_time)
                 .map((v) => {
-                    v.sign_timestamp = getBlockTimestamp(
+                    v.sign_timestamp = ComputeBlockTimestamp(
                         v.buy_time,
-                        this.$store.state.global.chain.blockHeight,
-                        this.$store.state.global.chain.timestamp
+                        this.$store.state.global.chain.timestamp,
+                        this.$store.state.global.chain.blockHeight
                     );
                     return v;
                 });
@@ -627,10 +701,10 @@ export default {
             );
             let jsonData = obj.toJSON();
             jsonData.map((v) => {
-                v.sign_timestamp = getBlockTimestamp(
+                v.sign_timestamp = ComputeBlockTimestamp(
                     v.sign_time,
-                    this.$store.state.global.chain.blockHeight,
-                    this.$store.state.global.chain.timestamp
+                    this.$store.state.global.chain.timestamp,
+                    this.$store.state.global.chain.blockHeight
                 );
                 return v;
             });
@@ -1166,6 +1240,7 @@ export default {
             margin-bottom: 80px;
         }
         .tr {
+            width: 100%;
             border-bottom: 1px solid #020202;
             display: flex;
             justify-content: space-between;
@@ -1177,6 +1252,16 @@ export default {
         }
         .tr:last-child {
             border-bottom: none;
+        }
+        .address {
+            width: 30%;
+        }
+        .price {
+            width: 45%;
+        }
+        .date {
+            width: 25%;
+            text-align: left;
         }
         .address {
             max-width: 240px;

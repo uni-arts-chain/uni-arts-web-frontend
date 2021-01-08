@@ -36,10 +36,10 @@
                 </span>
             </div>
             <router-link
-                :to="`/art/${v.id}`"
+                :to="v.aasm_state == 'prepare' ? '' : `/art/${v.id}`"
                 class="action"
+                :class="{ disabled: v.aasm_state == 'prepare' }"
                 v-if="type == 'all'"
-                @click="show(v)"
             >
                 Auction Now
             </router-link>
@@ -164,6 +164,13 @@ export default {
     margin-right: 10px;
     text-transform: capitalize;
 }
+
+.action.disabled {
+    border: 2px solid #c3c3c3;
+    color: #999;
+    cursor: not-allowed;
+}
+
 .desc {
     display: block;
 }
@@ -177,6 +184,7 @@ export default {
     letter-spacing: 0px;
     padding: 4px 10px;
     margin-right: 10px;
+    cursor: default;
     text-transform: capitalize;
 }
 

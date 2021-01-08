@@ -5,6 +5,16 @@
         <div class="item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${v.id}`" class="img-container">
                 <AdaptiveImage :url="v.img_main_file1.url"></AdaptiveImage>
+                <div class="aution-view" v-if="v.aasm_state == 'auctioning'">
+                    {{
+                        computeBlockTimestamp(v.auction_start_time) | dateFormat
+                    }}
+                    ~
+                    {{ computeBlockTimestamp(v.auction_end_time) | dateFormat }}
+                </div>
+                <div class="aution-label" v-if="v.aasm_state == 'auctioning'">
+                    AUCTIONING
+                </div>
             </router-link>
             <h5 class="title">{{ v.name }}</h5>
             <div class="desc">{{ materialType(v.material_id) }}</div>
@@ -18,6 +28,7 @@
 </template>
 <script>
 import AdaptiveImage from "./AdaptiveImage";
+import { ComputeBlockTimestamp } from "@/utils";
 export default {
     name: "thumbnail",
     components: {
@@ -42,6 +53,13 @@ export default {
                 (v) => v.code == id + ""
             );
             return item ? item.title : "";
+        },
+        computeBlockTimestamp(blockNumber) {
+            return ComputeBlockTimestamp(
+                blockNumber,
+                this.$store.state.global.chain.timestamp,
+                this.$store.state.global.chain.blockHeight
+            );
         },
     },
 };
@@ -73,12 +91,23 @@ export default {
     border-radius: 4px;
     margin-bottom: 35px;
     position: relative;
-    img {
-        height: 100%;
+    .aution-view {
+        width: 100%;
+        line-height: 35px;
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateY(-50%) translateX(-50%);
+        bottom: 0;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+    .aution-label {
+        line-height: 35px;
+        position: absolute;
+        top: 0;
+        border-bottom-left-radius: 4px;
+        padding: 0 10px;
+        right: 0;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.7);
     }
 }
 

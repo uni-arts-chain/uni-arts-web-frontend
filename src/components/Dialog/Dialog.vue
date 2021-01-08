@@ -129,14 +129,14 @@ export default {
 .dialog.medium {
     ::v-deep .el-dialog {
         width: 780px;
-        height: 586px;
+        min-height: 586px;
     }
 }
 
 .dialog.small {
     ::v-deep .el-dialog {
         width: 500px;
-        height: 300px;
+        min-height: 300px;
     }
 }
 

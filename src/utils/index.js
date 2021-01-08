@@ -1,13 +1,4 @@
-export function getBlockTimestamp(
-    blockHeight,
-    lastBlockHeight,
-    lastBlockTimetamp
-) {
-    let sign_timestamp =
-        parseInt(lastBlockTimetamp) -
-        (lastBlockHeight - parseInt(blockHeight)) * 6000;
-    return parseInt(sign_timestamp / 1000);
-}
+import { BigNumber } from "bignumber.js";
 
 export function DateFormat(inputTime) {
     if (!inputTime) return "";
@@ -24,4 +15,24 @@ export function DateFormat(inputTime) {
     minute = minute < 10 ? "0" + minute : minute;
     second = second < 10 ? "0" + second : second;
     return y + "-" + m + "-" + d + " " + h + ":" + minute + ":" + second;
+}
+
+export function ComputeBlockNumber(timestamp, blockTimestamp, blockHeight) {
+    if (!timestamp || !blockTimestamp || !blockHeight) return "";
+    let tempBlocks = parseInt(
+        new BigNumber(timestamp).minus(blockTimestamp).div(6000).toNumber()
+    );
+    let result = new BigNumber(blockHeight).plus(tempBlocks).toNumber();
+    return result;
+}
+
+export function ComputeBlockTimestamp(number, blockTimestamp, blockHeight) {
+    if (!number || !blockTimestamp || !blockHeight) return "";
+    let tempTimestamp = parseInt(
+        new BigNumber(number).minus(blockHeight).times(6000).toNumber()
+    );
+    let result = parseInt(
+        new BigNumber(blockTimestamp).plus(tempTimestamp).div(1000).toNumber()
+    );
+    return result;
 }

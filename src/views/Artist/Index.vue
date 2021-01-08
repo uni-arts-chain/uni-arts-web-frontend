@@ -99,9 +99,9 @@ export default {
                 })
                 .then((res) => {
                     this.isLoading = false;
-                    if (res.list.length > 0 && res.list[0].member.address) {
-                        this.topAuhtor = res.list.shift();
-                    }
+                    // if (res.list.length > 0 && res.list[0].member.address) {
+                    //     this.topAuhtor = res.list.shift();
+                    // }
                     this.artList = res.list;
                     this.total_pages = Math.ceil(
                         res.total_count / this.per_page
