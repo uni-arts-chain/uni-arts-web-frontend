@@ -81,6 +81,19 @@
                         <button
                             :disabled="
                                 art.aasm_state == 'prepare' ||
+                                art.aasm_state == 'bidding' ||
+                                !isStarted ||
+                                isFinished
+                            "
+                            v-if="!isOwner && art.aasm_state == 'auctioning'"
+                            class="auction"
+                            @click="createAuction()"
+                        >
+                            BID NOW
+                        </button>
+                        <button
+                            :disabled="
+                                art.aasm_state == 'prepare' ||
                                 art.aasm_state == 'bidding'
                             "
                             v-if="isOwner"
@@ -92,7 +105,11 @@
                             "
                         >
                             {{
-                                isAuction ? "CANCEL AUCTION" : "CREATE AUCTION"
+                                isAuction
+                                    ? !isFinished
+                                        ? "CANCEL AUCTION"
+                                        : "FINISH AUCTION"
+                                    : "CREATE AUCTION"
                             }}
                         </button>
                     </div>
@@ -421,6 +438,9 @@
                 <Auction
                     @finishAuction="finishAuction"
                     @cancelAuction="finishAuction"
+                    :isFinished="isFinished"
+                    :isStarted="isStarted"
+                    :auction="auctionInfo"
                     :art="art"
                 />
             </div>
@@ -460,33 +480,6 @@
                     element-loading-background="rgba(0, 0, 0, 0.8)"
                 >
                     SELL NOW
-                </button>
-            </div>
-            <div class="dialog-content" v-else>
-                <div class="title">FIRM BID</div>
-                <div class="price">
-                    Current Price:
-                    <span class="number">{{ art.price }} UART</span>
-                </div>
-                <!-- <div class="desc">
-                    You have bid <span>1100 ART</span>, at least you need to
-                    increase the price by <span>200 ART</span>.
-                </div>
-                <div class="input-body">
-                    <input type="number" v-model="form.price" />
-                    <span class="code">ART</span>
-                </div>
-                <div class="note">
-                    If the auction is not successful, the bid amount will be
-                    returned after the auction
-                </div> -->
-                <button
-                    @click="submitBuy"
-                    v-loading="isSubmiting"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                >
-                    BID NOW
                 </button>
             </div>
         </Dialog>
@@ -553,24 +546,41 @@ export default {
         },
         isOwnerOrder() {
             return (
-                this.art.member_id == this.$store.state.user.info.id &&
+                this.member.address == this.$store.state.user.info.address &&
                 this.art.aasm_state == "bidding"
             );
         },
         isAuction() {
-            return (
-                this.art.member_id == this.$store.state.user.info.id &&
-                this.art.aasm_state == "auctioning"
-            );
+            return this.art.aasm_state == "auctioning";
         },
         dialogType() {
             return this.isDialogPreview
                 ? "fullscreen"
                 : this.isOwner
-                ? this.isOwnerOrder || this.isAuction
+                ? this.isAuction
                     ? "small"
                     : "medium"
+                : this.isAuction
+                ? "medium"
                 : "small";
+        },
+        isFinished() {
+            let endHeight = this.auctionInfo.end_time;
+            let currentHeight = parseInt(
+                this.$store.state.global.chain.blockHeight
+            );
+            return new BigNumber(currentHeight).gt(endHeight);
+        },
+        isStarted() {
+            let startHeight = this.auctionInfo.start_time;
+            let endHeight = this.auctionInfo.end_time;
+            let currentHeight = parseInt(
+                this.$store.state.global.chain.blockHeight
+            );
+            return (
+                new BigNumber(currentHeight).gte(startHeight) &&
+                new BigNumber(currentHeight).lte(endHeight)
+            );
         },
     },
     methods: {
@@ -651,20 +661,19 @@ export default {
             );
             return timestamp;
         },
-        async getAuctionInfo() {
-            await this.$rpc.api.isReady;
-            let currentAuction = await this.$rpc.api.query.nft.auctionList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            this.auctionInfo = currentAuction.toJSON();
-
-            let list = await this.$rpc.api.query.nft.bidHistoryList(
-                this.auctionInfo.id
-            );
-            this.auctionList = list.toJSON();
-        },
         createAuction() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
+            this.dialogVisible = true;
+            this.dialogAuctionVisible = true;
+        },
+        sendAuction() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
             this.dialogVisible = true;
             this.dialogAuctionVisible = true;
         },
@@ -709,6 +718,19 @@ export default {
                 return v;
             });
             this.signatureList = jsonData.reverse();
+        },
+        async getAuctionInfo() {
+            await this.$rpc.api.isReady;
+            let currentAuction = await this.$rpc.api.query.nft.auctionList(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            this.auctionInfo = currentAuction.toJSON();
+
+            let list = await this.$rpc.api.query.nft.bidHistoryList(
+                this.auctionInfo.id
+            );
+            this.auctionList = list.toJSON();
         },
         async submitSell() {
             if (!this.$store.state.user.info.address) {

@@ -1,69 +1,131 @@
 /** * Created by Lay Hunt on 2021-01-08 14:13:11. */
 <template>
     <div class="auction">
-        <div class="title" v-if="isAuctioning">CANCEL AUCTION</div>
-        <div class="title" v-else>FIRM AUCTION</div>
-        <div class="price">
-            Current Price:
-            <span class="number">{{ art.price || 0 }} UART</span>
+        <div class="title" v-if="isAuctioning && isOwner">
+            {{
+                isStarted
+                    ? "CANCEL AUCTION"
+                    : isFinished
+                    ? "FINISH AUCTION"
+                    : "CANCEL AUCTION"
+            }}
         </div>
-        <el-form
-            v-if="!isAuctioning"
-            ref="form"
-            :model="form"
-            label-width="130px"
-            :rules="rules"
-            label-position="left"
-        >
-            <el-form-item label="起拍价格" prop="start_price">
-                <Input
-                    class="input-start-price"
-                    v-model="form.start_price"
+        <div class="title" v-else>FIRM AUCTION</div>
+        <div class="create-auction" v-if="isOwner">
+            <div class="price">
+                Current Price:
+                <span class="number">{{ art.price || 0 }} UART</span>
+            </div>
+            <el-form
+                v-if="!isAuctioning"
+                ref="form"
+                :model="form"
+                label-width="130px"
+                :rules="rules"
+                label-position="left"
+            >
+                <el-form-item label="起拍价格" prop="start_price">
+                    <Input
+                        class="input-start-price"
+                        v-model="form.start_price"
+                        type="number"
+                        :append="chainInfo.tokenSymbol"
+                    />
+                </el-form-item>
+                <el-form-item label="加价幅度" prop="increment">
+                    <Input
+                        class="input-start-price"
+                        v-model="form.increment"
+                        type="number"
+                        :append="chainInfo.tokenSymbol"
+                    />
+                </el-form-item>
+                <el-form-item label="开始时间" prop="start_time">
+                    <DatePicker
+                        type="datetime"
+                        v-model="form.start_time"
+                        placeholder="选择日期"
+                    />
+                </el-form-item>
+                <el-form-item label="结束时间" prop="end_time">
+                    <DatePicker
+                        type="datetime"
+                        v-model="form.end_time"
+                        placeholder="选择日期"
+                    />
+                </el-form-item>
+            </el-form>
+            <button
+                v-if="isAuctioning && isStarted"
+                @click="cancelAuction"
+                v-loading="isSubmiting"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
+                CANCEL AUCTION
+            </button>
+            <button
+                v-if="isAuctioning && isFinished"
+                @click="finishAuction"
+                v-loading="isSubmiting"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
+                FINISH AUCTION
+            </button>
+            <button
+                v-if="!isAuctioning"
+                @click="submit"
+                v-loading="isSubmiting"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
+                CREATE AUCTION
+            </button>
+        </div>
+        <div class="send-auction" v-else>
+            <div class="price">
+                Current Price:
+                <span class="number"
+                    >{{
+                        auction.current_price ||
+                        auction.start_price | priceFormat
+                    }}
+                    UART</span
+                >
+            </div>
+            <div class="desc">
+                You have bid
+                <span
+                    >{{ auction.start_price | priceFormat }}
+                    {{ chainInfo.tokenSymbol }}</span
+                >, at least you need to increase the price by
+                <span
+                    >{{ auction.increment | priceFormat }}
+                    {{ chainInfo.tokenSymbol }}</span
+                >.
+            </div>
+            <div class="input-body">
+                <input
+                    disabled
                     type="number"
-                    :append="chainInfo.tokenSymbol"
+                    :value="currentPrice | priceFormat"
                 />
-            </el-form-item>
-            <el-form-item label="加价幅度" prop="increment">
-                <Input
-                    class="input-start-price"
-                    v-model="form.increment"
-                    type="number"
-                    :append="chainInfo.tokenSymbol"
-                />
-            </el-form-item>
-            <el-form-item label="开始时间" prop="start_time">
-                <DatePicker
-                    type="datetime"
-                    v-model="form.start_time"
-                    placeholder="选择日期"
-                />
-            </el-form-item>
-            <el-form-item label="结束时间" prop="end_time">
-                <DatePicker
-                    type="datetime"
-                    v-model="form.end_time"
-                    placeholder="选择日期"
-                />
-            </el-form-item>
-        </el-form>
-        <button
-            v-if="isAuctioning"
-            @click="cancelAuction"
-            v-loading="isSubmiting"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(0, 0, 0, 0.8)"
-        >
-            CANCEL AUCTION
-        </button>
-        <button
-            v-else
-            @click="submit"
-            v-loading="isSubmiting"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(0, 0, 0, 0.8)"
-        >
-            CREATE AUCTION
-        </button>
+                <span class="code">{{ chainInfo.tokenSymbol }}</span>
+            </div>
+            <div class="note">
+                If the auction is not successful, the bid amount will be
+                returned after the auction
+            </div>
+            <button
+                @click="bidAuction"
+                v-loading="isSubmiting"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)"
+            >
+                BID NOW
+            </button>
+        </div>
     </div>
 </template>
 <script>
@@ -86,6 +148,20 @@ export default {
             default: () => {
                 return {};
             },
+        },
+        auction: {
+            type: Object,
+            default: () => {
+                return {};
+            },
+        },
+        isStarted: {
+            type: Boolean,
+            default: false,
+        },
+        isFinished: {
+            type: Boolean,
+            default: false,
         },
     },
     data() {
@@ -133,6 +209,19 @@ export default {
         chainInfo() {
             return this.$store.state.global.chain;
         },
+        isOwner() {
+            return (
+                this.art.member &&
+                this.art.member.address == this.$store.state.user.info.address
+            );
+        },
+        currentPrice() {
+            return new BigNumber(
+                this.auction.current_price || this.auction.start_price
+            )
+                .plus(this.auction.increment)
+                .toString();
+        },
         isAuctioning() {
             return this.art.aasm_state == "auctioning";
         },
@@ -144,6 +233,78 @@ export default {
                     this.signAndSend();
                 }
             });
+        },
+        async finishAuction() {
+            await this.$rpc.api.isReady;
+            if (this.isSubmiting) {
+                return;
+            }
+            this.isSubmiting = true;
+            let extrinsic = this.$rpc.api.tx.nft.finishAuction(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            let accountList = await this.$extension.accounts();
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Success",
+                        message: "Success",
+                        type: "success",
+                    });
+                    this.$emit("finishAuction");
+                },
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
+        },
+        async bidAuction() {
+            await this.$rpc.api.isReady;
+            if (this.isSubmiting) {
+                return;
+            }
+            this.isSubmiting = true;
+            let extrinsic = this.$rpc.api.tx.nft.bid(
+                this.art.collection_id,
+                this.art.item_id
+            );
+            let accountList = await this.$extension.accounts();
+            let currentAccount = accountList.find(
+                (v) => v.address === this.$store.state.user.info.address
+            );
+            await this.$extension.signAndSend(
+                currentAccount,
+                extrinsic,
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Success",
+                        message: "Success",
+                        type: "success",
+                    });
+                    this.$emit("finishAuction");
+                },
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Error",
+                        message: "Submission Failed",
+                        type: "error",
+                    });
+                }
+            );
         },
         async cancelAuction() {
             if (this.isSubmiting) {
@@ -280,7 +441,17 @@ export default {
         font-size: 24px;
         color: #c61e1e;
     }
-    > button {
+    .note {
+        font-size: 20px;
+        margin-bottom: 25px;
+    }
+    .desc {
+        font-size: 20px;
+        font-weight: 400;
+        margin-bottom: 37px;
+        min-height: 30px;
+    }
+    button {
         background: #020202;
         width: 307px;
         height: 75px;
@@ -290,6 +461,28 @@ export default {
         color: #ffffff;
         letter-spacing: 0px;
         cursor: pointer;
+    }
+    .input-body {
+        position: relative;
+        margin-bottom: 37px;
+        height: 77px;
+        input {
+            width: 100%;
+            height: 75px;
+            font-size: 26px;
+            border: 2px solid #020202;
+            padding: 14px 34px;
+            text-align: center;
+        }
+        .code {
+            font-size: 26px;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0px;
+            position: absolute;
+            right: 34px;
+            top: 19px;
+        }
     }
     .el-form {
         width: 450px;
