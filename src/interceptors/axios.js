@@ -87,7 +87,7 @@ export function requestFailFunc(requestError) {
 }
 
 export function responseSuccessFunc(responseObj) {
-    if (responseObj.data.head.total_count) {
+    if (responseObj.data.head.total_count != undefined) {
         return Promise.resolve({
             total_count: responseObj.data.head.total_count,
             list: responseObj.data.body,
