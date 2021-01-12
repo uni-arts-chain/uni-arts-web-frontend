@@ -120,6 +120,17 @@ const apiList = [
             unSignature: true,
         },
     },
+    {
+        name: "getTopArtist",
+        method: "GET",
+        desc: "推荐艺术家置顶",
+        path: "/members/artist_topic",
+        mockPath: "/members/artist_topic",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
 ];
 
 export default apiList;

@@ -3,25 +3,38 @@
     <div class="profile container">
         <div class="title">Personal Account</div>
         <div class="body">
-            <div class="avatar" @click="uploadAvatar">
-                <AdaptiveImage
-                    :url="form.avatar.length > 0 ? form.avatar[2] : yin_2x"
-                />
-                <div class="mask">Upload</div>
-                <Upload ref="upload" v-show="false" v-model="form.avatar" />
-            </div>
             <el-form
                 ref="form"
                 :model="form"
+                @submit.prevent="onSubmit"
                 :rules="rules"
                 label-position="right"
             >
                 <el-form-item
-                    label="Nickname"
-                    prop="display_name"
+                    label="Head image"
+                    prop="avatar"
                     label-width="190px"
+                    class="avatar-form-item"
                 >
-                    <Input v-model="form.display_name" />
+                    <div class="avatar" @click="uploadAvatar">
+                        <AdaptiveImage
+                            :url="
+                                form.avatar.length > 0 ? form.avatar[2] : yin_2x
+                            "
+                        />
+                        <div class="mask">Upload</div>
+                        <Upload
+                            ref="upload"
+                            v-show="false"
+                            v-model="form.avatar"
+                        />
+                    </div>
+                    <button
+                        v-if="form.avatar.length <= 0"
+                        @click.prevent="uploadAvatar"
+                    >
+                        choose
+                    </button>
                 </el-form-item>
                 <el-form-item
                     class="gender-form-item"
@@ -31,6 +44,20 @@
                 >
                     <el-radio v-model="form.sex" label="1">Men</el-radio>
                     <el-radio v-model="form.sex" label="2">Women</el-radio>
+                </el-form-item>
+                <el-form-item
+                    label="Nickname"
+                    prop="display_name"
+                    label-width="190px"
+                >
+                    <Input v-model="form.display_name" />
+                </el-form-item>
+                <el-form-item
+                    label="Cell-phone number"
+                    prop="phone_number"
+                    label-width="251px"
+                >
+                    <Input v-model="form.phone_number" type="number" />
                 </el-form-item>
                 <el-form-item
                     label="Profile"
@@ -54,18 +81,56 @@
                     <Input v-model="form.real_name" />
                 </el-form-item>
                 <el-form-item
-                    label="Cell-phone number"
-                    prop="phone_number"
                     label-width="251px"
-                >
-                    <Input v-model="form.phone_number" type="number" />
-                </el-form-item>
-                <el-form-item
                     label="ID Number"
                     prop="id_document_number"
-                    label-width="190px"
                 >
                     <Input v-model="form.id_document_number" type="number" />
+                </el-form-item>
+                <el-form-item
+                    label="Description of Recommendation"
+                    class="desc-form-item"
+                    label-width="190px"
+                    style="width: 95%"
+                    prop="artist_desc"
+                >
+                    <Textarea
+                        v-model="form.artist_desc"
+                        :minRows="7"
+                        :maxRows="7"
+                        :rows="7"
+                    />
+                </el-form-item>
+                <el-form-item
+                    label="Photo image"
+                    prop="recommend_image"
+                    label-width="190px"
+                    class="photo-form-item"
+                >
+                    <div class="photo" @click="uploadPhoto">
+                        <AdaptiveImage
+                            width="133px"
+                            height="176px"
+                            isBorder="false"
+                            :url="
+                                form.recommend_image.length > 0
+                                    ? form.recommend_image[2]
+                                    : photo_image
+                            "
+                        />
+                        <div class="mask">Upload</div>
+                        <Upload
+                            ref="uploadPhoto"
+                            v-show="false"
+                            v-model="form.recommend_image"
+                        />
+                    </div>
+                    <button
+                        v-if="form.recommend_image.length <= 0"
+                        @click.prevent="uploadPhoto"
+                    >
+                        choose
+                    </button>
                 </el-form-item>
                 <el-form-item style="width: 100%" label-width="190px">
                     <el-button
@@ -94,6 +159,7 @@ import Input from "@/components/Input";
 import Textarea from "@/components/Textarea";
 import { Button, Form, FormItem, Radio } from "element-ui";
 import yin_2x from "@/assets/images/yin@2x.png";
+import photo_image from "@/assets/images/photo_image@2x.png";
 
 export default {
     name: "profile",
@@ -136,9 +202,12 @@ export default {
         };
         return {
             yin_2x,
+            photo_image,
             isSubmiting: false,
             form: {
                 avatar: [],
+                recommend_image: [],
+                artist_desc: "",
                 display_name: "",
                 desc: "",
                 sex: "",
@@ -157,6 +226,13 @@ export default {
                     {
                         required: false,
                         message: "请输入个人简介",
+                        trigger: "blur",
+                    },
+                ],
+                artist_desc: [
+                    {
+                        required: false,
+                        message: "请输入艺术家简介",
                         trigger: "blur",
                     },
                 ],
@@ -188,6 +264,13 @@ export default {
                         trigger: "change",
                     },
                 ],
+                recommend_image: [
+                    {
+                        required: false,
+                        message: "请上传艺术家头像",
+                        trigger: "change",
+                    },
+                ],
             },
         };
     },
@@ -198,6 +281,9 @@ export default {
         uploadAvatar() {
             this.$refs.upload.$el.click();
         },
+        uploadPhoto() {
+            this.$refs.uploadPhoto.$el.click();
+        },
         requestData() {
             this.$http
                 .userGetUserInfo({})
@@ -205,8 +291,16 @@ export default {
                     this.form.avatar = res.avatar.url
                         ? [null, null, res.avatar.url]
                         : [];
-                    this.form.display_name = res.display_name;
-                    this.form.desc = res.desc;
+                    this.form.display_name = res.display_name
+                        ? res.display_name
+                        : "";
+                    this.form.desc = res.desc ? res.desc : "";
+                    this.form.artist_desc = res.artist_desc
+                        ? res.artist_desc
+                        : "";
+                    this.form.recommend_image = res.recommend_image.url
+                        ? [null, null, res.recommend_image.url]
+                        : [];
                     this.form.sex = res.sex ? res.sex + "" : null;
                     this.form.real_name = res.real_name;
                     this.form.phone_number = res.phone_number;
@@ -229,15 +323,32 @@ export default {
                     this.$http
                         .userPostChangeUserInfo({
                             avatar:
-                                this.form.avatar.length > 0
+                                this.form.avatar.length > 0 &&
+                                this.form.avatar[0]
                                     ? this.form.avatar
                                     : "",
-                            display_name: this.form.display_name,
-                            desc: this.form.desc,
-                            sex: this.form.sex,
-                            real_name: this.form.real_name,
-                            phone_number: this.form.phone_number,
-                            id_document_number: this.form.id_document_number,
+                            recommend_image:
+                                this.form.recommend_image.length > 0 &&
+                                this.form.recommend_image[0]
+                                    ? this.form.recommend_image
+                                    : "",
+                            display_name: this.form.display_name
+                                ? this.form.display_name
+                                : "",
+                            desc: this.form.desc ? this.form.desc : "",
+                            artist_desc: this.form.artist_desc
+                                ? this.form.artist_desc
+                                : "",
+                            sex: this.form.sex ? this.form.sex : "",
+                            real_name: this.form.real_name
+                                ? this.form.real_name
+                                : "",
+                            phone_number: this.form.phone_number
+                                ? this.form.phone_number
+                                : "",
+                            id_document_number: this.form.id_document_number
+                                ? this.form.id_document_number
+                                : "",
                         })
                         .then(() => {
                             this.isSubmiting = false;
@@ -285,15 +396,14 @@ export default {
         text-transform: uppercase;
         margin-bottom: 83px;
     }
+    .photo,
     .avatar {
         width: 124px;
         height: 124px;
         border-radius: 50%;
         overflow: hidden;
-        margin: 0 auto;
         cursor: pointer;
         position: relative;
-        margin-bottom: 67px;
         .mask {
             width: 100%;
             height: 100%;
@@ -310,6 +420,12 @@ export default {
             justify-content: center;
         }
     }
+    .photo {
+        height: 176px;
+        width: 133px;
+        border-radius: 0;
+    }
+    .photo:hover,
     .avatar:hover {
         .mask {
             opacity: 1;
@@ -333,7 +449,6 @@ export default {
         min-width: 130px;
         padding-right: 60px;
         letter-spacing: 0px;
-        white-space: nowrap;
     }
 
     .el-radio {
@@ -360,6 +475,42 @@ export default {
     ::v-deep .el-form-item__label {
         min-width: 190px;
     }
+}
+.avatar-form-item ::v-deep .el-form-item__content {
+    display: flex;
+    align-items: flex-end;
+    button {
+        margin-left: 35px;
+        margin-bottom: 15px;
+        background: #272727;
+        font-size: 15px;
+        font-weight: 400;
+        text-align: center;
+        letter-spacing: 0px;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+}
+.photo-form-item ::v-deep .el-form-item__content {
+    display: flex;
+    align-items: flex-end;
+    button {
+        margin-left: 35px;
+        background: #272727;
+        font-size: 15px;
+        font-weight: 400;
+        text-align: center;
+        letter-spacing: 0px;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+}
+.desc-form-item ::v-deep .el-form-item__label {
+    text-align: left;
 }
 
 .input-box {

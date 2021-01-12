@@ -107,15 +107,17 @@ const apiList = [
         mockPath: "/members/change_user_info",
         params: {
             avatar: "",
+            recommend_image: "",
             display_name: "",
             desc: "",
             sex: "",
+            artist_desc: "",
             real_name: "",
             phone_number: "",
             id_document_number: "",
         },
         options: {
-            upload: ["avatar"],
+            upload: ["avatar", "recommend_image"],
         },
     },
     {

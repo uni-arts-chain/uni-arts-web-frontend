@@ -2,15 +2,17 @@
 <template>
     <div class="index">
         <div class="container">
-            <div class="header" v-if="topAuthor.member">
+            <div class="header" v-if="topAuthor.id">
                 <div class="bg"></div>
                 <div class="profile">
                     <router-link
                         class="avatar-container"
-                        :to="`/artist-detail/${topAuhtor.id}`"
+                        :to="`/artist-detail/${topAuthor.id}`"
                     >
                         <div class="avatar">
                             <AdaptiveImage
+                                width="325px"
+                                height="430px"
                                 :url="
                                     topAuthor.recommend_image.url
                                         ? topAuthor.recommend_image.url
@@ -21,11 +23,15 @@
                     </router-link>
                     <div class="info">
                         <div class="name">
-                            {{ topAuhtor.display_name || "Anonymous" }}
+                            {{ topAuthor.display_name || "Anonymous" }}
                         </div>
                         <div class="intro">
                             <i class="quote1"></i>
-                            No introduction
+                            {{
+                                topAuthor.artist_desc
+                                    ? topAuthor.artist_desc
+                                    : "No description"
+                            }}
                             <i class="quote2"></i>
                         </div>
                     </div>
@@ -80,6 +86,7 @@ export default {
     },
     created() {
         this.requestData();
+        this.requestTopData();
     },
     computed: {
         hasPrev() {
@@ -99,9 +106,6 @@ export default {
                 })
                 .then((res) => {
                     this.isLoading = false;
-                    // if (res.list.length > 0 && res.list[0].member.address) {
-                    //     this.topAuhtor = res.list.shift();
-                    // }
                     this.artList = res.list;
                     this.total_pages = Math.ceil(
                         res.total_count / this.per_page
@@ -110,6 +114,25 @@ export default {
                 .catch((err) => {
                     console.log(err);
                     this.isLoading = false;
+                    this.$notify({
+                        title: "Error",
+                        message: err.head ? err.head.msg : err,
+                        type: "error",
+                    });
+                });
+        },
+        requestTopData() {
+            this.$http
+                .globalGetTopArtist({
+                    per_page: this.per_page,
+                    page: this.page,
+                })
+                .then((res) => {
+                    console.log(res);
+                    this.topAuthor = res.length > 0 ? res[0] : {};
+                })
+                .catch((err) => {
+                    console.log(err);
                     this.$notify({
                         title: "Error",
                         message: err.head ? err.head.msg : err,
@@ -154,10 +177,11 @@ export default {
         padding-top: 94px;
         position: relative;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         .avatar-container {
             position: relative;
             overflow: hidden;
+            margin-left: 120px;
             width: 325px;
             height: 430px;
             cursor: pointer;
