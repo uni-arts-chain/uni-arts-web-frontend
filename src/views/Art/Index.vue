@@ -156,6 +156,12 @@
                         <div class="tr" v-for="(v, i) in auctionList" :key="i">
                             <div class="td date">
                                 {{ formatBlockNumber(v.bid_time) | dateFormat }}
+
+                                <icon-svg
+                                    v-if="i == 0"
+                                    class="new-bid-label"
+                                    icon-class="new"
+                                ></icon-svg>
                             </div>
                             <div class="td price">
                                 Lead {{ v.bid_price | priceFormat }}
@@ -538,6 +544,9 @@ export default {
         };
     },
     created() {
+        if (!this.$store.state.user.info.address) {
+            this.$router.push("/login");
+        }
         this.requestData();
     },
     computed: {
@@ -737,6 +746,7 @@ export default {
                 this.auctionInfo.id
             );
             this.auctionList = list.toJSON();
+            this.auctionList.reverse();
         },
         async submitSell() {
             if (!this.$store.state.user.info.address) {
@@ -1290,6 +1300,13 @@ export default {
         .date {
             width: 25%;
             text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        .new-bid-label {
+            font-size: 30px;
+            margin-left: 5px;
+            color: #c61e1e;
         }
         .address {
             max-width: 240px;

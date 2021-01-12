@@ -93,7 +93,7 @@ export default {
                 .globalGetAuthorArts({}, { id: this.authorId })
                 .then((res) => {
                     this.isLoading = false;
-                    this.list = res.list;
+                    this.list = res.total_count ? res.list : res;
                     this.author = this.list[0] ? this.list[0].author : {};
                 })
                 .catch((err) => {
