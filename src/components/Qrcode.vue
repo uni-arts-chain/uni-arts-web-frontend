@@ -22,7 +22,7 @@ export default {
                 ? this.errorCorrectionLevel
                 : "M";
             var qr = QrCode(typeNumber, errorCorrectionLevel);
-            qr.addData(this.data);
+            qr.addData(this.data ? this.data : "No Data");
             qr.make();
             this.$refs.qrcode.innerHTML = qr.createSvgTag(
                 this.scale ? this.scale : 4,

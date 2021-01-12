@@ -41,7 +41,7 @@
                             <i
                                 class="copy"
                                 @mouseleave="copyLeave"
-                                @click="copy(member.address)"
+                                @click="copy(art.item_hash)"
                             ></i>
                         </el-tooltip>
                         <el-tooltip
@@ -53,7 +53,7 @@
                                 <Qrcode
                                     style="border: none"
                                     :scale="5"
-                                    :data="member.address ? member.address : ''"
+                                    :data="art.item_hash ? art.item_hash : ''"
                                     :typeNumber="8"
                                 ></Qrcode>
                             </div>
@@ -618,7 +618,13 @@ export default {
             }
         },
         showCertificate(collection_id, item_id, item_hash) {
-            this.$uniCerDialog.show(collection_id, item_id, item_hash);
+            this.$uniCerDialog.show(
+                collection_id,
+                item_id,
+                item_hash,
+                this.$store.state.global.chain.blockHeight,
+                this.$store.state.global.chain.timestamp
+            );
         },
         handlePreviewClose() {
             this.dialogPreviewUrl = "";

@@ -48,17 +48,23 @@
             {{ itemHash ? itemHash.toLowerCase() : "" }}
         </div>
         <div class="logos">
-            <img src="@/assets/images/1@2x.png" />
-            <img src="@/assets/images/2@2x.png" />
-            <img src="@/assets/images/3@2x.png" />
+            <AdaptiveImage
+                v-for="(v, i) in signatureList"
+                :key="i"
+                width="50px"
+                height="50px"
+                :url="v.value.img_file"
+            />
         </div>
     </el-dialog>
 </template>
 <script>
 import { Dialog } from "element-ui";
+import AdaptiveImage from "@/components/AdaptiveImage";
+import { ComputeBlockTimestamp } from "@/utils";
 import { hexToString } from "@polkadot/util";
 export default {
-    components: { [Dialog.name]: Dialog },
+    components: { [Dialog.name]: Dialog, AdaptiveImage },
     name: "uni-cer-dialog",
     data() {
         return {
@@ -66,6 +72,7 @@ export default {
             itemId: "",
             dialogVisible: false,
             certificateData: {},
+            signatureList: [],
         };
     },
     props: {
@@ -96,6 +103,14 @@ export default {
             type: Boolean,
             default: true,
         },
+        blockHeight: {
+            type: String,
+            require: true,
+        },
+        blockTimestamp: {
+            type: String,
+            require: true,
+        },
         showClose: {
             type: Boolean,
             default: false,
@@ -118,6 +133,8 @@ export default {
             this.itemId
         );
         this.certificateData = JSON.parse(hexToString(obj.Data.toHex())) || {};
+
+        this.getSignatureData();
     },
     mounted() {
         if (this.visible) {
@@ -133,6 +150,42 @@ export default {
         },
         closed() {
             this.$emit("closed");
+        },
+        async getSignatureData() {
+            await this.$rpc.api.isReady;
+            let obj = await this.$rpc.api.query.nft.signatureList(
+                this.collectionId,
+                this.itemId
+            );
+            let jsonData = obj.toJSON();
+            jsonData.map((v) => {
+                v.sign_timestamp = ComputeBlockTimestamp(
+                    v.sign_time,
+                    this.blockTimestamp,
+                    this.blockHeight
+                );
+                return v;
+            });
+            let namesList = jsonData.map((v) => v.names);
+            let orgList = await this.$rpc.api.query.names.names.multi(
+                namesList
+            );
+            let orgListJson = orgList.map((v) => v.toJSON()).filter((v) => v);
+            this.signatureList = orgListJson.map((v) => {
+                let expiration = v.expiration;
+                let owner = v.owner;
+                let value = hexToString(v.value);
+                try {
+                    value = JSON.parse(value);
+                } catch (e) {
+                    value = {};
+                }
+                return {
+                    expiration,
+                    owner,
+                    value,
+                };
+            });
         },
     },
 };
@@ -292,19 +345,15 @@ export default {
     position: absolute;
     top: 595px;
     left: 50%;
+    width: 820px;
+    height: 50px;
     transform: translateX(-50%);
-    img:nth-child(1) {
-        margin-right: 17px;
-        width: 55px;
-    }
-    img:nth-child(2) {
-        transform: translateY(2px);
-        margin-right: 17px;
-        width: 47px;
-    }
-    img:nth-child(3) {
-        transform: translateY(-1px);
-        width: 72px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    justify-content: center;
+    .adaptive-image {
+        margin: 0 5px;
     }
 }
 </style>
