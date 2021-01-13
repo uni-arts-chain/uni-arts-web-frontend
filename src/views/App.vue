@@ -51,6 +51,10 @@ export default {
                 specVersion: specVersion.toString(),
                 ...properties,
             });
+            console.log(
+                "GenesisHash: ",
+                await this.$rpc.api.genesisHash.toHex()
+            );
         },
     },
 };

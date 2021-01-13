@@ -75,7 +75,15 @@
                         >
                             {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
                         </button>
-                        <button v-else class="buy" @click="confirm">
+                        <button
+                            v-if="!isOwner"
+                            :disabled="
+                                art.aasm_state == 'prepare' ||
+                                art.aasm_state == 'auctioning'
+                            "
+                            class="buy"
+                            @click="confirm"
+                        >
                             BUY NOW
                         </button>
                         <button
@@ -486,6 +494,21 @@
                     element-loading-background="rgba(0, 0, 0, 0.8)"
                 >
                     SELL NOW
+                </button>
+            </div>
+            <div class="dialog-content" v-else>
+                <div class="title">FIRM BUY</div>
+                <div class="price">
+                    Current Price:
+                    <span class="number">{{ art.price }} UART</span>
+                </div>
+                <button
+                    @click="submitBuy"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    BUY NOW
                 </button>
             </div>
         </Dialog>
