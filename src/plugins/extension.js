@@ -108,7 +108,14 @@ class Extension {
                                     Notification({
                                         title: "Success",
                                         type: "success",
-                                        message: "Success",
+                                        message: "Successful extrinsic",
+                                    });
+                                } else {
+                                    notifyIns.close();
+                                    Notification({
+                                        title: "Failed",
+                                        type: "error",
+                                        message: "Failed Extrinsic",
                                     });
                                 }
                             }
