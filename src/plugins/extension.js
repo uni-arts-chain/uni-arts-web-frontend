@@ -9,6 +9,7 @@ import {
     web3AccountsSubscribe,
 } from "@polkadot/extension-dapp";
 import { stringToHex } from "@polkadot/util";
+import { Notification } from "element-ui";
 import Alert from "@/components/Alert";
 import store from "@/store";
 import { CHAIN_DEFAULT_CONFIG } from "@/config";
@@ -71,22 +72,30 @@ class Extension {
             return signature;
         }
     }
-    async signAndSend(account, extrinsic, cb, err) {
-        const injector = await this.web3FromSource(account.meta.source);
+    async signAndSend(address, extrinsic, cb, err) {
+        let notifyIns = "";
+        const injector = await this.web3FromAddress(address);
         extrinsic
             .signAndSend(
-                account.address,
+                address,
                 { signer: injector.signer },
-                ({ events = [], status }) => {
+                async ({ events = [], status }) => {
                     if (status.isInBlock) {
                         console.log(
                             `Completed at block hash #${status.asInBlock.toString()}`
                         );
-                        cb && cb();
+                        cb && (await cb());
+                        notifyIns = Notification({
+                            title: "Inbock",
+                            message: "Waiting for confirmation",
+                            duration: 0,
+                            iconClass: "el-icon-loading",
+                            showClose: false,
+                        });
                     } else {
                         console.log(`Current status: ${status.type}`);
                         if (status.type == "Invalid") {
-                            err && err();
+                            err && (await err());
                         }
                         // Loop through Vec<EventRecord> to display all events
                         events.forEach(
@@ -94,6 +103,14 @@ class Extension {
                                 console.log(
                                     `\t' ${phase}: ${section}.${method}:: ${data}`
                                 );
+                                if (method === "ExtrinsicSuccess") {
+                                    notifyIns.close();
+                                    Notification({
+                                        title: "Success",
+                                        type: "success",
+                                        message: "Success",
+                                    });
+                                }
                             }
                         );
                     }
