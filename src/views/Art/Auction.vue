@@ -97,7 +97,10 @@
             <div class="desc">
                 You have bid
                 <span
-                    >{{ auction.start_price | priceFormat }}
+                    >{{
+                        auction.current_price ||
+                        auction.start_price | priceFormat
+                    }}
                     {{ chainInfo.tokenSymbol }}</span
                 >, at least you need to increase the price by
                 <span
