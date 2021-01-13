@@ -75,7 +75,7 @@ class Extension {
     async signAndSend(address, extrinsic, cb, err) {
         let notifyIns = "";
         const injector = await this.web3FromAddress(address);
-        extrinsic
+        const unsub = extrinsic
             .signAndSend(
                 address,
                 { signer: injector.signer },
@@ -98,28 +98,34 @@ class Extension {
                             err && (await err());
                         }
                         // Loop through Vec<EventRecord> to display all events
-                        events.forEach(
-                            ({ phase, event: { data, method, section } }) => {
-                                console.log(
-                                    `\t' ${phase}: ${section}.${method}:: ${data}`
-                                );
-                                if (method === "ExtrinsicSuccess") {
-                                    notifyIns.close();
-                                    Notification({
-                                        title: "Success",
-                                        type: "success",
-                                        message: "Successful extrinsic",
-                                    });
-                                } else {
-                                    notifyIns.close();
-                                    Notification({
-                                        title: "Failed",
-                                        type: "error",
-                                        message: "Failed Extrinsic",
-                                    });
+                        if (status.isFinalized) {
+                            events.forEach(
+                                ({
+                                    phase,
+                                    event: { data, method, section },
+                                }) => {
+                                    console.log(
+                                        `\t' ${phase}: ${section}.${method}:: ${data}`
+                                    );
+                                    if (method === "ExtrinsicSuccess") {
+                                        notifyIns.close();
+                                        Notification({
+                                            title: "Success",
+                                            type: "success",
+                                            message: "Successful extrinsic",
+                                        });
+                                    } else {
+                                        notifyIns.close();
+                                        Notification({
+                                            title: "Failed",
+                                            type: "error",
+                                            message: "Failed Extrinsic",
+                                        });
+                                    }
                                 }
-                            }
-                        );
+                            );
+                            unsub();
+                        }
                     }
                 }
             )
