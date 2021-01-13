@@ -123,120 +123,28 @@
                     </div>
                 </div>
             </div>
-            <div class="transaction-info" v-if="transactionList.length > 0">
-                <div class="title">Transaction records</div>
-                <div class="transaction-body">
-                    <div class="recent-bid">
-                        <div class="bid-title">Recent bid records</div>
-                        <div class="ul">
-                            <li v-for="(v, i) in transactionList" :key="i">
-                                <span
-                                    style="
-                                        display: inline-block;
-                                        width: 270px;
-                                        overflow: hidden;
-                                        text-overflow: ellipsis;
-                                    "
-                                    >{{ v.buyer }}</span
-                                >
-                                bought it for {{ v.price | priceFormat }} UART,
-                                {{ v.sign_timestamp | dateFormat }}
-                            </li>
-                        </div>
-                    </div>
-                    <div class="recent-price">
-                        <div class="bid-title">
-                            Price trend of recent five transactions
-                        </div>
-                        <div class="chart">
-                            <Chart :list="transactionList"></Chart>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bid-history" v-if="isAuction">
-                <div class="title">Bid History</div>
-                <div class="content">
-                    <div class="table">
-                        <div class="no-data" v-if="auctionList.length == 0">
-                            No Auction Data
-                        </div>
-                        <div class="tr" v-for="(v, i) in auctionList" :key="i">
-                            <div class="td date">
-                                {{ formatBlockNumber(v.bid_time) | dateFormat }}
 
-                                <icon-svg
-                                    v-if="i == 0"
-                                    class="new-bid-label"
-                                    icon-class="new"
-                                ></icon-svg>
-                            </div>
-                            <div class="td price">
-                                Lead {{ v.bid_price | priceFormat }}
-                                {{ $store.state.global.chain.tokenSymbol }}
-                            </div>
-                            <div class="td address">
-                                {{ v.bidder }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bid-info">
-                        <div class="item">
-                            <span class="label">Starting Price</span>
-                            <span class="value"
-                                >{{ auctionInfo.current_price | priceFormat }}
-                                {{
-                                    $store.state.global.chain.tokenSymbol
-                                }}</span
-                            >
-                        </div>
-                        <div class="item">
-                            <span class="label">Price Increase Range</span>
-                            <span class="value"
-                                >{{ auctionInfo.increment | priceFormat }}
-                                {{
-                                    $store.state.global.chain.tokenSymbol
-                                }}</span
-                            >
-                        </div>
-                        <div class="item">
-                            <span class="label">Start Time</span>
-                            <span class="value">{{
-                                formatBlockNumber(auctionInfo.start_time)
-                                    | dateFormat
-                            }}</span>
-                        </div>
-                        <div class="item">
-                            <span class="label">End Time</span>
-                            <span class="value">{{
-                                formatBlockNumber(auctionInfo.end_time)
-                                    | dateFormat
-                            }}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="signature-info" v-if="signatureList.length > 0">
-                <div class="title">SIGNING RECORDS</div>
-                <div class="signature-body">
-                    <div class="recent-signature">
-                        <div class="ul">
-                            <li v-for="(v, i) in signatureList" :key="i">
-                                <div class="header">
-                                    <div class="org-img"></div>
-                                    <div class="org-name">
-                                        {{ hexTostring(v.names) }}
-                                    </div>
-                                    <div class="timestamp">
-                                        {{ v.sign_timestamp | dateFormat }}
-                                    </div>
-                                </div>
-                                <div class="address">{{ v.names }}</div>
-                            </li>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Transaction
+                :status="art.aasm_state"
+                :collection_id="art.collection_id"
+                :item_id="art.item_id"
+            />
+
+            <BidHistory
+                :status="art.aasm_state"
+                v-model="auctionInfo"
+                v-if="isAuction"
+                :collection_id="art.collection_id"
+                :item_id="art.item_id"
+            />
+
+            <Signature
+                :status="art.aasm_state"
+                v-model="signatureList"
+                :collection_id="art.collection_id"
+                :item_id="art.item_id"
+            />
+
             <div class="author-info">
                 <div class="title">About the author</div>
                 <div class="author">
@@ -248,7 +156,6 @@
                                     : yin_2x
                             "
                         ></AdaptiveImage>
-                        <img src="@/assets/images/yin@2x.png" />
                     </div>
                     <div class="name">
                         {{
@@ -525,7 +432,9 @@ import { Tooltip } from "element-ui";
 import { hexToString } from "@polkadot/util";
 import { ComputeBlockTimestamp } from "@/utils";
 import Auction from "./Auction";
-import Chart from "./Chart";
+import Transaction from "./Transaction";
+import BidHistory from "./BidHistory";
+import Signature from "./Signature";
 
 export default {
     name: "art",
@@ -534,9 +443,11 @@ export default {
         AdaptiveImage,
         [Tooltip.name]: Tooltip,
         Qrcode,
-        Chart,
         RowText,
         Auction,
+        Transaction,
+        BidHistory,
+        Signature,
     },
     data() {
         return {
@@ -554,10 +465,8 @@ export default {
             },
             member: {},
             author: {},
-            transactionList: [],
-            signatureList: [],
             auctionInfo: {},
-            auctionList: [],
+            signatureList: [],
             currentArtId: this.$route.params.id,
             copyStatus: false,
             form: {
@@ -630,11 +539,9 @@ export default {
                     this.art = res;
                     this.member = res.member;
                     this.author = res.author;
-                    if (this.art.aasm_state !== "prepare") {
-                        this.getTransactionData();
-                        this.getSignatureData();
-                        this.getAuctionInfo();
-                    }
+                    // if (this.art.aasm_state !== "prepare") {
+                    //     this.getAuctionInfo();
+                    // }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -721,58 +628,7 @@ export default {
             this.dialogVisible = true;
             this.dialogAuctionVisible = true;
         },
-        async getTransactionData() {
-            if (this.art.aasm_state == "prepare") return [];
-            await this.$rpc.api.isReady;
-            let obj = await this.$rpc.api.query.nft.historySaleOrderList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            obj = obj
-                .toJSON()
-                .sort((a, b) => b.buy_time - a.buy_time)
-                .map((v) => {
-                    v.sign_timestamp = ComputeBlockTimestamp(
-                        v.buy_time,
-                        this.$store.state.global.chain.timestamp,
-                        this.$store.state.global.chain.blockHeight
-                    );
-                    return v;
-                });
-            this.transactionList = obj;
-        },
-        async getSignatureData() {
-            if (this.art.aasm_state == "prepare") return [];
-            await this.$rpc.api.isReady;
-            let obj = await this.$rpc.api.query.nft.signatureList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            let jsonData = obj.toJSON();
-            jsonData.map((v) => {
-                v.sign_timestamp = ComputeBlockTimestamp(
-                    v.sign_time,
-                    this.$store.state.global.chain.timestamp,
-                    this.$store.state.global.chain.blockHeight
-                );
-                return v;
-            });
-            this.signatureList = jsonData.reverse();
-        },
-        async getAuctionInfo() {
-            await this.$rpc.api.isReady;
-            let currentAuction = await this.$rpc.api.query.nft.auctionList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            this.auctionInfo = currentAuction.toJSON();
 
-            let list = await this.$rpc.api.query.nft.bidHistoryList(
-                this.auctionInfo.id
-            );
-            this.auctionList = list.toJSON();
-            this.auctionList.reverse();
-        },
         async submitSell() {
             if (!this.$store.state.user.info.address) {
                 this.$router.push("/login");
@@ -1028,10 +884,7 @@ export default {
 .author-info,
 .infomation,
 .comments,
-.details,
-.transaction-info,
-.signature-info,
-.bid-history {
+.details {
     margin-bottom: 180px;
     > .title {
         font-size: 48px;
@@ -1209,154 +1062,6 @@ export default {
     }
 }
 
-.transaction-info {
-    margin-bottom: 100px;
-    .title {
-        margin-bottom: 70px;
-    }
-    .transaction-body {
-        display: flex;
-        justify-content: space-between;
-        .bid-title {
-            font-size: 22px;
-            font-weight: 600;
-            text-align: left;
-            margin-bottom: 39px;
-            color: #020202;
-        }
-        .ul {
-            li {
-                font-size: 18px;
-                font-weight: 400;
-                text-align: left;
-                margin-bottom: 25px;
-                color: #020202;
-                display: flex;
-            }
-        }
-    }
-}
-
-.signature-info .title {
-    margin-bottom: 70px;
-}
-.signature-info .recent-signature {
-    .ul {
-        li {
-            border-bottom: 1px solid #272727;
-            padding: 31px 0;
-        }
-        .header {
-            display: flex;
-            align-items: flex-end;
-            margin-bottom: 22px;
-            .org-img {
-                height: 30px;
-                width: 39px;
-                background: url(~@/assets/images/jianzhu@2x.png) no-repeat;
-                background-size: 100% 100%;
-                margin-right: 18px;
-            }
-            .org-name {
-                width: calc(100% - 200px);
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                font-size: 22px;
-                font-weight: 600;
-                text-align: left;
-                color: #020202;
-                letter-spacing: 0px;
-            }
-            .timestamp {
-                width: 200px;
-                line-height: 30px;
-            }
-        }
-        .address {
-            font-size: 20px;
-            font-weight: 400;
-            text-align: left;
-            color: #020202;
-            letter-spacing: 0px;
-        }
-    }
-}
-
-.bid-history {
-    .content {
-        .table {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 80px;
-        }
-        .tr {
-            width: 100%;
-            border-bottom: 1px solid #020202;
-            display: flex;
-            justify-content: space-between;
-            font-size: 18px;
-            font-weight: 400;
-            text-align: center;
-            letter-spacing: 0px;
-            padding: 30px 16px;
-        }
-        .tr:last-child {
-            border-bottom: none;
-        }
-        .address {
-            width: 30%;
-        }
-        .price {
-            width: 45%;
-        }
-        .date {
-            width: 25%;
-            text-align: left;
-            display: flex;
-            align-items: center;
-        }
-        .new-bid-label {
-            font-size: 30px;
-            margin-left: 5px;
-            color: #c61e1e;
-        }
-        .address {
-            max-width: 240px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .bid-info {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            .item {
-                background-color: #eee;
-                padding: 16px 0px;
-                width: 540px;
-                font-size: 18px;
-                font-weight: 400;
-                text-align: center;
-                letter-spacing: 0px;
-                margin-bottom: 37px;
-                overflow: hidden;
-                .label {
-                    float: left;
-                    display: block;
-                    width: 60%;
-                    text-align: center;
-                }
-                .value {
-                    float: left;
-                    display: block;
-                    width: 40%;
-                    text-align: left;
-                }
-            }
-        }
-    }
-}
 .dialog ::v-deep .el-dialog {
     padding-left: 30px;
     padding-right: 30px;
