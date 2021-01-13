@@ -247,12 +247,9 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            let accountList = await this.$extension.accounts();
-            let currentAccount = accountList.find(
-                (v) => v.address === this.$store.state.user.info.address
-            );
+
             await this.$extension.signAndSend(
-                currentAccount,
+                this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
@@ -283,21 +280,19 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            let accountList = await this.$extension.accounts();
-            let currentAccount = accountList.find(
-                (v) => v.address === this.$store.state.user.info.address
-            );
             await this.$extension.signAndSend(
-                currentAccount,
+                this.$store.state.user.info.address,
                 extrinsic,
-                () => {
-                    this.isSubmiting = false;
-                    this.$notify({
-                        title: "Success",
-                        message: "Success",
-                        type: "success",
-                    });
-                    this.$emit("finishAuction");
+                (isFinished) => {
+                    if (isFinished) {
+                        this.isSubmiting = false;
+                        this.$notify({
+                            title: "Success",
+                            message: "Success",
+                            type: "success",
+                        });
+                        this.$emit("finishAuction");
+                    }
                 },
                 () => {
                     this.isSubmiting = false;
@@ -318,12 +313,8 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            let accountList = await this.$extension.accounts();
-            let currentAccount = accountList.find(
-                (v) => v.address === this.$store.state.user.info.address
-            );
             await this.$extension.signAndSend(
-                currentAccount,
+                this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
@@ -394,12 +385,8 @@ export default {
                 start_time,
                 end_time
             );
-            let accountList = await this.$extension.accounts();
-            let currentAccount = accountList.find(
-                (v) => v.address === this.$store.state.user.info.address
-            );
             await this.$extension.signAndSend(
-                currentAccount,
+                this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;

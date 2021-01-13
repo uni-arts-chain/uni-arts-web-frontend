@@ -118,12 +118,8 @@ export default {
                     img_file: info.img_file.url,
                 })
             );
-            let accountList = await this.$extension.accounts();
-            let currentAccount = accountList.find(
-                (v) => v.address === this.$store.state.user.info.address
-            );
             await this.$extension.signAndSend(
-                currentAccount,
+                this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
