@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2021-01-13 18:35:33. */
 <template>
-    <div class="bid-history">
+    <div class="bid-history" v-if="auctionInfo.id">
         <div class="title">Bid History</div>
         <div class="content">
             <div class="table">
@@ -61,14 +61,14 @@
 import { ComputeBlockTimestamp } from "@/utils";
 export default {
     name: "bid-history",
-    model: {
-        prop: "value",
-        event: "change",
-    },
     props: {
-        value: {
+        auctionInfo: {
             type: Object,
             default: () => {},
+        },
+        auctionList: {
+            type: Array,
+            default: () => [],
         },
         collection_id: {
             type: Number,
@@ -78,30 +78,33 @@ export default {
             type: Number,
             default: 0,
         },
-        status: {
-            type: String,
-            default: "prepare",
-        },
     },
     data() {
         return {
-            auctionInfo: {},
-            auctionList: [],
+            subAuctionInfo: () => {},
+            subAuctionList: () => {},
         };
     },
-    created() {
-        this.getAuctionInfo();
-    },
     watch: {
-        collection_id() {
+        auctionInfo(newValue, oldValue) {
+            if (!oldValue.id && newValue) {
+                this.getAuctionList();
+            }
+        },
+        collection_id(value) {
+            if (value) {
+                this.getAuctionInfo();
+            }
+        },
+    },
+    created() {
+        if (this.collection_id) {
             this.getAuctionInfo();
-        },
-        auctionInfo() {
-            this.$emit("change", this.auctionInfo);
-        },
-        status() {
-            this.getAuctionInfo();
-        },
+        }
+    },
+    beforeDestroy() {
+        this.subAuctionInfo();
+        this.subAuctionList();
     },
     methods: {
         formatBlockNumber(blockNumber) {
@@ -113,24 +116,32 @@ export default {
             return timestamp;
         },
         async getAuctionInfo() {
-            if (
-                !this.collection_id ||
-                !this.item_id ||
-                this.status == "prepare"
-            )
-                return;
             await this.$rpc.api.isReady;
-            let currentAuction = await this.$rpc.api.query.nft.auctionList(
+            this.subAuctionInfo = await this.$rpc.api.query.nft.auctionList(
                 this.collection_id,
-                this.item_id
+                this.item_id,
+                (item) => {
+                    console.log(item.isEmpty ? {} : item.toJSON());
+                    this.$emit(
+                        "update:auctionInfo",
+                        item.isEmpty ? {} : item.toJSON()
+                    );
+                }
             );
-            this.auctionInfo = currentAuction.toJSON();
+        },
 
-            let list = await this.$rpc.api.query.nft.bidHistoryList(
-                this.auctionInfo.id
+        async getAuctionList() {
+            if (!this.auctionInfo.id) return;
+            await this.$rpc.api.isReady;
+            this.subAuctionList = await this.$rpc.api.query.nft.bidHistoryList(
+                this.auctionInfo.id,
+                (item) => {
+                    this.$emit(
+                        "update:auctionList",
+                        item.isEmpty ? [] : item.toJSON().reverse()
+                    );
+                }
             );
-            this.auctionList = list.toJSON();
-            this.auctionList.reverse();
         },
     },
 };

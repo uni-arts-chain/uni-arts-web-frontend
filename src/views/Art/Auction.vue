@@ -1,9 +1,9 @@
 /** * Created by Lay Hunt on 2021-01-08 14:13:11. */
 <template>
     <div class="auction">
-        <div class="title" v-if="isAuctioning && isOwner">
+        <div class="title" v-if="isAuction && isOwner">
             {{
-                isStarted
+                isAuction
                     ? "CANCEL AUCTION"
                     : isFinished
                     ? "FINISH AUCTION"
@@ -17,7 +17,7 @@
                 <span class="number">{{ art.price || 0 }} UART</span>
             </div>
             <el-form
-                v-if="!isAuctioning"
+                v-if="!isAuction"
                 ref="form"
                 :model="form"
                 label-width="130px"
@@ -56,7 +56,7 @@
                 </el-form-item>
             </el-form>
             <button
-                v-if="isAuctioning && isStarted"
+                v-if="isAuction"
                 @click="cancelAuction"
                 v-loading="isSubmiting"
                 element-loading-spinner="el-icon-loading"
@@ -65,7 +65,7 @@
                 CANCEL AUCTION
             </button>
             <button
-                v-if="isAuctioning && isFinished"
+                v-if="isAuctionFinished"
                 @click="finishAuction"
                 v-loading="isSubmiting"
                 element-loading-spinner="el-icon-loading"
@@ -74,7 +74,7 @@
                 FINISH AUCTION
             </button>
             <button
-                v-if="!isAuctioning"
+                v-if="!isAuction"
                 @click="submit"
                 v-loading="isSubmiting"
                 element-loading-spinner="el-icon-loading"
@@ -158,11 +158,19 @@ export default {
                 return {};
             },
         },
-        isStarted: {
+        artChainStatus: {
+            type: Number,
+            default: 0,
+        },
+        isAuction: {
             type: Boolean,
             default: false,
         },
-        isFinished: {
+        isAuctionWaiting: {
+            type: Boolean,
+            default: false,
+        },
+        isAuctionFinished: {
             type: Boolean,
             default: false,
         },
@@ -206,6 +214,7 @@ export default {
                 ],
             },
             isSubmiting: false,
+            currentRequest: () => {},
         };
     },
     computed: {
@@ -225,8 +234,15 @@ export default {
                 .plus(this.auction.increment)
                 .toString();
         },
-        isAuctioning() {
-            return this.art.aasm_state == "auctioning";
+    },
+    watch: {
+        artChainStatus() {
+            if (this.isSubmiting) {
+                this.isSubmiting = false;
+                console.log(this.currentRequest);
+                this.currentRequest();
+                this.$emit("finishAuction");
+            }
         },
     },
     methods: {
@@ -248,17 +264,24 @@ export default {
                 this.art.item_id
             );
 
-            await this.$extension.signAndSend(
+            this.currentRequest = await this.$extension.signAndSend(
                 this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
                     this.$notify({
+                        title: "Submitted",
+                        message: "Submitted",
+                        type: "success",
+                    });
+                    this.$emit("finishAuction");
+                },
+                () => {
+                    this.$notify({
                         title: "Success",
                         message: "Success",
                         type: "success",
                     });
-                    this.$emit("finishAuction");
                 },
                 () => {
                     this.isSubmiting = false;
@@ -283,16 +306,14 @@ export default {
             await this.$extension.signAndSend(
                 this.$store.state.user.info.address,
                 extrinsic,
-                (isFinished) => {
-                    if (isFinished) {
-                        this.isSubmiting = false;
-                        this.$notify({
-                            title: "Success",
-                            message: "Success",
-                            type: "success",
-                        });
-                        this.$emit("finishAuction");
-                    }
+                () => {
+                    this.isSubmiting = false;
+                    this.$notify({
+                        title: "Submitted",
+                        message: "Submitted",
+                        type: "success",
+                    });
+                    this.$emit("finishAuction");
                 },
                 () => {
                     this.isSubmiting = false;
@@ -313,17 +334,24 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            await this.$extension.signAndSend(
+            this.currentRequest = await this.$extension.signAndSend(
                 this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
                     this.$notify({
+                        title: "Submitted",
+                        message: "Submitted",
+                        type: "success",
+                    });
+                    this.$emit("finishAuction");
+                },
+                () => {
+                    this.$notify({
                         title: "Success",
                         message: "Success",
                         type: "success",
                     });
-                    this.$emit("cancelAuction");
                 },
                 () => {
                     this.isSubmiting = false;
@@ -355,21 +383,6 @@ export default {
                 currentTimestamp,
                 currentBlockHeight
             );
-            console.log([
-                this.art.collection_id,
-                this.art.item_id,
-                0,
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.start_price)
-                    .toNumber(),
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.increment)
-                    .toNumber(),
-                start_time,
-                end_time,
-            ]);
             let extrinsic = this.$rpc.api.tx.nft.createAuction(
                 this.art.collection_id,
                 this.art.item_id,
@@ -385,18 +398,24 @@ export default {
                 start_time,
                 end_time
             );
-            await this.$extension.signAndSend(
+            this.currentRequest = await this.$extension.signAndSend(
                 this.$store.state.user.info.address,
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
                     this.$notify({
+                        title: "Submitted",
+                        message: "Submitted",
+                        type: "success",
+                    });
+                    this.$emit("finishAuction");
+                },
+                () => {
+                    this.$notify({
                         title: "Success",
                         message: "Success",
                         type: "success",
                     });
-                    this.$refs["form"].resetFields();
-                    this.$emit("finishAuction");
                 },
                 () => {
                     this.isSubmiting = false;

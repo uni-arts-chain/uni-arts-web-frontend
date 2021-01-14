@@ -49,35 +49,17 @@ export default {
             type: Number,
             default: 0,
         },
-        status: {
-            type: String,
-            default: "prepare",
-        },
     },
     data() {
         return {
             transactionList: [],
         };
     },
-    watch: {
-        collection_id() {
-            this.getTransactionData();
-        },
-        status() {
-            this.getTransactionData();
-        },
-    },
     created() {
         this.getTransactionData();
     },
     methods: {
         async getTransactionData() {
-            if (
-                !this.collection_id ||
-                !this.item_id ||
-                this.status == "prepare"
-            )
-                return;
             await this.$rpc.api.isReady;
             let obj = await this.$rpc.api.query.nft.historySaleOrderList(
                 this.collection_id,

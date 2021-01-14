@@ -6,6 +6,13 @@ export default {
         categories: [],
         themes: [],
         materials: [],
+
+        ART_OFFLINE: 1,
+        ART_ONLINE: 2,
+        ART_ON_AUCTION: 3,
+        ART_WAITING_AUCTION: 4,
+        ART_ON_SALE: 5,
+        ART_AUCTIONED: 6,
     },
     mutations: {
         SET_CATEGORIES: (state, data) => {

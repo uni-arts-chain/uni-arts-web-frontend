@@ -55,14 +55,8 @@ export default {
         };
     },
     watch: {
-        collection_id() {
-            this.getSignatureData();
-        },
         signatureList() {
             this.$emit("change", this.signatureList);
-        },
-        status() {
-            this.getSignatureData();
         },
     },
     created() {
@@ -70,12 +64,6 @@ export default {
     },
     methods: {
         async getSignatureData() {
-            if (
-                !this.collection_id ||
-                !this.item_id ||
-                this.status == "prepare"
-            )
-                return;
             await this.$rpc.api.isReady;
             let obj = await this.$rpc.api.query.nft.signatureList(
                 this.collection_id,

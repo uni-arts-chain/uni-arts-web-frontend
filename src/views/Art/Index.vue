@@ -65,22 +65,16 @@
                     </div>
                     <div class="button-group">
                         <button
-                            :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'auctioning'
-                            "
+                            :disabled="isOffline || isAuction"
                             v-if="isOwner"
                             class="buy"
                             @click="confirm"
                         >
-                            {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
+                            {{ isOnSale ? "CANCEL NOW" : "SELL NOW" }}
                         </button>
                         <button
                             v-if="!isOwner"
-                            :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'auctioning'
-                            "
+                            :disabled="isOffline || isAuction"
                             class="buy"
                             @click="confirm"
                         >
@@ -88,12 +82,12 @@
                         </button>
                         <button
                             :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'bidding' ||
-                                !isStarted ||
-                                isFinished
+                                isOffline ||
+                                isOnSale ||
+                                isAuctionWaiting ||
+                                isAuctionFinished
                             "
-                            v-if="!isOwner && art.aasm_state == 'auctioning'"
+                            v-if="!isOwner && isAuction"
                             class="auction"
                             @click="createAuction()"
                         >
@@ -101,20 +95,17 @@
                         </button>
                         <button
                             :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'bidding'
+                                isOffline || isOnSale || isAuctionStarted
                             "
                             v-if="isOwner"
                             class="auction"
                             @click="
-                                art.aasm_state == 'auctioning'
-                                    ? cancelAuction()
-                                    : createAuction()
+                                isAuction ? cancelAuction() : createAuction()
                             "
                         >
                             {{
                                 isAuction
-                                    ? !isFinished
+                                    ? !isAuctionFinished
                                         ? "CANCEL AUCTION"
                                         : "FINISH AUCTION"
                                     : "CREATE AUCTION"
@@ -125,21 +116,20 @@
             </div>
 
             <Transaction
-                :status="art.aasm_state"
+                v-if="!isOffline"
                 :collection_id="art.collection_id"
                 :item_id="art.item_id"
             />
 
             <BidHistory
-                :status="art.aasm_state"
-                v-model="auctionInfo"
-                v-if="isAuction"
+                :auctionInfo.sync="auctionInfo"
+                :auctionList.sync="auctionList"
                 :collection_id="art.collection_id"
                 :item_id="art.item_id"
             />
 
             <Signature
-                :status="art.aasm_state"
+                v-if="!isOffline"
                 v-model="signatureList"
                 :collection_id="art.collection_id"
                 :item_id="art.item_id"
@@ -358,14 +348,15 @@
             <div class="dialog-content" v-if="dialogAuctionVisible">
                 <Auction
                     @finishAuction="finishAuction"
-                    @cancelAuction="finishAuction"
-                    :isFinished="isFinished"
-                    :isStarted="isStarted"
+                    :artChainStatus="artChainStatus"
+                    :isAuctionFinished="isAuctionFinished"
+                    :isAuction="isAuction"
+                    :isAuctionWaiting="isAuctionWaiting"
                     :auction="auctionInfo"
                     :art="art"
                 />
             </div>
-            <div class="dialog-content" v-else-if="isOwnerOrder">
+            <div class="dialog-content" v-else-if="isOnSale">
                 <div class="title">FIRM CANCEL</div>
                 <div class="price">
                     Current Price:
@@ -465,7 +456,11 @@ export default {
             },
             member: {},
             author: {},
+            saleInfo: {},
             auctionInfo: {},
+            auctionList: [],
+
+            subSaleInfo: () => {},
             signatureList: [],
             currentArtId: this.$route.params.id,
             copyStatus: false,
@@ -481,18 +476,38 @@ export default {
         }
         this.requestData();
     },
+    beforeDestroy() {
+        this.subSaleInfo();
+    },
     computed: {
         isOwner() {
             return this.art.member_id == this.$store.state.user.info.id;
         },
-        isOwnerOrder() {
-            return (
-                this.member.address == this.$store.state.user.info.address &&
-                this.art.aasm_state == "bidding"
-            );
+        isOnSale() {
+            return this.artChainStatus == this.$store.state.art.ART_ON_SALE;
         },
         isAuction() {
-            return this.art.aasm_state == "auctioning";
+            return this.artChainStatus == this.$store.state.art.ART_ON_AUCTION;
+        },
+        isAuctionStarted() {
+            return (
+                this.artChainStatus == this.$store.state.art.ART_ON_AUCTION &&
+                this.auctionList.length > 0
+            );
+        },
+        isAuctionFinished() {
+            return this.artChainStatus == this.$store.state.art.ART_AUCTIONED;
+        },
+        isAuctionWaiting() {
+            return (
+                this.artChainStatus == this.$store.state.art.ART_WAITING_AUCTION
+            );
+        },
+        isOffline() {
+            return this.artChainStatus == this.$store.state.art.ART_OFFLINE;
+        },
+        isOnline() {
+            return this.artChainStatus == this.$store.state.art.ART_ONLINE;
         },
         dialogType() {
             return this.isDialogPreview
@@ -500,30 +515,40 @@ export default {
                 : this.isOwner
                 ? this.isAuction
                     ? "small"
-                    : this.isOwnerOrder
+                    : this.isOnSale
                     ? "small"
                     : "medium"
                 : this.isAuction
                 ? "medium"
                 : "small";
         },
-        isFinished() {
-            let endHeight = this.auctionInfo.end_time;
-            let currentHeight = parseInt(
-                this.$store.state.global.chain.blockHeight
-            );
-            return new BigNumber(currentHeight).gt(endHeight);
-        },
-        isStarted() {
-            let startHeight = this.auctionInfo.start_time;
-            let endHeight = this.auctionInfo.end_time;
-            let currentHeight = parseInt(
-                this.$store.state.global.chain.blockHeight
-            );
-            return (
-                new BigNumber(currentHeight).gte(startHeight) &&
-                new BigNumber(currentHeight).lte(endHeight)
-            );
+        artChainStatus() {
+            if (!this.art.item_id) {
+                return this.$store.state.art.ART_OFFLINE;
+            }
+            if (this.auctionInfo.id) {
+                let startHeight = this.auctionInfo.start_time;
+                let endHeight = this.auctionInfo.end_time;
+                let currentHeight = parseInt(
+                    this.$store.state.global.chain.blockHeight
+                );
+                if (new BigNumber(currentHeight).gt(endHeight)) {
+                    return this.$store.state.art.ART_AUCTIONED;
+                } else if (
+                    new BigNumber(currentHeight).gte(startHeight) &&
+                    new BigNumber(currentHeight).lte(endHeight)
+                ) {
+                    return this.$store.state.art.ART_ON_AUCTION;
+                } else {
+                    return this.$store.state.art.ART_WAITING_AUCTION;
+                }
+            }
+
+            if (this.saleInfo.item_id) {
+                return this.$store.state.art.ART_ON_SALE;
+            }
+
+            return this.$store.state.art.ART_ONLINE;
         },
     },
     methods: {
@@ -539,9 +564,9 @@ export default {
                     this.art = res;
                     this.member = res.member;
                     this.author = res.author;
-                    // if (this.art.aasm_state !== "prepare") {
-                    //     this.getAuctionInfo();
-                    // }
+                    if (!this.isOffline) {
+                        this.getSaleInfo();
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
@@ -629,6 +654,16 @@ export default {
             this.dialogAuctionVisible = true;
         },
 
+        async getSaleInfo() {
+            this.subSaleInfo = await this.$rpc.api.query.nft.saleOrderList(
+                this.art.collection_id,
+                this.art.item_id,
+                (item) => {
+                    this.saleInfo = item.isEmpty ? {} : item.toJSON();
+                }
+            );
+        },
+
         async submitSell() {
             if (!this.$store.state.user.info.address) {
                 this.$router.push("/login");
@@ -670,6 +705,7 @@ export default {
                 }
             );
         },
+
         async cancelOrder() {
             if (this.isSubmiting) {
                 return;
@@ -702,6 +738,7 @@ export default {
                 }
             );
         },
+
         async submitBuy() {
             if (!this.$store.state.user.info.address) {
                 this.$router.push("/login");
