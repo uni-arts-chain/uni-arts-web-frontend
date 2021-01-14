@@ -75,64 +75,56 @@ class Extension {
     async signAndSend(address, extrinsic, cb, err) {
         let notifyIns = "";
         const injector = await this.web3FromAddress(address);
-        const unsub = extrinsic
-            .signAndSend(
-                address,
-                { signer: injector.signer },
-                async ({ events = [], status }) => {
-                    if (status.isInBlock) {
-                        console.log(
-                            `Completed at block hash #${status.asInBlock.toString()}`
-                        );
-                        cb && (await cb());
-                        notifyIns = Notification({
-                            title: "Inbock",
-                            message: "Waiting for confirmation",
-                            duration: 0,
-                            iconClass: "el-icon-loading",
-                            showClose: false,
-                        });
-                    } else {
-                        console.log(`Current status: ${status.type}`);
-                        if (status.type == "Invalid") {
-                            err && (await err());
-                        }
-                        // Loop through Vec<EventRecord> to display all events
-                        if (status.isFinalized) {
-                            events.forEach(
-                                ({
-                                    phase,
-                                    event: { data, method, section },
-                                }) => {
-                                    console.log(
-                                        `\t' ${phase}: ${section}.${method}:: ${data}`
-                                    );
-                                    if (method === "ExtrinsicSuccess") {
-                                        notifyIns.close();
-                                        Notification({
-                                            title: "Success",
-                                            type: "success",
-                                            message: "Successful extrinsic",
-                                        });
-                                    } else {
-                                        notifyIns.close();
-                                        Notification({
-                                            title: "Failed",
-                                            type: "error",
-                                            message: "Failed Extrinsic",
-                                        });
-                                    }
+        const unsub = await extrinsic.signAndSend(
+            address,
+            { signer: injector.signer },
+            async ({ events = [], status }) => {
+                if (status.isInBlock) {
+                    console.log(
+                        `Completed at block hash #${status.asInBlock.toString()}`
+                    );
+                    cb && (await cb());
+                    notifyIns = Notification({
+                        title: "Inbock",
+                        message: "Waiting for confirmation",
+                        duration: 0,
+                        iconClass: "el-icon-loading",
+                        showClose: false,
+                    });
+                } else {
+                    console.log(`Current status: ${status.type}`);
+                    if (status.type == "Invalid") {
+                        err && (await err());
+                    }
+                    // Loop through Vec<EventRecord> to display all events
+                    if (status.isFinalized) {
+                        events.forEach(
+                            ({ phase, event: { data, method, section } }) => {
+                                console.log(
+                                    `\t' ${phase}: ${section}.${method}:: ${data}`
+                                );
+                                if (method === "ExtrinsicSuccess") {
+                                    notifyIns.close();
+                                    Notification({
+                                        title: "Success",
+                                        type: "success",
+                                        message: "Successful extrinsic",
+                                    });
+                                } else {
+                                    notifyIns.close();
+                                    Notification({
+                                        title: "Failed",
+                                        type: "error",
+                                        message: "Failed Extrinsic",
+                                    });
                                 }
-                            );
-                            unsub();
-                        }
+                            }
+                        );
+                        unsub();
                     }
                 }
-            )
-            .catch((error) => {
-                console.log(":( transaction failed", error);
-                err && err();
-            });
+            }
+        );
     }
 }
 
