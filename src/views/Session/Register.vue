@@ -89,17 +89,10 @@ export default {
                     signature: signature,
                 })
                 .then(() => {
-                    this.$notify({
-                        type: "success",
-                        message: "Register Successful",
-                    });
+                    this.$notify.success("Register Successful");
                 })
                 .catch((err) => {
-                    this.$notify({
-                        title: "Error",
-                        type: "error",
-                        message: err.head.msg || "Failed Register",
-                    });
+                    this.$notify.error(err.head.msg || "Failed Register");
                 });
         },
     },

@@ -114,11 +114,7 @@ export default {
                 .catch((err) => {
                     console.log(err);
                     this.isLoading = false;
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         requestTopData() {
@@ -133,11 +129,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         next() {

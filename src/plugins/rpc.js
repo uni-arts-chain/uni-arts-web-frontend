@@ -2,6 +2,8 @@ import { RPC_DEFAULT_CONFIG } from "@/config";
 import { CHAIN_DEFAULT_CONFIG } from "@/config";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { TypeRegistry } from "@polkadot/types";
+import { notification } from "@/components/Notification";
+import extension from "@/plugins/extension";
 
 import Detect from "@/plugins/detect";
 import Alert from "@/components/Alert";
@@ -72,6 +74,51 @@ class Rpc {
     }
     setErrorListener(callback) {
         this.apiErrorListener = callback;
+    }
+    async signAndSend(address, extrinsic, cb, done, err) {
+        let notifyIns = "";
+        const injector = await extension.getInjector(address);
+        extrinsic
+            .signAndSend(address, injector, async ({ events = [], status }) => {
+                if (status.isInBlock) {
+                    console.log(
+                        `Completed at block hash #${status.asInBlock.toString()}`
+                    );
+                    cb && cb();
+                    notifyIns = notification.notice(
+                        {
+                            title: "Inbock",
+                            message: "Waiting for confirmation",
+                            type: "loading",
+                        },
+                        { timeout: 0 }
+                    );
+                } else {
+                    console.log(`Current status: ${status.type}`);
+                    if (status.type == "Invalid") {
+                        err && err();
+                    }
+                    // Loop through Vec<EventRecord> to display all events
+                    events.forEach(
+                        ({ phase, event: { data, method, section } }) => {
+                            console.log(
+                                `\t' ${phase}: ${section}.${method}:: ${data}`
+                            );
+                            if (method === "ExtrinsicSuccess") {
+                                notification.dismiss(notifyIns);
+                                done && done();
+                            } else if (method === "ExtrinsicFailed") {
+                                notification.dismiss(notifyIns);
+                                err && err();
+                            }
+                        }
+                    );
+                }
+            })
+            .catch((error) => {
+                console.log(":( transaction failed", error);
+                err && err();
+            });
     }
 }
 

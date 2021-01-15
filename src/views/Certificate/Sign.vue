@@ -128,11 +128,7 @@ export default {
                 .catch((err) => {
                     console.log(err);
                     this.isLoading = false;
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         getMaterial(id) {
@@ -172,21 +168,13 @@ export default {
                 extrinsic,
                 () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "success",
-                        message: "Application submitted",
-                        type: "success",
-                    });
+                    this.$notify.success("Application submitted");
                     this.signContent = "";
                     this.dialogVisible = false;
                 },
                 () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
+                    this.$notify.error("Submission Failed");
                 }
             );
         },
@@ -206,20 +194,12 @@ export default {
                 .then(() => {
                     this.isSubmiting = false;
                     this.dialogVisible = false;
-                    this.$notify({
-                        title: "success",
-                        message: "Application submitted",
-                        type: "success",
-                    });
+                    this.$notify.success("Application submitted");
                 })
                 .catch((err) => {
                     console.log(err);
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         clickArt(item) {

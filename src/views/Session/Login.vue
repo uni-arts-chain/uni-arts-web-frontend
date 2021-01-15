@@ -131,20 +131,12 @@ export default {
                     signature: signature,
                 })
                 .then((res) => {
-                    this.$notify({
-                        title: "Success",
-                        type: "success",
-                        message: "Login Successful",
-                    });
+                    this.$notify.success("Login Successful");
                     this.$store.dispatch("user/SetInfo", res);
                     this.$router.push("/account");
                 })
                 .catch((err) => {
-                    this.$notify({
-                        title: "Error",
-                        type: "error",
-                        message: err.head.msg || "Failed Login",
-                    });
+                    this.$notify.error(err.head.msg || "Failed Login");
                 });
         },
     },

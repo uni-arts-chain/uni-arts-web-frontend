@@ -28,4 +28,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     background-color: #020202;
     font-size: 16px;
 }
+
+.uniarts-toast {
+    &.Vue-Toastification__toast {
+        background-color: white;
+        font-size: 20px;
+        color: black;
+    }
+    &.Vue-Toastification__toast--error .Vue-Toastification__icon{
+        color: red;
+    }
+    & .Vue-Toastification__close-button {
+        color: black;
+    }
+    & .Vue-Toastification__progress-bar {
+        background-color: black;
+    }
+}
     
