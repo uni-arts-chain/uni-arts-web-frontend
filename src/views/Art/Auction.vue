@@ -3,7 +3,7 @@
     <div class="auction">
         <div class="title" v-if="isAuctioning && isOwner">
             {{
-                isStarted
+                isStarted || isWaiting
                     ? "CANCEL AUCTION"
                     : isFinished
                     ? "FINISH AUCTION"
@@ -56,7 +56,7 @@
                 </el-form-item>
             </el-form>
             <button
-                v-if="isAuctioning && isStarted"
+                v-if="isAuctioning && (isStarted || isWaiting)"
                 @click="cancelAuction"
                 v-loading="isSubmiting"
                 element-loading-spinner="el-icon-loading"
@@ -154,6 +154,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        isWaiting: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -222,7 +226,9 @@ export default {
         isAuctioning() {
             return (
                 this.$store.getters["art/artStatus"] ==
-                this.$store.state.art.ART_ON_AUCTION
+                    this.$store.state.art.ART_ON_AUCTION ||
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_WAITING_AUCTION
             );
         },
     },
@@ -254,7 +260,7 @@ export default {
                     this.$emit("finishAuction");
                 },
                 done: () => {
-                    this.$notify.info("Success");
+                    this.$notify.success("Success");
                 },
                 err: () => {
                     this.isSubmiting = false;
@@ -281,7 +287,7 @@ export default {
                     this.$emit("finishAuction");
                 },
                 done: () => {
-                    this.$notify.info("Success");
+                    this.$notify.success("Success");
                 },
                 err: () => {
                     this.isSubmiting = false;
@@ -307,7 +313,7 @@ export default {
                     this.$emit("cancelAuction");
                 },
                 done: () => {
-                    this.$notify.info("Success");
+                    this.$notify.success("Success");
                 },
                 err: () => {
                     this.isSubmiting = false;
@@ -355,12 +361,12 @@ export default {
                 extrinsic,
                 cb: () => {
                     this.isSubmiting = false;
-                    this.$notify.success("Submitted");
+                    this.$notify.info("Submitted");
                     this.$refs["form"].resetFields();
                     this.$emit("finishAuction");
                 },
                 done: () => {
-                    this.$notify.info("Success");
+                    this.$notify.success("Success");
                 },
                 err: () => {
                     this.isSubmiting = false;

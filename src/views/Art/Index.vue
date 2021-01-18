@@ -443,6 +443,7 @@
                     @cancelAuction="finishAuction"
                     :isFinished="isFinished"
                     :isStarted="isStarted"
+                    :isWaiting="isWaiting"
                 />
             </div>
             <div class="dialog-content" v-else-if="isOwnerOrder">
@@ -617,6 +618,12 @@ export default {
             return (
                 this.$store.getters["art/artStatus"] ==
                 this.$store.state.art.ART_ON_AUCTION
+            );
+        },
+        isWaiting() {
+            return (
+                this.$store.getters["art/artStatus"] ==
+                this.$store.state.art.ART_WAITING_AUCTION
             );
         },
         auctionInfo() {
