@@ -105,6 +105,7 @@ export default {
         },
         async registerOrg(info) {
             await this.$rpc.api.isReady;
+            this.isSubmiting = true;
             let extrinsic = await this.$rpc.api.tx.names.update(
                 stringToHex(info.name + ""),
                 JSON.stringify({
@@ -114,19 +115,22 @@ export default {
                     img_file: info.img_file.url,
                 })
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify.success("Application submitted");
-                    this.dialogVisible = false;
+                    this.$notify.info("Submitted");
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
                     this.$notify.error("Submission Failed");
-                }
-            );
+                },
+            });
         },
     },
 };

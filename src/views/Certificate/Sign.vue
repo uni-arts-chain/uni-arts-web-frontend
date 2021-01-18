@@ -163,20 +163,23 @@ export default {
                 this.signContent,
                 null
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify.success("Application submitted");
+                    this.$notify.info("Submitted");
                     this.signContent = "";
                     this.dialogVisible = false;
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
                     this.$notify.error("Submission Failed");
-                }
-            );
+                },
+            });
         },
         applyOrgSignature(id, organization_name) {
             this.isSubmiting = true;

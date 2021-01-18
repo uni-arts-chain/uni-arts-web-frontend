@@ -633,7 +633,7 @@ export default {
         },
     },
     methods: {
-        requestData() {
+        requestData(isSub = true) {
             this.$http
                 .globalGetArtById(
                     {},
@@ -646,7 +646,7 @@ export default {
                     this.author = res.author;
                     if (res.item_id) {
                         await this.$store.dispatch("art/SetArtInfo", res);
-                        this.subInfo();
+                        isSub ? this.subInfo() : "";
                     }
                 })
                 .catch((err) => {
@@ -655,6 +655,7 @@ export default {
                 });
         },
         async subInfo() {
+            this.requestData(false);
             await this.$store.dispatch("art/GetTransactionList");
             await this.$store.dispatch("art/GetSignatureList");
             await this.$store.dispatch("art/GetAuctionInfo");
