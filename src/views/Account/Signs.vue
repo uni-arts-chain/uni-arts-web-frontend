@@ -110,11 +110,7 @@ export default {
                 .catch((err) => {
                     console.log(err);
                     this.isLoading = false;
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         next() {
@@ -151,20 +147,12 @@ export default {
                 .then(() => {
                     this.refuseLoading = false;
                     this.dialogVisible = false;
-                    this.$notify({
-                        title: "Success",
-                        message: "Success",
-                        type: "success",
-                    });
+                    this.$notify.success("Success");
                 })
                 .catch((err) => {
                     console.log(err);
                     this.refuseLoading = false;
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         async signature() {
@@ -182,21 +170,13 @@ export default {
                 extrinsic,
                 () => {
                     this.signatureLoading = false;
-                    this.$notify({
-                        title: "success",
-                        message: "Application submitted",
-                        type: "success",
-                    });
+                    this.$notify.success("Application submitted");
                     this.selectItem = {};
                     this.dialogVisible = false;
                 },
                 () => {
                     this.signatureLoading = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
+                    this.$notify.error("Submission Failed");
                 }
             );
         },

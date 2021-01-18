@@ -98,11 +98,7 @@ export default {
                 })
                 .catch((err) => {
                     this.isLoading = false;
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         getImg(obj) {

@@ -20,10 +20,12 @@
     "crypto": "^1.0.1",
     "echarts": "^4.1.0",
     "element-ui": "^2.14.1",
+    "lodash": "^4.17.20",
     "nprogress": "^0.2.0",
     "ua-parser-js": "^0.7.22",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vue-toastification": "1.7.7",
     "vuex": "^3.4.0"
   },
   "devDependencies": {

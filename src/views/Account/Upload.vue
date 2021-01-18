@@ -380,21 +380,13 @@ export default {
                         .userPostArt(obj)
                         .then(() => {
                             this.isSubmiting = false;
-                            this.$notify({
-                                title: "Success",
-                                message: "Submitted",
-                                type: "success",
-                            });
+                            this.$notify.success("Submitted");
                             this.resetForm();
                         })
                         .catch((err) => {
                             console.log(err);
                             this.isSubmiting = false;
-                            this.$notify({
-                                title: "Error",
-                                message: err.head ? err.head.msg : err,
-                                type: "error",
-                            });
+                            this.$notify.error(err.head ? err.head.msg : err);
                         });
                 }
             });

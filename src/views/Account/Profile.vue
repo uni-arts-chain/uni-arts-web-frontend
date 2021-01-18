@@ -308,11 +308,7 @@ export default {
                 })
                 .catch((err) => {
                     console.log(err);
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         onSubmit() {
@@ -352,22 +348,14 @@ export default {
                         })
                         .then(() => {
                             this.isSubmiting = false;
-                            this.$notify({
-                                title: "Success",
-                                message: "Submitted",
-                                type: "success",
-                            });
+                            this.$notify.success("Submitted");
                             this.resetForm();
                             this.$router.push("/account");
                         })
                         .catch((err) => {
                             console.log(err);
                             this.isSubmiting = false;
-                            this.$notify({
-                                title: "Error",
-                                message: err.head ? err.head.msg : err,
-                                type: "error",
-                            });
+                            this.$notify.error(err.head ? err.head.msg : err);
                         });
                 }
             });

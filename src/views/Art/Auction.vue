@@ -146,18 +146,6 @@ export default {
         [FormItem.name]: FormItem,
     },
     props: {
-        art: {
-            type: Object,
-            default: () => {
-                return {};
-            },
-        },
-        auction: {
-            type: Object,
-            default: () => {
-                return {};
-            },
-        },
         isStarted: {
             type: Boolean,
             default: false,
@@ -209,8 +197,14 @@ export default {
         };
     },
     computed: {
+        art() {
+            return this.$store.state.art.art;
+        },
         chainInfo() {
             return this.$store.state.global.chain;
+        },
+        auction() {
+            return this.$store.state.art.auctionInfo;
         },
         isOwner() {
             return (
@@ -226,14 +220,17 @@ export default {
                 .toString();
         },
         isAuctioning() {
-            return this.art.aasm_state == "auctioning";
+            return (
+                this.$store.getters["art/artStatus"] ==
+                this.$store.state.art.ART_ON_AUCTION
+            );
         },
     },
     methods: {
         submit() {
             this.$refs["form"].validate((valid) => {
                 if (valid) {
-                    this.signAndSend();
+                    this.createAuction();
                 }
             });
         },
@@ -248,27 +245,22 @@ export default {
                 this.art.item_id
             );
 
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Success",
-                        message: "Success",
-                        type: "success",
-                    });
+                    this.$notify.info("Submitted");
                     this.$emit("finishAuction");
                 },
-                () => {
+                done: () => {
+                    this.$notify.info("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
         async bidAuction() {
             await this.$rpc.api.isReady;
@@ -280,29 +272,22 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                (isFinished) => {
-                    if (isFinished) {
-                        this.isSubmiting = false;
-                        this.$notify({
-                            title: "Success",
-                            message: "Success",
-                            type: "success",
-                        });
-                        this.$emit("finishAuction");
-                    }
-                },
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.info("Submitted");
+                    this.$emit("finishAuction");
+                },
+                done: () => {
+                    this.$notify.info("Success");
+                },
+                err: () => {
+                    this.isSubmiting = false;
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
         async cancelAuction() {
             if (this.isSubmiting) {
@@ -313,29 +298,24 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Success",
-                        message: "Success",
-                        type: "success",
-                    });
+                    this.$notify.info("Submitted");
                     this.$emit("cancelAuction");
                 },
-                () => {
+                done: () => {
+                    this.$notify.info("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
-        async signAndSend() {
+        async createAuction() {
             await this.$rpc.api.isReady;
             if (this.isSubmiting) {
                 return;
@@ -355,21 +335,6 @@ export default {
                 currentTimestamp,
                 currentBlockHeight
             );
-            console.log([
-                this.art.collection_id,
-                this.art.item_id,
-                0,
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.start_price)
-                    .toNumber(),
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.increment)
-                    .toNumber(),
-                start_time,
-                end_time,
-            ]);
             let extrinsic = this.$rpc.api.tx.nft.createAuction(
                 this.art.collection_id,
                 this.art.item_id,
@@ -385,28 +350,23 @@ export default {
                 start_time,
                 end_time
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Success",
-                        message: "Success",
-                        type: "success",
-                    });
+                    this.$notify.success("Submitted");
                     this.$refs["form"].resetFields();
                     this.$emit("finishAuction");
                 },
-                () => {
+                done: () => {
+                    this.$notify.info("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
     },
 };

@@ -98,17 +98,14 @@ export default {
                         .catch((err) => {
                             console.log(err);
                             this.isSubmiting = false;
-                            this.$notify({
-                                title: "Error",
-                                message: err.head ? err.head.msg : err,
-                                type: "error",
-                            });
+                            this.$notify.error("err.head ? err.head.msg : err");
                         });
                 }
             });
         },
         async registerOrg(info) {
             await this.$rpc.api.isReady;
+            this.isSubmiting = true;
             let extrinsic = await this.$rpc.api.tx.names.update(
                 stringToHex(info.name + ""),
                 JSON.stringify({
@@ -118,27 +115,22 @@ export default {
                     img_file: info.img_file.url,
                 })
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "success",
-                        message: "Application submitted",
-                        type: "success",
-                    });
-                    this.dialogVisible = false;
+                    this.$notify.info("Submitted");
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
     },
 };

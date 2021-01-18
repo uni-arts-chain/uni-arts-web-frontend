@@ -65,10 +65,7 @@
                     </div>
                     <div class="button-group">
                         <button
-                            :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'auctioning'
-                            "
+                            :disabled="isOffline || isAuction"
                             v-if="isOwner"
                             class="buy"
                             @click="confirm"
@@ -77,10 +74,7 @@
                         </button>
                         <button
                             v-if="!isOwner"
-                            :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'auctioning'
-                            "
+                            :disabled="isOffline || isAuction"
                             class="buy"
                             @click="confirm"
                         >
@@ -88,28 +82,23 @@
                         </button>
                         <button
                             :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'bidding' ||
+                                isOffline ||
+                                isOnSale ||
                                 !isStarted ||
                                 isFinished
                             "
-                            v-if="!isOwner && art.aasm_state == 'auctioning'"
+                            v-if="!isOwner && isAuction"
                             class="auction"
                             @click="createAuction()"
                         >
                             BID NOW
                         </button>
                         <button
-                            :disabled="
-                                art.aasm_state == 'prepare' ||
-                                art.aasm_state == 'bidding'
-                            "
+                            :disabled="isOffline || isOnSale"
                             v-if="isOwner"
                             class="auction"
                             @click="
-                                art.aasm_state == 'auctioning'
-                                    ? cancelAuction()
-                                    : createAuction()
+                                isAuction ? cancelAuction() : createAuction()
                             "
                         >
                             {{
@@ -454,8 +443,6 @@
                     @cancelAuction="finishAuction"
                     :isFinished="isFinished"
                     :isStarted="isStarted"
-                    :auction="auctionInfo"
-                    :art="art"
                 />
             </div>
             <div class="dialog-content" v-else-if="isOwnerOrder">
@@ -545,26 +532,24 @@ export default {
             dialogPreviewUrl: "",
             isSubmiting: false,
             dialogAuctionVisible: false,
-            art: {
-                img_detail_file1: {},
-                img_detail_file2: {},
-                img_detail_file3: {},
-                img_detail_file4: {},
-                img_detail_file5: {},
-            },
             member: {},
             author: {},
-            transactionList: [],
-            signatureList: [],
-            auctionInfo: {},
-            auctionList: [],
             currentArtId: this.$route.params.id,
             copyStatus: false,
             form: {
                 price: "",
             },
             yin_2x,
+
+            subAuctionInfo: "",
+            subAuctionList: "",
+            subSaleOrderList: "",
         };
+    },
+    watch: {
+        isSending(value) {
+            if (!value) this.subInfo();
+        },
     },
     created() {
         if (!this.$store.state.user.info.address) {
@@ -572,18 +557,42 @@ export default {
         }
         this.requestData();
     },
+    beforeDestroy() {
+        this.$store.dispatch("art/ResetSubQueue");
+    },
     computed: {
+        art() {
+            return this.$store.state.art.art;
+        },
+        isOffline() {
+            return !this.art.item_id;
+        },
+        isOnSale() {
+            return (
+                this.$store.getters["art/artStatus"] ==
+                this.$store.state.art.ART_ON_SALE
+            );
+        },
+        isSending() {
+            return this.$store.state.art.isSending;
+        },
         isOwner() {
             return this.art.member_id == this.$store.state.user.info.id;
         },
         isOwnerOrder() {
             return (
                 this.member.address == this.$store.state.user.info.address &&
-                this.art.aasm_state == "bidding"
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_ON_SALE
             );
         },
         isAuction() {
-            return this.art.aasm_state == "auctioning";
+            return (
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_ON_AUCTION ||
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_WAITING_AUCTION
+            );
         },
         dialogType() {
             return this.isDialogPreview
@@ -599,26 +608,32 @@ export default {
                 : "small";
         },
         isFinished() {
-            let endHeight = this.auctionInfo.end_time;
-            let currentHeight = parseInt(
-                this.$store.state.global.chain.blockHeight
+            return (
+                this.$store.getters["art/artStatus"] ==
+                this.$store.state.art.ART_AUCTIONED
             );
-            return new BigNumber(currentHeight).gt(endHeight);
         },
         isStarted() {
-            let startHeight = this.auctionInfo.start_time;
-            let endHeight = this.auctionInfo.end_time;
-            let currentHeight = parseInt(
-                this.$store.state.global.chain.blockHeight
-            );
             return (
-                new BigNumber(currentHeight).gte(startHeight) &&
-                new BigNumber(currentHeight).lte(endHeight)
+                this.$store.getters["art/artStatus"] ==
+                this.$store.state.art.ART_ON_AUCTION
             );
+        },
+        auctionInfo() {
+            return this.$store.state.art.auctionInfo;
+        },
+        auctionList() {
+            return this.$store.state.art.auctionList;
+        },
+        transactionList() {
+            return this.$store.state.art.transactionList;
+        },
+        signatureList() {
+            return this.$store.state.art.signatureList;
         },
     },
     methods: {
-        requestData() {
+        requestData(isSub = true) {
             this.$http
                 .globalGetArtById(
                     {},
@@ -626,24 +641,25 @@ export default {
                         id: this.currentArtId,
                     }
                 )
-                .then((res) => {
-                    this.art = res;
+                .then(async (res) => {
                     this.member = res.member;
                     this.author = res.author;
-                    if (this.art.aasm_state !== "prepare") {
-                        this.getTransactionData();
-                        this.getSignatureData();
-                        this.getAuctionInfo();
+                    if (res.item_id) {
+                        await this.$store.dispatch("art/SetArtInfo", res);
+                        isSub ? this.subInfo() : "";
                     }
                 })
                 .catch((err) => {
                     console.log(err);
-                    this.$notify({
-                        title: "Error",
-                        message: err.head ? err.head.msg : err,
-                        type: "error",
-                    });
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
+        },
+        async subInfo() {
+            this.requestData(false);
+            await this.$store.dispatch("art/GetTransactionList");
+            await this.$store.dispatch("art/GetSignatureList");
+            await this.$store.dispatch("art/GetAuctionInfo");
+            await this.$store.dispatch("art/GetSaleInfo");
         },
         enterPreview(obj) {
             if (obj) {
@@ -721,58 +737,6 @@ export default {
             this.dialogVisible = true;
             this.dialogAuctionVisible = true;
         },
-        async getTransactionData() {
-            if (this.art.aasm_state == "prepare") return [];
-            await this.$rpc.api.isReady;
-            let obj = await this.$rpc.api.query.nft.historySaleOrderList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            obj = obj
-                .toJSON()
-                .sort((a, b) => b.buy_time - a.buy_time)
-                .map((v) => {
-                    v.sign_timestamp = ComputeBlockTimestamp(
-                        v.buy_time,
-                        this.$store.state.global.chain.timestamp,
-                        this.$store.state.global.chain.blockHeight
-                    );
-                    return v;
-                });
-            this.transactionList = obj;
-        },
-        async getSignatureData() {
-            if (this.art.aasm_state == "prepare") return [];
-            await this.$rpc.api.isReady;
-            let obj = await this.$rpc.api.query.nft.signatureList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            let jsonData = obj.toJSON();
-            jsonData.map((v) => {
-                v.sign_timestamp = ComputeBlockTimestamp(
-                    v.sign_time,
-                    this.$store.state.global.chain.timestamp,
-                    this.$store.state.global.chain.blockHeight
-                );
-                return v;
-            });
-            this.signatureList = jsonData.reverse();
-        },
-        async getAuctionInfo() {
-            await this.$rpc.api.isReady;
-            let currentAuction = await this.$rpc.api.query.nft.auctionList(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            this.auctionInfo = currentAuction.toJSON();
-
-            let list = await this.$rpc.api.query.nft.bidHistoryList(
-                this.auctionInfo.id
-            );
-            this.auctionList = list.toJSON();
-            this.auctionList.reverse();
-        },
         async submitSell() {
             if (!this.$store.state.user.info.address) {
                 this.$router.push("/login");
@@ -783,6 +747,7 @@ export default {
             }
             if (!this.form.price) return;
             this.isSubmiting = true;
+
             let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
                 this.art.collection_id,
                 this.art.item_id,
@@ -792,27 +757,22 @@ export default {
                     .times(this.form.price)
                     .toNumber()
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "success",
-                        message: "Submitted",
-                        type: "success",
-                    });
+                    this.$notify.info("Submitted");
                     this.dialogVisible = false;
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
         async cancelOrder() {
             if (this.isSubmiting) {
@@ -824,27 +784,22 @@ export default {
                 this.art.item_id,
                 0
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Submitted",
-                        message: "Submitted",
-                        type: "success",
-                    });
+                    this.$notify.info("Submitted");
                     this.dialogVisible = false;
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
         async submitBuy() {
             if (!this.$store.state.user.info.address) {
@@ -860,27 +815,22 @@ export default {
                 this.art.collection_id,
                 this.art.item_id
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "success",
-                        message: "Application submitted",
-                        type: "success",
-                    });
+                    this.$notify.info("Submitted");
                     this.dialogVisible = false;
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.isSubmiting = false;
-                    this.$notify({
-                        title: "Error",
-                        message: "Submission Failed",
-                        type: "error",
-                    });
-                }
-            );
+                    this.$notify.error("Submission Failed");
+                },
+            });
         },
     },
 };

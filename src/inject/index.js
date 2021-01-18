@@ -2,6 +2,7 @@ import IconSvg from "@/components/IconSvg";
 import Dialog from "@/components/Dialog";
 import Certificate from "@/components/Certificate";
 import Alert from "@/components/Alert";
+import Notification from "@/components/Notification";
 
 import detect from "@/plugins/detect";
 import http from "@/plugins/http";
@@ -19,6 +20,7 @@ export default {
     install: async (vue) => {
         vue.component("icon-svg", IconSvg);
         vue.use(element);
+        vue.use(Notification);
         vue.prototype.$browser = detect.browser;
         vue.prototype.$uniDialog = Dialog;
         vue.prototype.$uniCerDialog = Certificate;
