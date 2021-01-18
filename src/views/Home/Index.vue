@@ -101,19 +101,37 @@ export default {
     mounted() {},
     methods: {
         requestAuthorData() {
-            this.$http.globalGetPopularAuthor({}).then((res) => {
-                this.authorList = res;
-            });
+            this.$http
+                .globalGetPopularAuthor({})
+                .then((res) => {
+                    this.authorList = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
         },
         requestWorkData() {
-            this.$http.globalGetPopArts({}).then((res) => {
-                this.workList = res;
-            });
+            this.$http
+                .globalGetPopArts({})
+                .then((res) => {
+                    this.workList = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
         },
         requestRecommendData() {
-            this.$http.globalGetTopicArts({}).then((res) => {
-                this.recommendList = res;
-            });
+            this.$http
+                .globalGetTopicArts({})
+                .then((res) => {
+                    this.recommendList = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
         },
     },
 };

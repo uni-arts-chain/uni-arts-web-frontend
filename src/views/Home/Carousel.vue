@@ -1,16 +1,19 @@
 /** * Created by Lay Hunt on 2020-11-19 10:42:34. */
 <template>
     <div class="carousel">
-        <el-carousel arrow="never" height="732px">
-            <el-carousel-item
-                :style="`background-image: url(${pageList[item - 1]});`"
-                v-for="item in 3"
-                :key="item"
-            >
-                <div class="info-body">
-                    <div>Time limited auction</div>
-                    <div>23 : 08 : 02</div>
-                </div>
+        <el-carousel arrow="never" height="732px" :autoplay="false">
+            <el-carousel-item v-for="(item, index) in list" :key="index">
+                <router-link :to="`/auction/${item.id}`" class="item-container">
+                    <AdaptiveImage
+                        width="100%"
+                        height="100%"
+                        :url="item.img_file.url"
+                    />
+                    <div class="info-body">
+                        <div>Time limited auction</div>
+                        <div>23 : 08 : 02</div>
+                    </div>
+                </router-link>
             </el-carousel-item>
         </el-carousel>
     </div>
@@ -18,17 +21,30 @@
 
 <script>
 import { Carousel, CarouselItem } from "element-ui";
-import page1 from "@/assets/images/temp/home-page1.jpg";
+import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
     name: "carousel",
     components: {
         [Carousel.name]: Carousel,
         [CarouselItem.name]: CarouselItem,
+        AdaptiveImage,
     },
     data() {
         return {
-            pageList: [page1, page1, page1],
+            list: [],
+            total_count: 0,
         };
+    },
+    created() {
+        this.requestData();
+    },
+    methods: {
+        requestData() {
+            this.$http.globalGetAuctionList({}).then((res) => {
+                this.list = res.list;
+                this.total_count = res.total_count;
+            });
+        },
     },
 };
 </script>
@@ -48,12 +64,14 @@ export default {
     }
 }
 
+.item-container {
+    width: 100%;
+    height: 100%;
+}
+
 .el-carousel__item {
     height: 100%;
     width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
     .info-body {
         position: absolute;
         width: 464px;

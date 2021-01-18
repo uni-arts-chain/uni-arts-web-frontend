@@ -129,6 +129,15 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "getAuctionApplyList",
+        method: "GET",
+        desc: "获取申请拍卖会作品列表",
+        path: "/auction_meetings/{:id}/applying_arts",
+        mockPath: "/auction_meetings/{:id}/applying_arts",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;
