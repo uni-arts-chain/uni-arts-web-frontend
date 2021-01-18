@@ -131,6 +131,41 @@ const apiList = [
             unSignature: true,
         },
     },
+    {
+        name: "getAuctionList",
+        method: "GET",
+        desc: "拍卖会列表",
+        path: "/auction_meetings",
+        mockPath: "/auction_meetings",
+        params: {},
+        options: {
+            unSignature: true,
+        },
+    },
+    {
+        name: "getAuctionInfo",
+        method: "GET",
+        desc: "拍卖会信息",
+        path: "/auction_meetings/{:id}",
+        mockPath: "/auction_meetings/{:id}",
+        params: {},
+        options: {
+            unSignature: true,
+            id: "",
+        },
+    },
+    {
+        name: "getAuctionArtInfo",
+        method: "GET",
+        desc: "拍卖会信息",
+        path: "/auction_meetings/:id/arts",
+        mockPath: "/auction_meetings/:id/arts",
+        params: {},
+        options: {
+            unSignature: true,
+            id: "",
+        },
+    },
 ];
 
 export default apiList;
