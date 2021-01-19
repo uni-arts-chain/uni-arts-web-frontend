@@ -22,7 +22,8 @@
                 Certificate Address:
                 <span class="address">{{ v.item_hash }}</span>
             </div>
-            <div class="price">{{ v.price }} UART</div>
+            <div class="price" v-if="!isAuction">{{ v.price }} UART</div>
+            <div class="price" v-else>Starting at {{ v.price }} UART</div>
         </div>
     </div>
 </template>
@@ -40,6 +41,10 @@ export default {
             default: () => [],
         },
         isGroup: {
+            type: Boolean,
+            default: false,
+        },
+        isAuction: {
             type: Boolean,
             default: false,
         },
@@ -143,7 +148,32 @@ export default {
     margin-top: 8px;
 }
 
+.button-group {
+    width: 100%;
+    > button {
+        width: 100%;
+        border: 2px solid #020202;
+        font-size: 16px;
+        height: 47px;
+        margin-top: 10px;
+        display: block;
+        cursor: pointer;
+        font-weight: 400;
+        text-align: center;
+        background: transparent;
+        color: #020202;
+        letter-spacing: 0px;
+        padding: 6px 10px;
+        margin-right: 10px;
+        text-transform: capitalize;
+    }
+}
+
 .no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
     color: #666;
 }
 </style>

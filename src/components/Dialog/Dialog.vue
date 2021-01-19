@@ -19,7 +19,6 @@
         :before-close="handleClose"
         @closed="closed"
     >
-        <!-- <NeedPlugin v-if="displayType == 'PluginError'"></NeedPlugin> -->
         <slot></slot>
     </el-dialog>
 </template>

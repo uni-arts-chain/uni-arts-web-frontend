@@ -129,6 +129,42 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "getAuctionApplyList",
+        method: "GET",
+        desc: "获取申请拍卖会作品列表",
+        path: "/auction_meetings/{:id}/applying_arts",
+        mockPath: "/auction_meetings/{:id}/applying_arts",
+        params: {},
+        options: {},
+    },
+    {
+        name: "postAuctionApply",
+        method: "POST",
+        desc: "申请参加拍卖会",
+        path: "/auction_meetings/{:id}/attend",
+        mockPath: "/auction_meetings/{:id}/attend",
+        params: {},
+        options: {},
+    },
+    {
+        name: "postAuctionRefuse",
+        method: "POST",
+        desc: "拒绝申请加入拍卖会",
+        path: "/auction_meetings/{:id}/reject",
+        mockPath: "/auction_meetings/{:id}/reject",
+        params: {},
+        options: {},
+    },
+    {
+        name: "postAuctionApprove",
+        method: "POST",
+        desc: "同意申请加入拍卖会",
+        path: "/auction_meetings/{:id}/agree",
+        mockPath: "/auction_meetings/{:id}/agree",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;

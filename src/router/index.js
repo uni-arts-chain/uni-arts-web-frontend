@@ -12,6 +12,39 @@ const routes = [
             import(/* webpackChunkName: "market" */ "@/views/Market/Index.vue"),
     },
     {
+        path: "/auction/:id",
+        name: "AuctionIndex",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "auction" */ "@/views/Auction/Index.vue"
+            ),
+    },
+    {
+        path: "/auction/:id/apply",
+        name: "AuctionApply",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "auction" */ "@/views/Auction/Apply.vue"
+            ),
+    },
+    {
+        path: "/auction/:id/candidates",
+        name: "AuctionCandidates",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "auction" */ "@/views/Auction/Candidates.vue"
+            ),
+    },
+    {
         path: "/artist",
         name: "Artist",
         component: () =>
