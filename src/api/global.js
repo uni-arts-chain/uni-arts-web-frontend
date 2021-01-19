@@ -158,8 +158,8 @@ const apiList = [
         name: "getAuctionArtInfo",
         method: "GET",
         desc: "拍卖会信息",
-        path: "/auction_meetings/:id/arts",
-        mockPath: "/auction_meetings/:id/arts",
+        path: "/auction_meetings/{:id}/arts",
+        mockPath: "/auction_meetings/{:id}/arts",
         params: {},
         options: {
             unSignature: true,

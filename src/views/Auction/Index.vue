@@ -2,7 +2,11 @@
 <template>
     <div class="index container" v-loading="isSubmiting">
         <div class="banner">
-            <AdaptiveImage width="100%" height="100%" :url="page" />
+            <AdaptiveImage
+                width="100%"
+                height="100%"
+                :url="auctionInfo.img_file ? auctionInfo.img_file.url : ''"
+            />
             <div class="info-body">
                 <div>Time limited auction</div>
                 <div style="margin-top: 20px">
@@ -54,7 +58,6 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 import Thumbnail from "@/components/Thumbnail";
-import page1 from "@/assets/images/temp/home-page1.jpg";
 export default {
     name: "index",
     components: {
@@ -63,7 +66,6 @@ export default {
     },
     data() {
         return {
-            page: page1,
             list: [],
             auctionInfo: {},
             id: this.$route.params.id,
