@@ -138,6 +138,15 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "postAuctionApply",
+        method: "POST",
+        desc: "申请参加拍卖会",
+        path: "/auction_meetings/{:id}/attend",
+        mockPath: "/auction_meetings/{:id}/attend",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;
