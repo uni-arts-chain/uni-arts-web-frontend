@@ -46,12 +46,14 @@
             <router-link :to="`/auction/${auctionInfo.id}/apply`"
                 >Apply</router-link
             >
-            <router-link :to="`/auction/${auctionInfo.id}/candidates`"
+            <router-link
+                v-if="auctionInfo.owner_id == user.id"
+                :to="`/auction/${auctionInfo.id}/candidates`"
                 >List</router-link
             >
         </div>
-        <div class="content">
-            <Thumbnail :list="list" class="content-list" />
+        <div class="content" v-loading="isLoading">
+            <Thumbnail :list="list" :isAuction="true" class="content-list" />
         </div>
     </div>
 </template>
@@ -70,6 +72,7 @@ export default {
             auctionInfo: {},
             id: this.$route.params.id,
             isSubmiting: false,
+            isLoading: false,
             countdown: [],
             status: "waiting",
             timeWorkId: "",
@@ -81,6 +84,11 @@ export default {
     beforeDestroy() {
         this.timeWorkdId ? clearInterval(this.timeWork) : "";
     },
+    computed: {
+        user() {
+            return this.$store.state.user.info;
+        },
+    },
     methods: {
         requestData() {
             this.isSubmiting = true;
@@ -89,17 +97,7 @@ export default {
                 .then((res) => {
                     this.isSubmiting = false;
                     this.auctionInfo = res;
-
-                    let time = new Date().getTime();
-                    if (res.start_at > time + "") {
-                        this.initTimeWork(res.start_at);
-                        this.status = "waiting";
-                    } else if (res.end_at < time + "") {
-                        this.status = "end";
-                    } else {
-                        this.initTimeWork(res.end_at);
-                        this.status = "auctioning";
-                    }
+                    this.initTimeWork();
                     this.requestArtData();
                 })
                 .catch((err) => {
@@ -109,14 +107,19 @@ export default {
                 });
         },
         requestArtData() {
+            this.isLoading = true;
             this.$http
                 .globalGetAuctionArtInfo({}, { id: this.id })
                 .then((res) => {
-                    console.log(res);
+                    this.list = res.list.map((v) => {
+                        v.art.price = v.start_price;
+                        return v.art;
+                    });
+                    this.isLoading = false;
                 })
                 .catch((err) => {
                     console.log(err);
-                    this.isSubmiting = false;
+                    this.isLoading = false;
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
@@ -137,17 +140,44 @@ export default {
                 minute = parseInt((jetLag / 60) % 60),
                 hour = parseInt((jetLag / 3600) % 24),
                 day = parseInt(jetLag / 3600 / 24);
-            return {
-                second: second < 10 ? "0" + second : second,
-                hour: hour < 10 ? "0" + hour : hour,
-                minute: minute < 10 ? "0" + minute : minute,
-                day,
-            };
+            if (day == 0 && hour == 0 && minute == 0 && second == 0) {
+                return -1;
+            } else {
+                return {
+                    second: second < 10 ? "0" + second : second,
+                    hour: hour < 10 ? "0" + hour : hour,
+                    minute: minute < 10 ? "0" + minute : minute,
+                    day,
+                };
+            }
         },
-        initTimeWork(time) {
-            this.timeWorkId = setInterval(() => {
-                this.countdown = this.countdownFormat(time);
-            }, 1000);
+        initTimeWork() {
+            let time = new Date().getTime();
+            if (this.auctionInfo.start_at > time + "") {
+                this.timeWorkId = setInterval(() => {
+                    let result = this.countdownFormat(
+                        this.auctionInfo.start_at
+                    );
+                    result == -1
+                        ? this.resetTimeWork()
+                        : (this.countdown = result);
+                }, 1000);
+                this.status = "waiting";
+            } else if (this.auctionInfo.end_at < time + "") {
+                this.status = "end";
+            } else {
+                this.timeWorkId = setInterval(() => {
+                    let result = this.countdownFormat(this.auctionInfo.end_at);
+                    result == -1
+                        ? this.resetTimeWork()
+                        : (this.countdown = result);
+                }, 1000);
+                this.status = "auctioning";
+            }
+        },
+        resetTimeWork() {
+            clearInterval(this.timeWorkId);
+            this.initTimeWork();
         },
     },
 };
@@ -156,6 +186,7 @@ export default {
 .banner {
     height: 469px;
     width: 100%;
+    margin-top: 40px;
     position: relative;
     .info-body {
         position: absolute;

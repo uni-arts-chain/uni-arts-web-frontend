@@ -11,7 +11,9 @@
                     />
                     <div class="info-body">
                         <div>Time limited auction</div>
-                        <div>23 : 08 : 02</div>
+                        <div v-if="item.countdown">
+                            {{ item.countdown }}
+                        </div>
                     </div>
                 </router-link>
             </el-carousel-item>
@@ -33,17 +35,90 @@ export default {
         return {
             list: [],
             total_count: 0,
+            timeWorkIdList: [],
         };
     },
     created() {
         this.requestData();
     },
+    beforeDestroy() {
+        this.timeWorkIdList.length > 0
+            ? this.timeWorkIdList.forEach((v) => clearInterval(v.timeWorkId))
+            : "";
+        this.timeWorkIdList = [];
+    },
     methods: {
         requestData() {
             this.$http.globalGetAuctionList({}).then((res) => {
-                this.list = res.list;
+                this.list = res.list.map((v) => {
+                    v.countdown = "";
+                    return v;
+                });
                 this.total_count = res.total_count;
+                this.list.forEach((v) => {
+                    this.initTimeWork(v);
+                });
             });
+        },
+        countdownFormat(time) {
+            time = parseInt(time) * 1000;
+            let jetLag = Math.abs(new Date().getTime() - time) / 1000;
+            let second = parseInt(jetLag % 60),
+                minute = parseInt((jetLag / 60) % 60),
+                hour = parseInt((jetLag / 3600) % 24),
+                day = parseInt(jetLag / 3600 / 24);
+            if (second == 0 && minute == 0 && hour == 0 && day == 0) {
+                return -1;
+            } else {
+                return `${day}d : ${hour < 10 ? "0" + hour : hour} : ${
+                    minute < 10 ? "0" + minute : minute
+                } : ${second < 10 ? "0" + second : second}`;
+            }
+        },
+        initTimeWork(item) {
+            let obj = {
+                id: item.id,
+                timeWorkId: "",
+            };
+            let curTime = new Date().getTime() / 1000;
+            let time = "";
+            if (curTime < parseInt(item.start_at)) {
+                time = item.start_at;
+                obj.timeWorkId = setInterval(() => {
+                    let result = this.countdownFormat(time);
+                    if (result == -1) {
+                        this.resetTimeWork(item.id);
+                    } else {
+                        item.countdown = result;
+                    }
+                }, 1000);
+                this.timeWorkIdList.push(obj);
+            } else if (
+                curTime >= parseInt(item.start_at) &&
+                curTime <= parseInt(item.end_at)
+            ) {
+                time = item.end_at;
+                obj.timeWorkId = setInterval(() => {
+                    let result = this.countdownFormat(time);
+                    if (result == -1) {
+                        this.resetTimeWork(item.id);
+                    } else {
+                        item.countdown = result;
+                    }
+                }, 1000);
+                this.timeWorkIdList.push(obj);
+            }
+        },
+        resetTimeWork(id) {
+            let index = this.timeWorkIdList.findIndex((v) => v.id == id);
+            if (index >= 0) {
+                clearInterval(this.timeWorkIdList[index].timeWorkId);
+                this.timeWorkIdList.splice(index, 1);
+                let result = this.list.find((v) => v.id == id);
+                if (result) {
+                    this.initTimeWork(result);
+                }
+            }
         },
     },
 };

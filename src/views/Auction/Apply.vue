@@ -10,26 +10,6 @@
                         <AdaptiveImage
                             :url="v.img_main_file1.url"
                         ></AdaptiveImage>
-                        <div
-                            class="aution-view"
-                            v-if="v.aasm_state == 'auctioning'"
-                        >
-                            {{
-                                computeBlockTimestamp(v.auction_start_time)
-                                    | dateFormat
-                            }}
-                            ~
-                            {{
-                                computeBlockTimestamp(v.auction_end_time)
-                                    | dateFormat
-                            }}
-                        </div>
-                        <div
-                            class="aution-label"
-                            v-if="v.aasm_state == 'auctioning'"
-                        >
-                            IN AUCTION
-                        </div>
                     </router-link>
                     <h5 class="title">{{ v.name }}</h5>
                     <div class="desc">{{ materialType(v.material_id) }}</div>
@@ -38,7 +18,11 @@
                         <span class="address">{{ v.item_hash }}</span>
                     </div>
                     <div class="price">{{ v.price }} UART</div>
-                    <button class="action" @click="selectArt(v)">
+                    <button
+                        class="action"
+                        :disabled="v.isApply"
+                        @click="selectArt(v)"
+                    >
                         Launch an auction
                     </button>
                 </div>
@@ -249,7 +233,6 @@ export default {
             }
         },
         async submitAuction() {
-            await this.$rpc.api.isReady;
             if (this.isSubmiting) {
                 return;
             }
@@ -268,37 +251,32 @@ export default {
                 currentTimestamp,
                 currentBlockHeight
             );
-            let extrinsic = this.$rpc.api.tx.nft.createAuction(
-                this.art.collection_id,
-                this.art.item_id,
-                0,
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.start_price)
-                    .toNumber(),
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.increment)
-                    .toNumber(),
-                start_time,
-                end_time
-            );
-            this.$rpc.signAndSend(
-                this.$store.state.user.info.address,
-                extrinsic,
-                () => {
+            this.$http
+                .userPostAuctionApply(
+                    {
+                        art_id: this.art.id,
+                        start_price: new BigNumber(
+                            this.form.start_price
+                        ).toNumber(),
+                        price_increment: new BigNumber(
+                            this.form.increment
+                        ).toNumber(),
+                        start_time: start_time,
+                        end_time: end_time,
+                    },
+                    { id: this.id }
+                )
+                .then((res) => {
                     this.isSubmiting = false;
-                    this.$notify.info("Submitted");
-                    this.$refs["form"].resetFields();
-                },
-                () => {
-                    this.$notify.success("Success");
-                },
-                () => {
+                    this.dialogVisible = false;
+                    this.$notify.success("Submitted");
+                    let item = this.list.find((v) => v.id == res.art.id);
+                    item ? (item.isApply = true) : "";
+                })
+                .catch(() => {
                     this.isSubmiting = false;
                     this.$notify.error("Submission Failed");
-                }
-            );
+                });
         },
         selectArt(item) {
             this.art = item;
@@ -401,7 +379,7 @@ export default {
         text-transform: capitalize;
     }
 
-    .action.disabled {
+    .action[disabled] {
         border: 2px solid #c3c3c3;
         color: #999;
         cursor: not-allowed;
