@@ -165,20 +165,23 @@ export default {
                 this.selectItem.memo,
                 null
             );
-            await this.$extension.signAndSend(
-                this.$store.state.user.info.address,
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
                 extrinsic,
-                () => {
+                cb: () => {
                     this.signatureLoading = false;
-                    this.$notify.success("Application submitted");
+                    this.$notify.info("Application submitted");
                     this.selectItem = {};
                     this.dialogVisible = false;
                 },
-                () => {
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
                     this.signatureLoading = false;
                     this.$notify.error("Submission Failed");
-                }
-            );
+                },
+            });
         },
     },
 };
