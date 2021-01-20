@@ -188,6 +188,17 @@ const routes = [
             ),
     },
     {
+        path: "/account/sold",
+        name: "AccountSold",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "accountSold" */ "@/views/Account/Sold.vue"
+            ),
+    },
+    {
         path: "/login",
         name: "Login",
         component: () =>

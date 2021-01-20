@@ -48,7 +48,7 @@
                             >
                         </li>
                         <li>
-                            <router-link to="/account/sale"
+                            <router-link to="/account/sold"
                                 >Sales Order</router-link
                             >
                         </li>
