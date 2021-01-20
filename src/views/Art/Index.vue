@@ -559,7 +559,7 @@ export default {
         this.requestData();
     },
     beforeDestroy() {
-        this.$store.dispatch("art/ResetSubQueue");
+        // this.$store.dispatch("art/ResetSubQueue");
     },
     computed: {
         art() {
@@ -700,7 +700,7 @@ export default {
             this.dialogVisible = false;
         },
         getMaterial(id) {
-            let item = this.$store.state.art.materials.find((v) => (v.id = id));
+            let item = this.$store.state.art.materials.find((v) => v.id == id);
             return item ? item : {};
         },
         hexTostring(hex) {
