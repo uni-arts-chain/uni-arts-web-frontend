@@ -63,8 +63,8 @@ export default {
     methods: {
         onBlur() {
             if (this.inputData >= 0) {
-                this.$emit("blur", this.inputData);
-                this.dispatch("ElFormItem", "el.form.blur", this.inputData);
+                this.$emit("change", this.inputData);
+                this.dispatch("ElFormItem", "el.form.change", this.inputData);
             }
         },
         dispatch(componentName, eventName, params) {
