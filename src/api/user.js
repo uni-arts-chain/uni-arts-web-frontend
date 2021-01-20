@@ -165,6 +165,24 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "getSoldList",
+        method: "GET",
+        desc: "获取已卖列表",
+        path: "/arts/sold",
+        mockPath: "/arts/sold",
+        params: {},
+        options: {},
+    },
+    {
+        name: "getBoughtList",
+        method: "GET",
+        desc: "获取已买列表",
+        path: "/arts/bought",
+        mockPath: "/arts/bought",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;

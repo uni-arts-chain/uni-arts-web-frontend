@@ -5,9 +5,9 @@
             <el-breadcrumb-item :to="{ path: '/account' }"
                 >Profile</el-breadcrumb-item
             >
-            <el-breadcrumb-item>Purchase Order</el-breadcrumb-item>
+            <el-breadcrumb-item>Sold Order</el-breadcrumb-item>
         </el-breadcrumb>
-        <Order v-loading="isLoading" type="bought" :list="list"></Order>
+        <Order v-loading="isLoading" type="sold" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
                 class="prev"
@@ -25,7 +25,7 @@
 <script>
 import Order from "./Order";
 export default {
-    name: "purchase",
+    name: "sold",
     components: {
         Order,
     },
@@ -54,7 +54,7 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userGetBoughtList({
+                .userGetSoldList({
                     page: this.page,
                     per_page: this.per_page,
                 })

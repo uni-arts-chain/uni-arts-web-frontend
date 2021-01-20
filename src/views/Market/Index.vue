@@ -85,8 +85,11 @@ export default {
         categoryList() {
             if (this.active_cate == "price") {
                 return this.priceInterval;
+            } else if (this.active_cate == "materials") {
+                return this.$store.state.art.materials;
+            } else {
+                return this.$store.state.art.themes;
             }
-            return this.$store.state.art[this.active_cate];
         },
         materials() {
             return this.$store.state.art.materials;
@@ -110,6 +113,7 @@ export default {
         // need to fix
         requestData() {
             this.isLoading = true;
+            this.list = [];
             let obj = {
                 page: this.page,
                 per_page: this.per_page,
@@ -169,28 +173,25 @@ export default {
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
+        resetForm() {
+            this.category_id = "";
+            this.material_id = "";
+            this.price_gte = "";
+            this.price_lt = "";
+            this.theme_id = "";
+        },
         resetActive_cate(item) {
+            this.resetForm();
             switch (this.active_cate) {
                 case "materials":
-                    this.category_id = "";
                     this.material_id = item.id;
-                    this.price_gte = "";
-                    this.price_lt = "";
-                    this.theme_id = "";
                     break;
                 case "themes":
                     this.theme_id = item.id;
-                    this.material_id = "";
-                    this.price_gte = "";
-                    this.price_lt = "";
-                    this.category_id = "";
                     break;
                 case "price":
                     this.price_gte = item.gte || "";
                     this.price_lt = item.lt || "";
-                    this.material_id = "";
-                    this.category_id = "";
-                    this.theme_id = "";
                     break;
             }
         },
