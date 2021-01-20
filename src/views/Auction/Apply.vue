@@ -18,9 +18,22 @@
                         <span class="address">{{ v.item_hash }}</span>
                     </div>
                     <div class="price">{{ v.price }} UART</div>
+                    <div
+                        class="status"
+                        v-if="
+                            v.join_status == 'applying' ||
+                            v.join_status == 'done'
+                        "
+                    >
+                        {{ v.join_status }}
+                    </div>
                     <button
                         class="action"
-                        :disabled="v.isApply"
+                        :disabled="
+                            v.join_status == 'applying' ||
+                            v.join_status == 'done'
+                        "
+                        v-else
                         @click="selectArt(v)"
                     >
                         Launch an auction
@@ -188,11 +201,13 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userOwnArts({
-                    aasm_state: "online",
-                    page: this.page,
-                    per_page: this.per_page,
-                })
+                .userGetAvailableSubmitList(
+                    {
+                        page: this.page,
+                        per_page: this.per_page,
+                    },
+                    { id: this.id }
+                )
                 .then((res) => {
                     this.isLoading = false;
                     this.list = res.list;
@@ -399,6 +414,26 @@ export default {
         line-height: 30px;
         letter-spacing: 0px;
         margin-top: 8px;
+    }
+
+    .status {
+        width: 100%;
+        border: 2px solid #020202;
+        font-size: 16px;
+        height: 47px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.3;
+        cursor: inherit;
+        text-align: center;
+        background: transparent;
+        color: #020202;
+        letter-spacing: 0px;
+        padding: 6px 10px;
+        margin-right: 10px;
+        text-transform: capitalize;
     }
 
     .no-data {
