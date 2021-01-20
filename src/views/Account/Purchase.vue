@@ -7,7 +7,7 @@
             >
             <el-breadcrumb-item>Purchase Order</el-breadcrumb-item>
         </el-breadcrumb>
-        <Order v-loading="isLoading" type="purchase" :list="list"></Order>
+        <Order v-loading="isLoading" type="bought" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
                 class="prev"
@@ -54,8 +54,7 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userOwnArts({
-                    aasm_state: "paid",
+                .userGetBoughtList({
                     page: this.page,
                     per_page: this.per_page,
                 })

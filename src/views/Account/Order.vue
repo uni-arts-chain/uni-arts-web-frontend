@@ -3,42 +3,41 @@
     <div class="own-arts">
         <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="art-item" v-for="(v, i) in list" :key="i">
-            <router-link
-                :to="`/art/${type !== 'signature' ? v.id : v.art.id}`"
-                class="img-container"
-            >
+            <router-link :to="`/art/${getArtId(v)}`" class="img-container">
                 <AdaptiveImage
-                    :url="
-                        type !== 'signature'
-                            ? v.img_main_file1.url
-                            : v.art.img_main_file1.url
-                    "
+                    :url="getImageResource(v)"
                     width="100%"
                     height="230px"
                 ></AdaptiveImage>
             </router-link>
             <h5 class="title">
-                {{ type !== "signature" ? v.name : v.art.name }}
+                {{ getArtName(v) }}
             </h5>
             <div class="desc">
                 Certificate Address:
-                {{ type !== "signature" ? v.item_hash : v.art.item_hash }}
+                {{ getItemHash(v) }}
             </div>
             <div class="organization-name" v-if="type === 'signature'">
-                {{ v.organization.name }}
+                {{ getOrganizationName(v) }}
             </div>
             <div class="price" v-if="type !== 'signature'">
-                {{ v.price }} UART
+                {{ getArtPrice(v) }} {{ $store.state.global.chain.tokenSymbol }}
             </div>
-            <div class="address-label" v-if="type !== 'signature'">
+            <div class="date" v-if="type == 'sold' || type == 'bought'">
+                {{ type == "bought" ? "Purchased on " : "Sold on " }}
+                {{ getDateTime(v) | dateFormat }}
+            </div>
+            <div class="address-label" v-if="type == 'all' || type == 'sale'">
                 <span class="tag">
-                    {{ v.aasm_state }}
+                    {{ getArtAasmState(v) }}
                 </span>
             </div>
             <router-link
-                :to="v.aasm_state == 'prepare' ? '' : `/art/${v.id}`"
+                :to="
+                    getArtAasmState(v) == 'prepare' ? '' : `/art/${getArtId(v)}`
+                "
                 class="action"
-                :class="{ disabled: v.aasm_state == 'prepare' }"
+                :class="{ disabled: getArtAasmState(v) == 'prepare' }"
                 v-if="type == 'all'"
             >
                 Auction Now
@@ -72,6 +71,84 @@ export default {
                 this.page++;
                 this.requestData();
             }
+        },
+        getImageResource(item) {
+            if (
+                this.type == "bought" ||
+                this.type == "sold" ||
+                this.type == "signature"
+            ) {
+                return item.art.img_main_file1.url;
+            } else {
+                return item.img_main_file1.url;
+            }
+        },
+        getArtId(item) {
+            if (
+                this.type == "bought" ||
+                this.type == "sold" ||
+                this.type == "signature"
+            ) {
+                return item.art.id;
+            } else {
+                return item.id;
+            }
+        },
+        getArtName(item) {
+            if (
+                this.type == "bought" ||
+                this.type == "sold" ||
+                this.type == "signature"
+            ) {
+                return item.art.name;
+            } else {
+                return item.name;
+            }
+        },
+        getItemHash(item) {
+            if (
+                this.type == "bought" ||
+                this.type == "sold" ||
+                this.type == "signature"
+            ) {
+                return item.art.item_hash;
+            } else {
+                return item.item_hash;
+            }
+        },
+        getOrganizationName(item) {
+            if (
+                this.type == "bought" ||
+                this.type == "sold" ||
+                this.type == "signature"
+            ) {
+                return item.art.organization.name;
+            } else {
+                return item.organization.name;
+            }
+        },
+        getArtPrice(item) {
+            if (
+                this.type == "bought" ||
+                this.type == "sold" ||
+                this.type == "signature"
+            ) {
+                return item.art.price;
+            } else {
+                return item.price;
+            }
+        },
+        getArtAasmState(item) {
+            if (this.type == "signature") {
+                return item.art.aasm_state;
+            } else if (this.type == "bought" || this.type == "sold") {
+                return item.art.aasm_state;
+            } else {
+                return item.aasm_state;
+            }
+        },
+        getDateTime(item) {
+            return item.buy_time;
         },
         prev() {
             if (this.hasPrev) {
@@ -195,6 +272,11 @@ export default {
     line-height: 30px;
     letter-spacing: 0px;
     margin-top: 5px;
+}
+.date {
+    text-align: left;
+    margin-top: 5px;
+    font-size: 18px;
 }
 .no-data {
     color: #666;

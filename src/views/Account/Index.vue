@@ -49,7 +49,7 @@
                         </li>
                         <li>
                             <router-link to="/account/sold"
-                                >Sales Order</router-link
+                                >Sold Order</router-link
                             >
                         </li>
                         <li>

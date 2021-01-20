@@ -25,7 +25,7 @@
 <script>
 import Order from "./Order";
 export default {
-    name: "purchase",
+    name: "sold",
     components: {
         Order,
     },
@@ -54,8 +54,7 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userOwnArts({
-                    aasm_state: "paid",
+                .userGetSoldList({
                     page: this.page,
                     per_page: this.per_page,
                 })

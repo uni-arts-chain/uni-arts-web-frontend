@@ -1,7 +1,7 @@
 /** * Created by Lay Hunt on 2020-12-14 14:12:54. */
 <template>
     <div class="sale" v-loading="isLoading">
-        <Order type="sala" :list="list"></Order>
+        <Order type="sale" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
                 class="prev"
