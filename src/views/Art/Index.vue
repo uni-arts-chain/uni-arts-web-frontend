@@ -2,7 +2,7 @@
 <template>
     <div class="art">
         <div class="container">
-            <div class="art-info">
+            <div class="art-info" v-loading="isLoading">
                 <div class="img-container">
                     <AdaptiveImage
                         :url="art.img_main_file1 ? art.img_main_file1.url : ''"
@@ -528,6 +528,7 @@ export default {
     },
     data() {
         return {
+            isLoading: false,
             dialogVisible: false,
             isDialogPreview: false,
             dialogPreviewUrl: "",
@@ -559,7 +560,14 @@ export default {
         this.requestData();
     },
     beforeDestroy() {
-        // this.$store.dispatch("art/ResetSubQueue");
+        this.$store.dispatch("art/ResetSubQueue");
+        this.$store.dispatch("art/SetArtInfo", {
+            img_detail_file1: {},
+            img_detail_file2: {},
+            img_detail_file3: {},
+            img_detail_file4: {},
+            img_detail_file5: {},
+        });
     },
     computed: {
         art() {
@@ -641,6 +649,14 @@ export default {
     },
     methods: {
         requestData(isSub = true) {
+            this.isLoading = true;
+            this.$store.dispatch("art/SetArtInfo", {
+                img_detail_file1: {},
+                img_detail_file2: {},
+                img_detail_file3: {},
+                img_detail_file4: {},
+                img_detail_file5: {},
+            });
             this.$http
                 .globalGetArtById(
                     {},
@@ -651,14 +667,16 @@ export default {
                 .then(async (res) => {
                     this.member = res.member;
                     this.author = res.author;
+                    await this.$store.dispatch("art/SetArtInfo", res);
                     if (res.item_id) {
-                        await this.$store.dispatch("art/SetArtInfo", res);
                         isSub ? this.subInfo() : "";
                     }
+                    this.isLoading = false;
                 })
                 .catch((err) => {
                     console.log(err);
                     this.$notify.error(err.head ? err.head.msg : err);
+                    this.isLoading = false;
                 });
         },
         async subInfo() {

@@ -183,6 +183,15 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "getAvailableSubmitList",
+        method: "GET",
+        desc: "获取可用于申请参加拍卖会的作品",
+        path: "/auction_meetings/{:id}/user_arts",
+        mockPath: "/auction_meetings/{:id}/user_arts",
+        params: {},
+        options: {},
+    },
 ];
 
 export default apiList;
