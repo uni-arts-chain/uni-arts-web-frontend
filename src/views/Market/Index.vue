@@ -33,7 +33,11 @@
                         @click="requestFilterData(v)"
                         v-for="(v, i) in categoryList"
                         :key="i"
-                        :class="{ active: active_subcate == v.id }"
+                        :class="{
+                            active:
+                                active_subcate == v.id &&
+                                current_cate == v.cate_label,
+                        }"
                     >
                         <div v-if="active_cate == 'price'">
                             {{ v.gte ? v.gte : "低于" }}
@@ -85,13 +89,14 @@ export default {
             price_lt: "",
             active_cate: "materials",
             active_subcate: "",
+            current_cate: "",
             isLoading: true,
         };
     },
     created() {
         if (this.materials.length > 0) {
             this.material_id = this.materials[0].id;
-            this.requestData();
+            this.active_subcate = this.materials[0].id;
         }
         this.requsetPriceLimit();
     },
@@ -150,6 +155,7 @@ export default {
                 .globalGetSellingArt(obj)
                 .then((res) => {
                     this.isLoading = false;
+                    this.current_cate = this.active_cate;
                     this.list = res.list;
                     this.total_count = res.total_count;
                     this.total_pages = Math.ceil(
@@ -185,8 +191,10 @@ export default {
                 .then((res) => {
                     this.priceInterval = res.map((v, i) => {
                         v.id = i + 1;
+                        v.cate_label = "price";
                         return v;
                     });
+                    this.requestData();
                 })
                 .catch((err) => {
                     this.$notify.error(err.head ? err.head.msg : err);
@@ -248,7 +256,6 @@ h2.title {
         letter-spacing: 0px;
         margin-right: 82px;
         color: #606060;
-        transition: all 0.3s ease;
         cursor: pointer;
     }
     .name-item.active {
@@ -273,7 +280,6 @@ h2.title {
         letter-spacing: 0px;
         min-width: 150px;
         color: #606060;
-        transition: all 0.3s ease;
         cursor: pointer;
     }
     .catetory-item.active {

@@ -40,10 +40,16 @@ export default {
             state.categories = data;
         },
         SET_THEMES: (state, data) => {
-            state.themes = data;
+            state.themes = data.map((v) => {
+                v.cate_label = "themes";
+                return v;
+            });
         },
         SET_MATERIALS: (state, data) => {
-            state.materials = data;
+            state.materials = data.map((v) => {
+                v.cate_label = "materials";
+                return v;
+            });
         },
         SET_IS_SENDING: (state, data) => {
             state.isSending = data;
