@@ -95,19 +95,27 @@
                         </button>
                         <button
                             :disabled="isOffline || isOnSale"
-                            v-if="isOwner"
+                            v-if="isOwner && !isAuction"
                             class="auction"
-                            @click="
-                                isAuction ? cancelAuction() : createAuction()
-                            "
+                            @click="createAuction()"
                         >
-                            {{
-                                isAuction
-                                    ? !isFinished
-                                        ? "CANCEL AUCTION"
-                                        : "FINISH AUCTION"
-                                    : "CREATE AUCTION"
-                            }}
+                            CREATE AUCTION
+                        </button>
+                        <button
+                            :disabled="isOffline || isOnSale || isFollowed"
+                            v-if="isOwner && !isFinished && isAuction"
+                            class="auction"
+                            @click="cancelAuction()"
+                        >
+                            CANCEL AUCTION
+                        </button>
+                        <button
+                            :disabled="isOffline || isOnSale"
+                            v-if="isOwner && isFinished && isAuction"
+                            class="auction"
+                            @click="cancelAuction()"
+                        >
+                            FINISH AUCTION
                         </button>
                     </div>
                 </div>
@@ -633,6 +641,9 @@ export default {
                 this.$store.getters["art/artStatus"] ==
                 this.$store.state.art.ART_WAITING_AUCTION
             );
+        },
+        isFollowed() {
+            return this.$store.state.art.auctionList.length > 0;
         },
         auctionInfo() {
             return this.$store.state.art.auctionInfo;
