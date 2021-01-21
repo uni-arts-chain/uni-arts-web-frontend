@@ -4,13 +4,32 @@
         <div class="container">
             <div class="logo" @click="goHome">Uniarts</div>
             <ul class="link-group">
-                <li><router-link to="/">Homepage</router-link></li>
-                <li><router-link to="/market">Market</router-link></li>
-                <li><router-link to="/artist">Artist</router-link></li>
+                <li>
+                    <router-link to="/" :class="{ active: activeTab == 'Home' }"
+                        >Homepage</router-link
+                    >
+                </li>
+                <li>
+                    <router-link
+                        to="/market"
+                        :class="{ active: activeTab == 'Market' }"
+                        >Market</router-link
+                    >
+                </li>
+                <li>
+                    <router-link
+                        to="/artist"
+                        :class="{ active: activeTab == 'Artist' }"
+                        >Artist</router-link
+                    >
+                </li>
                 <li v-if="user.token" class="li-info">
-                    <router-link to="/account" class="info">{{
-                        user.address
-                    }}</router-link>
+                    <router-link
+                        to="/account"
+                        class="info"
+                        :class="{ active: activeTab == 'Account' }"
+                        >{{ user.address }}</router-link
+                    >
                 </li>
                 <li class="li-login" v-if="!user.token">
                     <router-link to="/login" class="login">Login</router-link>
@@ -26,6 +45,33 @@ export default {
     computed: {
         user() {
             return this.$store.state.user.info;
+        },
+        activeTab() {
+            let routeName = "";
+            switch (this.$route.name) {
+                case "Home":
+                    routeName = "Home";
+                    break;
+                case "Market":
+                    routeName = "Market";
+                    break;
+                case "ArtDetail":
+                    routeName = "Art";
+                    break;
+                case "ArtistDetail":
+                case "Artist":
+                    routeName = "Artist";
+                    break;
+                case "AccountUpload":
+                case "AccountProfile":
+                case "AccountPurchase":
+                case "AccountSold":
+                case "Account":
+                    routeName = "Account";
+                    break;
+            }
+
+            return routeName;
         },
     },
     methods: {
@@ -66,6 +112,13 @@ ul {
         padding-left: 23px;
         padding-right: 23px;
         font-size: 16px;
+        .active {
+            font-weight: 500;
+            color: black;
+        }
+        > a {
+            color: #4d4d4d;
+        }
     }
     li:last-child {
         padding-right: 0px;
