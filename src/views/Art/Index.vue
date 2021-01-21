@@ -74,7 +74,7 @@
                         </button>
                         <button
                             v-if="!isOwner"
-                            :disabled="isOffline || isAuction"
+                            :disabled="isOffline || isAuction || !isOnSale"
                             class="buy"
                             @click="confirm"
                         >
