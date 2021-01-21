@@ -122,7 +122,7 @@ export default {
                 this.type == "sold" ||
                 this.type == "signature"
             ) {
-                return item.art.organization.name;
+                return item.organization.name;
             } else {
                 return item.organization.name;
             }
