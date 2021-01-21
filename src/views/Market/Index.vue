@@ -5,13 +5,25 @@
             <h2 class="title">market</h2>
             <div class="filter">
                 <div class="name">
-                    <div class="name-item" @click="active_cate = 'materials'">
+                    <div
+                        class="name-item"
+                        :class="{ active: active_cate == 'materials' }"
+                        @click="active_cate = 'materials'"
+                    >
                         Classification
                     </div>
-                    <div class="name-item" @click="active_cate = 'themes'">
+                    <div
+                        class="name-item"
+                        @click="active_cate = 'themes'"
+                        :class="{ active: active_cate == 'themes' }"
+                    >
                         Theme
                     </div>
-                    <div class="name-item" @click="active_cate = 'price'">
+                    <div
+                        class="name-item"
+                        @click="active_cate = 'price'"
+                        :class="{ active: active_cate == 'price' }"
+                    >
                         Price
                     </div>
                 </div>
@@ -21,6 +33,7 @@
                         @click="requestFilterData(v)"
                         v-for="(v, i) in categoryList"
                         :key="i"
+                        :class="{ active: active_subcate == v.id }"
                     >
                         <div v-if="active_cate == 'price'">
                             {{ v.gte ? v.gte : "低于" }}
@@ -71,6 +84,7 @@ export default {
             price_gte: "",
             price_lt: "",
             active_cate: "materials",
+            active_subcate: "",
             isLoading: true,
         };
     },
@@ -105,6 +119,7 @@ export default {
         materials(value) {
             if (value.length > 0) {
                 this.material_id = value[0].id;
+                this.active_subcate = value[0].id;
                 this.requestData();
             }
         },
@@ -160,6 +175,7 @@ export default {
         },
         requestFilterData(item) {
             this.page = 1;
+            this.active_subcate = item.id;
             this.resetActive_cate(item);
             this.requestData();
         },
@@ -167,7 +183,10 @@ export default {
             this.$http
                 .globalGetPriceInterval({})
                 .then((res) => {
-                    this.priceInterval = res;
+                    this.priceInterval = res.map((v, i) => {
+                        v.id = i + 1;
+                        return v;
+                    });
                 })
                 .catch((err) => {
                     this.$notify.error(err.head ? err.head.msg : err);
@@ -228,7 +247,15 @@ h2.title {
         font-weight: 600;
         letter-spacing: 0px;
         margin-right: 82px;
+        color: #606060;
+        transition: all 0.3s ease;
         cursor: pointer;
+    }
+    .name-item.active {
+        color: black;
+    }
+    .name-item:hover {
+        color: black;
     }
     .catetory {
         display: flex;
@@ -237,7 +264,7 @@ h2.title {
         margin-bottom: 71px;
     }
     .catetory-item {
-        border: 2px solid #020202;
+        border: 2px solid #606060;
         padding: 7px 15px;
         margin-right: 50px;
         font-size: 18px;
@@ -245,7 +272,17 @@ h2.title {
         text-align: center;
         letter-spacing: 0px;
         min-width: 150px;
+        color: #606060;
+        transition: all 0.3s ease;
         cursor: pointer;
+    }
+    .catetory-item.active {
+        color: black;
+        border-color: black;
+    }
+    .catetory-item:hover {
+        color: black;
+        border-color: black;
     }
 }
 
