@@ -650,13 +650,15 @@ export default {
     methods: {
         requestData(isSub = true) {
             this.isLoading = true;
-            this.$store.dispatch("art/SetArtInfo", {
-                img_detail_file1: {},
-                img_detail_file2: {},
-                img_detail_file3: {},
-                img_detail_file4: {},
-                img_detail_file5: {},
-            });
+            if (isSub) {
+                this.$store.dispatch("art/SetArtInfo", {
+                    img_detail_file1: {},
+                    img_detail_file2: {},
+                    img_detail_file3: {},
+                    img_detail_file4: {},
+                    img_detail_file5: {},
+                });
+            }
             this.$http
                 .globalGetArtById(
                     {},
@@ -669,7 +671,7 @@ export default {
                     this.author = res.author;
                     await this.$store.dispatch("art/SetArtInfo", res);
                     if (res.item_id) {
-                        isSub ? this.subInfo() : "";
+                        isSub ? await this.subInfo() : "";
                     }
                     this.isLoading = false;
                 })
