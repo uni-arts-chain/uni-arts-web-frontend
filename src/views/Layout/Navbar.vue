@@ -113,7 +113,7 @@ ul {
         padding-right: 23px;
         font-size: 16px;
         .active {
-            font-weight: 500;
+            font-weight: 600;
             color: black;
         }
         > a {
