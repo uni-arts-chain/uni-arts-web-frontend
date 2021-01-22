@@ -269,10 +269,11 @@ export default {
                 state.art.collection_id,
                 state.art.item_id,
                 (result) => {
+                    console.log(result.toJSON());
                     let list = result.isEmpty ? [] : result.toJSON().reverse();
                     list.map((v) => {
                         v.sign_timestamp = ComputeBlockTimestamp(
-                            v.sign_time,
+                            v.buy_time,
                             rootState.global.chain.timestamp,
                             rootState.global.chain.blockHeight
                         );
