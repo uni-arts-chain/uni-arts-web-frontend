@@ -3,10 +3,13 @@
     <div
         class="adaptive-image"
         ref="imgBox"
-        :class="{ 'img-loading': isLoading }"
-        :style="`width:${width};height:${height};`"
+        :class="{ 'img-loading': isLoading && !isVideo }"
+        :style="`${width ? `width:${width};` : ``}${
+            height ? `height:${height};` : ``
+        }`"
     >
         <img
+            v-if="!isVideo"
             ref="img"
             :class="{
                 'img-horizontal': !isOrigin && isHorizontal,
@@ -16,11 +19,27 @@
             @load="imgOnLoad"
             :src="url"
         />
+        <Video
+            v-else
+            :source="url"
+            :isPlay="isPlay"
+            :isResponsive="isResponsive"
+            @load="imgOnLoad"
+        />
+        <icon-svg
+            v-if="!isPlay && isVideo"
+            class="video-label"
+            icon-class="video"
+        />
     </div>
 </template>
 <script>
+import Video from "@/components/Video";
 export default {
     name: "adaptive-image",
+    components: {
+        Video,
+    },
     props: {
         url: {
             type: String,
@@ -38,6 +57,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        isPlay: {
+            type: Boolean,
+            default: false,
+        },
+        isResponsive: {
+            type: Boolean,
+            default: true,
+        },
     },
     data() {
         return {
@@ -45,14 +72,26 @@ export default {
             isLoading: true,
         };
     },
+    computed: {
+        isVideo() {
+            return (
+                /\.mp4$/.test(this.url) || /^data:video\/mp4;/.test(this.url)
+            );
+        },
+    },
     methods: {
         imgOnLoad() {
+            if (this.isVideo) {
+                return;
+            }
             if (this.isOrigin) {
                 this.isLoading = false;
                 return;
             }
-            let width = this.$refs.img ? this.$refs.img.width : "100%";
-            let height = this.$refs.img ? this.$refs.img.height : "230px";
+
+            let obj = this.$refs.img;
+            let width = obj ? obj.width : "100%";
+            let height = obj ? obj.height : "230px";
             let boxWidth = this.width;
             let boxHeight = this.height;
             boxWidth = boxWidth.includes("px")
@@ -109,8 +148,15 @@ export default {
     }
 
     > img.img-origin {
-        height: auto;
-        width: auto;
+        max-height: 100%;
+        max-width: 100%;
+    }
+    .video-label {
+        font-size: 28px;
+        position: absolute;
+        top: 3px;
+        left: 7px;
+        color: white;
     }
 }
 .img-loading {

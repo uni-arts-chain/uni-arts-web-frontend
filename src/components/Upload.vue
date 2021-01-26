@@ -46,9 +46,10 @@ export default {
             const pickerOpts = {
                 types: [
                     {
-                        description: "Image",
+                        description: "Image Or Video",
                         accept: {
                             "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+                            "video/*": [".mp4"],
                         },
                     },
                 ],
@@ -108,6 +109,7 @@ export default {
         position: absolute;
         background: url(~@/assets/images/refresh@2x.png) no-repeat;
         background-size: 32px;
+        z-index: 1px;
     }
     .bg {
         width: 100%;

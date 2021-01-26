@@ -5,6 +5,8 @@
             <div class="art-info" v-loading="isLoading">
                 <div class="img-container">
                     <AdaptiveImage
+                        :isResponsive="false"
+                        :isPlay="true"
                         :url="art.img_main_file1 ? art.img_main_file1.url : ''"
                     />
                 </div>
@@ -436,7 +438,14 @@
             :close="handlePreviewClose"
         >
             <div class="dialog-content preview">
-                <img :src="dialogPreviewUrl" alt="" />
+                <AdaptiveImage
+                    width="100%"
+                    height="100%"
+                    :isPlay="true"
+                    :isResponsive="false"
+                    :isOrigin="true"
+                    :url="dialogPreviewUrl"
+                />
             </div>
         </Dialog>
         <Dialog
@@ -698,6 +707,9 @@ export default {
             await this.$store.dispatch("art/GetSignatureList");
             await this.$store.dispatch("art/GetAuctionInfo");
             await this.$store.dispatch("art/GetSaleInfo");
+        },
+        isVideo(url) {
+            return /\.mp4$/.test(url);
         },
         enterPreview(obj) {
             if (obj) {
