@@ -20,7 +20,7 @@ export function requestSuccessFunc(config) {
     const method = config.method.toUpperCase();
 
     let tokenObj = JSON.parse(getLocalStore("user_token") || "{}");
-    // 单独两步验证，强制登录时进行两步验证
+
     if (!tokenObj.token) tokenObj = false;
     if (config.signature) {
         tokenObj = config.signature;

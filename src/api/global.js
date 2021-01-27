@@ -7,7 +7,7 @@ const apiList = [
         mockPath: "/arts/{:id}",
         params: {},
         options: {
-            unSignature: true,
+            unSignature: false,
         },
     },
     {
