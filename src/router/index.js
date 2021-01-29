@@ -149,7 +149,7 @@ const routes = [
                 },
                 component: () =>
                     import(
-                        /* webpackChunkName: "accountSale" */ "@/views/Account/Signs.vue"
+                        /* webpackChunkName: "AccountSign" */ "@/views/Account/Signs.vue"
                     ),
             },
         ],
@@ -199,12 +199,43 @@ const routes = [
             ),
     },
     {
+        path: "/account/following",
+        name: "AccountFollowing",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "AccountFollowing" */ "@/views/Account/Following.vue"
+            ),
+    },
+    {
+        path: "/account/followers",
+        name: "AccountFollowers",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "AccountFollowers" */ "@/views/Account/Followers.vue"
+            ),
+    },
+    {
+        path: "/account/collection",
+        name: "AccountCollection",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "AccountCollection" */ "@/views/Account/Collection.vue"
+            ),
+    },
+    {
         path: "/login",
         name: "Login",
         component: () =>
-            import(
-                /* webpackChunkName: "account" */ "@/views/Session/Login.vue"
-            ),
+            import(/* webpackChunkName: "Login" */ "@/views/Session/Login.vue"),
     },
 ];
 

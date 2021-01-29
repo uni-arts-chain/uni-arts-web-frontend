@@ -192,6 +192,88 @@ const apiList = [
         params: {},
         options: {},
     },
+    {
+        name: "postArtLike",
+        method: "POST",
+        desc: "点赞作品",
+        path: "/arts/{:id}/like",
+        mockPath: "/arts/{:id}/like",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
+    {
+        name: "postArtCancelLike",
+        method: "POST",
+        desc: "取消点赞作品",
+        path: "/arts/{:id}/cancel_like",
+        mockPath: "/arts/{:id}/cancel_like",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
+    {
+        name: "postArtDislike",
+        method: "POST",
+        desc: "踩作品",
+        path: "/arts/{:id}/dislike",
+        mockPath: "/arts/{:id}/dislike",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
+    {
+        name: "postArtCancelDislike",
+        method: "POST",
+        desc: "取消踩作品",
+        path: "/arts/{:id}/cancel_dislike",
+        mockPath: "/arts/{:id}/cancel_dislike",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
+    {
+        name: "postArtFavorite",
+        method: "POST",
+        desc: "收藏作品",
+        path: "/arts/{:id}/favorite",
+        mockPath: "/arts/{:id}/favorite",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
+    {
+        name: "postArtCancelFavorite",
+        method: "POST",
+        desc: "取消收藏作品",
+        path: "/arts/{:id}/unfavorite",
+        mockPath: "/arts/{:id}/unfavorite",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
+    {
+        name: "getUserFollowing",
+        method: "GET",
+        desc: "获取正在关注的艺术家",
+        path: "/members/followings",
+        mockPath: "/members/followings",
+        options: {},
+    },
+    {
+        name: "getUserFavorate",
+        method: "GET",
+        desc: "获取正在关注的艺术家",
+        path: "/members/favorate_arts",
+        mockPath: "/members/favorate_arts",
+        options: {},
+    },
 ];
 
 export default apiList;

@@ -9,6 +9,23 @@
                         :isPlay="true"
                         :url="art.img_main_file1 ? art.img_main_file1.url : ''"
                     />
+                    <div class="auction-label" v-if="isStarted">IN AUCTION</div>
+                    <div class="auction-date" v-if="isStarted || isWaiting">
+                        <div class="auction-data-pick">
+                            {{
+                                isWaiting
+                                    ? "Start after"
+                                    : isStarted
+                                    ? "End after"
+                                    : ""
+                            }}
+                            <span>{{ countdown }}</span>
+                        </div>
+                        <span
+                            >Bidding notice
+                            <img src="@/assets/images/auciton_notice@2x.png"
+                        /></span>
+                    </div>
                 </div>
                 <div class="info">
                     <div class="title">{{ art.name }}</div>
@@ -64,6 +81,47 @@
                     </div>
                     <div class="signature" style="min-height: 28px">
                         Number of signatures : {{ signatureList.length }}
+                    </div>
+                    <div class="function">
+                        <div class="action-item">
+                            <img
+                                src="@/assets/images/zan@2x.png"
+                                v-if="!art.liked_by_me"
+                                @click="artLike(true)"
+                            />
+                            <img
+                                src="@/assets/images/zan1@2x.png"
+                                @click="artLike(false)"
+                                v-else
+                            />
+                            <span class="action-text">like</span>
+                        </div>
+                        <div class="action-item">
+                            <img
+                                @click="artDislike(true)"
+                                src="@/assets/images/cai@2x.png"
+                                v-if="!art.disliked_by_me"
+                            />
+                            <img
+                                @click="artDislike(false)"
+                                src="@/assets/images/cai1@2x.png"
+                                v-else
+                            />
+                            <span class="action-text">dislike</span>
+                        </div>
+                        <div class="action-item">
+                            <img
+                                @click="artFavorite(true)"
+                                src="@/assets/images/shoucang@2x.png"
+                                v-if="!art.favorite_by_me"
+                            />
+                            <img
+                                @click="artFavorite(false)"
+                                src="@/assets/images/shoucang1@2x.png"
+                                v-else
+                            />
+                            <span class="action-text">collect</span>
+                        </div>
                     </div>
                     <div class="button-group">
                         <button
@@ -553,8 +611,10 @@ export default {
             dialogAuctionVisible: false,
             member: {},
             author: {},
+            countdown: "",
             currentArtId: this.$route.params.id,
             copyStatus: false,
+            timeWorkId: "",
             form: {
                 price: "",
             },
@@ -568,6 +628,11 @@ export default {
     watch: {
         isSending(value) {
             if (!value) this.subInfo();
+        },
+        auctionInfo(value) {
+            if (value) {
+                this.initTimeWork(value);
+            }
         },
     },
     created() {
@@ -585,6 +650,7 @@ export default {
             img_detail_file4: {},
             img_detail_file5: {},
         });
+        clearInterval(this.timeWorkId);
     },
     computed: {
         art() {
@@ -882,6 +948,158 @@ export default {
                 },
             });
         },
+        artLike(flag) {
+            if (flag) {
+                this.$http
+                    .userPostArtLike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.liked_by_me = true;
+                        this.art.disliked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            } else {
+                this.$http
+                    .userPostArtCancelLike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.liked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            }
+        },
+        artDislike(flag) {
+            if (flag) {
+                this.$http
+                    .userPostArtDislike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.disliked_by_me = true;
+                        this.art.liked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            } else {
+                this.$http
+                    .userPostArtCancelDislike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.disliked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            }
+        },
+        artFavorite(flag) {
+            if (flag) {
+                this.$http
+                    .userPostArtFavorite(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.favorite_by_me = true;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            } else {
+                this.$http
+                    .userPostArtCancelFavorite(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.favorite_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            }
+        },
+        countdownFormat(time) {
+            time = parseInt(time) * 1000;
+            let jetLag = Math.abs(new Date().getTime() - time) / 1000;
+            let second = parseInt(jetLag % 60),
+                minute = parseInt((jetLag / 60) % 60),
+                hour = parseInt((jetLag / 3600) % 24),
+                day = parseInt(jetLag / 3600 / 24);
+            if (second == 0 && minute == 0 && hour == 0 && day == 0) {
+                return -1;
+            } else {
+                return `${day}d : ${hour < 10 ? "0" + hour : hour}h : ${
+                    minute < 10 ? "0" + minute : minute
+                }m : ${second < 10 ? "0" + second : second}s`;
+            }
+        },
+        initTimeWork(item) {
+            let timeWorkId = "";
+            let curTime = new Date().getTime() / 1000;
+            let time = "";
+            if (curTime < this.formatBlockNumber(item.start_time)) {
+                time = this.formatBlockNumber(item.start_time);
+                timeWorkId = setInterval(() => {
+                    let result = this.countdownFormat(time);
+                    if (result == -1) {
+                        this.resetTimeWork(item);
+                    } else {
+                        this.countdown = result;
+                    }
+                }, 1000);
+                this.timeWorkId = timeWorkId;
+            } else if (
+                curTime >= this.formatBlockNumber(item.start_time) &&
+                curTime <= this.formatBlockNumber(item.end_time)
+            ) {
+                time = this.formatBlockNumber(item.end_time);
+                timeWorkId = setInterval(() => {
+                    let result = this.countdownFormat(time);
+                    if (result == -1) {
+                        this.resetTimeWork(item);
+                    } else {
+                        this.countdown = result;
+                    }
+                }, 1000);
+                this.timeWorkId = timeWorkId;
+            }
+        },
+        resetTimeWork(item) {
+            clearInterval(this.timeWorkId);
+            this.timeWorkId = "";
+            this.initTimeWork(item);
+        },
     },
 };
 </script>
@@ -893,26 +1111,70 @@ export default {
 
 .art-info {
     overflow: hidden;
+    width: 100%;
+
     .img-container {
         float: left;
-        width: 550px;
-        height: 550px;
-        margin-right: 50px;
+        width: 620px;
+        height: 580px;
+        margin-right: 25px;
         overflow: hidden;
         position: relative;
-        img {
+
+        .auction-label {
             position: absolute;
-            height: 100%;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%);
+            top: 34px;
+            left: 0;
+            padding: 5px 16px;
+            background-color: #f9b43b;
+            font-size: 20px;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            font-weight: 600;
+            text-align: left;
+            color: #ffffff;
+            letter-spacing: 0px;
+        }
+
+        .auction-date {
+            width: 100%;
+            height: 50px;
+            position: absolute;
+            background-color: rgba(134, 29, 57, 0.8);
+            bottom: 0;
+            left: 0;
+            font-size: 18px;
+            font-weight: 400;
+            text-align: left;
+            color: #ffffff;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            letter-spacing: 0px;
+            span {
+                display: flex;
+                align-items: center;
+            }
+            img {
+                width: 17px;
+                margin-left: 5px;
+            }
+            .auction-data-pick {
+                display: flex;
+                align-items: center;
+                span {
+                    margin-left: 10px;
+                    font-weight: 600;
+                }
+            }
         }
     }
 }
 .info {
     float: left;
-    width: 550px;
-    margin-left: 50px;
+    width: calc(100% - 620px - 50px);
+    margin-left: 25px;
     text-align: left;
     margin-bottom: 151px;
     .title {
@@ -995,11 +1257,31 @@ export default {
         font-weight: 400;
         text-align: left;
         letter-spacing: 0px;
-        margin-bottom: 86px;
+        margin-bottom: 51px;
+    }
+
+    .function {
+        display: flex;
+        align-items: center;
+        margin-bottom: 35px;
+        .action-item {
+            margin-right: 35px;
+            display: flex;
+            align-items: center;
+            > img {
+                width: 20px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .action-text {
+                font-size: 20px;
+            }
+        }
     }
 
     .button-group {
-        display: block;
+        display: flex;
+        justify-content: space-between;
 
         .buy,
         .auction {
