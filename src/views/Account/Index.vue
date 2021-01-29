@@ -47,11 +47,16 @@
                                 >Personal account</router-link
                             >
                         </li>
-                        <li>
+                        <!-- <li>
                             <router-link to="/account/following"
                                 >Following</router-link
                             >
                         </li>
+                        <li>
+                            <router-link to="/account/followers"
+                                >Followers</router-link
+                            >
+                        </li> -->
                         <li>
                             <router-link to="/account/collection"
                                 >Collection</router-link

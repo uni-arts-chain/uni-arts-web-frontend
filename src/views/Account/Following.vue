@@ -8,7 +8,36 @@
             <el-breadcrumb-item>Following</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="title">Following</div>
-        <Order v-loading="isLoading" type="all" :list="list"></Order>
+        <div class="list">
+            <div class="profile" v-for="(member, i) in list" :key="i">
+                <div class="avatar">
+                    <router-link
+                        :to="`/artist-detail/${member.id}`"
+                        class="avatar-img"
+                    >
+                        <AdaptiveImage
+                            :url="
+                                member.avatar.url ? member.avatar.url : yin_2x
+                            "
+                        />
+                    </router-link>
+                    <div class="info">
+                        <span class="name">{{
+                            member.display_name || "Anonymous"
+                        }}</span>
+                        <RowText
+                            class="desc"
+                            :textLength="70"
+                            :text="member.desc || member.address"
+                        />
+                    </div>
+                </div>
+                <div class="works">
+                    <i class="zp"></i>
+                    <span>{{ art_count }} works</span>
+                </div>
+            </div>
+        </div>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
                 class="prev"
@@ -24,12 +53,8 @@
     </div>
 </template>
 <script>
-import Order from "./Order";
 export default {
     name: "following",
-    components: {
-        Order,
-    },
     data() {
         return {
             list: [],
@@ -105,6 +130,65 @@ export default {
         text-transform: uppercase;
         margin-bottom: 73px;
         margin-top: 40px;
+    }
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 97px;
+    .avatar-img {
+        width: 95px;
+        height: 95px;
+        overflow: hidden;
+        border: 4px solid #020202;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+    .avatar-img.empty {
+        border-color: transparent;
+    }
+}
+.avatar {
+    display: flex;
+    align-items: center;
+}
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-left: 32px;
+    .name {
+        font-size: 22px;
+        font-weight: 600;
+        letter-spacing: 0px;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+    .desc {
+        font-size: 16px;
+        font-weight: 400;
+        text-align: left;
+        letter-spacing: 1px;
+        width: 800px;
+        line-height: 20px;
+    }
+}
+.works {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 400;
+    text-align: left;
+    letter-spacing: 0px;
+    .zp {
+        margin-right: 12px;
+        display: block;
+        width: 27px;
+        height: 25px;
+        background: url("~@/assets/images/zuopin@2x.png") no-repeat;
+        background-size: 100% auto;
     }
 }
 </style>

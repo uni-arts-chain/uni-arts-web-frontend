@@ -102,17 +102,23 @@ export default {
         position: absolute;
         bottom: 0;
         color: white;
-        background-color: rgba(0, 0, 0, 0.7);
+        text-align: center;
+        background-color: rgba(134, 29, 57, 0.8);
     }
     .aution-label {
         line-height: 35px;
         position: absolute;
-        top: 0;
-        border-bottom-left-radius: 4px;
-        padding: 0 10px;
+        top: 15px;
         right: 0;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.7);
+        padding: 0px 16px;
+        background-color: #f9b43b;
+        font-size: 16px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        font-weight: 600;
+        text-align: center;
+        color: #ffffff;
+        letter-spacing: 0px;
     }
 }
 

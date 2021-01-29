@@ -210,6 +210,17 @@ const routes = [
             ),
     },
     {
+        path: "/account/followers",
+        name: "AccountFollowers",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "AccountFollowers" */ "@/views/Account/Followers.vue"
+            ),
+    },
+    {
         path: "/account/collection",
         name: "AccountCollection",
         meta: {

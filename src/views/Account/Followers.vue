@@ -1,14 +1,14 @@
 /** * Created by Lay Hunt on 2021-01-29 17:13:31. */
 <template>
-    <div class="collection container">
+    <div class="followers container">
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/account' }"
                 >Profile</el-breadcrumb-item
             >
-            <el-breadcrumb-item>Collection</el-breadcrumb-item>
+            <el-breadcrumb-item>Followers</el-breadcrumb-item>
         </el-breadcrumb>
-        <div class="title">Collection</div>
-        <Thumbnail v-loading="isLoading" :list="list" />
+        <div class="title">Followers</div>
+        <Order v-loading="isLoading" type="all" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
                 class="prev"
@@ -24,11 +24,11 @@
     </div>
 </template>
 <script>
-import Thumbnail from "@/components/Thumbnail";
+import Order from "./Order";
 export default {
-    name: "following",
+    name: "followers",
     components: {
-        Thumbnail,
+        Order,
     },
     data() {
         return {
@@ -55,13 +55,13 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userGetUserFavorate({
+                .userGetUserFollowing({
                     page: this.page,
                     per_page: this.per_page,
                 })
                 .then((res) => {
                     this.isLoading = false;
-                    this.list = res.list.map((v) => v.favoritable);
+                    this.list = res.list;
                     this.total_count = res.total_count;
                     this.total_pages = Math.ceil(
                         res.total_count / this.per_page
@@ -89,7 +89,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.collection {
+.followers {
     padding: 40px;
     padding-top: 70px;
     padding-left: 0px;
