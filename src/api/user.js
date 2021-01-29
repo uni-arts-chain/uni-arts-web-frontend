@@ -258,6 +258,22 @@ const apiList = [
         },
         options: {},
     },
+    {
+        name: "getUserFollowing",
+        method: "GET",
+        desc: "获取正在关注的艺术家",
+        path: "/members/followings",
+        mockPath: "/members/followings",
+        options: {},
+    },
+    {
+        name: "getUserFavorate",
+        method: "GET",
+        desc: "获取正在关注的艺术家",
+        path: "/members/favorate_arts",
+        mockPath: "/members/favorate_arts",
+        options: {},
+    },
 ];
 
 export default apiList;

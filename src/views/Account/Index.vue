@@ -43,6 +43,21 @@
                 <div class="menu-container">
                     <ul class="menu">
                         <li>
+                            <router-link to="/account/profile"
+                                >Personal account</router-link
+                            >
+                        </li>
+                        <li>
+                            <router-link to="/account/following"
+                                >Following</router-link
+                            >
+                        </li>
+                        <li>
+                            <router-link to="/account/collection"
+                                >Collection</router-link
+                            >
+                        </li>
+                        <li>
                             <router-link to="/account/purchase"
                                 >Purchase Order</router-link
                             >
@@ -52,19 +67,14 @@
                                 >Sold Order</router-link
                             >
                         </li>
-                        <li>
-                            <router-link to="/account"
-                                >Receiving Address</router-link
-                            >
-                        </li>
                     </ul>
                     <ul
                         class="menu"
                         style="padding-top: 25px; margin-bottom: 70px"
                     >
                         <li>
-                            <router-link to="/account/profile"
-                                >Account Setting</router-link
+                            <router-link to="/account"
+                                >Receiving Address</router-link
                             >
                         </li>
                         <li>
