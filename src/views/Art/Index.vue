@@ -65,6 +65,47 @@
                     <div class="signature" style="min-height: 28px">
                         Number of signatures : {{ signatureList.length }}
                     </div>
+                    <div class="function">
+                        <div class="action-item">
+                            <img
+                                src="@/assets/images/zan@2x.png"
+                                v-if="!art.liked_by_me"
+                                @click="artLike(true)"
+                            />
+                            <img
+                                src="@/assets/images/zan1@2x.png"
+                                @click="artLike(false)"
+                                v-else
+                            />
+                            <span class="action-text">like</span>
+                        </div>
+                        <div class="action-item">
+                            <img
+                                @click="artDislike(true)"
+                                src="@/assets/images/cai@2x.png"
+                                v-if="!art.disliked_by_me"
+                            />
+                            <img
+                                @click="artDislike(false)"
+                                src="@/assets/images/cai1@2x.png"
+                                v-else
+                            />
+                            <span class="action-text">dislike</span>
+                        </div>
+                        <div class="action-item">
+                            <img
+                                @click="artFavorite(true)"
+                                src="@/assets/images/shoucang@2x.png"
+                                v-if="!art.favorite_by_me"
+                            />
+                            <img
+                                @click="artFavorite(false)"
+                                src="@/assets/images/shoucang1@2x.png"
+                                v-else
+                            />
+                            <span class="action-text">collect</span>
+                        </div>
+                    </div>
                     <div class="button-group">
                         <button
                             :disabled="isOffline || isAuction"
@@ -882,6 +923,107 @@ export default {
                 },
             });
         },
+        artLike(flag) {
+            if (flag) {
+                this.$http
+                    .userPostArtLike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.liked_by_me = true;
+                        this.art.disliked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            } else {
+                this.$http
+                    .userPostArtCancelLike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.liked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            }
+        },
+        artDislike(flag) {
+            if (flag) {
+                this.$http
+                    .userPostArtDislike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.disliked_by_me = true;
+                        this.art.liked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            } else {
+                this.$http
+                    .userPostArtCancelDislike(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.disliked_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            }
+        },
+        artFavorite(flag) {
+            if (flag) {
+                this.$http
+                    .userPostArtFavorite(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.favorite_by_me = true;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            } else {
+                this.$http
+                    .userPostArtCancelFavorite(
+                        {
+                            id: this.art.id,
+                        },
+                        { id: this.art.id }
+                    )
+                    .then(() => {
+                        this.art.favorite_by_me = false;
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        this.$notify.error(err.head ? err.head.msg : err);
+                    });
+            }
+        },
     },
 };
 </script>
@@ -893,11 +1035,13 @@ export default {
 
 .art-info {
     overflow: hidden;
+    width: 100%;
+
     .img-container {
         float: left;
-        width: 550px;
-        height: 550px;
-        margin-right: 50px;
+        width: 620px;
+        height: 580px;
+        margin-right: 25px;
         overflow: hidden;
         position: relative;
         img {
@@ -911,8 +1055,8 @@ export default {
 }
 .info {
     float: left;
-    width: 550px;
-    margin-left: 50px;
+    width: calc(100% - 620px - 50px);
+    margin-left: 25px;
     text-align: left;
     margin-bottom: 151px;
     .title {
@@ -995,11 +1139,31 @@ export default {
         font-weight: 400;
         text-align: left;
         letter-spacing: 0px;
-        margin-bottom: 86px;
+        margin-bottom: 51px;
+    }
+
+    .function {
+        display: flex;
+        align-items: center;
+        margin-bottom: 35px;
+        .action-item {
+            margin-right: 35px;
+            display: flex;
+            align-items: center;
+            > img {
+                width: 20px;
+                margin-right: 10px;
+                cursor: pointer;
+            }
+            .action-text {
+                font-size: 20px;
+            }
+        }
     }
 
     .button-group {
-        display: block;
+        display: flex;
+        justify-content: space-between;
 
         .buy,
         .auction {
