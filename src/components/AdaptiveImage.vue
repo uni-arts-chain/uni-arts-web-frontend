@@ -155,7 +155,7 @@ export default {
         font-size: 28px;
         position: absolute;
         top: 3px;
-        left: 7px;
+        right: 7px;
         color: white;
     }
 }

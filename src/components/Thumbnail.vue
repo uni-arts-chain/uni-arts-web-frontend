@@ -109,12 +109,12 @@ export default {
         line-height: 35px;
         position: absolute;
         top: 15px;
-        right: 0;
+        left: 0;
         padding: 0px 16px;
         background-color: #f9b43b;
         font-size: 16px;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
         font-weight: 600;
         text-align: center;
         color: #ffffff;
