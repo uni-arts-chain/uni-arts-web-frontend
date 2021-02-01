@@ -298,6 +298,14 @@ const apiList = [
         mockPath: "/members/{:id}/unfollow",
         options: {},
     },
+    {
+        name: "getArtSimilar",
+        method: "GET",
+        desc: "关联作品",
+        path: "/members/recommend_arts",
+        mockPath: "/members/recommend_arts",
+        options: {},
+    },
 ];
 
 export default apiList;

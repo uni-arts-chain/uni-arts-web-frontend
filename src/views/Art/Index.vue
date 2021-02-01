@@ -489,6 +489,7 @@
                     </div>
                 </div>
             </div>
+            <Similar />
         </div>
         <Dialog
             :visible.sync="isDialogPreview"
@@ -589,6 +590,7 @@ import { hexToString } from "@polkadot/util";
 import { ComputeBlockTimestamp } from "@/utils";
 import Auction from "./Auction";
 import Chart from "./Chart";
+import Similar from "./Similar";
 
 export default {
     name: "art",
@@ -600,6 +602,7 @@ export default {
         Chart,
         RowText,
         Auction,
+        Similar,
     },
     data() {
         return {
@@ -626,6 +629,10 @@ export default {
         };
     },
     watch: {
+        "$route.params.id"(value) {
+            this.currentArtId = value;
+            this.requestData();
+        },
         isSending(value) {
             if (!value) this.subInfo();
         },
@@ -1459,7 +1466,7 @@ export default {
 
 .details {
     .comment-content {
-        min-height: 300px;
+        min-height: 100px;
     }
     .img-content {
         width: 456px;
