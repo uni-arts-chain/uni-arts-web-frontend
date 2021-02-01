@@ -186,8 +186,7 @@ const apiList = [
         mockPath: "/members/{:id}",
         params: {},
         options: {
-            unSignature: true,
-            id: "",
+            unSignature: false,
         },
     },
 ];
