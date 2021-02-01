@@ -122,7 +122,7 @@ export default {
         requestArtistData() {
             this.isInfoLoading = true;
             this.$http
-                .globalGetArtistInfo({}, { id: this.authorId })
+                .globalGetMemberInfo({}, { id: this.authorId })
                 .then((res) => {
                     this.isInfoLoading = false;
                     this.author = res;

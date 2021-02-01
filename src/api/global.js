@@ -178,6 +178,18 @@ const apiList = [
             id: "",
         },
     },
+    {
+        name: "getMemberInfo",
+        method: "GET",
+        desc: "获取艺术家信息",
+        path: "/members/{:id}",
+        mockPath: "/members/{:id}",
+        params: {},
+        options: {
+            unSignature: true,
+            id: "",
+        },
+    },
 ];
 
 export default apiList;

@@ -2,10 +2,26 @@
 <template>
     <div class="notification">
         <div class="logo">
-            <icon-svg icon-class="success" v-if="noticeType == 'success'" />
-            <icon-svg icon-class="loading" v-if="noticeType == 'loading'" />
-            <icon-svg icon-class="error" v-if="noticeType == 'error'" />
-            <icon-svg icon-class="info" v-if="noticeType == 'info'" />
+            <icon-svg
+                icon-class="success"
+                class="success"
+                v-if="noticeType == 'success'"
+            />
+            <icon-svg
+                icon-class="loading"
+                class="loading"
+                v-if="noticeType == 'loading'"
+            />
+            <icon-svg
+                icon-class="error"
+                class="error"
+                v-if="noticeType == 'error'"
+            />
+            <icon-svg
+                icon-class="info"
+                class="info"
+                v-if="noticeType == 'info'"
+            />
         </div>
         <div class="body">
             <h1 v-if="noticeTitle">{{ noticeTitle }}</h1>
@@ -46,6 +62,12 @@ export default {
         color: black;
         font-size: 23px;
         margin-right: 20px;
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
     }
     .body {
         > h1 {
