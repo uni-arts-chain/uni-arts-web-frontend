@@ -2,7 +2,7 @@
 <template>
     <div class="detail">
         <div class="container">
-            <div class="author">
+            <div class="author" v-loading="isInfoLoading">
                 <div class="avatar-container">
                     <div class="avatar">
                         <AdaptiveImage
@@ -22,9 +22,25 @@
                     </h2>
                     <RowText
                         class="desc"
-                        :textLength="100"
+                        :textLength="60"
                         :text="author.desc"
                     />
+                    <button
+                        v-loading="isFollowing"
+                        class="follow-button"
+                        @click="follow"
+                        v-if="!author.follow_by_me"
+                    >
+                        Follow
+                    </button>
+                    <button
+                        v-loading="isFollowing"
+                        class="follow-button"
+                        @click="unfollow"
+                        v-else
+                    >
+                        Unfollow
+                    </button>
                 </div>
             </div>
             <div class="content">
@@ -71,12 +87,15 @@ export default {
             authorId: this.$route.params.id,
             list: [],
             isLoading: false,
+            isInfoLoading: false,
+            isFollowing: false,
             author: {},
             avatar,
         };
     },
     created() {
         this.requestData();
+        this.requestArtistData();
     },
     computed: {
         hasPrev() {
@@ -94,10 +113,56 @@ export default {
                 .then((res) => {
                     this.isLoading = false;
                     this.list = res.total_count ? res.list : res;
-                    this.author = this.list[0] ? this.list[0].author : {};
                 })
                 .catch((err) => {
                     this.isLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
+        requestArtistData() {
+            this.isInfoLoading = true;
+            this.$http
+                .globalGetArtistInfo({}, { id: this.authorId })
+                .then((res) => {
+                    this.isInfoLoading = false;
+                    this.author = res;
+                })
+                .catch((err) => {
+                    this.isInfoLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
+        follow() {
+            if (this.isFollowing) return;
+            this.isFollowing = true;
+            this.$http
+                .userPostArtistFollow(
+                    { id: this.authorId },
+                    { id: this.authorId }
+                )
+                .then(() => {
+                    this.isFollowing = false;
+                    this.author.follow_by_me = true;
+                })
+                .catch((err) => {
+                    this.isFollowing = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
+        unfollow() {
+            if (this.isFollowing) return;
+            this.isFollowing = true;
+            this.$http
+                .userPostArtistUnfollow(
+                    { id: this.authorId },
+                    { id: this.authorId }
+                )
+                .then(() => {
+                    this.isFollowing = false;
+                    this.author.follow_by_me = false;
+                })
+                .catch((err) => {
+                    this.isFollowing = false;
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
@@ -173,6 +238,27 @@ export default {
             max-width: 400px;
             color: #ffffff;
             letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+        .follow-button {
+            font-size: 20px;
+            font-weight: 500;
+            text-align: center;
+            color: #ffffff;
+            border: 1px solid #fff;
+            background-color: transparent;
+            min-width: 212px;
+            min-height: 49px;
+            cursor: pointer;
+        }
+        .follow-button ::v-deep .el-loading-mask {
+            background-color: rgba(2, 2, 2, 0.6);
+        }
+        .follow-button ::v-deep .el-loading-spinner {
+            margin-top: -23px;
+            .circular .path {
+                stroke: white;
+            }
         }
     }
 }

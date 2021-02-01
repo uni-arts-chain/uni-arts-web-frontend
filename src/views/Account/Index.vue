@@ -14,7 +14,7 @@
                         />
                     </div>
                     <div class="profile-info">
-                        <span class="name">{{ user.address }}</span>
+                        <span class="name">{{ user.display_name }}</span>
 
                         <el-tooltip
                             popper-class="balance"
@@ -47,7 +47,7 @@
                                 >Personal account</router-link
                             >
                         </li>
-                        <!-- <li>
+                        <li>
                             <router-link to="/account/following"
                                 >Following</router-link
                             >
@@ -56,7 +56,7 @@
                             <router-link to="/account/followers"
                                 >Followers</router-link
                             >
-                        </li> -->
+                        </li>
                         <li>
                             <router-link to="/account/collection"
                                 >Collection</router-link
