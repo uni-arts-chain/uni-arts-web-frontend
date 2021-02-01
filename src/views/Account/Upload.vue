@@ -229,6 +229,17 @@ export default {
         Upload,
     },
     data() {
+        let fileValidator = (rule, value, callback) => {
+            if (
+                !value &&
+                !this.form.img_detail_file2[0] &&
+                !this.form.img_detail_file3[0]
+            ) {
+                return callback(new Error("至少上传一张主图"));
+            } else {
+                callback();
+            }
+        };
         return {
             form: {
                 name: "",
@@ -311,7 +322,7 @@ export default {
                 img_main_file1: [
                     {
                         required: true,
-                        message: "请至少上传一张主图",
+                        validator: fileValidator,
                         trigger: "change",
                     },
                 ],
@@ -375,7 +386,29 @@ export default {
                         img_detail_file4_desc: this.form.img_detail_file4_desc,
                         img_detail_file5_desc: this.form.img_detail_file5_desc,
                     };
-                    console.log(obj);
+                    if (!this.form.img_main_file1[0]) {
+                        if (this.form.img_main_file2[0]) {
+                            obj.img_main_file1 = this.form.img_main_file2;
+                            obj.img_main_file2 = this.form.img_main_file3[0]
+                                ? this.form.img_main_file3
+                                : "";
+                            obj.img_main_file3 = "";
+                        } else if (this.form.img_main_file3[0]) {
+                            obj.img_main_file1 = this.form.img_main_file3;
+                            obj.img_main_file2 = "";
+                            obj.img_main_file3 = "";
+                        }
+                    } else {
+                        (obj.img_main_file1 = this.form.img_main_file1[0]
+                            ? this.form.img_main_file1
+                            : ""),
+                            (obj.img_main_file2 = this.form.img_main_file2[0]
+                                ? this.form.img_main_file2
+                                : ""),
+                            (obj.img_main_file3 = this.form.img_main_file3[0]
+                                ? this.form.img_main_file3
+                                : "");
+                    }
                     this.$http
                         .userPostArt(obj)
                         .then(() => {
