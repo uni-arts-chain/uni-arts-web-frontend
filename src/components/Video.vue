@@ -84,8 +84,12 @@ export default {
                 let height = obj ? obj.height : "230px";
                 let boxWidth = this.width;
                 let boxHeight = this.height;
-                boxWidth = this.$refs.videoContainer.offsetWidth;
-                boxHeight = this.$refs.videoContainer.offsetHeight;
+                boxWidth = this.$refs.videoContainer
+                    ? this.$refs.videoContainer.offsetWidth
+                    : 0;
+                boxHeight = this.$refs.videoContainer
+                    ? this.$refs.videoContainer.offsetHeight
+                    : 0;
                 if (width < height) {
                     this.isResponsiveHorizontal =
                         height < boxHeight ? false : true;
