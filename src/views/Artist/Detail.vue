@@ -29,7 +29,7 @@
                         v-loading="isFollowing"
                         class="follow-button"
                         @click="follow"
-                        v-if="!author.follow_by_me"
+                        v-if="!author.follow_by_me && !isSelf"
                     >
                         Follow
                     </button>
@@ -37,7 +37,7 @@
                         v-loading="isFollowing"
                         class="follow-button"
                         @click="unfollow"
-                        v-else
+                        v-else-if="author.follow_by_me && !isSelf"
                     >
                         Unfollow
                     </button>
@@ -103,6 +103,9 @@ export default {
         },
         hasNext() {
             return this.page < this.total_pages;
+        },
+        isSelf() {
+            return this.$store.state.user.info.address == this.author.address;
         },
     },
     methods: {
