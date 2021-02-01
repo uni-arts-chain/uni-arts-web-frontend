@@ -80,6 +80,11 @@ export default {
                 v();
             });
             state.subQueue = [];
+            state.auctionInfo = {};
+            state.auctionList = [];
+            state.saleInfo = {};
+            state.transactionList = [];
+            state.signatureList = [];
         },
     },
     getters: {

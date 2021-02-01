@@ -489,7 +489,7 @@
                     </div>
                 </div>
             </div>
-            <Similar />
+            <Similar v-loading="isSmilarLoading" :list="similarList" />
         </div>
         <Dialog
             :visible.sync="isDialogPreview"
@@ -612,12 +612,14 @@ export default {
             dialogPreviewUrl: "",
             isSubmiting: false,
             dialogAuctionVisible: false,
+            isSmilarLoading: false,
             member: {},
             author: {},
             countdown: "",
             currentArtId: this.$route.params.id,
             copyStatus: false,
             timeWorkId: "",
+            similarList: [],
             form: {
                 price: "",
             },
@@ -744,6 +746,7 @@ export default {
         requestData(isSub = true) {
             this.isLoading = true;
             if (isSub) {
+                this.$store.dispatch("art/ResetSubQueue");
                 this.$store.dispatch("art/SetArtInfo", {
                     img_detail_file1: {},
                     img_detail_file2: {},
@@ -766,12 +769,27 @@ export default {
                     if (res.item_id) {
                         isSub ? await this.subInfo() : "";
                     }
+                    this.requestSimilarData();
                     this.isLoading = false;
                 })
                 .catch((err) => {
                     console.log(err);
                     this.$notify.error(err.head ? err.head.msg : err);
                     this.isLoading = false;
+                });
+        },
+        requestSimilarData() {
+            this.isSmilarLoading = true;
+            this.$http
+                .userGetArtSimilar({})
+                .then((res) => {
+                    this.isSmilarLoading = false;
+                    this.similarList = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isSmilarLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         async subInfo() {

@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2021-02-01 14:02:47. */
 <template>
-    <div class="similar" v-loading="isLoading">
+    <div class="similar">
         <div class="title">Recommend Arts</div>
         <div class="content">
             <Thumbnail :list="list"></Thumbnail>
@@ -15,28 +15,12 @@ export default {
         Thumbnail,
     },
     data() {
-        return {
-            isLoading: false,
-            list: [],
-        };
+        return {};
     },
-    created() {
-        this.requestData();
-    },
-    methods: {
-        requestData() {
-            this.isLoading = true;
-            this.$http
-                .userGetArtSimilar({})
-                .then((res) => {
-                    this.isLoading = false;
-                    this.list = res;
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.isLoading = false;
-                    this.$notify.error(err.head ? err.head.msg : err);
-                });
+    props: {
+        list: {
+            type: Array,
+            default: () => [],
         },
     },
 };
@@ -51,8 +35,6 @@ export default {
         text-align: left;
         letter-spacing: 0px;
         margin-bottom: 110px;
-    }
-    .content {
     }
 }
 </style>
