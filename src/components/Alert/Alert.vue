@@ -9,9 +9,7 @@
         <div v-else-if="noteType === 'NeedPlugin'" class="need-plugin">
             <div>
                 Please authorize the application or install
-                <a target="_blank" :href="pluginUrl()"
-                    >polkadot{.js} extension</a
-                >
+                <a target="_blank" :href="pluginUrl()">browser extension</a>
             </div>
         </div>
         <div v-else class="alert-content" v-html="message"></div>

@@ -5,10 +5,30 @@
             <h2 class="title">Connect a account to get started</h2>
             <div class="wallet-list">
                 <div class="polkadot">
-                    <div class="wallet-chain">Uniarts</div>
-                    <button class="wallet-button" @click="showList">
+                    <div class="wallet-chain">
                         <icon-svg icon-class="polkadot"></icon-svg>
-                        <span class="wallet-name">Polkadot Extension</span>
+                        <span class="text">polkadot{.js}</span>
+                    </div>
+                    <button
+                        class="wallet-button"
+                        @click="showList('polkadot-js')"
+                    >
+                        <span class="wallet-name">Browser Extension</span>
+                    </button>
+                </div>
+                <div class="math">
+                    <div class="wallet-chain">
+                        <img
+                            class="wallet-logo"
+                            src="@/assets/images/math.jpg"
+                        />
+                        <span class="text">Math Wallet</span>
+                    </div>
+                    <button
+                        class="wallet-button"
+                        @click="showList('mathwallet')"
+                    >
+                        <span class="wallet-name">Browser Extension</span>
                     </button>
                 </div>
             </div>
@@ -90,11 +110,19 @@ export default {
         return {
             isShow: false,
             needReset: false,
-            list: [],
+            accountList: [],
+            currentWallet: "polkadot-js",
         };
     },
     created() {
-        this.getAccounts();
+        // this.getAccounts();
+    },
+    computed: {
+        list() {
+            return this.accountList.filter((v) => {
+                return v.meta.source == this.currentWallet;
+            });
+        },
     },
     beforeRouteEnter(to, from, next) {
         if (store.state.user.info.token) {
@@ -106,15 +134,17 @@ export default {
         }
     },
     methods: {
-        async showList() {
+        async showList(text) {
             if (!this.$extension.isConnect) {
                 this.needReset = true;
             }
+            this.currentWallet = text;
             this.isShow = true;
+            this.getAccounts();
         },
         getAccounts() {
             this.$extension.accounts().then((res) => {
-                this.list = res.length ? res : [];
+                this.accountList = res.length ? res : [];
             });
         },
         selectAccount(account) {
@@ -124,6 +154,7 @@ export default {
         async register(account) {
             let message = "login";
             let signature = await this.$extension.sign(account, message);
+            console.log(signature);
             this.$http
                 .userLogin({
                     message: message,
@@ -156,19 +187,26 @@ export default {
 }
 
 .wallet-list {
+    width: 100%;
     display: flex;
     justify-content: center;
+    margin-top: 70px;
 }
 
-.polkadot {
+.polkadot,
+.math {
     padding: 0 12px;
+    margin-left: 50px;
+    margin-right: 50px;
     /* max-width: 268px; */
     .wallet-chain {
-        font-family: "Broadway";
-        font-size: 34px;
+        font-size: 26px;
         font-weight: 400;
         margin-bottom: 20px;
         line-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .wallet-button {
         border: 2px solid #020202;
@@ -178,18 +216,27 @@ export default {
         text-align: center;
         letter-spacing: 0px;
         background-color: transparent;
-        min-width: 150px;
+        min-width: 230px;
+        min-height: 54px;
+        margin-bottom: 35px;
         cursor: pointer;
         display: flex;
         align-items: center;
         padding: 10px 20px;
     }
+    .wallet-logo {
+        width: 35px;
+        height: 35px;
+        margin-right: 15px;
+    }
     .svg-icon {
-        font-size: 22px;
+        font-size: 35px;
         margin-right: 15px;
     }
     .wallet-name {
         font-size: 18px;
+        width: 100%;
+        text-align: center;
     }
 }
 

@@ -57,23 +57,46 @@ class Extension {
     }
     async sign(account, message) {
         const injector = await this.web3FromSource(account.meta.source);
-        const signRaw = injector
-            ? injector.signer
-                ? injector.signer.signRaw
-                : ""
-            : "";
-        // eslint-disable-next-line no-extra-boolean-cast
-        if (!!signRaw) {
-            console.log("address: ", account.address);
-            console.log("data: ", message, stringToHex(message));
-            console.log("type: ", "bytes");
-            const { signature } = await signRaw({
-                address: account.address,
-                data: stringToHex(message),
-                type: "bytes",
-            });
-            return signature;
+        console.log(injector);
+        if (injector && injector.signer) {
+            if (injector.name === "polkadot-js") {
+                const signRaw = injector.signer.signRaw;
+                if (signRaw) {
+                    console.log("address: ", account.address);
+                    console.log("data: ", message, stringToHex(message));
+                    console.log("type: ", "bytes");
+                    let obj = await signRaw({
+                        address: account.address,
+                        data: stringToHex(message),
+                        type: "bytes",
+                    });
+
+                    return obj.signature;
+                }
+            } else if (injector.name === "mathwallet") {
+                const signMessageByMath = injector.signer.signMessageByMath;
+                if (signMessageByMath) {
+                    console.log("address: ", account.address);
+                    console.log("data: ", message, stringToHex(message));
+                    let signRes = await signMessageByMath(
+                        account.address,
+                        stringToHex(message),
+                        "Sign message by Math",
+                        false
+                    );
+                    let result = {};
+                    if (signRes && signRes.length > 0) {
+                        signRes.map((v) => {
+                            if (v.chain == "polkadot") {
+                                result.signature = v.signature;
+                            }
+                        });
+                    }
+                    return result.signature;
+                }
+            }
         }
+        // eslint-disable-next-line no-extra-boolean-cast
     }
 }
 
