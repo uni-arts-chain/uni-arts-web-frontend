@@ -747,6 +747,7 @@ export default {
             this.isLoading = true;
             if (isSub) {
                 this.$store.dispatch("art/ResetSubQueue");
+                this.$store.dispatch("art/ResetInfo");
                 this.$store.dispatch("art/SetArtInfo", {
                     img_detail_file1: {},
                     img_detail_file2: {},

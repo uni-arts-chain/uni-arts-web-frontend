@@ -79,6 +79,8 @@ export default {
             state.subQueue.forEach((v) => {
                 v();
             });
+        },
+        RESET_INFO: (state) => {
             state.subQueue = [];
             state.auctionInfo = {};
             state.auctionList = [];
@@ -183,6 +185,9 @@ export default {
         //         return result;
         //     }
         // },
+        ResetInfo({ commit }) {
+            commit("RESET_INFO");
+        },
         async SetArtInfo({ commit }, info) {
             commit("SET_ART_INFO", info);
         },
