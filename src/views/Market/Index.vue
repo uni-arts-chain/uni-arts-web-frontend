@@ -21,6 +21,13 @@
                     </div>
                     <div
                         class="name-item"
+                        @click="active_cate = 'categories'"
+                        :class="{ active: active_cate == 'categories' }"
+                    >
+                        Category
+                    </div>
+                    <div
+                        class="name-item"
                         @click="active_cate = 'price'"
                         :class="{ active: active_cate == 'price' }"
                     >
@@ -106,6 +113,8 @@ export default {
                 return this.priceInterval;
             } else if (this.active_cate == "materials") {
                 return this.$store.state.art.materials;
+            } else if (this.active_cate == "categories") {
+                return this.$store.state.art.categories;
             } else {
                 return this.$store.state.art.themes;
             }
@@ -216,6 +225,9 @@ export default {
                 case "themes":
                     this.theme_id = item.id;
                     break;
+                case "categories":
+                    this.category_id = item.id;
+                    break;
                 case "price":
                     this.price_gte = item.gte || "";
                     this.price_lt = item.lt || "";
@@ -267,6 +279,7 @@ h2.title {
     .catetory {
         display: flex;
         justify-content: flex-start;
+        flex-wrap: wrap;
         align-items: center;
         margin-bottom: 71px;
     }
@@ -274,6 +287,7 @@ h2.title {
         border: 2px solid #606060;
         padding: 7px 15px;
         margin-right: 50px;
+        margin-bottom: 20px;
         font-size: 18px;
         font-weight: 400;
         text-align: center;
