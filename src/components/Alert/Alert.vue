@@ -30,12 +30,15 @@ export default {
             noteType: "",
         };
     },
-    created() {},
+    created() {
+        console.log(Detect.browser.name);
+    },
     methods: {
         pluginUrl() {
             let url = "";
             switch (Detect.browser.name) {
                 case "Chrome":
+                case "Edge":
                     url =
                         "https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd";
                     break;

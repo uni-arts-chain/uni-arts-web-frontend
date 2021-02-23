@@ -57,6 +57,7 @@ class Rpc {
     initDetect() {
         if (
             Detect.browser.name !== "Chrome" &&
+            Detect.browser.name !== "Edge" &&
             Detect.browser.name !== "Firefox"
         ) {
             Alert.show("NeedBrowser");
