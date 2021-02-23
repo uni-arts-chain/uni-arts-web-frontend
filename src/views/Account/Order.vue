@@ -37,7 +37,7 @@
                     getArtAasmState(v) == 'prepare' ? '' : `/art/${getArtId(v)}`
                 "
                 class="action"
-                :class="{ disabled: getArtAasmState(v) == 'prepare' }"
+                :class="{ disabled: getArtAasmState(v) != 'online' }"
                 v-if="type == 'all'"
             >
                 Auction Now
