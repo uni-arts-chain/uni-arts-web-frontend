@@ -3,7 +3,10 @@
     <div class="art">
         <div class="container">
             <div class="art-info" v-loading="isLoading">
-                <div class="img-container">
+                <div
+                    class="img-container"
+                    @click="enterPreview(art.img_main_file1)"
+                >
                     <AdaptiveImage
                         :isResponsive="false"
                         :isPlay="true"
@@ -1145,6 +1148,7 @@ export default {
         height: 580px;
         margin-right: 25px;
         overflow: hidden;
+        cursor: pointer;
         position: relative;
 
         .auction-label {
