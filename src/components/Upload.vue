@@ -31,8 +31,14 @@ export default {
     },
     watch: {
         fileDataList(value) {
-            this.$emit("change", value);
-            this.dispatch("ElFormItem", "el.form.change", this.fileDataList);
+            if (value.length > 0) {
+                this.$emit("change", value);
+                this.dispatch(
+                    "ElFormItem",
+                    "el.form.change",
+                    this.fileDataList
+                );
+            }
         },
         value(value) {
             this.fileDataList = value ? value : [];
