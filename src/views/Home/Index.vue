@@ -16,7 +16,7 @@
                         the transaction will be saved
                     </p>
                 </div>
-                <router-link class="guide-item certificate" to="/certificate">
+                <div class="guide-item certificate">
                     <div class="icon-bg"></div>
                     <h4>APPLY FOR certificates</h4>
                     <p>
@@ -24,7 +24,7 @@
                         before they can be traded.Works that already have
                         certificates can also apply for enterprise endorsement.
                     </p>
-                </router-link>
+                </div>
                 <div class="guide-item">
                     <div class="icon-bg"></div>
                     <h4>certificate querying</h4>
@@ -251,13 +251,6 @@ export default {
                 text-align: left;
                 line-height: 30px;
                 letter-spacing: 0px;
-            }
-        }
-        .guide-item.certificate:hover {
-            cursor: pointer;
-            > h4,
-            > p {
-                text-decoration: underline;
             }
         }
         .guide-item:nth-child(1) .icon-bg {

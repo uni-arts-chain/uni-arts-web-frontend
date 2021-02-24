@@ -23,6 +23,13 @@
                         >Artist</router-link
                     >
                 </li>
+                <li>
+                    <router-link
+                        to="/certificate"
+                        :class="{ active: activeTab == 'Certificate' }"
+                        >Authority</router-link
+                    >
+                </li>
                 <li v-if="user.token" class="li-info">
                     <router-link
                         to="/account"
@@ -54,6 +61,9 @@ export default {
                     break;
                 case "Market":
                     routeName = "Market";
+                    break;
+                case "Certificate":
+                    routeName = "Certificate";
                     break;
                 case "ArtDetail":
                     routeName = "Art";
