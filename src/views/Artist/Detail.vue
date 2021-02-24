@@ -25,22 +25,28 @@
                         :textLength="60"
                         :text="author.desc"
                     />
-                    <button
-                        v-loading="isFollowing"
-                        class="follow-button"
-                        @click="follow"
-                        v-if="!author.follow_by_me && !isSelf"
-                    >
-                        Follow
-                    </button>
-                    <button
-                        v-loading="isFollowing"
-                        class="follow-button"
-                        @click="unfollow"
-                        v-else-if="author.follow_by_me && !isSelf"
-                    >
-                        Unfollow
-                    </button>
+                    <div class="button-group">
+                        <button
+                            v-loading="isFollowing"
+                            class="follow-button"
+                            @click="follow"
+                            v-if="!author.follow_by_me && !isSelf"
+                        >
+                            Follow
+                        </button>
+                        <button
+                            v-loading="isFollowing"
+                            class="follow-button"
+                            @click="unfollow"
+                            v-else-if="author.follow_by_me && !isSelf"
+                        >
+                            Unfollow
+                        </button>
+                        <div class="share" @click="share">
+                            <img src="@/assets/images/share_white@2x.png" />
+                            <span class="share">Share</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="content">
@@ -65,12 +71,24 @@
                 </div>
             </div>
         </div>
+        <Dialog :visible.sync="dialogShareVisible" type="medium">
+            <div class="dialog-content">
+                <ShareDialog
+                    :url="shareUrl"
+                    :author="shareAuthor"
+                    :content="shareContent"
+                    type="artist"
+                />
+            </div>
+        </Dialog>
     </div>
 </template>
 
 <script>
 import Thumbnail from "@/components/Thumbnail";
 import AdaptiveImage from "@/components/AdaptiveImage";
+import Dialog from "@/components/Dialog/Dialog";
+import ShareDialog from "@/components/ShareDialog";
 import RowText from "@/components/RowText";
 import avatar from "@/assets/images/yin@2x.png";
 export default {
@@ -79,6 +97,8 @@ export default {
         Thumbnail,
         AdaptiveImage,
         RowText,
+        Dialog,
+        ShareDialog,
     },
     data() {
         return {
@@ -90,6 +110,11 @@ export default {
             isInfoLoading: false,
             isFollowing: false,
             author: {},
+
+            dialogShareVisible: false,
+            shareUrl: "",
+            shareAuthor: "",
+            shareContent: "",
             avatar,
         };
     },
@@ -115,7 +140,7 @@ export default {
                 .globalGetAuthorArts({}, { id: this.authorId })
                 .then((res) => {
                     this.isLoading = false;
-                    this.list = res.total_count ? res.list : res;
+                    this.list = res.total_count >= 0 ? res.list : res;
                 })
                 .catch((err) => {
                     this.isLoading = false;
@@ -134,6 +159,20 @@ export default {
                     this.isInfoLoading = false;
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
+        },
+        share() {
+            this.dialogShareVisible = true;
+            this.shareUrl =
+                location.protocol +
+                "//" +
+                location.hostname +
+                (location.port ? `:${location.port}` : "") +
+                "/artist-detail/" +
+                this.authorId;
+            this.shareAuthor = this.author.display_name;
+
+            this.shareContent = `Uniarts chain - Art encryption Tour \n\nAuthor：${this.shareAuthor} \n\nView the homepage：${this.shareUrl}
+            `;
         },
         follow() {
             if (this.isFollowing) return;
@@ -219,7 +258,7 @@ export default {
         color: white;
         text-align: left;
         left: 550px;
-        top: 150px;
+        top: 120px;
         > h2 {
             font-size: 40px;
             font-family: "Broadway";
@@ -243,14 +282,20 @@ export default {
             letter-spacing: 1px;
             margin-bottom: 40px;
         }
+        .button-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
         .follow-button {
             font-size: 20px;
             font-weight: 500;
+            margin-right: 40px;
             text-align: center;
             color: #ffffff;
             border: 1px solid #fff;
             background-color: transparent;
-            min-width: 212px;
+            min-width: 162px;
             min-height: 49px;
             cursor: pointer;
         }
@@ -261,6 +306,24 @@ export default {
             margin-top: -23px;
             .circular .path {
                 stroke: white;
+            }
+        }
+        .share {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            cursor: pointer;
+            img {
+                width: 20px;
+                height: 20px;
+                margin-right: 15px;
+            }
+            > span {
+                font-size: 20px;
+                margin-left: 0;
+                font-weight: 400;
+                text-align: left;
+                color: #ffffff;
             }
         }
     }

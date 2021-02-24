@@ -97,7 +97,9 @@
                                 @click="artLike(false)"
                                 v-else
                             />
-                            <span class="action-text">like</span>
+                            <span class="action-text">{{
+                                art.liked_count
+                            }}</span>
                         </div>
                         <div class="action-item">
                             <img
@@ -110,7 +112,9 @@
                                 src="@/assets/images/cai1@2x.png"
                                 v-else
                             />
-                            <span class="action-text">dislike</span>
+                            <span class="action-text">{{
+                                art.dislike_count
+                            }}</span>
                         </div>
                         <div class="action-item">
                             <img
@@ -123,7 +127,16 @@
                                 src="@/assets/images/shoucang1@2x.png"
                                 v-else
                             />
-                            <span class="action-text">collect</span>
+                            <span class="action-text">{{
+                                art.favorite_count
+                            }}</span>
+                        </div>
+                        <div class="action-item">
+                            <img
+                                @click="shareLink"
+                                src="@/assets/images/share@2x.png"
+                            />
+                            <span class="action-text">分享</span>
                         </div>
                     </div>
                     <div class="button-group">
@@ -579,6 +592,16 @@
                 </button>
             </div>
         </Dialog>
+        <Dialog :visible.sync="dialogShareVisible" type="medium">
+            <div class="dialog-content">
+                <ShareDialog
+                    :url="shareUrl"
+                    :art="shareArt"
+                    :content="shareContent"
+                    type="art"
+                />
+            </div>
+        </Dialog>
     </div>
 </template>
 <script>
@@ -594,6 +617,7 @@ import { ComputeBlockTimestamp } from "@/utils";
 import Auction from "./Auction";
 import Chart from "./Chart";
 import Similar from "./Similar";
+import ShareDialog from "@/components/ShareDialog";
 
 export default {
     name: "art",
@@ -606,6 +630,7 @@ export default {
         RowText,
         Auction,
         Similar,
+        ShareDialog,
     },
     data() {
         return {
@@ -615,6 +640,7 @@ export default {
             dialogPreviewUrl: "",
             isSubmiting: false,
             dialogAuctionVisible: false,
+            dialogShareVisible: false,
             isSmilarLoading: false,
             member: {},
             author: {},
@@ -631,6 +657,10 @@ export default {
             subAuctionInfo: "",
             subAuctionList: "",
             subSaleOrderList: "",
+
+            shareUrl: "",
+            shareArt: "",
+            shareContent: "",
         };
     },
     watch: {
@@ -802,6 +832,19 @@ export default {
             await this.$store.dispatch("art/GetSignatureList");
             await this.$store.dispatch("art/GetAuctionInfo");
             await this.$store.dispatch("art/GetSaleInfo");
+        },
+        shareLink() {
+            this.dialogShareVisible = true;
+            this.shareUrl =
+                location.protocol +
+                "//" +
+                location.hostname +
+                (location.port ? `:${location.port}` : "") +
+                "/art/" +
+                this.currentArtId;
+            this.shareArt = this.art.name;
+            this.shareContent = `Uniarts chain - Art encryption Tour \n\nArt：${this.art.name} \n\nView the homepage：${this.url}
+            `;
         },
         isVideo(url) {
             return /\.mp4$/.test(url);
@@ -988,7 +1031,11 @@ export default {
                     )
                     .then(() => {
                         this.art.liked_by_me = true;
-                        this.art.disliked_by_me = false;
+                        this.art.liked_count += 1;
+                        if (this.art.disliked_by_me) {
+                            this.art.disliked_by_me = false;
+                            this.art.dislike_count -= 1;
+                        }
                     })
                     .catch((err) => {
                         console.log(err);
@@ -1004,6 +1051,7 @@ export default {
                     )
                     .then(() => {
                         this.art.liked_by_me = false;
+                        this.art.liked_count -= 1;
                     })
                     .catch((err) => {
                         console.log(err);
@@ -1022,7 +1070,11 @@ export default {
                     )
                     .then(() => {
                         this.art.disliked_by_me = true;
-                        this.art.liked_by_me = false;
+                        this.art.dislike_count += 1;
+                        if (this.art.liked_by_me) {
+                            this.art.liked_by_me = false;
+                            this.art.liked_count -= 1;
+                        }
                     })
                     .catch((err) => {
                         console.log(err);
@@ -1038,6 +1090,7 @@ export default {
                     )
                     .then(() => {
                         this.art.disliked_by_me = false;
+                        this.art.dislike_count -= 1;
                     })
                     .catch((err) => {
                         console.log(err);
@@ -1056,6 +1109,7 @@ export default {
                     )
                     .then(() => {
                         this.art.favorite_by_me = true;
+                        this.art.favorite_count += 1;
                     })
                     .catch((err) => {
                         console.log(err);
@@ -1071,6 +1125,7 @@ export default {
                     )
                     .then(() => {
                         this.art.favorite_by_me = false;
+                        this.art.favorite_count -= 1;
                     })
                     .catch((err) => {
                         console.log(err);
@@ -1304,7 +1359,7 @@ export default {
                 cursor: pointer;
             }
             .action-text {
-                font-size: 20px;
+                font-size: 17px;
             }
         }
     }

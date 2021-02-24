@@ -128,7 +128,7 @@ export default {
 .dialog.medium {
     ::v-deep .el-dialog {
         width: 780px;
-        min-height: 586px;
+        min-height: 506px;
     }
 }
 
