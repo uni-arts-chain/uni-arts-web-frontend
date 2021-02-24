@@ -1,5 +1,16 @@
 const apiList = [
     {
+        name: "getBannerList",
+        method: "GET",
+        desc: "获取Banner",
+        path: "/banners",
+        mockPath: "/banners",
+        params: {},
+        options: {
+            unSignature: false,
+        },
+    },
+    {
         name: "getArtById",
         method: "GET",
         desc: "获取指定ID作品",

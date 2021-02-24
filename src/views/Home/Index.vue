@@ -2,26 +2,7 @@
 <template>
     <div class="index">
         <div class="banner-top">
-            <div class="container">
-                <h1 style="padding-left: 19.5%">Link Credit</h1>
-                <h1 style="text-align: right; padding-right: 19.5%">
-                    Assist <span class="tip">Originality</span>
-                </h1>
-                <div class="input-box">
-                    <div class="input">
-                        <input type="text" placeholder="PICASSO" />
-                        <img src="@/assets/images/sousuo@2x.png" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="guide container">
-            <h2 class="title" style="text-transform: none; margin-bottom: 97px">
-                Time limited auction
-            </h2>
-            <div class="guide-body">
-                <Carousel />
-            </div>
+            <Top />
         </div>
         <div class="guide container">
             <h2 class="title">How To use the product?</h2>
@@ -52,6 +33,14 @@
                         the certificate address to fully understand the work
                     </p>
                 </div>
+            </div>
+        </div>
+        <div class="guide container">
+            <h2 class="title" style="text-transform: none; margin-bottom: 97px">
+                Time limited auction
+            </h2>
+            <div class="guide-body">
+                <Carousel />
             </div>
         </div>
         <div class="worklist container">
@@ -88,11 +77,12 @@
 
 <script>
 import Carousel from "./Carousel";
+import Top from "./Top";
 import Thumbnail from "@/components/Thumbnail";
 import ArtistGroupList from "@/components/ArtistGroupList";
 export default {
     name: "index",
-    components: { Carousel, Thumbnail, ArtistGroupList },
+    components: { Carousel, Thumbnail, ArtistGroupList, Top },
     data() {
         return {
             workList: [],
@@ -145,12 +135,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.index {
-}
-
 .banner-top {
     background: white;
-    height: 500px;
+    height: 760px;
+    margin-bottom: 105px;
     .container {
         height: 100%;
         display: flex;
@@ -208,7 +196,6 @@ export default {
 }
 
 .carousel {
-    margin-bottom: 120px;
 }
 
 .guide,
