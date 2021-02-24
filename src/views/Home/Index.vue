@@ -15,7 +15,14 @@
                 </div>
             </div>
         </div>
-        <Carousel />
+        <div class="guide container">
+            <h2 class="title" style="text-transform: none; margin-bottom: 97px">
+                Time limited auction
+            </h2>
+            <div class="guide-body">
+                <Carousel />
+            </div>
+        </div>
         <div class="guide container">
             <h2 class="title">How To use the product?</h2>
             <div class="guide-body">

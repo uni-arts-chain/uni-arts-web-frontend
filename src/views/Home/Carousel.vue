@@ -1,7 +1,7 @@
 /** * Created by Lay Hunt on 2020-11-19 10:42:34. */
 <template>
-    <div class="carousel">
-        <el-carousel arrow="never" height="732px" :autoplay="false">
+    <div class="carousel container">
+        <el-carousel arrow="never" height="500px" :autoplay="false">
             <el-carousel-item v-for="(item, index) in list" :key="index">
                 <router-link :to="`/auction/${item.id}`" class="item-container">
                     <AdaptiveImage
@@ -9,10 +9,41 @@
                         height="100%"
                         :url="item.img_file.url"
                     />
+                    <div class="bg"></div>
                     <div class="info-body">
-                        <div>Time limited auction</div>
-                        <div v-if="item.countdown">
-                            {{ item.countdown }}
+                        <div class="topic">{{ item.topic }}</div>
+                        <div class="time" v-if="status != 'end'">
+                            {{
+                                status == "waiting"
+                                    ? "START AFTER"
+                                    : status == "auctioning"
+                                    ? "END AFTER"
+                                    : ""
+                            }}
+                            <div class="time-parse">
+                                <div class="day">{{ item.countdown.day }}d</div>
+                                :
+                                <div class="hour">
+                                    {{ item.countdown.hour }}
+                                </div>
+                                :
+                                <div class="minute">
+                                    {{ item.countdown.minute }}
+                                </div>
+                                :
+                                <div class="second">
+                                    {{ item.countdown.second }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="date">
+                            <img src="@/assets/images/time@2x.png" />
+                            {{ timeLimit(item.start_at) }}
+                            -
+                            {{ timeLimit(item.end_at) }}
+                        </div>
+                        <div class="enter">
+                            ENTER <img src="@/assets/images/pmjt@2x.png" />
                         </div>
                     </div>
                 </router-link>
@@ -36,6 +67,7 @@ export default {
             list: [],
             total_count: 0,
             timeWorkIdList: [],
+            status: "waiting",
         };
     },
     created() {
@@ -68,12 +100,25 @@ export default {
                 hour = parseInt((jetLag / 3600) % 24),
                 day = parseInt(jetLag / 3600 / 24);
             if (second == 0 && minute == 0 && hour == 0 && day == 0) {
-                return -1;
+                return;
             } else {
-                return `${day}d : ${hour < 10 ? "0" + hour : hour} : ${
-                    minute < 10 ? "0" + minute : minute
-                } : ${second < 10 ? "0" + second : second}`;
+                return {
+                    day: day < 10 ? `0${day}` : day,
+                    hour: hour < 10 ? `0${hour}` : hour,
+                    minute: minute < 10 ? `0${minute}` : minute,
+                    second: second < 10 ? `0${second}` : second,
+                };
             }
+        },
+        timeLimit(inputTime) {
+            if (!inputTime) return "";
+            var date = new Date(inputTime * 1000);
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? "0" + m : m;
+            var d = date.getDate();
+            d = d < 10 ? "0" + d : d;
+            return y + "." + m + "." + d;
         },
         initTimeWork(item) {
             let obj = {
@@ -135,13 +180,24 @@ export default {
         margin-right: 6px;
     }
     ::v-deep .el-carousel__indicators--horizontal {
-        bottom: 105px;
+        bottom: 10px;
     }
 }
 
 .item-container {
     width: 100%;
     height: 100%;
+    display: block;
+    position: relative;
+    .bg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #000;
+        opacity: 0.4;
+    }
 }
 
 .el-carousel__item {
@@ -149,12 +205,10 @@ export default {
     width: 100%;
     .info-body {
         position: absolute;
-        width: 464px;
-        height: 182px;
-        top: 50%;
-        left: 50%;
-        transform: translateY(-50%) translateX(-50%);
-        background: rgba(0, 0, 0, 0.8);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -166,6 +220,89 @@ export default {
             text-align: left;
             color: #ffffff;
             letter-spacing: 2px;
+        }
+
+        .topic {
+            font-size: 24px;
+            font-family: "Broadway";
+            font-weight: 400;
+            text-align: center;
+            color: #ffffff;
+            line-height: 63px;
+            letter-spacing: 1px;
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 15px;
+        }
+
+        .time {
+            color: white;
+            font-size: 22px;
+            font-family: "Broadway";
+            font-weight: 400;
+            line-height: 63px;
+            letter-spacing: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .time-parse {
+            font-family: "Broadway";
+            display: flex;
+            align-items: center;
+            margin-left: 13px;
+            .day,
+            .hour,
+            .minute,
+            .second {
+                width: 54px;
+                height: 37px;
+                font-size: 22px;
+                line-height: 37px;
+                font-family: "Broadway";
+                color: white;
+                border-radius: 13px;
+                padding: 0 5px;
+                text-align: center;
+                margin: 0 10px;
+                background-color: #c61e1e;
+            }
+            .day {
+                width: auto;
+                min-width: 76px;
+                display: inline-block;
+            }
+        }
+        .date {
+            font-size: 18px;
+            font-weight: 400;
+            font-family: "PingFang SC Regular, PingFang SC Regular-Regular";
+            text-align: center;
+            color: #ffffff;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 70px;
+            > img {
+                width: 17px;
+                height: 17px;
+                margin-right: 10px;
+            }
+        }
+        .enter {
+            font-size: 18px;
+            font-family: PingFang SC Semibold, PingFang SC Semibold-Semibold;
+            font-weight: 600;
+            text-align: center;
+            color: #ffffff;
+            letter-spacing: 1px;
+            > img {
+                width: 17px;
+            }
         }
     }
 }
