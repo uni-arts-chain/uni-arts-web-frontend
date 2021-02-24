@@ -30,16 +30,37 @@
                         >Authority</router-link
                     >
                 </li>
-                <li v-if="user.token" class="li-info">
+                <li v-if="user.token" class="user.avatar.url">
                     <router-link
                         to="/account"
                         class="info"
                         :class="{ active: activeTab == 'Account' }"
-                        >{{ user.address }}</router-link
                     >
+                        <img
+                            v-if="user.avatar && user.avatar.url"
+                            :src="user.avatar ? user.avatar.url : ''"
+                            style="
+                                width: 24px;
+                                height: 24px;
+                                border-radius: 50%;
+                            "
+                        />
+                        <img
+                            v-else
+                            src="@/assets/images/yin@2x.png"
+                            style="
+                                width: 24px;
+                                height: 24px;
+                                border: 1px solid black;
+                                border-radius: 50%;
+                            "
+                        />
+                    </router-link>
                 </li>
                 <li class="li-login" v-if="!user.token">
-                    <router-link to="/login" class="login">Login</router-link>
+                    <router-link to="/login" class="login">
+                        <img src="@/assets/images/profile@2x.png" />
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -128,6 +149,11 @@ ul {
         }
         > a {
             color: #4d4d4d;
+            display: block;
+        }
+        > a.info {
+            width: 24px;
+            height: 24px;
         }
     }
     li:last-child {
@@ -137,19 +163,23 @@ ul {
 
 .login,
 .register {
+    display: block;
     color: white;
-    background-color: #c61e1e;
-    border: 1px solid rgba(194, 96, 96, 0.537);
+    /* background-color: #c61e1e; */
+    /* border: 1px solid rgba(194, 96, 96, 0.537); */
+    height: 22px;
     cursor: pointer;
-    padding: 4px 8px;
     font-size: 0.875rem;
     box-shadow: 0 0 10px 0px rgba(194, 96, 96, 0.07);
     border-radius: 15px;
     text-transform: uppercase;
+    img {
+        height: 22px;
+    }
 }
 
 .register {
-    background-color: #c61e1e;
+    /* background-color: #c61e1e; */
     color: white;
 }
 
@@ -160,7 +190,8 @@ ul {
     padding-left: 10px;
 }
 .li-info .info {
-    width: 200px;
+    width: 24px;
+    height: 24px;
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
