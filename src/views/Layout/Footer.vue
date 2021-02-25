@@ -7,7 +7,7 @@
                 <span class="desc">@2019-2020 uniarts.me</span>
             </div>
             <div class="bottom-community">
-                <div class="text">社区</div>
+                <div class="text">Community</div>
                 <div class="icons">
                     <a
                         href="https://t.me/uniarts"
@@ -35,11 +35,11 @@
             </div>
             <div class="bottom-nav">
                 <ul>
-                    <span class="title">FOR ARTISTS</span>
+                    <span class="title">For artists</span>
                     <li><a to="#">Apply as an artist</a></li>
                 </ul>
                 <ul>
-                    <span class="title">LEGAL</span>
+                    <span class="title">Legal</span>
                     <li><a to="#">Terms of Service</a></li>
                     <li><a to="#">Privacy Policy</a></li>
                 </ul>
@@ -94,7 +94,7 @@ footer {
         font-size: 23px;
         text-align: left;
         font-weight: 500;
-        margin-bottom: 15px;
+        margin-bottom: 30px;
     }
     .icons {
         display: flex;
