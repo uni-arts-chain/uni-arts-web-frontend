@@ -6,16 +6,42 @@
                 <span class="logo">Uniarts</span>
                 <span class="desc">@2019-2020 uniarts.me</span>
             </div>
+            <div class="bottom-community">
+                <div class="text">社区</div>
+                <div class="icons">
+                    <a
+                        href="https://t.me/uniarts"
+                        style="margin-left: 0"
+                        target="_blank"
+                    >
+                        <icon-svg icon-class="telegram"></icon-svg>
+                    </a>
+                    <a
+                        href="https://twitter.com/NetworkUniarts"
+                        target="_blank"
+                    >
+                        <icon-svg icon-class="twitter"></icon-svg>
+                    </a>
+                    <a href="https://discord.gg/ynKCwp5c" target="_blank">
+                        <icon-svg icon-class="discord"></icon-svg>
+                    </a>
+                    <a href="https://medium.com/@uniarts.me" target="_blank">
+                        <icon-svg icon-class="medium"></icon-svg>
+                    </a>
+                    <a href="https://github.com/uni-arts-chain" target="_blank">
+                        <icon-svg icon-class="github"></icon-svg>
+                    </a>
+                </div>
+            </div>
             <div class="bottom-nav">
                 <ul>
-                    <span class="title">Abstract</span>
-                    <li><router-link to="/">Questions</router-link></li>
-                    <li><router-link to="/">Contact Us</router-link></li>
+                    <span class="title">FOR ARTISTS</span>
+                    <li><a to="#">Apply as an artist</a></li>
                 </ul>
                 <ul>
-                    <span class="title">Technology</span>
-                    <li><router-link to="/">White Pape</router-link></li>
-                    <li><router-link to="/">Telemetry</router-link></li>
+                    <span class="title">LEGAL</span>
+                    <li><a to="#">Terms of Service</a></li>
+                    <li><a to="#">Privacy Policy</a></li>
                 </ul>
                 <ul>
                     <span class="title">Products</span>
@@ -50,6 +76,7 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-right: 1px solid white;
     .logo {
         font-family: "Broadway";
         font-size: 33px;
@@ -61,18 +88,39 @@ footer {
         line-height: 30px;
     }
 }
+.bottom-community {
+    margin-left: 23px;
+    .text {
+        font-size: 23px;
+        text-align: left;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+    .icons {
+        display: flex;
+        align-items: center;
+        a {
+            display: block;
+            font-size: 50px;
+            margin: 0 7px;
+            line-height: 50px;
+        }
+    }
+}
 .bottom-nav {
     width: 66%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: flex-end;
     ul {
         overflow: hidden;
         width: 33%;
         display: block;
-        text-align: left;
+        text-align: right;
         .title {
             display: inline-block;
             font-size: 18px;
+            text-align: right;
             font-weight: 600;
             line-height: 30px;
             padding-bottom: 23px;
@@ -82,6 +130,7 @@ footer {
         li {
             display: block;
             margin-top: 23px;
+            text-align: right;
             font-size: 14px;
         }
     }
