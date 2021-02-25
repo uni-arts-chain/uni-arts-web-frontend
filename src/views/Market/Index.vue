@@ -3,6 +3,14 @@
     <div class="index">
         <div class="container">
             <h2 class="title">market</h2>
+            <div class="search">
+                <Input
+                    v-model="searchContent"
+                    class="input"
+                    placeholder="Please enter keywords to search works"
+                />
+                <img @click="search" src="@/assets/images/search@2x.png" />
+            </div>
             <div class="filter">
                 <div class="name">
                     <div
@@ -77,10 +85,11 @@
 </template>
 
 <script>
+import Input from "@/components/Input";
 import Thumbnail from "@/components/Thumbnail";
 export default {
     name: "index",
-    components: { Thumbnail },
+    components: { Thumbnail, Input },
     data() {
         return {
             list: [],
@@ -94,29 +103,31 @@ export default {
             material_id: "",
             price_gte: "",
             price_lt: "",
-            active_cate: "materials",
+            active_cate: "",
             active_subcate: "",
             current_cate: "",
             isLoading: true,
+
+            searchContent: "",
         };
     },
     created() {
-        if (this.materials.length > 0) {
-            this.material_id = this.materials[0].id;
-            this.active_subcate = this.materials[0].id;
-        }
+        // if (this.materials.length > 0) {
+        //     this.material_id = this.materials[0].id;
+        //     this.active_subcate = this.materials[0].id;
+        // }
         this.requsetPriceLimit();
     },
     computed: {
         categoryList() {
             if (this.active_cate == "price") {
                 return this.priceInterval;
-            } else if (this.active_cate == "materials") {
-                return this.$store.state.art.materials;
+            } else if (this.active_cate == "themes") {
+                return this.$store.state.art.themes;
             } else if (this.active_cate == "categories") {
                 return this.$store.state.art.categories;
             } else {
-                return this.$store.state.art.themes;
+                return this.$store.state.art.materials;
             }
         },
         materials() {
@@ -176,6 +187,31 @@ export default {
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
+        search() {
+            if (this.isLoading) return;
+            this.active_cate = "";
+            this.active_subcate = "";
+            this.page = 1;
+            this.isLoading = true;
+            this.$http
+                .globalGetSearchMarket({
+                    q: this.searchContent,
+                    page: this.page,
+                })
+                .then((res) => {
+                    this.isLoading = false;
+                    this.current_cate = this.active_cate;
+                    this.list = res.list ? res.list : res;
+                    this.total_count = res.total_count;
+                    this.total_pages = Math.ceil(
+                        this.total_count / this.per_page
+                    );
+                })
+                .catch((err) => {
+                    this.isLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
         next() {
             if (this.hasNext) {
                 this.page++;
@@ -190,7 +226,17 @@ export default {
         },
         requestFilterData(item) {
             this.page = 1;
-            this.active_subcate = item.id;
+            this.searchContent = "";
+            if (
+                this.active_cate != item.cate_label ||
+                this.active_subcate != item.id
+            ) {
+                this.active_cate = item.cate_label;
+                this.active_subcate = item.id;
+            } else {
+                this.active_cate = "";
+                this.active_subcate = "";
+            }
             this.resetActive_cate(item);
             this.requestData();
         },
@@ -252,7 +298,29 @@ h2.title {
     text-transform: uppercase;
     margin-bottom: 60px;
 }
-
+.search {
+    width: 100%;
+    position: relative;
+    text-align: left;
+    margin-bottom: 60px;
+    > img {
+        cursor: pointer;
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        left: 840px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .input {
+        width: 900px;
+        height: 69px;
+        font-size: 22px;
+        ::v-deep input {
+            padding-right: 70px;
+        }
+    }
+}
 .filter {
     display: flex;
     flex-direction: column;

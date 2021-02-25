@@ -200,6 +200,19 @@ const apiList = [
             unSignature: false,
         },
     },
+    {
+        name: "getSearchMarket",
+        method: "GET",
+        desc: "搜索市场",
+        path: "/arts/search",
+        mockPath: "/arts/search",
+        params: {
+            q: "",
+        },
+        options: {
+            unSignature: false,
+        },
+    },
 ];
 
 export default apiList;

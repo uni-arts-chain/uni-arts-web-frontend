@@ -37,7 +37,10 @@ export default {
     },
     mutations: {
         SET_CATEGORIES: (state, data) => {
-            state.categories = data;
+            state.categories = data.map((v) => {
+                v.cate_label = "categories";
+                return v;
+            });
         },
         SET_THEMES: (state, data) => {
             state.themes = data.map((v) => {

@@ -7,6 +7,7 @@
             :class="{ 'unit-input': append }"
             @blur="onBlur"
             v-model="inputData"
+            :placeholder="placeholder"
         />
         <div class="append" v-if="append">{{ append }}</div>
     </div>
@@ -25,6 +26,10 @@ export default {
         type: {
             type: String,
             default: "text",
+        },
+        placeholder: {
+            type: String,
+            default: "",
         },
         append: {
             type: String,
@@ -69,12 +74,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 input {
-    height: 45px;
+    min-height: 45px;
+    height: 100%;
     border: 2px solid #020202;
     color: #020202;
     padding: 5px 15px;
     border-radius: 0;
-    font-size: 17px;
+    font-size: 1em;
 }
 input.unit-input {
     padding-right: 55px;
@@ -85,6 +91,7 @@ input:hover {
 .input-box {
     display: inline-block;
     position: relative;
+    font-size: 17px;
 }
 .append {
     position: absolute;

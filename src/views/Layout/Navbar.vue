@@ -30,7 +30,12 @@
                         >Authority</router-link
                     >
                 </li>
-                <li v-if="user.token" class="user.avatar.url">
+                <li class="li-search">
+                    <router-link to="/market" class="market">
+                        <img src="@/assets/images/search@2x.png" />
+                    </router-link>
+                </li>
+                <li v-if="user.token">
                     <router-link
                         to="/account"
                         class="info"
@@ -152,7 +157,8 @@ ul {
             display: block;
             min-width: 70px;
         }
-        > a.info {
+        > a.info,
+        > a.market {
             width: 24px;
             height: 24px;
         }
@@ -163,6 +169,7 @@ ul {
 }
 
 .login,
+.market,
 .register {
     display: block;
     color: white;
@@ -183,8 +190,16 @@ ul {
     /* background-color: #c61e1e; */
     color: white;
 }
-
-.li-login {
+.li-search {
+    width: 68px;
+    height: 21px;
+    .market > img {
+        width: 21px;
+        height: 21px;
+    }
+}
+.li-login,
+.li-search {
     padding-right: 10px;
 }
 .li-register {
