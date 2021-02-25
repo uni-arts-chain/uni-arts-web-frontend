@@ -45,6 +45,14 @@ const routes = [
             ),
     },
     {
+        path: "/authority",
+        name: "Authority",
+        component: () =>
+            import(
+                /* webpackChunkName: "authority" */ "@/views/Certificate/Authority.vue"
+            ),
+    },
+    {
         path: "/artist",
         name: "Artist",
         component: () =>

@@ -25,8 +25,8 @@
                 </li>
                 <li>
                     <router-link
-                        to="/certificate"
-                        :class="{ active: activeTab == 'Certificate' }"
+                        to="/authority"
+                        :class="{ active: activeTab == 'Authority' }"
                         >Authority</router-link
                     >
                 </li>
@@ -83,8 +83,8 @@ export default {
                 case "Market":
                     routeName = "Market";
                     break;
-                case "Certificate":
-                    routeName = "Certificate";
+                case "Authority":
+                    routeName = "Authority";
                     break;
                 case "ArtDetail":
                     routeName = "Art";
@@ -140,8 +140,8 @@ ul {
     align-items: center;
     justify-content: space-between;
     li {
-        padding-left: 23px;
-        padding-right: 23px;
+        padding-left: 18px;
+        padding-right: 18px;
         font-size: 16px;
         .active {
             font-weight: 600;
@@ -150,6 +150,7 @@ ul {
         > a {
             color: #4d4d4d;
             display: block;
+            min-width: 70px;
         }
         > a.info {
             width: 24px;

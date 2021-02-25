@@ -56,7 +56,11 @@ export default {
     },
     methods: {
         apply(item) {
-            this.$router.push("/certificate/orgsign/" + item.hash);
+            if (this.$store.state.user.info.address) {
+                this.$router.push("/certificate/orgsign/" + item.hash);
+            } else {
+                this.$router.push("/login");
+            }
         },
         isOwner(v) {
             return v === this.$store.state.user.info.address;
