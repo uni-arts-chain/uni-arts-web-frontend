@@ -175,6 +175,10 @@ export default {
             `;
         },
         follow() {
+            if (!this.isLogin()) {
+                this.$router.push("/login");
+                return;
+            }
             if (this.isFollowing) return;
             this.isFollowing = true;
             this.$http
@@ -192,6 +196,10 @@ export default {
                 });
         },
         unfollow() {
+            if (this.isLogin()) {
+                this.$router.push("/login");
+                return;
+            }
             if (this.isFollowing) return;
             this.isFollowing = true;
             this.$http
@@ -207,6 +215,13 @@ export default {
                     this.isFollowing = false;
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
+        },
+        isLogin() {
+            if (this.$store.state.user.info.address) {
+                return true;
+            } else {
+                return false;
+            }
         },
         getImg(obj) {
             return obj.avatar && obj.avatar.url ? obj.avatar.url : avatar;

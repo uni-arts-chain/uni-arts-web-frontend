@@ -505,7 +505,11 @@
                     </div>
                 </div>
             </div>
-            <Similar v-loading="isSmilarLoading" :list="similarList" />
+            <Similar
+                v-if="similarList.length > 0"
+                v-loading="isSmilarLoading"
+                :list="similarList"
+            />
         </div>
         <Dialog
             :visible.sync="isDialogPreview"
@@ -678,9 +682,9 @@ export default {
         },
     },
     created() {
-        if (!this.$store.state.user.info.address) {
-            this.$router.push("/login");
-        }
+        // if (!this.$store.state.user.info.address) {
+        //     this.$router.push("/login");
+        // }
         this.requestData();
     },
     beforeDestroy() {
@@ -813,6 +817,9 @@ export default {
                 });
         },
         requestSimilarData() {
+            if (!this.$store.state.user.info.address) {
+                return;
+            }
             this.isSmilarLoading = true;
             this.$http
                 .userGetArtSimilar({})

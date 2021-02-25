@@ -199,6 +199,10 @@ export default {
     },
     methods: {
         requestData() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
             this.isLoading = true;
             this.$http
                 .userGetAvailableSubmitList(
