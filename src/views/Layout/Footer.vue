@@ -35,7 +35,7 @@
             </div>
             <div class="bottom-nav">
                 <ul>
-                    <span class="title">For artists</span>
+                    <span class="title">For Artists</span>
                     <li><a to="#">Apply as an artist</a></li>
                 </ul>
                 <ul>
@@ -45,8 +45,20 @@
                 </ul>
                 <ul>
                     <span class="title">Products</span>
-                    <li><router-link to="/">Uniarts Chain</router-link></li>
-                    <li><router-link to="/">QTS</router-link></li>
+                    <li>
+                        <a
+                            href="http://explorer.uniarts.me/#/explorer"
+                            target="_blank"
+                            >Chain Explorer</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            target="_blank"
+                            href="https://telemetry.polkadot.io/#list/Uni-Arts%20Staging%20network"
+                            >Chain Network</a
+                        >
+                    </li>
                 </ul>
             </div>
         </div>
