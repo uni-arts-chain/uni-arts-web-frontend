@@ -22,7 +22,7 @@
                 </router-link>
             </el-carousel-item>
             <el-carousel-item v-for="(item, index) in list" :key="index">
-                <router-link :to="item.url" class="item-container">
+                <a :href="item.url" target="_blank" class="item-container">
                     <AdaptiveImage
                         width="100%"
                         height="100%"
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                </router-link>
+                </a>
             </el-carousel-item>
         </el-carousel>
     </div>
