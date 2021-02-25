@@ -136,7 +136,7 @@
                                 @click="shareLink"
                                 src="@/assets/images/share@2x.png"
                             />
-                            <span class="action-text">分享</span>
+                            <span class="action-text">Share</span>
                         </div>
                     </div>
                     <div class="button-group">

@@ -9,43 +9,43 @@
             :rules="rules"
             label-position="left"
         >
-            <el-form-item label="画作标题" prop="name">
+            <el-form-item label="Name" prop="name">
                 <Input v-model="form.name" />
             </el-form-item>
-            <el-form-item label="作品分类" prop="category_id">
+            <el-form-item label="Category" prop="category_id">
                 <Select
                     v-model="form.category_id"
-                    placeholder="请选择作品分类"
+                    placeholder="select"
                     :options="categories"
                     optionLabel="title"
                     optionValue="id"
                     optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="作品主题" prop="theme_id">
+            <el-form-item label="Theme" prop="theme_id">
                 <Select
                     v-model="form.theme_id"
-                    placeholder="请选择作品主题"
+                    placeholder="select"
                     :options="themes"
                     optionLabel="title"
                     optionValue="id"
                     optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="作品材质" prop="material_id">
+            <el-form-item label="Material" prop="material_id">
                 <Select
                     v-model="form.material_id"
-                    placeholder="请选择作品材质"
+                    placeholder="select"
                     :options="materials"
                     optionLabel="title"
                     optionValue="id"
                     optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="创作日期" prop="produce_at">
-                <DatePicker v-model="form.produce_at" placeholder="选择日期" />
+            <el-form-item label="Date" prop="produce_at">
+                <DatePicker v-model="form.produce_at" placeholder="select" />
             </el-form-item>
-            <el-form-item label="尺寸" class="size-form-item">
+            <el-form-item label="Size" class="size-form-item">
                 <el-form-item class="size-length" prop="size_length">
                     <Input
                         class="size-input"
@@ -65,10 +65,10 @@
                 </el-form-item>
                 cm
             </el-form-item>
-            <el-form-item label="价格" prop="price">
+            <el-form-item label="Price" prop="price">
                 <Input v-model="form.price" append="UART" />
             </el-form-item>
-            <el-form-item label="作品说明" prop="details">
+            <el-form-item label="Description" prop="details">
                 <Textarea
                     v-model="form.details"
                     :minRows="5"
@@ -76,7 +76,7 @@
                     :rows="5"
                 />
             </el-form-item>
-            <el-form-item class="main-upload" label="主图">
+            <el-form-item class="main-upload" label="Main">
                 <el-form-item class="upload-form-item" prop="img_main_file1">
                     <Upload v-model="form.img_main_file1" />
                 </el-form-item>
@@ -87,7 +87,7 @@
                     <Upload v-model="form.img_main_file3" />
                 </el-form-item>
             </el-form-item>
-            <el-form-item class="detail-upload" label="细节图">
+            <el-form-item class="detail-upload" label="Detail">
                 <div class="detail-box">
                     <el-form-item
                         class="upload-form-item"
@@ -197,12 +197,12 @@
                     v-loading="isSubmiting"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
-                    >立即创建</el-button
+                    >Upload</el-button
                 >
                 <el-button
                     class="cancel-button"
                     @click="$router.push('/account')"
-                    >取消</el-button
+                    >Cancel</el-button
                 >
             </el-form-item>
         </el-form>

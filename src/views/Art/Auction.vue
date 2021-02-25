@@ -24,7 +24,7 @@
                 :rules="rules"
                 label-position="left"
             >
-                <el-form-item label="起拍价格" prop="start_price">
+                <el-form-item label="Price" prop="start_price">
                     <Input
                         class="input-start-price"
                         v-model="form.start_price"
@@ -32,7 +32,7 @@
                         :append="chainInfo.tokenSymbol"
                     />
                 </el-form-item>
-                <el-form-item label="加价幅度" prop="increment">
+                <el-form-item label="Markup" prop="increment">
                     <Input
                         class="input-start-price"
                         v-model="form.increment"
@@ -40,18 +40,18 @@
                         :append="chainInfo.tokenSymbol"
                     />
                 </el-form-item>
-                <el-form-item label="开始时间" prop="start_time">
+                <el-form-item label="Starting time" prop="start_time">
                     <DatePicker
                         type="datetime"
                         v-model="form.start_time"
-                        placeholder="选择日期"
+                        placeholder="Select"
                     />
                 </el-form-item>
-                <el-form-item label="结束时间" prop="end_time">
+                <el-form-item label="End Time" prop="end_time">
                     <DatePicker
                         type="datetime"
                         v-model="form.end_time"
-                        placeholder="选择日期"
+                        placeholder="Select"
                     />
                 </el-form-item>
             </el-form>
@@ -171,28 +171,28 @@ export default {
                 start_price: [
                     {
                         required: true,
-                        message: "请输入起拍价格",
+                        message: "Please enter the price",
                         trigger: "blur",
                     },
                 ],
                 increment: [
                     {
                         required: true,
-                        message: "请输入加价幅度",
+                        message: "Please enter the price increase",
                         trigger: "blur",
                     },
                 ],
                 start_time: [
                     {
                         required: true,
-                        message: "请选择竞拍开始时间",
+                        message: "Please select the auction start time",
                         trigger: "blur",
                     },
                 ],
                 end_time: [
                     {
                         required: true,
-                        message: "请选择竞拍结束时间",
+                        message: "Please select the end time of the auction",
                         trigger: "blur",
                     },
                 ],
