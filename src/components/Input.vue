@@ -5,6 +5,7 @@
             class="el-input__inner"
             :type="type"
             :class="{ 'unit-input': append }"
+            @keyup.enter="enter"
             @blur="onBlur"
             v-model="inputData"
             :placeholder="placeholder"
@@ -68,6 +69,9 @@ export default {
             if (parent) {
                 parent.$emit.apply(parent, [eventName].concat(params));
             }
+        },
+        enter() {
+            this.$emit("enter");
         },
     },
 };

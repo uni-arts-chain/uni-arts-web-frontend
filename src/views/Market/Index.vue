@@ -6,6 +6,7 @@
             <div class="search">
                 <Input
                     v-model="searchContent"
+                    @enter="search()"
                     class="input"
                     placeholder="Please enter keywords to search works"
                 />
@@ -192,6 +193,7 @@ export default {
             this.active_cate = "";
             this.active_subcate = "";
             this.page = 1;
+            this.list = [];
             this.isLoading = true;
             this.$http
                 .globalGetSearchMarket({
