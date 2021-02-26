@@ -20,7 +20,7 @@
                 v-if="!isAuctioning"
                 ref="form"
                 :model="form"
-                label-width="130px"
+                label-width="140px"
                 :rules="rules"
                 label-position="left"
             >
@@ -40,7 +40,7 @@
                         :append="chainInfo.tokenSymbol"
                     />
                 </el-form-item>
-                <el-form-item label="Starting time" prop="start_time">
+                <el-form-item label="Starting Time" prop="start_time">
                     <DatePicker
                         type="datetime"
                         v-model="form.start_time"
@@ -441,7 +441,7 @@ export default {
         }
     }
     .el-form {
-        width: 450px;
+        width: 460px;
         margin: 0 auto;
         margin-bottom: 60px;
     }
