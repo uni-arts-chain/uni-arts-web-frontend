@@ -25,7 +25,10 @@
                     <a href="https://discord.gg/ynKCwp5c" target="_blank">
                         <icon-svg icon-class="discord"></icon-svg>
                     </a>
-                    <a href="https://medium.com/@uniarts.me" target="_blank">
+                    <a
+                        href="https://medium.com/@UniartsNetwork"
+                        target="_blank"
+                    >
                         <icon-svg icon-class="medium"></icon-svg>
                     </a>
                     <a href="https://github.com/uni-arts-chain" target="_blank">

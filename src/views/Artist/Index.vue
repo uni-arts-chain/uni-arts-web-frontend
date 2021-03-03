@@ -43,7 +43,7 @@
                     <Artist
                         :member="v.member"
                         :list="v.arts"
-                        :art_count="v.art_count"
+                        :art_count="v.member.art_size"
                         v-for="(v, i) in artList"
                         :key="i"
                     ></Artist>
@@ -100,7 +100,7 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .globalGetAllArt({
+                .globalGetPreArtistTopic({
                     per_page: this.per_page,
                     page: this.page,
                 })

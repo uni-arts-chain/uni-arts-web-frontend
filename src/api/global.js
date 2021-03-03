@@ -213,6 +213,17 @@ const apiList = [
             unSignature: false,
         },
     },
+    {
+        name: "getPreArtistTopic",
+        method: "GET",
+        desc: "往期艺术家",
+        path: "/members/pre_artist_topic",
+        mockPath: "/members/pre_artist_topic",
+        params: {},
+        options: {
+            unSignature: false,
+        },
+    },
 ];
 
 export default apiList;

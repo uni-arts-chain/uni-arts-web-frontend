@@ -51,13 +51,19 @@
         </div>
         <div class="recommendation container">
             <h2 class="title">Topic recommendation</h2>
-            <div class="recommendation-body">
+            <div
+                class="recommendation-body"
+                v-for="(v, i) in recommendList"
+                :key="i"
+            >
                 <div class="postmoder">
-                    <div class="name-text">Olivia Palermo</div>
-                    <div class="bg"></div>
-                    <div class="post-text"></div>
+                    <div class="name-text">{{ v.title }}</div>
+                    <div
+                        class="bg"
+                        :style="`background-image: url(${v.img_file.url});`"
+                    ></div>
                 </div>
-                <Thumbnail :list="recommendList"></Thumbnail>
+                <Thumbnail :list="v.arts"></Thumbnail>
                 <button class="more-button" @click="$router.push('/market')">
                     more works
                 </button>
@@ -289,6 +295,12 @@ export default {
 }
 
 .recommendation {
+    .title {
+        margin-bottom: 0;
+    }
+    .recommendation-body {
+        margin-top: 150px;
+    }
     .postmoder {
         margin-bottom: 57px;
         position: relative;
@@ -305,7 +317,9 @@ export default {
         .bg {
             width: 100%;
             height: 250px;
-            background: url(~@/assets/images/topic@3x.png) no-repeat;
+            background-image: url(~@/assets/images/topic@3x.png);
+            background-repeat: no-repeat;
+            background-position: center;
             background-size: 100% auto;
         }
         .post-text {
@@ -315,11 +329,6 @@ export default {
             background: url(~@/assets/images/postmodernism@3x.png) no-repeat;
             background-size: 100% auto;
         }
-    }
-}
-
-.authors {
-    .authors-body {
     }
 }
 </style>
