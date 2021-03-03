@@ -1,7 +1,7 @@
 /** * Created by Lay Hunt on 2020-12-17 15:04:15. */
 <template>
-    <div class="upload container">
-        <div class="title">Upload Works</div>
+    <div class="edit container">
+        <div class="title">Edit Works</div>
         <el-form
             ref="form"
             :model="form"
@@ -197,7 +197,7 @@
                     v-loading="isSubmiting"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.8)"
-                    >Upload</el-button
+                    >Update</el-button
                 >
                 <el-button
                     class="cancel-button"
@@ -241,6 +241,7 @@ export default {
             }
         };
         return {
+            id: this.$route.params.id,
             form: {
                 name: "",
                 category_id: "",
@@ -329,6 +330,9 @@ export default {
             },
         };
     },
+    created() {
+        this.requestData();
+    },
     computed: {
         categories() {
             return this.$store.state.art.categories;
@@ -341,6 +345,61 @@ export default {
         },
     },
     methods: {
+        requestData() {
+            this.$http
+                .globalGetArtById({}, { id: this.id })
+                .then(async (res) => {
+                    this.form.name = res.name;
+                    this.form.category_id = res.category_id;
+                    this.form.theme_id = res.theme_id;
+                    this.form.material_id = res.material_id;
+                    this.form.produce_at = res.produce_at * 1000;
+                    this.form.size_length = res.size_length;
+                    this.form.size_width = res.size_width;
+                    this.form.details = res.details;
+                    this.form.price = res.price;
+
+                    this.form.img_main_file1 = res.img_main_file1.url && [
+                        "",
+                        "",
+                        res.img_main_file1.url,
+                    ];
+                    this.form.img_main_file2 = ["", "", res.img_main_file2.url];
+                    this.form.img_main_file3 = ["", "", res.img_main_file3.url];
+
+                    this.form.img_detail_file1 = [
+                        "",
+                        "",
+                        res.img_detail_file1.url,
+                    ];
+                    this.form.img_detail_file2 = [
+                        "",
+                        "",
+                        res.img_detail_file2.url,
+                    ];
+                    this.form.img_detail_file3 = [
+                        "",
+                        "",
+                        res.img_detail_file3.url,
+                    ];
+                    this.form.img_detail_file4 = [
+                        "",
+                        "",
+                        res.img_detail_file4.url,
+                    ];
+                    this.form.img_detail_file5 = [
+                        "",
+                        "",
+                        res.img_detail_file5.url,
+                    ];
+
+                    this.form.img_detail_file1_desc = res.img_detail_file1_desc;
+                    this.form.img_detail_file2_desc = res.img_detail_file2_desc;
+                    this.form.img_detail_file3_desc = res.img_detail_file3_desc;
+                    this.form.img_detail_file4_desc = res.img_detail_file4_desc;
+                    this.form.img_detail_file5_desc = res.img_detail_file5_desc;
+                });
+        },
         onSubmit() {
             this.$refs["form"].validate((valid) => {
                 if (valid) {
@@ -410,7 +469,7 @@ export default {
                                 : "");
                     }
                     this.$http
-                        .userPostArt(obj)
+                        .userPostEditArt(obj)
                         .then(() => {
                             this.isSubmiting = false;
                             this.$notify.success("Submitted");
@@ -431,7 +490,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.upload {
+.edit {
     padding: 40px;
     padding-top: 70px;
     padding-left: 0px;

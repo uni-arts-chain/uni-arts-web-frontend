@@ -38,9 +38,16 @@
                 "
                 class="action"
                 :class="{ disabled: getArtAasmState(v) != 'online' }"
-                v-if="type == 'all'"
+                v-if="type == 'all' && getArtAasmState(v) != 'prepare'"
             >
                 Auction Now
+            </router-link>
+            <router-link
+                :to="`/account/edit/${v.id}`"
+                class="action"
+                v-else-if="type == 'all' && getArtAasmState(v) == 'prepare'"
+            >
+                Edit
             </router-link>
             <div class="action" v-if="type == 'signature'" @click="show(v)">
                 Check

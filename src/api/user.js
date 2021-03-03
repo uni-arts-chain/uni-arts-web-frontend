@@ -51,6 +51,26 @@ const apiList = [
         },
     },
     {
+        name: "postEditArt",
+        method: "POST",
+        desc: "编辑未上传成功艺术品",
+        path: "/update_infos",
+        mockPath: "/update_infos",
+        params: {},
+        options: {
+            upload: [
+                "img_main_file1",
+                "img_main_file2",
+                "img_main_file3",
+                "img_detail_file1",
+                "img_detail_file2",
+                "img_detail_file3",
+                "img_detail_file4",
+                "img_detail_file5",
+            ],
+        },
+    },
+    {
         name: "postOrganization",
         method: "POST",
         desc: "注册机构",

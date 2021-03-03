@@ -174,6 +174,17 @@ const routes = [
             ),
     },
     {
+        path: "/account/edit/:id",
+        name: "AccountEdit",
+        meta: {
+            needAuth: true,
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "accountUpload" */ "@/views/Account/Edit.vue"
+            ),
+    },
+    {
         path: "/account/profile",
         name: "AccountProfile",
         meta: {

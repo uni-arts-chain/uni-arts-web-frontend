@@ -60,6 +60,20 @@
                     <Input v-model="form.phone_number" type="number" />
                 </el-form-item>
                 <el-form-item
+                    label="College"
+                    prop="college"
+                    label-width="190px"
+                >
+                    <Input v-model="form.college" />
+                </el-form-item>
+                <el-form-item
+                    label="Residential Address"
+                    prop="residential_address"
+                    label-width="251px"
+                >
+                    <Input v-model="form.residential_address" />
+                </el-form-item>
+                <el-form-item
                     label="Profile"
                     class="profile-form-item"
                     label-width="190px"
@@ -211,35 +225,59 @@ export default {
                 display_name: "",
                 desc: "",
                 sex: "",
+                residential_address: "",
+                college: "",
                 real_name: "",
                 phone_number: "",
                 id_document_number: "",
             },
             rules: {
                 display_name: [
-                    { required: false, message: "请输入标题", trigger: "blur" },
+                    {
+                        required: false,
+                        message: "Please enter the title",
+                        trigger: "blur",
+                    },
                 ],
                 sex: [
-                    { required: false, message: "请选择性别", trigger: "blur" },
+                    {
+                        required: false,
+                        message: "Please select gender",
+                        trigger: "blur",
+                    },
                 ],
                 desc: [
                     {
                         required: false,
-                        message: "请输入个人简介",
+                        message: "Please enter a profile",
+                        trigger: "blur",
+                    },
+                ],
+                residential_address: [
+                    {
+                        required: false,
+                        message: "Please enter the place of residence",
+                        trigger: "blur",
+                    },
+                ],
+                college: [
+                    {
+                        required: false,
+                        message: "Please enter graduate school",
                         trigger: "blur",
                     },
                 ],
                 artist_desc: [
                     {
                         required: false,
-                        message: "请输入艺术家简介",
+                        message: "Please enter the artist profile",
                         trigger: "blur",
                     },
                 ],
                 real_name: [
                     {
                         required: false,
-                        message: "请输入真实姓名",
+                        message: "please enter your real name",
                         trigger: "blur",
                     },
                 ],
@@ -260,14 +298,14 @@ export default {
                 avatar: [
                     {
                         required: false,
-                        message: "请上传头像",
+                        message: "Please upload an avatar",
                         trigger: "change",
                     },
                 ],
                 recommend_image: [
                     {
                         required: false,
-                        message: "请上传艺术家头像",
+                        message: "Please upload an artist profile picture",
                         trigger: "change",
                     },
                 ],
@@ -294,6 +332,10 @@ export default {
                     this.form.display_name = res.display_name
                         ? res.display_name
                         : "";
+                    this.form.residential_address = res.residential_address
+                        ? res.residential_address
+                        : "";
+                    this.form.college = res.college ? res.college : "";
                     this.form.desc = res.desc ? res.desc : "";
                     this.form.artist_desc = res.artist_desc
                         ? res.artist_desc
@@ -331,6 +373,10 @@ export default {
                             display_name: this.form.display_name
                                 ? this.form.display_name
                                 : "",
+                            residential_address: this.form.residential_address
+                                ? this.form.residential_address
+                                : "",
+                            college: this.form.college ? this.form.college : "",
                             desc: this.form.desc ? this.form.desc : "",
                             artist_desc: this.form.artist_desc
                                 ? this.form.artist_desc
