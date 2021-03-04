@@ -52,13 +52,43 @@
                 >
                     <Input v-model="form.display_name" />
                 </el-form-item>
+                <el-form-item label-width="251px"></el-form-item>
                 <el-form-item
-                    label="Cell-phone number"
+                    label="Phone"
                     prop="phone_number"
-                    label-width="251px"
+                    :style="`margin-bottom: ${isActivedPhone ? '' : '30px'}`"
+                    label-width="190px"
                 >
-                    <Input v-model="form.phone_number" type="number" />
+                    <Input
+                        :disabled="isActivedPhone"
+                        v-model="form.phone_number"
+                        type="number"
+                    />
                 </el-form-item>
+                <el-form-item label-width="251px"></el-form-item>
+                <el-form-item
+                    prop="token"
+                    v-if="!isActivedPhone"
+                    label-width="190px"
+                >
+                    <Input
+                        style="width: 200px"
+                        placeholder="Code"
+                        v-model="form.token"
+                        type="number"
+                    />
+                    <button
+                        @click.prevent="sendCode"
+                        v-loading="sending"
+                        class="code-send"
+                    >
+                        Send
+                    </button>
+                </el-form-item>
+                <el-form-item
+                    label-width="251px"
+                    v-if="!isActivedPhone"
+                ></el-form-item>
                 <el-form-item
                     label="College"
                     prop="college"
@@ -189,14 +219,23 @@ export default {
     },
     data() {
         var validatePhoneNumber = (rule, value, callback) => {
-            if (!value) {
+            if (this.isActivedPhone) {
                 callback();
             } else if (
                 !/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/.test(
                     value
                 )
             ) {
-                callback(new Error("手机号码格式错误"));
+                callback(new Error("Wrong format of phone number"));
+            } else {
+                callback();
+            }
+        };
+        var validateCode = (rule, value, callback) => {
+            if (this.isActivedPhone) {
+                callback();
+            } else if (!/^[0-9]{6}$/.test(value)) {
+                callback(new Error("Verification code error"));
             } else {
                 callback();
             }
@@ -209,7 +248,7 @@ export default {
                     value
                 )
             ) {
-                callback(new Error("身份证号码格式错误"));
+                callback(new Error("ID card number error"));
             } else {
                 callback();
             }
@@ -218,6 +257,8 @@ export default {
             yin_2x,
             photo_image,
             isSubmiting: false,
+            sending: false,
+            isActivedPhone: false,
             form: {
                 avatar: [],
                 recommend_image: [],
@@ -228,6 +269,7 @@ export default {
                 residential_address: "",
                 college: "",
                 real_name: "",
+                token: "",
                 phone_number: "",
                 id_document_number: "",
             },
@@ -283,8 +325,15 @@ export default {
                 ],
                 phone_number: [
                     {
-                        required: false,
+                        required: true,
                         validator: validatePhoneNumber,
+                        trigger: "blur",
+                    },
+                ],
+                token: [
+                    {
+                        required: true,
+                        validator: validateCode,
                         trigger: "blur",
                     },
                 ],
@@ -322,6 +371,26 @@ export default {
         uploadPhoto() {
             this.$refs.uploadPhoto.$el.click();
         },
+        sendCode() {
+            if (this.sending) return;
+            this.$refs["form"].validateField("phone_number", (err) => {
+                if (!err) {
+                    this.sending = true;
+                    this.$http
+                        .userPostPhoneCode({
+                            phone_number: "86" + this.form.phone_number,
+                        })
+                        .then(() => {
+                            this.sending = false;
+                            this.$notify.success("Successfully sent");
+                        })
+                        .catch((err) => {
+                            this.sending = false;
+                            this.$notify.error(err.head && err.head.msg);
+                        });
+                }
+            });
+        },
         requestData() {
             this.$http
                 .userGetUserInfo({})
@@ -346,6 +415,7 @@ export default {
                     this.form.sex = res.sex ? res.sex + "" : null;
                     this.form.real_name = res.real_name;
                     this.form.phone_number = res.phone_number;
+                    this.isActivedPhone = res.phone_number ? true : false;
                     this.form.id_document_number = res.id_document_number;
                 })
                 .catch((err) => {
@@ -358,40 +428,45 @@ export default {
                 if (valid) {
                     if (this.isSubmiting) return;
                     this.isSubmiting = true;
-                    this.$http
-                        .userPostChangeUserInfo({
-                            avatar:
-                                this.form.avatar.length > 0 &&
-                                this.form.avatar[0]
-                                    ? this.form.avatar
-                                    : "",
-                            recommend_image:
-                                this.form.recommend_image.length > 0 &&
-                                this.form.recommend_image[0]
-                                    ? this.form.recommend_image
-                                    : "",
-                            display_name: this.form.display_name
-                                ? this.form.display_name
+                    let obj = {
+                        avatar:
+                            this.form.avatar.length > 0 && this.form.avatar[0]
+                                ? this.form.avatar
                                 : "",
-                            residential_address: this.form.residential_address
-                                ? this.form.residential_address
+                        recommend_image:
+                            this.form.recommend_image.length > 0 &&
+                            this.form.recommend_image[0]
+                                ? this.form.recommend_image
                                 : "",
-                            college: this.form.college ? this.form.college : "",
-                            desc: this.form.desc ? this.form.desc : "",
-                            artist_desc: this.form.artist_desc
-                                ? this.form.artist_desc
-                                : "",
-                            sex: this.form.sex ? this.form.sex : "",
-                            real_name: this.form.real_name
-                                ? this.form.real_name
-                                : "",
-                            phone_number: this.form.phone_number
+                        display_name: this.form.display_name
+                            ? this.form.display_name
+                            : "",
+                        residential_address: this.form.residential_address
+                            ? this.form.residential_address
+                            : "",
+                        college: this.form.college ? this.form.college : "",
+                        desc: this.form.desc ? this.form.desc : "",
+                        artist_desc: this.form.artist_desc
+                            ? this.form.artist_desc
+                            : "",
+                        sex: this.form.sex ? this.form.sex : "",
+                        real_name: this.form.real_name
+                            ? this.form.real_name
+                            : "",
+                        phone_number: this.form.phone_number
+                            ? this.isActivedPhone
                                 ? this.form.phone_number
-                                : "",
-                            id_document_number: this.form.id_document_number
-                                ? this.form.id_document_number
-                                : "",
-                        })
+                                : "86" + this.form.phone_number
+                            : "",
+                        id_document_number: this.form.id_document_number
+                            ? this.form.id_document_number
+                            : "",
+                    };
+                    if (!this.isActivedPhone) {
+                        obj.token = this.form.token ? this.form.token : "";
+                    }
+                    this.$http
+                        .userPostChangeUserInfo(obj)
                         .then(() => {
                             this.isSubmiting = false;
                             this.$notify.success("Submitted");
@@ -502,6 +577,21 @@ export default {
 
         ::v-deep .el-radio__inner {
             border-color: #b7b7b7;
+        }
+    }
+    .code-send {
+        font-size: 18px;
+        font-weight: 400;
+        color: #020202;
+        width: 90px;
+        height: 45px;
+        cursor: pointer;
+        letter-spacing: 0px;
+        background: transparent;
+        outline: none;
+        border: none;
+        ::v-deep .el-loading-spinner {
+            margin-top: -20px;
         }
     }
 }

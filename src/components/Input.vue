@@ -3,6 +3,7 @@
     <div class="input-box">
         <input
             class="el-input__inner"
+            :disabled="disabled"
             :type="type"
             :class="{ 'unit-input': append }"
             @keyup.enter="enter"
@@ -35,6 +36,10 @@ export default {
         append: {
             type: String,
             default: "",
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
         },
     },
     data() {

@@ -326,6 +326,17 @@ const apiList = [
         mockPath: "/members/recommend_arts",
         options: {},
     },
+    {
+        name: "postPhoneCode",
+        method: "POST",
+        desc: "获取手机验证码",
+        path: "/members/send_sms",
+        mockPath: "/members/send_sms",
+        params: {
+            phone_number: "",
+        },
+        options: {},
+    },
 ];
 
 export default apiList;
