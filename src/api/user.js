@@ -31,6 +31,15 @@ const apiList = [
         options: {},
     },
     {
+        name: "ownSginArts",
+        method: "GET",
+        desc: "获取待签名作品集",
+        path: "/arts/available_signature_arts",
+        mockPath: "/arts/available_signature_arts",
+        params: {},
+        options: {},
+    },
+    {
         name: "postArt",
         method: "POST",
         desc: "上传艺术品",

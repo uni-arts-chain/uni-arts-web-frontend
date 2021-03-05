@@ -113,7 +113,8 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userOwnArts({
+                .userOwnSginArts({
+                    organization_name: this.hexTostring(this.name),
                     page: this.page,
                     per_page: this.per_page,
                 })
