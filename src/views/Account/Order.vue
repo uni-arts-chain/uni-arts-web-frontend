@@ -27,7 +27,7 @@
                 {{ type == "bought" ? "Purchased on " : "Sold on " }}
                 {{ getDateTime(v) | dateFormat }}
             </div>
-            <div class="address-label" v-if="type == 'all' || type == 'sale'">
+            <div class="address-label" v-if="type == 'all'">
                 <span class="tag">
                     {{ getArtAasmState(v) }}
                 </span>
