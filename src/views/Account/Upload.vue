@@ -301,14 +301,14 @@ export default {
                 ],
                 size_length: [
                     {
-                        required: false,
+                        required: true,
                         message: "请输入作品长度",
                         trigger: "blur",
                     },
                 ],
                 size_width: [
                     {
-                        required: false,
+                        required: true,
                         message: "请输入作品宽度",
                         trigger: "blur",
                     },
