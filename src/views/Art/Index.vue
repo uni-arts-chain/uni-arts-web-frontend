@@ -89,7 +89,16 @@
                         </el-tooltip>
                     </div>
                     <div class="signature" style="min-height: 28px">
-                        Number of signatures : {{ signatureList.length }}
+                        Number of signatures: {{ signatureList.length }}
+                    </div>
+                    <div class="royalty">
+                        <span v-if="art.has_royalty"
+                            >Royalty: {{ art.royalty * 100 }}%</span
+                        >
+                        <span v-if="art.has_royalty"
+                            >Royalty Date:
+                            {{ art.royalty_expired_at | dateDayFormat }}</span
+                        >
                     </div>
                     <div class="function">
                         <div class="action-item">
@@ -1330,7 +1339,7 @@ export default {
         font-weight: 400;
         text-align: left;
         letter-spacing: 0px;
-        margin-bottom: 85px;
+        margin-bottom: 65px;
     }
 
     .block-title {
@@ -1382,12 +1391,21 @@ export default {
         }
     }
 
-    .signature {
+    .signature,
+    .royalty {
         font-size: 20px;
         font-weight: 400;
         text-align: left;
         letter-spacing: 0px;
-        margin-bottom: 51px;
+        margin-bottom: 21px;
+        /* margin-bottom: 51px; */
+    }
+
+    .royalty {
+        height: 28px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 31px;
     }
 
     .function {
