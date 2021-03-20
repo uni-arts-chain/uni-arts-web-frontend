@@ -263,8 +263,8 @@ export default {
                     .mod(1)
                     .toString()
                     .split(".");
-                if (numberArray.length == 2 && numberArray[1].length > 4) {
-                    return callback(new Error("最多4位小数"));
+                if (numberArray.length == 2 && numberArray[1].length > 2) {
+                    return callback(new Error("最多2位小数"));
                 } else {
                     callback();
                 }

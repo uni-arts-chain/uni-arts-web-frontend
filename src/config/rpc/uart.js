@@ -8,6 +8,9 @@ export default {
     Value: "Vec<u8>",
     ReasonIndex: "u32",
     LottoIndex: "u32",
+    MemberId: "u64",
+    ProposalId: "u64",
+    TokenBalance: "Balance",
     LotteryKind: {
         _enum: ["Routine", "TreasuryFunded(ReasonIndex)"],
     },
@@ -23,6 +26,22 @@ export default {
         tickets: "BTreeMap<u32, AccountId>",
         result: "Option<LottoResult<AccountId, Balance>>",
     },
+    CurrencyId: {
+        _enum: {
+            Native: "Null",
+            UINK: "Null",
+            DOT: "Null",
+            KSM: "Null",
+            ETH: "Null",
+            Token: "TokenSymbol",
+        },
+    },
+    TokenSymbol: {
+        _enum: ["USDT", "DAI"],
+    },
+    CurrencyIdOf: "CurrencyId",
+    Amount: "i128",
+    AmountOf: "Amount",
     NameData: {
         value: "Value",
         owner: "AccountId",
@@ -186,5 +205,17 @@ export default {
         amount: "Balance",
         reward: "Balance",
         debt: "Balance",
+    },
+    Limits: {
+        max_tx_value: "u128",
+        day_max_limit: "u128",
+        day_max_limit_for_one_address: "u128",
+        max_pending_tx_limit: "u128",
+        min_tx_value: "u128",
+    },
+    Royalty: {
+        owner: "AccountId",
+        rate: "u64",
+        expired_at: "BlockNumber",
     },
 };

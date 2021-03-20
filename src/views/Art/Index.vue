@@ -93,7 +93,7 @@
                     </div>
                     <div class="royalty">
                         <span v-if="art.has_royalty"
-                            >Royalty: {{ art.royalty * 100 }}%</span
+                            >Royalty: {{ percentFormat(art.royalty) }}%</span
                         >
                         <span v-if="art.has_royalty"
                             >Royalty Date:
@@ -1205,6 +1205,9 @@ export default {
             clearInterval(this.timeWorkId);
             this.timeWorkId = "";
             this.initTimeWork(item);
+        },
+        percentFormat(str_number) {
+            return new BigNumber(str_number).times(100).toString();
         },
     },
 };
