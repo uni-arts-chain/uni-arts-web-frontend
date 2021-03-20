@@ -86,4 +86,16 @@ export default {
     border-right-width: 10px;
     border-bottom-color: white;
 }
+.el-date-picker[x-placement^="top"] .popper__arrow {
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-top-color: black;
+}
+.el-date-picker[x-placement^="top"] .popper__arrow::after {
+    bottom: 2px;
+    margin-left: -10px;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-top-color: white;
+}
 </style>

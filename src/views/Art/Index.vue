@@ -29,6 +29,12 @@
                             <img src="@/assets/images/auciton_notice@2x.png"
                         /></span>
                     </div>
+                    <div class="copyright-icon" v-if="art.has_royalty">
+                        <div class="icon-sub">
+                            <div class="sub"></div>
+                            <icon-svg icon-class="copyright" />
+                        </div>
+                    </div>
                 </div>
                 <div class="info">
                     <div class="title">{{ art.name }}</div>
@@ -1259,6 +1265,38 @@ export default {
                     margin-left: 10px;
                     font-weight: 600;
                 }
+            }
+        }
+        .copyright-icon {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 100px;
+            height: 100px;
+            color: white;
+            font-size: 20px;
+            .icon-sub {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .sub {
+                position: absolute;
+                border-left: 100px solid transparent;
+                border-bottom: 100px solid rgba(0, 0, 0, 0.3);
+                width: 0;
+                height: 0;
+                left: 50%;
+                top: 50%;
+                transform: translateY(-50%) translateX(-50%);
+            }
+            .svg-icon {
+                position: absolute;
+                left: 55px;
+                top: 55px;
+                font-size: 30px;
+                /* color: #c61e1e; */
+                color: white;
             }
         }
     }

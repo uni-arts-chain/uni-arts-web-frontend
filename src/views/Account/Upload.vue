@@ -45,7 +45,7 @@
             <el-form-item label="Date" prop="produce_at">
                 <DatePicker v-model="form.produce_at" placeholder="select" />
             </el-form-item>
-            <el-form-item label="Size" class="size-form-item">
+            <el-form-item label="Size" required class="size-form-item">
                 <el-form-item class="size-length" prop="size_length">
                     <Input
                         class="size-input"
@@ -65,6 +65,20 @@
                 </el-form-item>
                 cm
             </el-form-item>
+            <el-form-item label="Royalty" prop="royalty">
+                <Input
+                    style="width: 140px"
+                    v-model="form.royalty"
+                    type="number"
+                    append="%"
+                />
+            </el-form-item>
+            <el-form-item label="Royalty Date" prop="royalty_expired_at">
+                <DatePicker
+                    v-model="form.royalty_expired_at"
+                    placeholder="select"
+                />
+            </el-form-item>
             <el-form-item label="Price" prop="price">
                 <Input v-model="form.price" append="UART" />
             </el-form-item>
@@ -76,7 +90,7 @@
                     :rows="5"
                 />
             </el-form-item>
-            <el-form-item class="main-upload" label="Main">
+            <el-form-item class="main-upload" required label="Main">
                 <el-form-item class="upload-form-item" prop="img_main_file1">
                     <Upload v-model="form.img_main_file1" />
                 </el-form-item>
@@ -210,11 +224,13 @@
 </template>
 <script>
 import { Form, FormItem, Button, Dialog } from "element-ui";
+import { BigNumber } from "bignumber.js";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
 import DatePicker from "@/components/DatePicker";
 import Textarea from "@/components/Textarea";
 import Upload from "@/components/Upload";
+// import CheckBox from "@/components/CheckBox";
 export default {
     name: "upload",
     components: {
@@ -227,6 +243,7 @@ export default {
         DatePicker,
         Textarea,
         Upload,
+        // CheckBox,
     },
     data() {
         let fileValidator = (rule, value, callback) => {
@@ -236,6 +253,21 @@ export default {
                 !this.form.img_detail_file3[0]
             ) {
                 return callback(new Error("至少上传一张主图"));
+            } else {
+                callback();
+            }
+        };
+        let persentValidator = (rule, value, callback) => {
+            if (value) {
+                let numberArray = new BigNumber(value)
+                    .mod(1)
+                    .toString()
+                    .split(".");
+                if (numberArray.length == 2 && numberArray[1].length > 4) {
+                    return callback(new Error("最多4位小数"));
+                } else {
+                    callback();
+                }
             } else {
                 callback();
             }
@@ -251,6 +283,8 @@ export default {
                 size_width: "",
                 details: "",
                 price: "",
+                royalty: "",
+                royalty_expired_at: "",
                 fee: "",
                 img_main_file1: [],
                 img_main_file2: [],
@@ -319,6 +353,21 @@ export default {
                 price: [
                     { required: false, message: "请输入价格", trigger: "blur" },
                 ],
+                royalty: [
+                    {
+                        required: false,
+                        validator: persentValidator,
+                        message: "请输入最多4位小数的百分比",
+                        trigger: "blur",
+                    },
+                ],
+                royalty_expired_at: [
+                    {
+                        required: false,
+                        message: "请选择版税截止日期",
+                        trigger: "blur",
+                    },
+                ],
                 img_main_file1: [
                     {
                         required: true,
@@ -339,6 +388,18 @@ export default {
         themes() {
             return this.$store.state.art.themes;
         },
+        isRoyalty() {
+            return this.form.royalty ? true : false;
+        },
+    },
+    watch: {
+        "form.royalty"(value) {
+            if (value) {
+                this.rules.royalty_expired_at[0].required = true;
+            } else {
+                this.rules.royalty_expired_at[0].required = false;
+            }
+        },
     },
     methods: {
         onSubmit() {
@@ -356,6 +417,14 @@ export default {
                         size_width: this.form.size_width,
                         details: this.form.details,
                         price: this.form.price,
+                        royalty: this.form.royalty
+                            ? this.form.royalty / 100
+                            : "",
+                        royalty_expired_at: this.form.royalty_expired_at
+                            ? parseInt(
+                                  this.form.royalty_expired_at.getTime() / 1000
+                              ) * 1000
+                            : "",
                         img_main_file1: this.form.img_main_file1[0]
                             ? this.form.img_main_file1
                             : "",

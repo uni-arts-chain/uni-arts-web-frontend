@@ -42,6 +42,13 @@
                     >
                         Price
                     </div>
+                    <div
+                        class="name-item"
+                        @click="active_cate = 'royalty'"
+                        :class="{ active: active_cate == 'royalty' }"
+                    >
+                        Royalty
+                    </div>
                 </div>
                 <div class="catetory">
                     <div
@@ -102,6 +109,7 @@ export default {
             category_id: "",
             theme_id: "",
             material_id: "",
+            isRoyalty: false,
             price_gte: "",
             price_lt: "",
             active_cate: "",
@@ -127,6 +135,14 @@ export default {
                 return this.$store.state.art.themes;
             } else if (this.active_cate == "categories") {
                 return this.$store.state.art.categories;
+            } else if (this.active_cate == "royalty") {
+                return [
+                    {
+                        cate_label: "royalty",
+                        id: "royalty1",
+                        title: "Royalty",
+                    },
+                ];
             } else {
                 return this.$store.state.art.materials;
             }
@@ -165,6 +181,9 @@ export default {
                 obj.theme_id = this.theme_id;
             } else if (this.material_id) {
                 obj.material_id = this.material_id;
+            }
+            if (this.isRoyalty) {
+                obj.has_royalty = true;
             }
             if (this.price_gte) {
                 obj.price_gte = this.price_gte;
@@ -263,6 +282,7 @@ export default {
             this.price_gte = "";
             this.price_lt = "";
             this.theme_id = "";
+            this.isRoyalty = false;
         },
         resetActive_cate(item) {
             this.resetForm();
@@ -279,6 +299,9 @@ export default {
                 case "price":
                     this.price_gte = item.gte || "";
                     this.price_lt = item.lt || "";
+                    break;
+                case "royalty":
+                    this.isRoyalty = item;
                     break;
             }
         },
