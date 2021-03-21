@@ -357,7 +357,7 @@ export default {
                     {
                         required: false,
                         validator: persentValidator,
-                        message: "请输入最多4位小数的百分比",
+                        message: "请输入最多2位小数的百分比",
                         trigger: "blur",
                     },
                 ],
