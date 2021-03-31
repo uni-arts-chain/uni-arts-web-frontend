@@ -1,29 +1,25 @@
 /** * Created by Lay Hunt on 2020-12-29 11:11:36. */
 <template>
-    <div class="uni-upload" @click="selectFile">
-        <div class="box-boder selected" v-if="fileDataList.length > 0">
-            <AdaptiveImage width="100%" height="100%" :url="fileDataList[2]" />
-        </div>
-        <div class="box-boder" v-if="fileDataList.length <= 0">
-            <div class="bg">
+    <div class="uni-file" @click="selectFile">
+        <div class="box-boder">
+            <div class="bg" v-if="fileDataList.length <= 0">
                 <div class="plus"></div>
-                <div class="text">choose a picture</div>
+                <div class="text">choose a zip</div>
+            </div>
+            <div class="file" v-else>
+                <icon-svg icon-class="zip" />
             </div>
         </div>
     </div>
 </template>
 <script>
-import AdaptiveImage from "@/components/AdaptiveImage";
 export default {
-    name: "uni-upload",
+    name: "uni-file",
     model: {
         prop: "value",
         event: "change",
     },
-    props: ["value", "limit"],
-    components: {
-        AdaptiveImage,
-    },
+    props: ["value", "upload"],
     data() {
         return {
             fileDataList: [],
@@ -52,29 +48,22 @@ export default {
             const pickerOpts = {
                 types: [
                     {
-                        description: "Image Or Video",
+                        description: "File",
                         accept: {
-                            "image/*": [".png", ".gif", ".jpeg", ".jpg"],
-                            "video/*": [".mp4"],
+                            "application/zip": [".zip"],
                         },
                     },
                 ],
-                excludeAcceptAllOption: true,
+                excludeAcceptAllOption: false,
                 multiple: false,
             };
 
             let [fileHandle] = await window.showOpenFilePicker(pickerOpts);
 
             let fileData = await fileHandle.getFile();
-            console.log(fileData);
-            let reader = new FileReader();
-            let fileDataURL = await new Promise((resolve) => {
-                reader.onload = (event) => {
-                    resolve(event.target.result);
-                };
-                reader.readAsDataURL(fileData);
-            });
-            this.fileDataList = [fileData, fileData.name, fileDataURL];
+            this.upload([fileData, fileData.name]);
+            // this.fileDataList = [fileData, fileData.name];
+            // this.$emit("uploadFile", [fileData, fileData.name]);
         },
         dispatch(componentName, eventName, params) {
             var parent = this.$parent || this.$root;
@@ -95,7 +84,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.uni-upload {
+.uni-file {
     display: flex;
     width: 360px;
     .box-boder {
@@ -118,7 +107,8 @@ export default {
         background-size: 32px;
         z-index: 1px;
     }
-    .bg {
+    .bg,
+    .file {
         width: 100%;
         height: 100%;
         background: #eee;
@@ -127,6 +117,9 @@ export default {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+    }
+    .file {
+        font-size: 70px;
     }
     .plus {
         width: 52px;

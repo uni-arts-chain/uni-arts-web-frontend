@@ -338,13 +338,24 @@ const apiList = [
     {
         name: "postPhoneCode",
         method: "POST",
-        desc: "获取手机验证码",
+        desc: "提交短信验证码",
         path: "/members/send_sms",
         mockPath: "/members/send_sms",
         params: {
             phone_number: "",
         },
         options: {},
+    },
+    {
+        name: "postZip",
+        method: "POST",
+        desc: "上传zip文件",
+        path: "/arts/upload_live2d_file",
+        mockPath: "/arts/upload_live2d_file",
+        params: {},
+        options: {
+            upload: ["live2d_file"],
+        },
     },
 ];
 

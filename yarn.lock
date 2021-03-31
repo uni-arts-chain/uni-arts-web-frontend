@@ -9246,6 +9246,13 @@ uglify-js@3.4.x:
     commander "~2.19.0"
     source-map "~0.6.1"
 
+uni-live2d@^1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/uni-live2d/-/uni-live2d-1.0.10.tgz#11976903999b7ed7b9b170ec34b06c2ad4794efe"
+  integrity sha512-2OiIBbk0nS5Hch8B7mZoBjD/Ofhg5jJvsLFhDDbQ2mpMTDTj+zmMhwhj9YB6eclej/yiYdFrhYsJB4xlKolWHw==
+  dependencies:
+    whatwg-fetch "^3.6.2"
+
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-1.0.4.tgz#2619800c4c825800efdd8343af7dd9933cbe2818"
@@ -9757,6 +9764,11 @@ websocket@^1.0.33:
     typedarray-to-buffer "^3.1.5"
     utf-8-validate "^5.0.2"
     yaeti "^0.0.6"
+
+whatwg-fetch@^3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.2.tgz#dced24f37f2624ed0281725d51d0e2e3fe677f8c"
+  integrity sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==
 
 which-module@^2.0.0:
   version "2.0.0"

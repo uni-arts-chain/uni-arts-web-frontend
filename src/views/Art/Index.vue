@@ -5,9 +5,18 @@
             <div class="art-info" v-loading="isLoading">
                 <div
                     class="img-container"
-                    @click="enterPreview(art.img_main_file1)"
+                    @click="enterPreview(art.img_main_file1, true)"
                 >
+                    <Live2DView
+                        width="620px"
+                        height="580px"
+                        :path="art.live2d_ipfs_url"
+                        :modelName="art.live2d_file"
+                        :canView="live2dCanView"
+                        v-if="art.live2d_ipfs_url"
+                    />
                     <AdaptiveImage
+                        v-else
                         :isResponsive="false"
                         :isPlay="true"
                         :url="art.img_main_file1 ? art.img_main_file1.url : ''"
@@ -637,6 +646,7 @@ import Auction from "./Auction";
 import Chart from "./Chart";
 import Similar from "./Similar";
 import ShareDialog from "@/components/ShareDialog";
+import Live2DView from "@/components/Live2DView";
 
 export default {
     name: "art",
@@ -650,6 +660,7 @@ export default {
         Auction,
         Similar,
         ShareDialog,
+        Live2DView,
     },
     data() {
         return {
@@ -661,6 +672,7 @@ export default {
             dialogAuctionVisible: false,
             dialogShareVisible: false,
             isSmilarLoading: false,
+            live2dCanView: false,
             member: {},
             author: {},
             countdown: "",
@@ -824,6 +836,7 @@ export default {
                     }
                     this.requestSimilarData();
                     this.isLoading = false;
+                    this.live2dCanView = true;
                 })
                 .catch((err) => {
                     console.log(err);
@@ -871,7 +884,8 @@ export default {
         isVideo(url) {
             return /\.mp4$/.test(url);
         },
-        enterPreview(obj) {
+        enterPreview(obj, isOff) {
+            if (isOff) return;
             if (obj) {
                 this.dialogPreviewUrl = obj.url;
                 this.isDialogPreview = true;

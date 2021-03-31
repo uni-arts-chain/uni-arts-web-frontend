@@ -4,11 +4,13 @@
         <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="art-item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${getArtId(v)}`" class="img-container">
+                <Live2DView width="100%" height="230px" v-if="v.isLive2d" />
                 <AdaptiveImage
                     :url="getImageResource(v)"
                     width="100%"
                     height="230px"
-                ></AdaptiveImage>
+                    v-else
+                />
                 <div class="copyright-icon" v-if="v.has_royalty">
                     <div class="icon-sub">
                         <div class="sub"></div>
@@ -63,6 +65,7 @@
 </template>
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
+import Live2DView from "@/components/Live2DView";
 export default {
     name: "order",
     props: {
@@ -77,6 +80,7 @@ export default {
     },
     components: {
         AdaptiveImage,
+        Live2DView,
     },
     methods: {
         next() {

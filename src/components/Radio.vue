@@ -1,24 +1,39 @@
 /** * Created by Lay Hunt on 2021-03-20 11:03:42. */
 <template>
-    <el-checkbox v-model="inputData"></el-checkbox>
+    <div>
+        <el-radio
+            v-model="inputData"
+            :label="v"
+            v-for="(v, i) in list"
+            :key="i"
+            >{{ v.toUpperCase() }}</el-radio
+        >
+    </div>
 </template>
 <script>
 export default {
-    name: "uni-checkbox",
+    name: "uni-radio",
     model: {
         prop: "value",
         event: "change",
     },
     props: {
         value: {
-            default: false,
-            type: Boolean,
+            default: "1",
+            type: String,
+        },
+        list: {
+            type: Array,
+            default: () => [],
         },
     },
     data() {
         return {
             inputData: "",
         };
+    },
+    created() {
+        this.inputData = this.value;
     },
     watch: {
         inputData() {
@@ -52,18 +67,28 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep .el-checkbox__inner {
+.el-radio {
+    margin-right: 50px;
+}
+::v-deep .el-radio__inner {
     width: 24px;
     height: 24px;
     border-width: 2px;
-    border-radius: 0;
+    border-radius: 50%;
+}
+::v-deep .el-radio .el-radio__label {
+    font-size: 17px;
+    font-weight: 400;
+    text-align: center;
+    letter-spacing: 0px;
+    color: black;
+}
+::v-deep .el-radio__inner.is-checked {
     border-color: black;
 }
-::v-deep .el-checkbox__inner::after {
-    width: 8px;
-    height: 14px;
-    left: 4px;
-    top: 0px;
+::v-deep .el-radio__inner::after {
+    width: 9px;
+    height: 9px;
     border-width: 2px;
 }
 </style>

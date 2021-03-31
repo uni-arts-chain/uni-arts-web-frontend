@@ -90,17 +90,51 @@
                     :rows="5"
                 />
             </el-form-item>
-            <el-form-item class="main-upload" required label="Main">
-                <el-form-item class="upload-form-item" prop="img_main_file1">
-                    <Upload v-model="form.img_main_file1" />
-                </el-form-item>
-                <el-form-item class="upload-form-item" prop="img_main_file2">
-                    <Upload v-model="form.img_main_file2" />
-                </el-form-item>
-                <el-form-item class="upload-form-item" prop="img_main_file3">
-                    <Upload v-model="form.img_main_file3" />
-                </el-form-item>
+            <el-form-item label="Type">
+                <Radio v-model="uploadType" :list="typeList" />
             </el-form-item>
+            <el-form-item />
+            <div v-if="uploadType == 'art'">
+                <el-form-item class="main-upload" required label="Main">
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_main_file1"
+                    >
+                        <Upload v-model="form.img_main_file1" />
+                    </el-form-item>
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_main_file2"
+                    >
+                        <Upload v-model="form.img_main_file2" />
+                    </el-form-item>
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_main_file3"
+                    >
+                        <Upload v-model="form.img_main_file3" />
+                    </el-form-item>
+                </el-form-item>
+            </div>
+            <div v-if="uploadType == 'live2d'">
+                <el-form-item
+                    class="live2d-upload-form-item"
+                    required
+                    label="Live2D"
+                >
+                    <File v-model="uploadLive2dFile" :upload="uploadZip" />
+                    <div class="live2d-preview">
+                        <Live2DView
+                            width="100%"
+                            height="100%"
+                            @shotCanvas="shotCanvas"
+                            :canView="isLive2dUploadDone"
+                            :path="uploadLive2dFile.live2d_ipfs_url"
+                            :modelName="uploadLive2dFile.live2d_file"
+                        />
+                    </div>
+                </el-form-item>
+            </div>
             <el-form-item class="detail-upload" label="Detail">
                 <div class="detail-box">
                     <el-form-item
@@ -230,7 +264,12 @@ import Select from "@/components/Select";
 import DatePicker from "@/components/DatePicker";
 import Textarea from "@/components/Textarea";
 import Upload from "@/components/Upload";
-// import CheckBox from "@/components/CheckBox";
+import FileUpload from "@/components/File";
+import Live2DView from "@/components/Live2DView";
+import Radio from "@/components/Radio";
+
+import { dataURLtoBlob } from "@/utils/index";
+
 export default {
     name: "upload",
     components: {
@@ -243,7 +282,11 @@ export default {
         DatePicker,
         Textarea,
         Upload,
+        // Tab,
         // CheckBox,
+        Radio,
+        ["File"]: FileUpload,
+        Live2DView,
     },
     data() {
         let fileValidator = (rule, value, callback) => {
@@ -273,6 +316,15 @@ export default {
             }
         };
         return {
+            uploadType: "art",
+            typeList: ["art", "live2d"],
+            canvasInstance: {},
+            isLive2dUploadDone: false,
+            uploadLive2dFile: {
+                live2d_file: "",
+                live2d_ipfs_hash: "",
+                live2d_ipfs_url: "",
+            },
             form: {
                 name: "",
                 category_id: "",
@@ -285,6 +337,8 @@ export default {
                 price: "",
                 royalty: "",
                 royalty_expired_at: "",
+                live2d_file: "",
+                live2d_ipfs_hash: "",
                 fee: "",
                 img_main_file1: [],
                 img_main_file2: [],
@@ -402,7 +456,42 @@ export default {
         },
     },
     methods: {
+        uploadZip(fileData) {
+            console.log(fileData);
+            this.isLive2dUploadDone = false;
+            this.$http
+                .userPostZip({
+                    live2d_file: fileData,
+                })
+                .then((res) => {
+                    this.uploadLive2dFile = res;
+                    this.isLive2dUploadDone = true;
+                })
+                .catch((err) => {
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
+        shotCanvas(canvasInstance) {
+            this.canvasInstance = canvasInstance;
+        },
         onSubmit() {
+            if (this.uploadType == "live2d" && this.canvasInstance.toDataURL) {
+                let canvasImgPngBase64 = this.canvasInstance.toDataURL();
+                console.log(canvasImgPngBase64);
+                let file = dataURLtoBlob(canvasImgPngBase64);
+                let fileData = new File(
+                    [file],
+                    this.uploadLive2dFile.live2d_file + ".png",
+                    { type: file.type }
+                );
+                console.log(fileData);
+                let fileDataList = [
+                    fileData,
+                    fileData.name,
+                    canvasImgPngBase64,
+                ];
+                this.form.img_main_file1 = fileDataList;
+            }
             this.$refs["form"].validate((valid) => {
                 if (valid) {
                     if (this.isSubmiting) return;
@@ -454,6 +543,12 @@ export default {
                         img_detail_file3_desc: this.form.img_detail_file3_desc,
                         img_detail_file4_desc: this.form.img_detail_file4_desc,
                         img_detail_file5_desc: this.form.img_detail_file5_desc,
+                        live2d_file: this.uploadLive2dFile.live2d_file
+                            ? this.uploadLive2dFile.live2d_file
+                            : "",
+                        live2d_ipfs_hash: this.uploadLive2dFile.live2d_ipfs_hash
+                            ? this.uploadLive2dFile.live2d_ipfs_hash
+                            : "",
                     };
                     if (!this.form.img_main_file1[0]) {
                         if (this.form.img_main_file2[0]) {
@@ -570,6 +665,22 @@ export default {
     .textarea-form-item {
         margin-right: 0;
         width: calc(100% - 300px);
+    }
+}
+.live2d-upload-form-item {
+    width: 100%;
+    ::v-deep .el-form-item__content {
+        display: flex;
+        align-items: flex-start;
+    }
+    .live2d-preview {
+        width: 500px;
+        height: 500px;
+        background: white;
+        border: 2px solid #020202;
+    }
+    .uni-file {
+        width: 300px;
     }
 }
 .detail-upload {
