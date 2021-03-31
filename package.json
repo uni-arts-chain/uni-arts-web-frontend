@@ -23,7 +23,7 @@
     "lodash": "^4.17.20",
     "nprogress": "^0.2.0",
     "ua-parser-js": "^0.7.22",
-    "uni-live2d": "^1.0.10",
+    "uni-live2d": "^1.0.11",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-toastification": "1.7.7",

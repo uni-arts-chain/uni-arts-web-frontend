@@ -53,9 +53,11 @@ export default {
     },
     destroyed() {
         this.live2dInstance && this.live2dInstance.release();
+        console.log("Live2d Destroyed");
     },
     mounted() {
         this.live2dInstance = new live2D();
+        console.log("Live2d Created");
     },
     methods: {
         init() {

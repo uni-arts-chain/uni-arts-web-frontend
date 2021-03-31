@@ -9246,10 +9246,10 @@ uglify-js@3.4.x:
     commander "~2.19.0"
     source-map "~0.6.1"
 
-uni-live2d@^1.0.10:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/uni-live2d/-/uni-live2d-1.0.10.tgz#11976903999b7ed7b9b170ec34b06c2ad4794efe"
-  integrity sha512-2OiIBbk0nS5Hch8B7mZoBjD/Ofhg5jJvsLFhDDbQ2mpMTDTj+zmMhwhj9YB6eclej/yiYdFrhYsJB4xlKolWHw==
+uni-live2d@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/uni-live2d/-/uni-live2d-1.0.11.tgz#261af516542a53a580102050606cdb891ccab6e0"
+  integrity sha512-7Oev1m75AuRsNPHW87RNSn0r6X6QpyqcTdPdW165S6OzO7Z8fjY8PXasMP5qrkEssG+K4WP5njx+OQScTu4How==
   dependencies:
     whatwg-fetch "^3.6.2"
 
