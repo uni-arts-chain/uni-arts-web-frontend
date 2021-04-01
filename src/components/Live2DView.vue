@@ -64,7 +64,7 @@ export default {
             this.manager = this.live2dInstance.initialize({
                 canvasWrapper: this.$refs.canvasWrapper,
                 canvas: this.$refs.canvas,
-                bgPath: "http://47.75.215.77:8080/ipfs",
+                bgPath: "https://ipfs.uniarts.me/ipfs",
                 bgName:
                     "QmdboSbc3eHqRT5aFHejL5njke6oaoeKb9HQpPD9xg8yAx/white.png",
             });
