@@ -1559,6 +1559,13 @@
   dependencies:
     "@types/node" "*"
 
+"@uniarts/live2d@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@uniarts/live2d/-/live2d-1.0.0.tgz#237e82c27431558d8686dcc9e9e15708407d992a"
+  integrity sha512-S9kTrH4zb2Wl0WsmfN4Z3Ud8lNjLlyqDwj9r+JUJeyXlw6ivOEzML7uHA+EcpZQJofVFLmgcYS1YnbVvFMTTHw==
+  dependencies:
+    whatwg-fetch "^3.6.2"
+
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@vue/babel-helper-vue-jsx-merge-props/-/babel-helper-vue-jsx-merge-props-1.2.1.tgz#31624a7a505fb14da1d58023725a4c5f270e6a81"
@@ -9245,13 +9252,6 @@ uglify-js@3.4.x:
   dependencies:
     commander "~2.19.0"
     source-map "~0.6.1"
-
-uni-live2d@^1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/uni-live2d/-/uni-live2d-1.0.11.tgz#261af516542a53a580102050606cdb891ccab6e0"
-  integrity sha512-7Oev1m75AuRsNPHW87RNSn0r6X6QpyqcTdPdW165S6OzO7Z8fjY8PXasMP5qrkEssG+K4WP5njx+OQScTu4How==
-  dependencies:
-    whatwg-fetch "^3.6.2"
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

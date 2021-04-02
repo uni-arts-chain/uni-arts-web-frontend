@@ -9,7 +9,7 @@
     </div>
 </template>
 <script>
-import live2D from "uni-live2d";
+import live2D from "@uniarts/live2d";
 
 export default {
     name: "live2dview",
@@ -61,19 +61,22 @@ export default {
     },
     methods: {
         init() {
-            this.manager = this.live2dInstance.initialize({
-                canvasWrapper: this.$refs.canvasWrapper,
-                canvas: this.$refs.canvas,
-                bgPath: "https://ipfs.uniarts.me/ipfs",
-                bgName:
-                    "QmdboSbc3eHqRT5aFHejL5njke6oaoeKb9HQpPD9xg8yAx/white.png",
-            });
-            this.manager.addModel({
-                path: this.path,
-                modelName: this.modelName,
-            });
-            this.$emit("shotCanvas", this.$refs.canvas);
-            this.initialize();
+            this.live2dInstance
+                .initialize({
+                    canvasWrapper: this.$refs.canvasWrapper,
+                    canvas: this.$refs.canvas,
+                    bgPath: "https://ipfs.uniarts.me/ipfs",
+                    bgName:
+                        "QmdboSbc3eHqRT5aFHejL5njke6oaoeKb9HQpPD9xg8yAx/white.png",
+                })
+                .then((manager) => {
+                    manager.addModel({
+                        path: this.path,
+                        modelName: this.modelName,
+                    });
+                    this.$emit("shotCanvas", this.$refs.canvas);
+                    this.initialize();
+                });
         },
         initialize() {
             this.$emit("reset");
