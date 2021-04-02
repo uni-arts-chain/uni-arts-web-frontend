@@ -6,7 +6,7 @@
             :label="v"
             v-for="(v, i) in list"
             :key="i"
-            >{{ v.toUpperCase() }}</el-radio
+            >{{ v }}</el-radio
         >
     </div>
 </template>
@@ -81,6 +81,7 @@ export default {
     font-weight: 400;
     text-align: center;
     letter-spacing: 0px;
+    text-transform: capitalize;
     color: black;
 }
 ::v-deep .el-radio__inner.is-checked {

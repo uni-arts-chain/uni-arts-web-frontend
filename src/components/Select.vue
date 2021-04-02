@@ -52,6 +52,9 @@ export default {
             inputData: "",
         };
     },
+    created() {
+        this.inputData = this.value ? this.value : "";
+    },
     watch: {
         inputData() {
             this.$emit("change", this.inputData);

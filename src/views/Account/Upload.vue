@@ -90,7 +90,36 @@
                     :rows="5"
                 />
             </el-form-item>
-            <el-form-item label="Type">
+            <el-form-item label="Refungible" required style="width: 100%">
+                <div class="split-body" style="height: 45px">
+                    <Radio
+                        style="width: 30%"
+                        v-model="splitType"
+                        :list="splitList"
+                    />
+                    <div v-if="splitType == 'multiple'" style="width: 70%">
+                        <Select
+                            style="210px"
+                            v-model="form.refungible_decimal"
+                            placeholder="select"
+                            :options="refungibleList"
+                            optionLabel="value"
+                            optionValue="value"
+                            optionKey="value"
+                        ></Select>
+                        <span
+                            style="
+                                font-size: 17px;
+                                font-weight: 400;
+                                margin-left: 30px;
+                            "
+                            >Split into
+                            {{ form.refungible_decimal }} parts</span
+                        >
+                    </div>
+                </div>
+            </el-form-item>
+            <el-form-item label="Type" required>
                 <Radio v-model="uploadType" :list="typeList" />
             </el-form-item>
             <el-form-item />
@@ -317,6 +346,22 @@ export default {
         };
         return {
             uploadType: "art",
+            splitType: "single",
+            splitList: ["single", "multiple"],
+            refungibleList: [
+                {
+                    value: 10,
+                },
+                {
+                    value: 100,
+                },
+                {
+                    value: 1000,
+                },
+                {
+                    value: 10000,
+                },
+            ],
             typeList: ["art", "live2d"],
             canvasInstance: {},
             isLive2dUploadDone: false,
@@ -340,6 +385,8 @@ export default {
                 live2d_file: "",
                 live2d_ipfs_hash: "",
                 fee: "",
+                refungible: false,
+                refungible_decimal: 10,
                 img_main_file1: [],
                 img_main_file2: [],
                 img_main_file3: [],
@@ -506,6 +553,9 @@ export default {
                         size_width: this.form.size_width,
                         details: this.form.details,
                         price: this.form.price,
+                        is_refungible:
+                            this.splitType == "single" ? "false" : "true",
+                        refungible_decimal: this.form.refungible_decimal,
                         royalty: this.form.royalty
                             ? this.form.royalty / 100
                             : "",
@@ -701,6 +751,10 @@ export default {
             width: calc(100% - 300px);
         }
     }
+}
+.split-body {
+    display: flex;
+    align-items: flex-start;
 }
 
 .el-button.cancel-button {
