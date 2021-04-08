@@ -17,7 +17,7 @@
                         <icon-svg icon-class="telegram"></icon-svg>
                     </a>
                     <a
-                        href="https://twitter.com/NetworkUniarts"
+                        href="https://twitter.com/UniartsNetwork"
                         target="_blank"
                     >
                         <icon-svg icon-class="twitter"></icon-svg>
