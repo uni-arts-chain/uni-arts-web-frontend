@@ -160,8 +160,8 @@ export default {
     watch: {
         materials(value) {
             if (value.length > 0) {
-                this.material_id = value[0].id;
-                this.active_subcate = value[0].id;
+                // this.material_id = value[0].id;
+                // this.active_subcate = value[0].id;
                 this.requestData();
             }
         },
@@ -255,7 +255,7 @@ export default {
                 this.active_cate = item.cate_label;
                 this.active_subcate = item.id;
             } else {
-                this.active_cate = "";
+                // this.active_cate = "";
                 this.active_subcate = "";
             }
             this.resetActive_cate(item);
@@ -286,6 +286,9 @@ export default {
         },
         resetActive_cate(item) {
             this.resetForm();
+            // reset
+            if (!this.active_subcate) return;
+
             switch (this.active_cate) {
                 case "materials":
                     this.material_id = item.id;
