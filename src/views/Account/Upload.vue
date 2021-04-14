@@ -531,9 +531,6 @@ export default {
             this.canvasInstance = canvasInstance;
         },
         onSubmit() {
-            this.resetForm();
-            return;
-            // eslint-disable-next-line no-unreachable
             if (this.uploadType == "live2d" && this.canvasInstance.toDataURL) {
                 let canvasImgPngBase64 = this.canvasInstance.toDataURL();
                 console.log(canvasImgPngBase64);
