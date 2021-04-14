@@ -177,6 +177,9 @@ export default {
             }
         },
     },
+    mounted() {
+        this.requestData();
+    },
     methods: {
         // need to fix
         requestData() {

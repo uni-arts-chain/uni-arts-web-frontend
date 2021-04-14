@@ -678,7 +678,6 @@ export default {
             dialogShareVisible: false,
             isSmilarLoading: false,
             live2dCanView: false,
-            member: {},
             author: {},
             countdown: "",
             currentArtId: this.$route.params.id,
@@ -747,11 +746,11 @@ export default {
             return this.$store.state.art.isSending;
         },
         isOwner() {
-            return this.art.member_id == this.$store.state.user.info.id;
+            return this.art.is_owner;
         },
         isOwnerOrder() {
             return (
-                this.member.address == this.$store.state.user.info.address &&
+                this.art.is_owner &&
                 this.$store.getters["art/artStatus"] ==
                     this.$store.state.art.ART_ON_SALE
             );
@@ -833,7 +832,6 @@ export default {
                     }
                 )
                 .then(async (res) => {
-                    this.member = res.member;
                     this.author = res.author;
                     await this.$store.dispatch("art/SetArtInfo", res);
                     if (res.item_id) {
