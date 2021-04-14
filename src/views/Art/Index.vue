@@ -5,7 +5,12 @@
             <div class="art-info" v-loading="isLoading">
                 <div
                     class="img-container"
-                    @click="enterPreview(art.img_main_file1, true)"
+                    @click="
+                        enterPreview(
+                            art.img_main_file1,
+                            art.live2d_ipfs_url ? true : false
+                        )
+                    "
                 >
                     <Live2DView
                         width="620px"
