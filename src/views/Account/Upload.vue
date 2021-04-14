@@ -151,11 +151,16 @@
                     required
                     label="Live2D"
                 >
-                    <File v-model="uploadLive2dFile" :upload="uploadZip" />
+                    <File
+                        :isLoading="isUploadLive2D"
+                        :fileObject="uploadLive2dFile"
+                        :upload="uploadZip"
+                    />
                     <div class="live2d-preview">
                         <Live2DView
                             width="100%"
                             height="100%"
+                            ref="live2d"
                             @shotCanvas="shotCanvas"
                             :canView="isLive2dUploadDone"
                             :path="uploadLive2dFile.live2d_ipfs_url"
@@ -364,6 +369,7 @@ export default {
             ],
             typeList: ["art", "live2d"],
             canvasInstance: {},
+            isUploadLive2D: false,
             isLive2dUploadDone: false,
             uploadLive2dFile: {
                 live2d_file: "",
@@ -505,6 +511,7 @@ export default {
     methods: {
         uploadZip(fileData) {
             console.log(fileData);
+            this.isUploadLive2D = true;
             this.isLive2dUploadDone = false;
             this.$http
                 .userPostZip({
@@ -513,8 +520,10 @@ export default {
                 .then((res) => {
                     this.uploadLive2dFile = res;
                     this.isLive2dUploadDone = true;
+                    this.isUploadLive2D = false;
                 })
                 .catch((err) => {
+                    this.isUploadLive2D = false;
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
@@ -522,6 +531,9 @@ export default {
             this.canvasInstance = canvasInstance;
         },
         onSubmit() {
+            this.resetForm();
+            return;
+            // eslint-disable-next-line no-unreachable
             if (this.uploadType == "live2d" && this.canvasInstance.toDataURL) {
                 let canvasImgPngBase64 = this.canvasInstance.toDataURL();
                 console.log(canvasImgPngBase64);
@@ -640,6 +652,11 @@ export default {
         },
         resetForm() {
             this.$refs.form.resetFields();
+            this.$refs.live2d && this.$refs.live2d.reset();
+
+            this.uploadLive2dFile.live2d_file = "";
+            this.uploadLive2dFile.live2d_ipfs_hash = "";
+            this.uploadLive2dFile.live2d_ipfs_url = "";
         },
     },
 };

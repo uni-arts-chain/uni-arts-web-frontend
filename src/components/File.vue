@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-12-29 11:11:36. */
 <template>
-    <div class="uni-file" @click="selectFile">
+    <div class="uni-file" @click="selectFile" v-loading="isLoading">
         <div class="box-boder">
             <div class="bg" v-if="fileDataList.length <= 0">
                 <div class="plus"></div>
@@ -15,11 +15,20 @@
 <script>
 export default {
     name: "uni-file",
-    model: {
-        prop: "value",
-        event: "change",
+    props: {
+        fileObject: {
+            type: Object,
+            default: () => {},
+        },
+        upload: {
+            type: Function,
+            default: () => {},
+        },
+        isLoading: {
+            type: Boolean,
+            default: false,
+        },
     },
-    props: ["value", "upload"],
     data() {
         return {
             fileDataList: [],
@@ -36,8 +45,10 @@ export default {
                 );
             }
         },
-        value(value) {
-            this.fileDataList = value ? value : [];
+        "fileObject.live2d_ipfs_url"(value) {
+            if (!value) {
+                this.fileDataList = [];
+            }
         },
     },
     methods: {
@@ -61,6 +72,7 @@ export default {
             let [fileHandle] = await window.showOpenFilePicker(pickerOpts);
 
             let fileData = await fileHandle.getFile();
+            this.fileDataList = [fileData, fileData.name];
             this.upload([fileData, fileData.name]);
             // this.fileDataList = [fileData, fileData.name];
             // this.$emit("uploadFile", [fileData, fileData.name]);
@@ -87,6 +99,7 @@ export default {
 .uni-file {
     display: flex;
     width: 360px;
+    margin-right: 30px;
     .box-boder {
         width: 360px;
         max-width: 100%;
@@ -94,7 +107,6 @@ export default {
         height: 270px;
         cursor: pointer;
         position: relative;
-        margin-right: 30px;
     }
     .box-boder.selected::after {
         content: "";
