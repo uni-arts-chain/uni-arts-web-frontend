@@ -13,7 +13,7 @@
     "@polkadot/util": "5.2.2",
     "@polkadot/util-crypto": "5.2.2",
     "@polkadot/vue-identicon": "^0.62.1",
-    "@uniarts/live2d": "^1.0.0",
+    "@uniarts/live2d": "^1.0.2",
     "axios": "^0.21.0",
     "bignumber.js": "^9.0.1",
     "clipboard-copy": "^4.0.1",

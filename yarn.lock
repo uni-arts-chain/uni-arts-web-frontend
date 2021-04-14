@@ -1559,10 +1559,10 @@
   dependencies:
     "@types/node" "*"
 
-"@uniarts/live2d@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@uniarts/live2d/-/live2d-1.0.0.tgz#237e82c27431558d8686dcc9e9e15708407d992a"
-  integrity sha512-S9kTrH4zb2Wl0WsmfN4Z3Ud8lNjLlyqDwj9r+JUJeyXlw6ivOEzML7uHA+EcpZQJofVFLmgcYS1YnbVvFMTTHw==
+"@uniarts/live2d@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@uniarts/live2d/-/live2d-1.0.2.tgz#323ba8bc8aa134f54211b3e69cdcb94dde402552"
+  integrity sha512-+E+rlRUlAjQnaJd/gvCYMJdRlEV9BxjJpVJEAxzCcqgvYAwYOZ3atdftjMe2cAlJbvF5HeosC2WPy10SRBemEQ==
   dependencies:
     whatwg-fetch "^3.6.2"
 

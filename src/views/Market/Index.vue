@@ -16,6 +16,13 @@
                 <div class="name">
                     <div
                         class="name-item"
+                        :class="{ active: active_cate == 'markets' }"
+                        @click="active_cate = 'markets'"
+                    >
+                        Market
+                    </div>
+                    <div
+                        class="name-item"
                         :class="{ active: active_cate == 'materials' }"
                         @click="active_cate = 'materials'"
                     >
@@ -35,13 +42,7 @@
                     >
                         Category
                     </div>
-                    <div
-                        class="name-item"
-                        @click="active_cate = 'price'"
-                        :class="{ active: active_cate == 'price' }"
-                    >
-                        Price
-                    </div>
+
                     <div
                         class="name-item"
                         @click="active_cate = 'royalty'"
@@ -58,14 +59,14 @@
                         :key="i"
                         :class="{
                             active:
-                                active_subcate == v.id &&
-                                current_cate == v.cate_label,
+                                active_cate == 'markets'
+                                    ? currentMarket == v.id
+                                    : active_subcate == v.id &&
+                                      current_cate == v.cate_label,
                         }"
                     >
-                        <div v-if="active_cate == 'price'">
-                            {{ v.gte ? v.gte : "低于" }}
-                            {{ v.gte && v.lt ? " - " : "" }}
-                            {{ v.lt ? v.lt : "以上" }}
+                        <div v-if="active_cate == 'markets'">
+                            {{ v.title }}
                         </div>
                         <div v-else>
                             {{ v.title || "unknown" }}
@@ -102,7 +103,22 @@ export default {
         return {
             list: [],
             page: 1,
-            priceInterval: [],
+            markets: [
+                {
+                    cate_label: "markets",
+                    code: "uart",
+                    desc: "UART",
+                    id: "uart",
+                    title: "UART",
+                },
+                // {
+                //     cate_label: "markets",
+                //     code: "rmb",
+                //     desc: "RMB",
+                //     id: "rmb",
+                //     title: "RMB",
+                // },
+            ],
             per_page: 18,
             total_pages: 0,
             total_count: 0,
@@ -110,8 +126,9 @@ export default {
             theme_id: "",
             material_id: "",
             isRoyalty: false,
-            price_gte: "",
-            price_lt: "",
+            currentMarket: "uart",
+            // price_gte: "",
+            // price_lt: "",
             active_cate: "",
             active_subcate: "",
             current_cate: "",
@@ -121,16 +138,12 @@ export default {
         };
     },
     created() {
-        // if (this.materials.length > 0) {
-        //     this.material_id = this.materials[0].id;
-        //     this.active_subcate = this.materials[0].id;
-        // }
-        this.requsetPriceLimit();
+        // this.requsetPriceLimit();
     },
     computed: {
         categoryList() {
-            if (this.active_cate == "price") {
-                return this.priceInterval;
+            if (this.active_cate == "markets") {
+                return this.markets;
             } else if (this.active_cate == "themes") {
                 return this.$store.state.art.themes;
             } else if (this.active_cate == "categories") {
@@ -160,11 +173,12 @@ export default {
     watch: {
         materials(value) {
             if (value.length > 0) {
-                this.material_id = value[0].id;
-                this.active_subcate = value[0].id;
                 this.requestData();
             }
         },
+    },
+    mounted() {
+        this.requestData();
     },
     methods: {
         // need to fix
@@ -185,12 +199,12 @@ export default {
             if (this.isRoyalty) {
                 obj.has_royalty = true;
             }
-            if (this.price_gte) {
-                obj.price_gte = this.price_gte;
-            }
-            if (this.price_lt) {
-                obj.price_lt = this.price_lt;
-            }
+            // if (this.price_gte) {
+            //     obj.price_gte = this.price_gte;
+            // }
+            // if (this.price_lt) {
+            //     obj.price_lt = this.price_lt;
+            // }
             this.$http
                 .globalGetSellingArt(obj)
                 .then((res) => {
@@ -255,27 +269,27 @@ export default {
                 this.active_cate = item.cate_label;
                 this.active_subcate = item.id;
             } else {
-                this.active_cate = "";
+                // this.active_cate = "";
                 this.active_subcate = "";
             }
             this.resetActive_cate(item);
             this.requestData();
         },
-        requsetPriceLimit() {
-            this.$http
-                .globalGetPriceInterval({})
-                .then((res) => {
-                    this.priceInterval = res.map((v, i) => {
-                        v.id = i + 1;
-                        v.cate_label = "price";
-                        return v;
-                    });
-                    this.requestData();
-                })
-                .catch((err) => {
-                    this.$notify.error(err.head ? err.head.msg : err);
-                });
-        },
+        // requsetPriceLimit() {
+        //     this.$http
+        //         .globalGetPriceInterval({})
+        //         .then((res) => {
+        //             this.priceInterval = res.map((v, i) => {
+        //                 v.id = i + 1;
+        //                 v.cate_label = "price";
+        //                 return v;
+        //             });
+        //             this.requestData();
+        //         })
+        //         .catch((err) => {
+        //             this.$notify.error(err.head ? err.head.msg : err);
+        //         });
+        // },
         resetForm() {
             this.category_id = "";
             this.material_id = "";
@@ -286,6 +300,9 @@ export default {
         },
         resetActive_cate(item) {
             this.resetForm();
+            // reset
+            if (!this.active_subcate) return;
+
             switch (this.active_cate) {
                 case "materials":
                     this.material_id = item.id;
@@ -302,6 +319,9 @@ export default {
                     break;
                 case "royalty":
                     this.isRoyalty = item;
+                    break;
+                case "markets":
+                    this.currentMarket = item.id;
                     break;
             }
         },

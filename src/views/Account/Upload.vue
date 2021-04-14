@@ -90,7 +90,36 @@
                     :rows="5"
                 />
             </el-form-item>
-            <el-form-item label="Type">
+            <el-form-item label="Refungible" required style="width: 100%">
+                <div class="split-body" style="height: 45px">
+                    <Radio
+                        style="width: 30%"
+                        v-model="splitType"
+                        :list="splitList"
+                    />
+                    <div v-if="splitType == 'multiple'" style="width: 70%">
+                        <Select
+                            style="210px"
+                            v-model="form.refungible_decimal"
+                            placeholder="select"
+                            :options="refungibleList"
+                            optionLabel="value"
+                            optionValue="value"
+                            optionKey="value"
+                        ></Select>
+                        <span
+                            style="
+                                font-size: 17px;
+                                font-weight: 400;
+                                margin-left: 30px;
+                            "
+                            >Split into
+                            {{ form.refungible_decimal }} parts</span
+                        >
+                    </div>
+                </div>
+            </el-form-item>
+            <el-form-item label="Type" required>
                 <Radio v-model="uploadType" :list="typeList" />
             </el-form-item>
             <el-form-item />
@@ -122,11 +151,16 @@
                     required
                     label="Live2D"
                 >
-                    <File v-model="uploadLive2dFile" :upload="uploadZip" />
+                    <File
+                        :isLoading="isUploadLive2D"
+                        :fileObject="uploadLive2dFile"
+                        :upload="uploadZip"
+                    />
                     <div class="live2d-preview">
                         <Live2DView
                             width="100%"
                             height="100%"
+                            ref="live2d"
                             @shotCanvas="shotCanvas"
                             :canView="isLive2dUploadDone"
                             :path="uploadLive2dFile.live2d_ipfs_url"
@@ -317,8 +351,25 @@ export default {
         };
         return {
             uploadType: "art",
+            splitType: "single",
+            splitList: ["single", "multiple"],
+            refungibleList: [
+                {
+                    value: 10,
+                },
+                {
+                    value: 100,
+                },
+                {
+                    value: 1000,
+                },
+                {
+                    value: 10000,
+                },
+            ],
             typeList: ["art", "live2d"],
             canvasInstance: {},
+            isUploadLive2D: false,
             isLive2dUploadDone: false,
             uploadLive2dFile: {
                 live2d_file: "",
@@ -340,6 +391,8 @@ export default {
                 live2d_file: "",
                 live2d_ipfs_hash: "",
                 fee: "",
+                refungible: false,
+                refungible_decimal: 10,
                 img_main_file1: [],
                 img_main_file2: [],
                 img_main_file3: [],
@@ -458,6 +511,7 @@ export default {
     methods: {
         uploadZip(fileData) {
             console.log(fileData);
+            this.isUploadLive2D = true;
             this.isLive2dUploadDone = false;
             this.$http
                 .userPostZip({
@@ -466,8 +520,10 @@ export default {
                 .then((res) => {
                     this.uploadLive2dFile = res;
                     this.isLive2dUploadDone = true;
+                    this.isUploadLive2D = false;
                 })
                 .catch((err) => {
+                    this.isUploadLive2D = false;
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
@@ -506,6 +562,9 @@ export default {
                         size_width: this.form.size_width,
                         details: this.form.details,
                         price: this.form.price,
+                        is_refungible:
+                            this.splitType == "single" ? "false" : "true",
+                        refungible_decimal: this.form.refungible_decimal,
                         royalty: this.form.royalty
                             ? this.form.royalty / 100
                             : "",
@@ -590,6 +649,11 @@ export default {
         },
         resetForm() {
             this.$refs.form.resetFields();
+            this.$refs.live2d && this.$refs.live2d.reset();
+
+            this.uploadLive2dFile.live2d_file = "";
+            this.uploadLive2dFile.live2d_ipfs_hash = "";
+            this.uploadLive2dFile.live2d_ipfs_url = "";
         },
     },
 };
@@ -701,6 +765,10 @@ export default {
             width: calc(100% - 300px);
         }
     }
+}
+.split-body {
+    display: flex;
+    align-items: flex-start;
 }
 
 .el-button.cancel-button {

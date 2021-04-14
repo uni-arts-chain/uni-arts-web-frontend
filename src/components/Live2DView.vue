@@ -2,6 +2,7 @@
 <template>
     <div
         class="live2dview"
+        v-loading="isLoading"
         :style="`width: ${width};height: ${height};`"
         ref="canvasWrapper"
     >
@@ -40,27 +41,31 @@ export default {
     data() {
         return {
             live2dInstance: {},
+            isLoading: false,
+            reset: () => {},
             manager: {},
         };
     },
     watch: {
         canView(value) {
             if (value) {
-                this.live2dInstance && this.live2dInstance.release();
+                this.release();
                 this.init();
             }
         },
     },
     destroyed() {
-        this.live2dInstance && this.live2dInstance.release();
+        this.destroy();
         console.log("Live2d Destroyed");
     },
     mounted() {
         this.live2dInstance = new live2D();
+        this.reset = this.release;
         console.log("Live2d Created");
     },
     methods: {
         init() {
+            this.isLoading = true;
             this.live2dInstance
                 .initialize({
                     canvasWrapper: this.$refs.canvasWrapper,
@@ -70,16 +75,26 @@ export default {
                         "QmdboSbc3eHqRT5aFHejL5njke6oaoeKb9HQpPD9xg8yAx/white.png",
                 })
                 .then((manager) => {
-                    manager.addModel({
-                        path: this.path,
-                        modelName: this.modelName,
-                    });
-                    this.$emit("shotCanvas", this.$refs.canvas);
-                    this.initialize();
+                    manager
+                        .addModel({
+                            path: this.path,
+                            modelName: this.modelName,
+                        })
+                        .then(() => {
+                            this.isLoading = false;
+                            this.$emit("shotCanvas", this.$refs.canvas);
+                        });
+                })
+                .catch((err) => {
+                    this.isLoading = false;
+                    console.log(err);
                 });
         },
-        initialize() {
-            this.$emit("reset");
+        release() {
+            this.live2dInstance && this.live2dInstance.release();
+        },
+        destroy() {
+            this.live2dInstance && this.live2dInstance.destroy();
         },
     },
 };

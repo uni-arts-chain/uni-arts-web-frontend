@@ -143,7 +143,6 @@ export default {
             background: rgba(0, 0, 0, 0.5);
             border: 2px solid rgba(255, 255, 255, 0.8);
             font-size: 20px;
-            font-family: PingFang SC Semibold, PingFang SC Semibold-Semibold;
             font-weight: 600;
             text-align: center;
             color: #ffffff;
