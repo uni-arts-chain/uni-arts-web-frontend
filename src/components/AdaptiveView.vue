@@ -1,11 +1,7 @@
 /** * Created by Lay Hunt on 2021-04-15 15:30:17. */
 <template>
     <div class="adaptive-view" :style="`width: ${width};height: ${height}`">
-        <div
-            class="img-container"
-            :class="{ preview: isPreview }"
-            @click="showPreview"
-        >
+        <div class="img-container" :class="{ preview: isPreview }">
             <Live2DView
                 :width="width"
                 :height="height"
@@ -14,18 +10,21 @@
                 v-if="viewType == 'live2d' && !isPreview"
             />
             <AdaptiveImage
+                @click="showPreview"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'live2d' && isPreview"
                 :url="nft.img_main_file1 ? nft.img_main_file1.url : ''"
             />
             <AdaptiveImage
+                @click="showPreview"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'img'"
                 :url="nft.img_main_file1 ? nft.img_main_file1.url : ''"
             />
             <AdaptiveVideo
+                @click="showPreview"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'video'"
@@ -71,16 +70,15 @@
                     v-if="viewType == 'img'"
                     width="100%"
                     height="100%"
-                    :isPlay="true"
                     :isResponsive="false"
                     :isOrigin="true"
                     :url="dialogPreviewUrl"
                 />
                 <AdaptiveVideo
                     v-else-if="viewType == 'video'"
-                    :isResponsive="true"
-                    :isPlay="!isPreview"
-                    :source="nft.img_main_file1 ? nft.img_main_file1.url : ''"
+                    :isResponsive="false"
+                    :isPlay="true"
+                    :source="dialogPreviewUrl"
                 />
             </div>
         </Dialog>
