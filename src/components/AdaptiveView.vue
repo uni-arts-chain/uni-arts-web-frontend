@@ -10,21 +10,21 @@
                 v-if="viewType == 'live2d' && !isPreview"
             />
             <AdaptiveImage
-                @click="showPreview"
+                @click.native="showPreview"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'live2d' && isPreview"
                 :url="nft.img_main_file1 ? nft.img_main_file1.url : ''"
             />
             <AdaptiveImage
-                @click="showPreview"
+                @click.native="showPreview"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'img'"
                 :url="nft.img_main_file1 ? nft.img_main_file1.url : ''"
             />
             <AdaptiveVideo
-                @click="showPreview"
+                @click.native="showPreview"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'video'"
