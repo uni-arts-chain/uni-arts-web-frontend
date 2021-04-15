@@ -3,52 +3,15 @@
     <div class="art">
         <div class="container">
             <div class="art-info" v-loading="isLoading">
-                <div
-                    class="img-container"
-                    @click="
-                        enterPreview(
-                            art.img_main_file1,
-                            art.live2d_ipfs_url ? true : false
-                        )
-                    "
-                >
-                    <Live2DView
-                        width="620px"
-                        height="580px"
-                        :path="art.live2d_ipfs_url"
-                        :modelName="art.live2d_file"
-                        :canView="live2dCanView"
-                        v-if="art.live2d_ipfs_url"
+                <div class="adaptive-view-wrapper">
+                    <AdaptiveView
+                        :nft="art"
+                        width="100%"
+                        height="100%"
+                        :isAuction="isAuction"
+                        :isWaiting="isWaiting"
+                        :countdown="countdown"
                     />
-                    <AdaptiveImage
-                        v-else
-                        :isResponsive="false"
-                        :isPlay="true"
-                        :url="art.img_main_file1 ? art.img_main_file1.url : ''"
-                    />
-                    <div class="auction-label" v-if="isStarted">IN AUCTION</div>
-                    <div class="auction-date" v-if="isStarted || isWaiting">
-                        <div class="auction-data-pick">
-                            {{
-                                isWaiting
-                                    ? "Start after"
-                                    : isStarted
-                                    ? "End after"
-                                    : ""
-                            }}
-                            <span>{{ countdown }}</span>
-                        </div>
-                        <span
-                            >Bidding notice
-                            <img src="@/assets/images/auciton_notice@2x.png"
-                        /></span>
-                    </div>
-                    <div class="copyright-icon" v-if="art.has_royalty">
-                        <div class="icon-sub">
-                            <div class="sub"></div>
-                            <icon-svg icon-class="copyright" />
-                        </div>
-                    </div>
                 </div>
                 <div class="info">
                     <div class="title">{{ art.name }}</div>
@@ -378,13 +341,11 @@
                 <div class="information-body">
                     <div class="img-container">
                         <div class="img-content">
-                            <AdaptiveImage
-                                :url="
-                                    art.img_main_file1
-                                        ? art.img_main_file1.url
-                                        : ''
-                                "
-                                alt=""
+                            <AdaptiveView
+                                width="100%"
+                                height="100%"
+                                :nft="art"
+                                :isPreview="true"
                             />
                         </div>
                     </div>
@@ -541,22 +502,6 @@
             />
         </div>
         <Dialog
-            :visible.sync="isDialogPreview"
-            type="fullscreen"
-            :close="handlePreviewClose"
-        >
-            <div class="dialog-content preview">
-                <AdaptiveImage
-                    width="100%"
-                    height="100%"
-                    :isPlay="true"
-                    :isResponsive="false"
-                    :isOrigin="true"
-                    :url="dialogPreviewUrl"
-                />
-            </div>
-        </Dialog>
-        <Dialog
             :visible.sync="dialogVisible"
             :type="dialogType"
             :close="handleClose"
@@ -651,13 +596,14 @@ import Auction from "./Auction";
 import Chart from "./Chart";
 import Similar from "./Similar";
 import ShareDialog from "@/components/ShareDialog";
-import Live2DView from "@/components/Live2DView";
+import AdaptiveView from "@/components/AdaptiveView";
 
 export default {
     name: "art",
     components: {
         Dialog,
         AdaptiveImage,
+        AdaptiveView,
         [Tooltip.name]: Tooltip,
         Qrcode,
         Chart,
@@ -665,7 +611,6 @@ export default {
         Auction,
         Similar,
         ShareDialog,
-        Live2DView,
     },
     data() {
         return {
@@ -1239,7 +1184,7 @@ export default {
     overflow: hidden;
     width: 100%;
 
-    .img-container {
+    .adaptive-view-wrapper {
         float: left;
         width: 620px;
         height: 580px;
@@ -1247,87 +1192,6 @@ export default {
         overflow: hidden;
         cursor: pointer;
         position: relative;
-
-        .auction-label {
-            position: absolute;
-            top: 34px;
-            left: 0;
-            padding: 5px 16px;
-            background-color: #f9b43b;
-            font-size: 20px;
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-            font-weight: 600;
-            text-align: left;
-            color: #ffffff;
-            letter-spacing: 0px;
-        }
-
-        .auction-date {
-            width: 100%;
-            height: 50px;
-            position: absolute;
-            background-color: rgba(134, 29, 57, 0.8);
-            bottom: 0;
-            left: 0;
-            font-size: 18px;
-            font-weight: 400;
-            text-align: left;
-            color: #ffffff;
-            padding: 5px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            letter-spacing: 0px;
-            span {
-                display: flex;
-                align-items: center;
-            }
-            img {
-                width: 17px;
-                margin-left: 5px;
-            }
-            .auction-data-pick {
-                display: flex;
-                align-items: center;
-                span {
-                    margin-left: 10px;
-                    font-weight: 600;
-                }
-            }
-        }
-        .copyright-icon {
-            position: absolute;
-            bottom: 0px;
-            right: 0px;
-            width: 100px;
-            height: 100px;
-            color: white;
-            font-size: 20px;
-            .icon-sub {
-                position: relative;
-                width: 100%;
-                height: 100%;
-            }
-            .sub {
-                position: absolute;
-                border-left: 100px solid transparent;
-                border-bottom: 100px solid rgba(0, 0, 0, 0.3);
-                width: 0;
-                height: 0;
-                left: 50%;
-                top: 50%;
-                transform: translateY(-50%) translateX(-50%);
-            }
-            .svg-icon {
-                position: absolute;
-                left: 55px;
-                top: 55px;
-                font-size: 30px;
-                /* color: #c61e1e; */
-                color: white;
-            }
-        }
     }
 }
 .info {
@@ -1577,6 +1441,8 @@ export default {
             background-size: 100% auto;
             padding-top: 40px;
             padding-left: 40px;
+            padding-right: 70px;
+            padding-bottom: 70px;
             .img-content {
                 position: relative;
                 overflow: hidden;

@@ -33,10 +33,6 @@ export default {
             type: String,
             required: true,
         },
-        canView: {
-            type: Boolean,
-            required: true,
-        },
     },
     data() {
         return {
@@ -47,7 +43,7 @@ export default {
         };
     },
     watch: {
-        canView(value) {
+        path(value) {
             if (value) {
                 this.release();
                 this.init();
@@ -61,6 +57,10 @@ export default {
     mounted() {
         this.live2dInstance = new live2D();
         this.reset = this.release;
+        if (this.path) {
+            this.release();
+            this.init();
+        }
         console.log("Live2d Created");
     },
     methods: {

@@ -3,13 +3,12 @@
     <div
         class="adaptive-image"
         ref="imgBox"
-        :class="{ 'img-loading': isLoading && !isVideo }"
+        :class="{ 'img-loading': isLoading }"
         :style="`${width ? `width:${width};` : ``}${
             height ? `height:${height};` : ``
         }`"
     >
         <img
-            v-if="!isVideo"
             ref="img"
             :class="{
                 'img-horizontal': !isOrigin && isHorizontal,
@@ -19,27 +18,11 @@
             @load="imgOnLoad"
             :src="url"
         />
-        <Video
-            v-else
-            :source="url"
-            :isPlay="isPlay"
-            :isResponsive="isResponsive"
-            @load="imgOnLoad"
-        />
-        <icon-svg
-            v-if="!isPlay && isVideo"
-            class="video-label"
-            icon-class="video"
-        />
     </div>
 </template>
 <script>
-import Video from "@/components/Video";
 export default {
     name: "adaptive-image",
-    components: {
-        Video,
-    },
     props: {
         url: {
             type: String,
@@ -57,14 +40,6 @@ export default {
             type: Boolean,
             default: false,
         },
-        isPlay: {
-            type: Boolean,
-            default: false,
-        },
-        isResponsive: {
-            type: Boolean,
-            default: true,
-        },
     },
     data() {
         return {
@@ -72,18 +47,8 @@ export default {
             isLoading: true,
         };
     },
-    computed: {
-        isVideo() {
-            return (
-                /\.mp4$/.test(this.url) || /^data:video\/mp4;/.test(this.url)
-            );
-        },
-    },
     methods: {
         imgOnLoad() {
-            if (this.isVideo) {
-                return;
-            }
             if (this.isOrigin) {
                 this.isLoading = false;
                 return;
@@ -150,13 +115,6 @@ export default {
     > img.img-origin {
         max-height: 100%;
         max-width: 100%;
-    }
-    .video-label {
-        font-size: 28px;
-        position: absolute;
-        top: 3px;
-        right: 7px;
-        color: white;
     }
 }
 .img-loading {

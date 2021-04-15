@@ -29,11 +29,12 @@
                         :key="i"
                         @click="clickArt(v)"
                     >
-                        <AdaptiveImage
+                        <AdaptiveView
                             width="250px"
                             height="187px"
-                            :url="v.img_main_file1.url"
-                        ></AdaptiveImage>
+                            :nft="v"
+                            :isPreview="true"
+                        />
                         <div class="art-info">
                             <div class="name">{{ v.name }}</div>
                             <div class="texture">
@@ -71,14 +72,14 @@
     </div>
 </template>
 <script>
-import AdaptiveImage from "@/components/AdaptiveImage";
+import AdaptiveView from "@/components/AdaptiveView";
 import Textarea from "@/components/Textarea";
 import { hexToString } from "@polkadot/util";
 import Dialog from "@/components/Dialog/Dialog";
 export default {
     name: "sign",
     components: {
-        AdaptiveImage,
+        AdaptiveView,
         Textarea,
         Dialog,
     },
