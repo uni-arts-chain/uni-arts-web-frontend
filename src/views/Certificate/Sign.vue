@@ -33,6 +33,7 @@
                             width="250px"
                             height="187px"
                             :nft="v"
+                            :isResponsive="true"
                             :isPreview="true"
                         />
                         <div class="art-info">
@@ -292,7 +293,7 @@ export default {
             cursor: not-allowed;
             box-shadow: none;
         }
-        .adaptive-image {
+        .adaptive-view {
             margin-bottom: 24px;
             margin-right: -1px;
             margin-top: -2px;

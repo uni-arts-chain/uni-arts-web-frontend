@@ -184,10 +184,8 @@ export default {
         /* cursor: default; */
     }
     .img-container {
-        float: left;
         width: 100%;
         height: 100%;
-        margin-right: 25px;
         overflow: hidden;
         cursor: pointer;
         position: relative;
