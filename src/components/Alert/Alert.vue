@@ -3,8 +3,9 @@
     <div class="uni__alert">
         <div v-if="noteType === 'NeedBrowser'" class="alert-content">
             For a better experience, please use
-            <span>Chrome</span> or
-            <span>Firefox</span>
+            <span>Chrome</span>
+            <!-- <span>Chrome</span> or
+            <span>Firefox</span> -->
         </div>
         <div v-else-if="noteType === 'NeedPlugin'" class="need-plugin">
             <div>
@@ -42,10 +43,10 @@ export default {
                     url =
                         "https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd";
                     break;
-                case "Firefox":
-                    url =
-                        "https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/";
-                    break;
+                // case "Firefox":
+                //     url =
+                //         "https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/";
+                //     break;
             }
             return url;
         },

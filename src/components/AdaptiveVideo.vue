@@ -124,6 +124,7 @@ export default {
     position: relative;
 }
 .video-player-container {
+    text-align: center;
     width: 100%;
     height: 100%;
     video {

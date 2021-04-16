@@ -17,9 +17,7 @@
                     </div>
                     <div class="item" v-for="(v, i) in list" :key="i">
                         <router-link :to="`/art/${v.id}`" class="img-container">
-                            <AdaptiveImage
-                                :url="v.img_main_file1.url"
-                            ></AdaptiveImage>
+                            <AdaptiveView :nft="v" :isPreview="true" />
                         </router-link>
                         <h5 class="title">{{ v.name }}</h5>
                         <div class="desc">
@@ -49,13 +47,13 @@
     </div>
 </template>
 <script>
-import AdaptiveImage from "@/components/AdaptiveImage";
+import AdaptiveView from "@/components/AdaptiveView";
 import Organization from "./Organization";
 import { hexToString, isJsonObject } from "@polkadot/util";
 export default {
     name: "index",
     components: {
-        AdaptiveImage,
+        AdaptiveView,
         Organization,
     },
     data() {

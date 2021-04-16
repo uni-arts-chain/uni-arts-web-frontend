@@ -1,9 +1,14 @@
 /** * Created by Lay Hunt on 2021-02-01 14:02:47. */
 <template>
-    <div class="similar">
+    <div
+        class="similar"
+        v-if="similarList.length > 0"
+        v-loading="isSmilarLoading"
+        :list="similarList"
+    >
         <div class="title">Recommend Arts</div>
         <div class="content">
-            <Thumbnail :list="list"></Thumbnail>
+            <Thumbnail :list="similarList"></Thumbnail>
         </div>
     </div>
 </template>
@@ -15,12 +20,31 @@ export default {
         Thumbnail,
     },
     data() {
-        return {};
+        return {
+            isSmilarLoading: false,
+            similarList: [],
+        };
     },
-    props: {
-        list: {
-            type: Array,
-            default: () => [],
+    mounted() {
+        this.requestSimilarData();
+    },
+    methods: {
+        requestSimilarData() {
+            if (!this.$store.state.user.info.address) {
+                return;
+            }
+            this.isSmilarLoading = true;
+            this.$http
+                .userGetArtSimilar({})
+                .then((res) => {
+                    this.isSmilarLoading = false;
+                    this.similarList = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isSmilarLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
         },
     },
 };

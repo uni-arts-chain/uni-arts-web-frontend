@@ -4,7 +4,7 @@
         <div class="no-data" v-if="list.length == 0">No artworks</div>
         <div class="item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${v.id}`" class="img-container">
-                <AdaptiveImage :url="v.img_main_file1.url"></AdaptiveImage>
+                <AdaptiveView :nft="v" :isResponsive="true" :isPreview="true" />
                 <div class="aution-view" v-if="v.aasm_state == 'auctioning'">
                     {{
                         computeBlockTimestamp(v.auction_start_time) | dateFormat
@@ -34,12 +34,12 @@
     </div>
 </template>
 <script>
-import AdaptiveImage from "./AdaptiveImage";
+import AdaptiveView from "./AdaptiveView";
 import { ComputeBlockTimestamp } from "@/utils";
 export default {
     name: "thumbnail",
     components: {
-        AdaptiveImage,
+        AdaptiveView,
     },
     props: {
         list: {

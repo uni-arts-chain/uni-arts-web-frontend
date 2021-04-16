@@ -7,9 +7,7 @@
                 <div class="no-data" v-if="list.length == 0">No artworks</div>
                 <div class="item" v-for="(v, i) in list" :key="i">
                     <router-link :to="`/art/${v.id}`" class="img-container">
-                        <AdaptiveImage
-                            :url="v.img_main_file1.url"
-                        ></AdaptiveImage>
+                        <AdaptiveView :nft="v" :isPreview="true" />
                     </router-link>
                     <h5 class="title">{{ v.name }}</h5>
                     <div class="desc">{{ materialType(v.material_id) }}</div>
@@ -116,7 +114,7 @@
     </div>
 </template>
 <script>
-import AdaptiveImage from "@/components/AdaptiveImage";
+import AdaptiveView from "@/components/AdaptiveView";
 import Dialog from "@/components/Dialog/Dialog";
 import Input from "@/components/Input";
 import DatePicker from "@/components/DatePicker";
@@ -126,7 +124,7 @@ import { BigNumber } from "bignumber.js";
 export default {
     name: "apply",
     components: {
-        AdaptiveImage,
+        AdaptiveView,
         Dialog,
         Input,
         DatePicker,
