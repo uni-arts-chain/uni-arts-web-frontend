@@ -66,7 +66,9 @@ export default {
                 this.$store.getters["art/artStatus"] ==
                     this.$store.state.art.ART_ON_AUCTION ||
                 this.$store.getters["art/artStatus"] ==
-                    this.$store.state.art.ART_WAITING_AUCTION
+                    this.$store.state.art.ART_WAITING_AUCTION ||
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_AUCTIONED
             );
         },
     },
