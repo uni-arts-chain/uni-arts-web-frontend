@@ -375,6 +375,7 @@ export default {
                 live2d_file: "",
                 live2d_ipfs_hash: "",
                 live2d_ipfs_url: "",
+                live2d_ipfs_zip_hash: "",
             },
             form: {
                 name: "",
@@ -607,6 +608,10 @@ export default {
                             : "",
                         live2d_ipfs_hash: this.uploadLive2dFile.live2d_ipfs_hash
                             ? this.uploadLive2dFile.live2d_ipfs_hash
+                            : "",
+                        live2d_ipfs_zip_hash: this.uploadLive2dFile
+                            .live2d_ipfs_zip_hash
+                            ? this.uploadLive2dFile.live2d_ipfs_zip_hash
                             : "",
                     };
                     if (!this.form.img_main_file1[0]) {
