@@ -469,8 +469,7 @@ export default {
             this.isSubmiting = true;
             let extrinsic = this.$rpc.api.tx.nft.cancelSaleOrder(
                 this.art.collection_id,
-                this.art.item_id,
-                0
+                this.art.item_id
             );
             this.$store.dispatch("art/SendExtrinsic", {
                 address: this.$store.state.user.info.address,
