@@ -13,15 +13,15 @@
                         :countdown="countdown"
                     />
                 </div>
-                <ArtInfo :art="art" :signatureList="signatureList" />
+                <ArtInfo />
             </div>
-            <Transaction :transactionList="transactionList" />
-            <BidHistory :auctionList="auctionList" />
-            <SignatureList :signatureList="signatureList" />
-            <Author :authorInfo="author" />
-            <Information :art="art" />
-            <Comment :art="art" />
-            <Detail :art="art" />
+            <Transaction />
+            <BidHistory />
+            <SignatureList />
+            <Author />
+            <Information />
+            <Comment />
+            <Detail />
             <Similar />
         </div>
     </div>
@@ -58,7 +58,6 @@ export default {
         return {
             isLoading: false,
 
-            author: {},
             countdown: "",
             currentArtId: this.$route.params.id,
 
@@ -101,6 +100,9 @@ export default {
         art() {
             return this.$store.state.art.art;
         },
+        auctionInfo() {
+            return this.$store.state.art.auctionInfo;
+        },
         isAuction() {
             return (
                 this.$store.getters["art/artStatus"] ==
@@ -114,18 +116,6 @@ export default {
                 this.$store.getters["art/artStatus"] ==
                 this.$store.state.art.ART_WAITING_AUCTION
             );
-        },
-        auctionInfo() {
-            return this.$store.state.art.auctionInfo;
-        },
-        auctionList() {
-            return this.$store.state.art.auctionList;
-        },
-        transactionList() {
-            return this.$store.state.art.transactionList;
-        },
-        signatureList() {
-            return this.$store.state.art.signatureList;
         },
     },
     methods: {
@@ -150,7 +140,6 @@ export default {
                     }
                 )
                 .then(async (res) => {
-                    this.author = res.author;
                     await this.$store.dispatch("art/SetArtInfo", res);
                     if (res.item_id) {
                         isSub ? await this.subInfo() : "";

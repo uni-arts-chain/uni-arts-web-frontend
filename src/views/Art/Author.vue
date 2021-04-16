@@ -46,10 +46,11 @@ export default {
         RowText,
         AdaptiveImage,
     },
-    props: {
-        authorInfo: {
-            type: Object,
-            default: () => {},
+    computed: {
+        authorInfo() {
+            return this.$store.state.art.art.author
+                ? this.$store.state.art.art.author
+                : {};
         },
     },
     data() {

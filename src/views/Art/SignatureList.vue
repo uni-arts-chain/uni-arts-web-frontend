@@ -27,10 +27,9 @@ import { hexToString } from "@polkadot/util";
 
 export default {
     name: "SignatureList",
-    props: {
-        signatureList: {
-            type: Array,
-            default: () => [],
+    computed: {
+        signatureList() {
+            return this.$store.state.art.signatureList;
         },
     },
     data() {

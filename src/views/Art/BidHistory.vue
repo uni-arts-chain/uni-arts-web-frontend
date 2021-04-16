@@ -63,14 +63,6 @@ import { ComputeBlockTimestamp } from "@/utils";
 export default {
     name: "bid-history",
     props: {
-        auctionInfo: {
-            type: Object,
-            default: () => {},
-        },
-        auctionList: {
-            type: Array,
-            default: () => [],
-        },
         isAuction: {
             type: Boolean,
             default: false,
@@ -78,6 +70,14 @@ export default {
     },
     data() {
         return {};
+    },
+    computed: {
+        auctionList() {
+            return this.$store.state.art.auctionList;
+        },
+        auctionInfo() {
+            return this.$store.state.art.auctionInfo;
+        },
     },
     methods: {
         formatBlockNumber(blockNumber) {

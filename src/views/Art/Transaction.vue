@@ -40,10 +40,9 @@ export default {
     components: {
         Chart,
     },
-    props: {
-        transactionList: {
-            type: Array,
-            default: () => [],
+    computed: {
+        transactionList() {
+            return this.$store.state.art.transactionList;
         },
     },
     data() {

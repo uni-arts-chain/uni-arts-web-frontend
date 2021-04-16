@@ -37,10 +37,9 @@ export default {
     components: {
         AdaptiveView,
     },
-    props: {
-        art: {
-            type: Object,
-            default: () => {},
+    computed: {
+        art() {
+            return this.$store.state.art.art;
         },
     },
     data() {

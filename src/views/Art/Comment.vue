@@ -10,10 +10,9 @@
 <script>
 export default {
     name: "comment",
-    props: {
-        art: {
-            type: Object,
-            default: () => {},
+    computed: {
+        art() {
+            return this.$store.state.art.art;
         },
     },
     data() {

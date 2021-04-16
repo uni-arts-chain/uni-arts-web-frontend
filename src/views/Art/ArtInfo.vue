@@ -256,16 +256,6 @@ export default {
         Auction,
         [Tooltip.name]: Tooltip,
     },
-    props: {
-        art: {
-            type: Object,
-            default: () => {},
-        },
-        signatureList: {
-            type: Array,
-            default: () => [],
-        },
-    },
     data() {
         return {
             dialogShareVisible: false,
@@ -286,6 +276,12 @@ export default {
         };
     },
     computed: {
+        art() {
+            return this.$store.state.art.art;
+        },
+        signatureList() {
+            return this.$store.state.art.signatureList;
+        },
         isFollowed() {
             return this.$store.state.art.auctionList.length > 0;
         },
