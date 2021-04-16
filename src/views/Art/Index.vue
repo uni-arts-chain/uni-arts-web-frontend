@@ -73,15 +73,18 @@ export default {
             this.currentArtId = value;
             this.requestData();
         },
-        isSending(value) {
-            if (!value) {
-                this.requestData(false);
-                this.subInfo();
+        "auctionInfo.id"(value) {
+            if (value > 0) {
+                this.initTimeWork(this.auctionInfo);
+            } else {
+                this.removeTimeWork();
             }
         },
-        auctionInfo(value) {
+        isSending(value) {
             if (value) {
-                this.initTimeWork(value);
+                this.$store.dispatch("art/unSubArtInfo");
+            } else {
+                this.$store.dispatch("art/SubArtInfo");
             }
         },
     },
@@ -89,7 +92,7 @@ export default {
         this.requestData();
     },
     beforeDestroy() {
-        this.$store.dispatch("art/ResetSubQueue");
+        this.$store.dispatch("art/unSubArtInfo");
         this.$store.dispatch("art/SetArtInfo", {
             img_detail_file1: {},
             img_detail_file2: {},
@@ -114,6 +117,9 @@ export default {
                     this.$store.state.art.ART_WAITING_AUCTION
             );
         },
+        isSending() {
+            return this.$store.state.art.isSending;
+        },
         isWaiting() {
             return (
                 this.$store.getters["art/artStatus"] ==
@@ -122,19 +128,17 @@ export default {
         },
     },
     methods: {
-        requestData(isSub = true) {
+        requestData() {
             this.isLoading = true;
-            if (isSub) {
-                this.$store.dispatch("art/ResetSubQueue");
-                this.$store.dispatch("art/ResetInfo");
-                this.$store.dispatch("art/SetArtInfo", {
-                    img_detail_file1: {},
-                    img_detail_file2: {},
-                    img_detail_file3: {},
-                    img_detail_file4: {},
-                    img_detail_file5: {},
-                });
-            }
+            this.$store.dispatch("art/unSubArtInfo");
+            this.$store.dispatch("art/ResetInfo");
+            this.$store.dispatch("art/SetArtInfo", {
+                img_detail_file1: {},
+                img_detail_file2: {},
+                img_detail_file3: {},
+                img_detail_file4: {},
+                img_detail_file5: {},
+            });
             this.$http
                 .globalGetArtById(
                     {},
@@ -145,9 +149,8 @@ export default {
                 .then(async (res) => {
                     await this.$store.dispatch("art/SetArtInfo", res);
                     if (res.item_id) {
-                        isSub ? await this.subInfo() : "";
+                        this.$store.dispatch("art/SubArtInfo");
                     }
-
                     this.isLoading = false;
                 })
                 .catch((err) => {
@@ -155,12 +158,6 @@ export default {
                     this.$notify.error(err.head ? err.head.msg : err);
                     this.isLoading = false;
                 });
-        },
-        async subInfo() {
-            await this.$store.dispatch("art/GetTransactionList");
-            await this.$store.dispatch("art/GetSignatureList");
-            await this.$store.dispatch("art/GetAuctionInfo");
-            await this.$store.dispatch("art/GetSaleInfo");
         },
 
         countdownFormat(time) {
@@ -210,8 +207,7 @@ export default {
             }
         },
         resetTimeWork(item) {
-            clearInterval(this.timeWorkId);
-            this.timeWorkId = "";
+            this.removeTimeWork();
             this.initTimeWork(item);
         },
         formatBlockNumber(blockNumber) {
@@ -221,6 +217,11 @@ export default {
                 this.$store.state.global.chain.blockHeight
             );
             return timestamp;
+        },
+        removeTimeWork() {
+            clearInterval(this.timeWorkId);
+            this.timeWorkId = "";
+            this.countdown = "";
         },
     },
 };

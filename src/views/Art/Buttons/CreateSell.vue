@@ -114,7 +114,9 @@ export default {
         handleClose() {
             this.dialogVisible = false;
         },
-        handleClosed() {},
+        handleClosed() {
+            this.form.price = "";
+        },
     },
 };
 </script>

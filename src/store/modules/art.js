@@ -151,9 +151,6 @@ export default {
         SetAuctionList({ commit }, list) {
             commit("SET_AUCTION_LIST", list);
         },
-        ResetSubQueue({ commit }) {
-            commit("RESET_SUB_QUEUE");
-        },
         async SendExtrinsic({ commit }, { address, extrinsic, cb, done, err }) {
             commit("SET_IS_SENDING", true);
             commit("RESET_SUB_QUEUE");
@@ -317,6 +314,15 @@ export default {
                 }
             );
             commit("ADD_SUB_QUEUE", subObject);
+        },
+        async SubArtInfo({ dispatch }) {
+            dispatch("GetTransactionList");
+            dispatch("GetSignatureList");
+            dispatch("GetAuctionInfo");
+            dispatch("GetSaleInfo");
+        },
+        async unSubArtInfo({ commit }) {
+            commit("RESET_SUB_QUEUE");
         },
     },
 };

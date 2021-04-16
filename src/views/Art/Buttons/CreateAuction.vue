@@ -204,7 +204,9 @@ export default {
         handleClose() {
             this.dialogVisible = false;
         },
-        handleClosed() {},
+        handleClosed() {
+            this.$refs.form.resetFields();
+        },
     },
 };
 </script>

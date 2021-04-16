@@ -186,9 +186,6 @@ export default {
                 this.$store.state.art.ART_ON_SALE
             );
         },
-        isSending() {
-            return this.$store.state.art.isSending;
-        },
         isOwner() {
             return this.art.is_owner;
         },
