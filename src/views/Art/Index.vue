@@ -22,11 +22,7 @@
             <Information :art="art" />
             <Comment :art="art" />
             <Detail :art="art" />
-            <Similar
-                v-if="similarList.length > 0"
-                v-loading="isSmilarLoading"
-                :list="similarList"
-            />
+            <Similar />
         </div>
     </div>
 </template>
@@ -62,13 +58,11 @@ export default {
         return {
             isLoading: false,
 
-            isSmilarLoading: false,
             author: {},
             countdown: "",
             currentArtId: this.$route.params.id,
 
             timeWorkId: "",
-            similarList: [],
 
             subAuctionInfo: "",
             subAuctionList: "",
@@ -161,30 +155,13 @@ export default {
                     if (res.item_id) {
                         isSub ? await this.subInfo() : "";
                     }
-                    this.requestSimilarData();
+
                     this.isLoading = false;
                 })
                 .catch((err) => {
                     console.log(err);
                     this.$notify.error(err.head ? err.head.msg : err);
                     this.isLoading = false;
-                });
-        },
-        requestSimilarData() {
-            if (!this.$store.state.user.info.address) {
-                return;
-            }
-            this.isSmilarLoading = true;
-            this.$http
-                .userGetArtSimilar({})
-                .then((res) => {
-                    this.isSmilarLoading = false;
-                    this.similarList = res;
-                })
-                .catch((err) => {
-                    console.log(err);
-                    this.isSmilarLoading = false;
-                    this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
         async subInfo() {
