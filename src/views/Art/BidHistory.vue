@@ -62,12 +62,6 @@ import { ComputeBlockTimestamp } from "@/utils";
 
 export default {
     name: "bid-history",
-    props: {
-        isAuction: {
-            type: Boolean,
-            default: false,
-        },
-    },
     data() {
         return {};
     },
@@ -77,6 +71,14 @@ export default {
         },
         auctionInfo() {
             return this.$store.state.art.auctionInfo;
+        },
+        isAuction() {
+            return (
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_ON_AUCTION ||
+                this.$store.getters["art/artStatus"] ==
+                    this.$store.state.art.ART_WAITING_AUCTION
+            );
         },
     },
     methods: {

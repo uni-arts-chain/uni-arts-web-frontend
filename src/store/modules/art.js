@@ -82,6 +82,7 @@ export default {
             state.subQueue.forEach((v) => {
                 v();
             });
+            state.subQueue = [];
         },
         RESET_INFO: (state) => {
             state.subQueue = [];
@@ -152,8 +153,8 @@ export default {
             commit("SET_AUCTION_LIST", list);
         },
         async SendExtrinsic({ commit }, { address, extrinsic, cb, done, err }) {
-            commit("SET_IS_SENDING", true);
-            commit("RESET_SUB_QUEUE");
+            await commit("SET_IS_SENDING", true);
+            await commit("RESET_SUB_QUEUE");
             rpc.signAndSend(
                 address,
                 extrinsic,

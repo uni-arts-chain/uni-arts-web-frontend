@@ -14,6 +14,7 @@
             @closed="handleClosed"
         >
             <div class="dialog-content">
+                <div class="title">FIRM AUCTION</div>
                 <div class="price">
                     Current Price:
                     <span class="number"
@@ -63,6 +64,7 @@
     </div>
 </template>
 <script>
+import { BigNumber } from "bignumber.js";
 import Dialog from "@/components/Dialog/Dialog";
 
 export default {
@@ -89,8 +91,21 @@ export default {
         chainInfo() {
             return this.$store.state.global.chain;
         },
+        currentPrice() {
+            return new BigNumber(
+                this.auction.current_price || this.auction.start_price
+            )
+                .plus(this.auction.increment)
+                .toString();
+        },
         isOffline() {
             return !this.art.item_id;
+        },
+        isOnSale() {
+            return (
+                this.$store.getters["art/artStatus"] ==
+                this.$store.state.art.ART_ON_SALE
+            );
         },
         isAuction() {
             return (
@@ -165,6 +180,10 @@ export default {
         width: 260px;
         background: transparent;
     }
+    > button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
 }
 .dialog ::v-deep .el-dialog {
     padding-left: 30px;
@@ -233,10 +252,6 @@ export default {
         color: #ffffff;
         letter-spacing: 0px;
         cursor: pointer;
-    }
-    > button:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
     }
 }
 </style>

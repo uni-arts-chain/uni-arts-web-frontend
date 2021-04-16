@@ -109,6 +109,10 @@ export default {
         width: 260px;
         background: transparent;
     }
+    > button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
 }
 .dialog ::v-deep .el-dialog {
     padding-left: 30px;

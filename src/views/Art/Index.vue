@@ -81,9 +81,7 @@ export default {
             }
         },
         isSending(value) {
-            if (value) {
-                this.$store.dispatch("art/unSubArtInfo");
-            } else {
+            if (!value) {
                 this.$store.dispatch("art/SubArtInfo");
             }
         },
