@@ -108,54 +108,13 @@
             </div>
         </div>
         <div class="button-group">
-            <button
-                :disabled="isOffline || isAuction"
-                v-if="isOwner"
-                class="buy"
-                @click="confirm"
-            >
-                {{ isOwnerOrder ? "CANCEL NOW" : "SELL NOW" }}
-            </button>
-            <button
-                v-if="!isOwner"
-                :disabled="isOffline || isAuction || !isOnSale"
-                class="buy"
-                @click="confirm"
-            >
-                BUY NOW
-            </button>
-            <button
-                :disabled="isOffline || isOnSale || !isStarted || isFinished"
-                v-if="!isOwner && isAuction"
-                class="auction"
-                @click="createAuction()"
-            >
-                BID NOW
-            </button>
-            <button
-                :disabled="isOffline || isOnSale"
-                v-if="isOwner && !isAuction"
-                class="auction"
-                @click="createAuction()"
-            >
-                CREATE AUCTION
-            </button>
-            <button
-                :disabled="isOffline || isOnSale || isFollowed"
-                v-if="isOwner && !isFinished && isAuction"
-                class="auction"
-                @click="cancelAuction()"
-            >
-                CANCEL AUCTION
-            </button>
-            <button
-                :disabled="isOffline || isOnSale"
-                v-if="isOwner && isFinished && isAuction"
-                class="auction"
-                @click="cancelAuction()"
-            >
-                FINISH AUCTION
-            </button>
+            <CreateSell v-if="isOwner && !isOwnerOrder" />
+            <CancelSell v-if="isOwner && isOwnerOrder" />
+            <Buy v-if="!isOwner" />
+            <CreateAuction v-if="isOwner && !isAuction" />
+            <BidAuction v-if="!isOwner && isAuction" />
+            <CancelAuction v-if="isOwner && !isFinished && isAuction" />
+            <FinishAuction v-if="isOwner && isFinished && isAuction" />
         </div>
         <Dialog :visible.sync="dialogShareVisible" type="medium">
             <div class="dialog-content">
@@ -167,84 +126,20 @@
                 />
             </div>
         </Dialog>
-        <Dialog
-            :visible.sync="dialogVisible"
-            :type="dialogType"
-            :close="handleClose"
-            @closed="handleClosed"
-        >
-            <div class="dialog-content" v-if="dialogAuctionVisible">
-                <Auction
-                    @finishAuction="finishAuction"
-                    @cancelAuction="finishAuction"
-                    :isFinished="isFinished"
-                    :isStarted="isStarted"
-                    :isWaiting="isWaiting"
-                />
-            </div>
-            <div class="dialog-content" v-else-if="isOwnerOrder">
-                <div class="title">FIRM CANCEL</div>
-                <div class="price">
-                    Current Price:
-                    <span class="number">{{ art.price }} UART</span>
-                </div>
-                <button
-                    @click="cancelOrder"
-                    v-loading="isSubmiting"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                >
-                    CANCEL NOW
-                </button>
-            </div>
-            <div class="dialog-content" v-else-if="isOwner">
-                <div class="title">FIRM SELL</div>
-                <div class="price">
-                    Current Price:
-                    <span class="number">{{ art.price }} UART</span>
-                </div>
-                <div class="desc">
-                    <p>Please enter the selling price</p>
-                </div>
-                <div class="input-body">
-                    <input type="number" v-model="form.price" />
-                    <span class="code">UART</span>
-                </div>
-                <div class="note" style="min-height: 56px"></div>
-                <button
-                    @click="submitSell"
-                    v-loading="isSubmiting"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                >
-                    SELL NOW
-                </button>
-            </div>
-            <div class="dialog-content" v-else>
-                <div class="title">FIRM BUY</div>
-                <div class="price">
-                    Current Price:
-                    <span class="number">{{ art.price }} UART</span>
-                </div>
-                <button
-                    @click="submitBuy"
-                    v-loading="isSubmiting"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                >
-                    BUY NOW
-                </button>
-            </div>
-        </Dialog>
     </div>
 </template>
 <script>
 import { BigNumber } from "bignumber.js";
-import { ComputeBlockTimestamp } from "@/utils";
 import Dialog from "@/components/Dialog/Dialog";
 import ShareDialog from "@/components/ShareDialog";
 import Qrcode from "@/components/Qrcode";
-import Auction from "./Auction";
+import CreateSell from "./Buttons/CreateSell";
+import CancelSell from "./Buttons/CancelSell";
+import CreateAuction from "./Buttons/CreateAuction";
+import BidAuction from "./Buttons/BidAuction";
+import CancelAuction from "./Buttons/CancelAuction";
+import FinishAuction from "./Buttons/FinishAuction";
+import Buy from "./Buttons/Buy";
 import { Tooltip } from "element-ui";
 
 export default {
@@ -253,22 +148,19 @@ export default {
         Qrcode,
         Dialog,
         ShareDialog,
-        Auction,
+        CreateSell,
+        CancelSell,
+        CreateAuction,
+        BidAuction,
+        CancelAuction,
+        FinishAuction,
+        Buy,
         [Tooltip.name]: Tooltip,
     },
     data() {
         return {
             dialogShareVisible: false,
             copyStatus: false,
-
-            form: {
-                price: "",
-            },
-
-            dialogVisible: false,
-            isDialogPreview: false,
-            isSubmiting: false,
-            dialogAuctionVisible: false,
 
             shareUrl: "",
             shareArt: "",
@@ -314,19 +206,6 @@ export default {
                 this.$store.getters["art/artStatus"] ==
                     this.$store.state.art.ART_WAITING_AUCTION
             );
-        },
-        dialogType() {
-            return this.isDialogPreview
-                ? "fullscreen"
-                : this.isOwner
-                ? this.isAuction
-                    ? "small"
-                    : this.isOwnerOrder
-                    ? "small"
-                    : "medium"
-                : this.isAuction
-                ? "medium"
-                : "small";
         },
         isFinished() {
             return (
@@ -380,144 +259,6 @@ export default {
                 this.$store.state.global.chain.blockHeight,
                 this.$store.state.global.chain.timestamp
             );
-        },
-        handleClose() {
-            this.dialogVisible = false;
-        },
-        handleClosed() {
-            this.dialogAuctionVisible = false;
-        },
-        confirm() {
-            this.dialogVisible = true;
-        },
-        submit() {
-            this.dialogVisible = false;
-        },
-
-        finishAuction() {
-            this.dialogVisible = false;
-        },
-        formatBlockNumber(blockNumber) {
-            let timestamp = ComputeBlockTimestamp(
-                blockNumber,
-                this.$store.state.global.chain.timestamp,
-                this.$store.state.global.chain.blockHeight
-            );
-            return timestamp;
-        },
-        createAuction() {
-            if (!this.$store.state.user.info.address) {
-                this.$router.push("/login");
-                return;
-            }
-            this.dialogVisible = true;
-            this.dialogAuctionVisible = true;
-        },
-        sendAuction() {
-            if (!this.$store.state.user.info.address) {
-                this.$router.push("/login");
-                return;
-            }
-            this.dialogVisible = true;
-            this.dialogAuctionVisible = true;
-        },
-        cancelAuction() {
-            this.dialogVisible = true;
-            this.dialogAuctionVisible = true;
-        },
-        async submitSell() {
-            if (!this.$store.state.user.info.address) {
-                this.$router.push("/login");
-                return;
-            }
-            if (this.isSubmiting) {
-                return;
-            }
-            if (!this.form.price) return;
-            this.isSubmiting = true;
-
-            let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
-                this.art.collection_id,
-                this.art.item_id,
-                0,
-                new BigNumber(10)
-                    .pow(this.$store.state.global.chain.tokenDecimals)
-                    .times(this.form.price)
-                    .toNumber()
-            );
-            this.$store.dispatch("art/SendExtrinsic", {
-                address: this.$store.state.user.info.address,
-                extrinsic,
-                cb: () => {
-                    this.isSubmiting = false;
-                    this.$notify.info("Submitted");
-                    this.dialogVisible = false;
-                },
-                done: () => {
-                    this.$notify.success("Success");
-                },
-                err: () => {
-                    this.isSubmiting = false;
-                    this.$notify.error("Submission Failed");
-                },
-            });
-        },
-        async cancelOrder() {
-            if (this.isSubmiting) {
-                return;
-            }
-            this.isSubmiting = true;
-            let extrinsic = this.$rpc.api.tx.nft.cancelSaleOrder(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            this.$store.dispatch("art/SendExtrinsic", {
-                address: this.$store.state.user.info.address,
-                extrinsic,
-                cb: () => {
-                    this.isSubmiting = false;
-                    this.$notify.info("Submitted");
-                    this.dialogVisible = false;
-                },
-                done: () => {
-                    this.$notify.success("Success");
-                },
-                err: () => {
-                    this.isSubmiting = false;
-                    this.$notify.error("Submission Failed");
-                },
-            });
-        },
-        async submitBuy() {
-            if (!this.$store.state.user.info.address) {
-                this.$router.push("/login");
-                return;
-            }
-            if (this.isSubmiting) {
-                return;
-            }
-            console.log("创建买单");
-            this.isSubmiting = true;
-            let extrinsic = this.$rpc.api.tx.nft.acceptSaleOrder(
-                this.art.collection_id,
-                this.art.item_id
-            );
-            this.$store.dispatch("art/SendExtrinsic", {
-                address: this.$store.state.user.info.address,
-                extrinsic,
-                cb: () => {
-                    this.isSubmiting = false;
-                    this.$notify.info("Submitted");
-                    this.dialogVisible = false;
-                },
-                done: () => {
-                    this.$notify.success("Success");
-                },
-                err: () => {
-                    this.isSubmiting = false;
-                    this.$notify.error("Submission Failed");
-                },
-            });
         },
         artLike(flag) {
             if (flag) {
@@ -755,40 +496,8 @@ export default {
             }
         }
     }
-
-    .button-group {
-        display: flex;
-        justify-content: space-between;
-
-        .buy,
-        .auction {
-            cursor: pointer;
-            border: 3px solid #020202;
-            font-size: 20px;
-            font-weight: bold;
-            text-align: center;
-            color: #020202;
-            letter-spacing: 0px;
-            padding: 17px 0px;
-            width: 260px;
-            background: transparent;
-        }
-        .buy {
-            margin-right: 30px;
-        }
-        button.buy:disabled,
-        button.auction:disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-    }
 }
 
-.dialog ::v-deep .el-dialog {
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-bottom: 10px;
-}
 .dialog-content {
     font-size: 26px;
     text-align: left;
@@ -869,6 +578,11 @@ export default {
         z-index: 0;
         transform: translateX(-50%) translateY(-50%);
     }
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
 
