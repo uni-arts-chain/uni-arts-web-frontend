@@ -74,7 +74,10 @@ export default {
             this.requestData();
         },
         isSending(value) {
-            if (!value) this.subInfo();
+            if (!value) {
+                this.requestData(false);
+                this.subInfo();
+            }
         },
         auctionInfo(value) {
             if (value) {
@@ -154,7 +157,6 @@ export default {
                 });
         },
         async subInfo() {
-            this.requestData(false);
             await this.$store.dispatch("art/GetTransactionList");
             await this.$store.dispatch("art/GetSignatureList");
             await this.$store.dispatch("art/GetAuctionInfo");
