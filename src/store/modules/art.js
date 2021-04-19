@@ -18,6 +18,9 @@ export default {
         ART_ON_SALE: 5,
         ART_AUCTIONED: 6,
 
+        ART_TYPE_SINGLE: 1,
+        ART_TYPE_SEPERABLE: 3,
+
         art: {
             img_detail_file1: {},
             img_detail_file2: {},
@@ -28,6 +31,10 @@ export default {
         auctionInfo: {},
         auctionList: [],
         saleInfo: {},
+        saleSeparableIdList: [],
+        saleSeparableInfoList: [],
+        unsubSeparableInfoList: () => {},
+        saleOrderId: -1,
         transactionList: [],
         signatureList: [],
 
@@ -69,11 +76,23 @@ export default {
         SET_SALE_INFO: (state, info) => {
             state.saleInfo = info;
         },
+        SET_SEPARABLE_SALE_ID_LIST: (state, list) => {
+            state.saleSeparableIdList = list;
+        },
+        SET_SEPARABLE_SALE_INFO_LIST: (state, list) => {
+            state.saleSeparableInfoList = list;
+        },
+        SET_SEPARABLE_SALE_INFO_UNSUB: (state, cb) => {
+            state.unsubSeparableInfoList = cb;
+        },
         SET_TRANSACTION_LIST: (state, list) => {
             state.transactionList = list;
         },
         SET_SIGNATURE_LIST: (state, list) => {
             state.signatureList = list;
+        },
+        SET_ORDER_ID: (state, id) => {
+            state.saleOrderId = id;
         },
         ADD_SUB_QUEUE: (state, sub) => {
             state.subQueue.push(sub);
@@ -82,12 +101,17 @@ export default {
             state.subQueue.forEach((v) => {
                 v();
             });
+            state.unsubSeparableInfoList();
             state.subQueue = [];
+            state.unsubSeparableInfoList = () => {};
         },
         RESET_INFO: (state) => {
             state.subQueue = [];
+            state.unsubSeparableInfoList = () => {};
             state.auctionInfo = {};
             state.auctionList = [];
+            state.saleSeparableIdList = [];
+            state.saleSeparableInfoList = [];
             state.saleInfo = {};
             state.transactionList = [];
             state.signatureList = [];
@@ -119,6 +143,11 @@ export default {
                 return state.ART_ON_SALE;
             }
             return state.ART_ONLINE;
+        },
+        artType(state) {
+            return state.art.collection_mode == state.ART_TYPE_SEPERABLE
+                ? state.ART_TYPE_SEPERABLE
+                : state.ART_TYPE_SINGLE;
         },
     },
     actions: {
@@ -195,26 +224,53 @@ export default {
         async GetSaleInfo({ state, commit }) {
             if (!state.art.collection_id) return;
             await rpc.api.isReady;
+            let cb = (resultObj) => {
+                console.log(resultObj.isEmpty ? {} : resultObj.toJSON());
+                commit(
+                    "SET_SALE_INFO",
+                    resultObj.isEmpty ? {} : resultObj.toJSON()
+                );
+            };
+            let result = "";
+            result = await rpc.api.query.nft.saleOrderList(
+                state.art.collection_id,
+                state.art.item_id,
+                state.isSending ? null : cb
+            );
             if (state.isSending) {
-                let result = await rpc.api.query.nft.saleOrderList(
-                    state.art.collection_id,
-                    state.art.item_id
-                );
-                commit("SET_SALE_INFO", result.isEmpty ? {} : result.toJSON());
+                cb(result ? result : {});
             } else {
-                let subObject = await rpc.api.query.nft.saleOrderList(
-                    state.art.collection_id,
-                    state.art.item_id,
-                    (result) => {
-                        console.log(result.isEmpty ? {} : result.toJSON());
-                        commit(
-                            "SET_SALE_INFO",
-                            result.isEmpty ? {} : result.toJSON()
-                        );
-                    }
-                );
-                commit("ADD_SUB_QUEUE", subObject);
+                commit("ADD_SUB_QUEUE", result ? result : () => {});
             }
+        },
+        async GetSaleSeparableInfo({ state, commit }) {
+            if (!state.art.collection_id) return;
+            await rpc.api.isReady;
+            let orderIdUnsub = await rpc.api.query.nft.separableSaleOrderList(
+                state.art.collection_id,
+                state.art.item_id,
+                async (orderIdList) => {
+                    console.log(orderIdList.toJSON());
+                    commit("SET_SEPARABLE_SALE_ID_LIST", orderIdList.toJSON());
+
+                    // need to fix;have a bug;
+                    state.unsubSeparableInfoList();
+                    if (orderIdList.length > 0) {
+                        let unsub = await rpc.api.query.nft.separableSaleOrder.multi(
+                            orderIdList,
+                            (resultList) => {
+                                console.log(resultList.map((v) => v.toJSON()));
+                                commit(
+                                    "SET_SEPARABLE_SALE_INFO_LIST",
+                                    resultList.map((v) => v.toJSON())
+                                );
+                            }
+                        );
+                        commit("SET_SEPARABLE_SALE_INFO_UNSUB", unsub);
+                    }
+                }
+            );
+            commit("ADD_SUB_QUEUE", orderIdUnsub);
         },
         async GetAuctionInfo({ dispatch, state, commit }) {
             if (!state.art.collection_id) return;
@@ -316,11 +372,15 @@ export default {
             );
             commit("ADD_SUB_QUEUE", subObject);
         },
-        async SubArtInfo({ dispatch }) {
+        async SubArtInfo({ state, getters, dispatch }) {
             dispatch("GetTransactionList");
             dispatch("GetSignatureList");
             dispatch("GetAuctionInfo");
-            dispatch("GetSaleInfo");
+            if (getters.artType == state.ART_TYPE_SEPERABLE) {
+                dispatch("GetSaleSeparableInfo");
+            } else {
+                dispatch("GetSaleInfo");
+            }
         },
         async unSubArtInfo({ commit }) {
             commit("RESET_SUB_QUEUE");

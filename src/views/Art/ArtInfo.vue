@@ -2,7 +2,7 @@
 <template>
     <div class="info">
         <div class="title">{{ art.name }}</div>
-        <div class="price">{{ art.price }} UART</div>
+        <div class="price">{{ art.price ? art.price : 0 }} UART</div>
         <p class="intro">
             {{ getMaterial(art.material_id).title }}，{{ art.size_width }} x
             {{ art.size_length }}
@@ -384,7 +384,7 @@ export default {
     width: calc(100% - 620px - 50px);
     margin-left: 25px;
     text-align: left;
-    margin-bottom: 151px;
+    margin-bottom: 51px;
     .title {
         font-size: 48px;
         font-family: "Broadway";

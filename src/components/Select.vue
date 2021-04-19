@@ -100,9 +100,10 @@ export default {
 ::v-deep .el-icon-arrow-up:before {
     content: "";
     position: absolute;
-    top: 10px;
+    top: 50%;
     right: 5px;
     z-index: 1;
+    transform: translateY(-75%);
     border-top: 8px solid transparent;
     border-left: 8px solid transparent;
     border-bottom: 8px solid black;
@@ -118,6 +119,11 @@ export default {
     border-radius: 0px;
     border-color: black;
     border-width: 2px;
+    min-height: 40px;
+}
+.el-select-dropdown__empty {
+    min-height: 40px;
+    line-height: 40px;
 }
 
 .el-select-dropdown[x-placement^="bottom"] .popper__arrow {

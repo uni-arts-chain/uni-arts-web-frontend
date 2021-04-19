@@ -137,8 +137,10 @@ export default {
         price: "u64",
     },
     SplitSaleOrder: {
+        order_id: "u64",
         collection_id: "u64",
         item_id: "u64",
+        balance: "u64",
         value: "u64",
         owner: "AccountId",
         price: "u64",
@@ -147,7 +149,6 @@ export default {
         collection_id: "u64",
         item_id: "u64",
         value: "u64",
-        balance: "u64",
         seller: "AccountId",
         buyer: "AccountId",
         price: "u64",
