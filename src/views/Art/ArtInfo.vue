@@ -4,7 +4,7 @@
         <div class="title">{{ art.name }}</div>
         <div class="price">{{ art.price ? art.price : 0 }} UART</div>
         <div class="intro">
-            <div v-if="isSeparable">
+            <div v-if="isSeparable && separableOrderInfo.total > 0">
                 On-sale:
                 <span style="font-weight: 500"
                     >{{ separableOrderInfo.total }} /
@@ -67,7 +67,7 @@
                 {{ art.royalty_expired_at | dateDayFormat }}</span
             >
         </div>
-        <div class="function">
+        <div class="function" :class="{ separable: !isOwner && isSeparable }">
             <div class="action-item">
                 <img
                     src="@/assets/images/zan@2x.png"
@@ -492,6 +492,11 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-bottom: 31px;
+    }
+
+    .function.separable {
+        margin-top: 130px;
+        margin-bottom: 0;
     }
 
     .function {

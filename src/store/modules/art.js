@@ -35,7 +35,7 @@ export default {
             Owner: [],
         },
         saleSeparableIdList: [],
-        saleSeparableInfoList: [],
+        saleSeparableOrderList: [],
         unsubSeparableInfoList: () => {},
         saleOrderId: -1,
         transactionList: [],
@@ -86,7 +86,7 @@ export default {
             state.separableInfo = info;
         },
         SET_SEPARABLE_SALE_INFO_LIST: (state, list) => {
-            state.saleSeparableInfoList = list;
+            state.saleSeparableOrderList = list;
         },
         SET_SEPARABLE_SALE_INFO_UNSUB: (state, cb) => {
             state.unsubSeparableInfoList = cb;
@@ -120,7 +120,7 @@ export default {
             };
             state.auctionList = [];
             state.saleSeparableIdList = [];
-            state.saleSeparableInfoList = [];
+            state.saleSeparableOrderList = [];
             state.saleInfo = {};
             state.transactionList = [];
             state.signatureList = [];
@@ -182,7 +182,7 @@ export default {
             let result = {
                 total: 0,
             };
-            state.saleSeparableInfoList.forEach((v) => {
+            state.saleSeparableOrderList.forEach((v) => {
                 result.total += parseInt(v.balance);
             });
             return result;

@@ -10,7 +10,10 @@
                 <div class="action">Action</div>
             </div>
             <div class="item" v-for="(v, i) in orderList" :key="i">
-                <div class="owner">{{ v.owner }}</div>
+                <div class="owner">
+                    <span class="address">{{ v.owner }}</span>
+                    <span class="own-order" v-if="isOwner(v.owner)">own</span>
+                </div>
                 <div class="price">{{ formatValue(v.price) }} UART</div>
                 <div class="quantity">{{ v.balance }} / {{ v.value }}</div>
                 <button v-if="isOwner(v.owner)" @click="cancelOrder(v)">
@@ -167,7 +170,13 @@ export default {
     },
     computed: {
         orderList() {
-            return this.$store.state.art.saleSeparableInfoList;
+            let ownList = this.$store.state.art.saleSeparableOrderList.filter(
+                (v) => this.isOwner(v.owner)
+            );
+            let normalList = this.$store.state.art.saleSeparableOrderList.filter(
+                (v) => !this.isOwner(v.owner)
+            );
+            return ownList.concat(normalList);
         },
     },
     data() {
@@ -329,30 +338,59 @@ export default {
             justify-content: space-between;
             align-content: center;
             font-size: 24px;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid black;
             .owner,
             .price,
             .quantity {
                 width: 30%;
                 text-align: center;
             }
+            .owner {
+                padding-right: 80px;
+            }
             .action {
                 width: 10%;
             }
+        }
+        .item::after {
+            content: "";
+            position: absolute;
+            bottom: 1px;
+            left: 50%;
+            transform: translateX(-50%);
+            /* border-bottom: 1px solid #999; */
+            width: 96%;
         }
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-top: 2px solid black;
             padding-top: 15px;
             padding-bottom: 15px;
             font-size: 20px;
+            position: relative;
             .owner {
                 width: 30%;
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
+                display: flex;
+                align-items: center;
+                .address {
+                    width: calc(100% - 80px);
+                    display: block;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+                .own-order {
+                    width: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #c61e1e;
+                    margin-left: 20px;
+                    border: 1px solid #c61e1e;
+                    border-radius: 4px;
+                }
             }
             .price {
                 width: 30%;
