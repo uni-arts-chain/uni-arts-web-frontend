@@ -130,6 +130,7 @@ export default {
         _enum: ["Normal", "WhiteList"],
     },
     SaleOrder: {
+        order_id: "u64",
         collection_id: "u64",
         item_id: "u64",
         value: "u64",
@@ -137,9 +138,11 @@ export default {
         price: "u64",
     },
     SplitSaleOrder: {
+        order_id: "u64",
         collection_id: "u64",
         item_id: "u64",
         value: "u64",
+        balance: "u64",
         owner: "AccountId",
         price: "u64",
     },

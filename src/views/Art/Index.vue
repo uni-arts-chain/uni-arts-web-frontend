@@ -15,6 +15,7 @@
                 </div>
                 <ArtInfo />
             </div>
+            <OrderList />
             <Transaction />
             <BidHistory />
             <SignatureList />
@@ -35,6 +36,7 @@ import Information from "./Information";
 import Comment from "./Comment";
 import Detail from "./Detail";
 import Transaction from "./Transaction";
+import OrderList from "./OrderList";
 import BidHistory from "./BidHistory";
 import SignatureList from "./SignatureList";
 import ArtInfo from "./ArtInfo";
@@ -53,6 +55,7 @@ export default {
         BidHistory,
         SignatureList,
         ArtInfo,
+        OrderList,
     },
     data() {
         return {

@@ -1,7 +1,10 @@
 /** * Created by Lay Hunt on 2021-04-16 14:41:44. */
 <template>
-    <div class="create-sell">
-        <button :disabled="isOffline || isAuction" @click="showDialog">
+    <div class="create-separable-sell">
+        <button
+            :disabled="isOffline || separableOwnInfo.quantity <= 0"
+            @click="showDialog"
+        >
             SELL NOW
         </button>
         <Dialog
@@ -12,15 +15,28 @@
         >
             <div class="dialog-content">
                 <div class="title">FIRM SELL</div>
-                <div class="price">
-                    Current Price:
-                    <span class="number"
-                        >{{ art.price ? art.price : 0 }} UART</span
-                    >
+                <div class="price-content">
+                    <div class="price">
+                        Current Price:
+                        <span class="number"
+                            >{{ art.price ? art.price : 0 }} UART</span
+                        >
+                    </div>
+                    <div class="price">
+                        <div>
+                            Total price:
+                            <span style="color: #c61e1e; font-size: 24px"
+                                >{{
+                                    totalPrice(form.price, form.volume)
+                                }}
+                                UART</span
+                            >
+                        </div>
+                    </div>
                 </div>
-                <div class="desc">
+                <!-- <div class="desc">
                     <p>Please enter sales information</p>
-                </div>
+                </div> -->
                 <el-form
                     ref="form"
                     :model="form"
@@ -28,6 +44,18 @@
                     :rules="rules"
                     label-position="left"
                 >
+                    <el-form-item prop="volume">
+                        <div class="input-body volume">
+                            <Input
+                                v-model="form.volume"
+                                :placeholder="'the number of splits purchased'"
+                            />
+                            <span class="code"
+                                >{{ form.volume ? form.volume : 0 }} /
+                                {{ separableOwnInfo.quantity }}</span
+                            >
+                        </div>
+                    </el-form-item>
                     <el-form-item prop="price">
                         <div class="input-body">
                             <Input
@@ -38,11 +66,11 @@
                             <span class="code">UART</span>
                         </div>
                     </el-form-item>
-                    <div class="note" style="min-height: 56px"></div>
+                    <!-- <div class="note" style="min-height: 56px"></div> -->
                     <el-form-item>
                         <button
                             class="submit-button"
-                            @click.prevent="submit"
+                            @click.prevent="submitSepabrableSell"
                             v-loading="isSubmiting"
                             element-loading-spinner="el-icon-loading"
                             element-loading-background="rgba(0, 0, 0, 0.8)"
@@ -62,7 +90,7 @@ import Input from "@/components/Input";
 import Dialog from "@/components/Dialog/Dialog";
 
 export default {
-    name: "create-sell-button",
+    name: "create-separable-sell-button",
     components: {
         Dialog,
         Input,
@@ -78,7 +106,7 @@ export default {
                     return callback(
                         new Error("The input value must be an integer")
                     );
-                } else if (valueNumber.gt(this.art.has_amount)) {
+                } else if (valueNumber.gt(this.separableOwnInfo.quantity)) {
                     callback("Exceeding the maximum");
                 } else if (valueNumber.isNaN()) {
                     callback("Invalid input value");
@@ -121,25 +149,15 @@ export default {
         isOffline() {
             return !this.art.item_id;
         },
-        isAuction() {
-            return (
-                this.$store.getters["art/artStatus"] ==
-                    this.$store.state.art.ART_TYPE_SINGLE ||
-                this.$store.getters["art/artStatus"] ==
-                    this.$store.state.art.ART_WAITING_AUCTION ||
-                this.$store.getters["art/artStatus"] ==
-                    this.$store.state.art.ART_AUCTIONED
-            );
+        separableOwnInfo() {
+            return this.$store.getters["art/separableOwnInfo"];
         },
     },
     methods: {
         showDialog() {
             this.dialogVisible = true;
         },
-        submit() {
-            this.submitSell();
-        },
-        async submitSell() {
+        async submitSepabrableSell() {
             if (!this.$store.state.user.info.address) {
                 this.$router.push("/login");
                 return;
@@ -151,10 +169,10 @@ export default {
                     }
                     this.isSubmiting = true;
 
-                    let extrinsic = this.$rpc.api.tx.nft.createSaleOrder(
+                    let extrinsic = this.$rpc.api.tx.nft.createSeparableSaleOrder(
                         this.art.collection_id,
                         this.art.item_id,
-                        0,
+                        parseInt(this.form.volume),
                         new BigNumber(10)
                             .pow(this.$store.state.global.chain.tokenDecimals)
                             .times(this.form.price)
@@ -179,6 +197,10 @@ export default {
                 }
             });
         },
+        totalPrice(price, volume) {
+            let result = new BigNumber(price).times(volume).toString();
+            return isNaN(result) ? 0 : result;
+        },
         handleClose() {
             this.dialogVisible = false;
         },
@@ -189,7 +211,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.create-sell {
+.create-separable-sell {
     > button {
         cursor: pointer;
         border: 3px solid #020202;
@@ -227,6 +249,13 @@ export default {
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 25px;
+        margin-left: 35px;
+        margin-right: 35px;
+    }
+    .price-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .number {
         font-size: 24px;
