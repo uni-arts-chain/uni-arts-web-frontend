@@ -221,7 +221,6 @@ export default {
     .input-body {
         position: relative;
         margin-bottom: 37px;
-        height: 40px;
         input {
             width: 100%;
             height: 75px;
