@@ -31,6 +31,9 @@ export default {
         auctionInfo: {},
         auctionList: [],
         saleInfo: {},
+        separableInfo: {
+            Owner: [],
+        },
         saleSeparableIdList: [],
         saleSeparableInfoList: [],
         unsubSeparableInfoList: () => {},
@@ -79,6 +82,9 @@ export default {
         SET_SEPARABLE_SALE_ID_LIST: (state, list) => {
             state.saleSeparableIdList = list;
         },
+        SET_SEPARABLE_INFO: (state, info) => {
+            state.separableInfo = info;
+        },
         SET_SEPARABLE_SALE_INFO_LIST: (state, list) => {
             state.saleSeparableInfoList = list;
         },
@@ -109,6 +115,9 @@ export default {
             state.subQueue = [];
             state.unsubSeparableInfoList = () => {};
             state.auctionInfo = {};
+            state.separableInfo = {
+                Owner: [],
+            };
             state.auctionList = [];
             state.saleSeparableIdList = [];
             state.saleSeparableInfoList = [];
@@ -148,6 +157,43 @@ export default {
             return state.art.collection_mode == state.ART_TYPE_SEPERABLE
                 ? state.ART_TYPE_SEPERABLE
                 : state.ART_TYPE_SINGLE;
+        },
+        separableOwnInfo(state, getters, rootState) {
+            let result = {
+                isOwner: false,
+                quantity: 0,
+                total: 0,
+            };
+            if (getters.artType == state.ART_TYPE_SEPERABLE) {
+                state.separableInfo.Owner.forEach((v) => {
+                    if (
+                        v.owner === rootState.user.info.address &&
+                        v.fraction > 0
+                    ) {
+                        result.isOwner = true;
+                        result.quantity = v.fraction;
+                    }
+                    result.total += parseInt(v.fraction);
+                });
+            }
+            return result;
+        },
+        separableOrderInfo(state) {
+            let result = {
+                total: 0,
+            };
+            state.saleSeparableInfoList.forEach((v) => {
+                result.total += parseInt(v.balance);
+            });
+            return result;
+        },
+        isOwner(state, getters) {
+            if (getters.artType == state.ART_TYPE_SEPERABLE) {
+                return getters.separableOwnInfo.isOwner;
+                // return state.art.has_amount > 0;
+            } else {
+                return state.art.is_owner;
+            }
         },
     },
     actions: {
@@ -272,6 +318,19 @@ export default {
             );
             commit("ADD_SUB_QUEUE", orderIdUnsub);
         },
+        async GetSeparableInfo({ state, commit }) {
+            if (!state.art.collection_id) return;
+            await rpc.api.isReady;
+            let itemUnsub = await rpc.api.query.nft.reFungibleItemList(
+                state.art.collection_id,
+                state.art.item_id,
+                async (itemInfo) => {
+                    console.log(itemInfo.toJSON());
+                    commit("SET_SEPARABLE_INFO", itemInfo.toJSON());
+                }
+            );
+            commit("ADD_SUB_QUEUE", itemUnsub);
+        },
         async GetAuctionInfo({ dispatch, state, commit }) {
             if (!state.art.collection_id) return;
             await rpc.api.isReady;
@@ -377,6 +436,7 @@ export default {
             dispatch("GetSignatureList");
             dispatch("GetAuctionInfo");
             if (getters.artType == state.ART_TYPE_SEPERABLE) {
+                dispatch("GetSeparableInfo");
                 dispatch("GetSaleSeparableInfo");
             } else {
                 dispatch("GetSaleInfo");

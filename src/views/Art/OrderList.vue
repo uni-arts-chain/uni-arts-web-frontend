@@ -13,7 +13,10 @@
                 <div class="owner">{{ v.owner }}</div>
                 <div class="price">{{ formatValue(v.price) }} UART</div>
                 <div class="quantity">{{ v.balance }} / {{ v.value }}</div>
-                <button @click="buyOrder(v)">BUY</button>
+                <button v-if="isOwner(v.owner)" @click="cancelOrder(v)">
+                    CANCEL
+                </button>
+                <button v-else @click="buyOrder(v)">BUY</button>
             </div>
         </div>
         <Dialog
@@ -75,6 +78,77 @@
                 </button>
             </div>
         </Dialog>
+        <Dialog
+            :visible.sync="dialogVisibleCancel"
+            type="medium"
+            :close="handleCancelClose"
+            @closed="handleCancelClosed"
+        >
+            <div class="dialog-content">
+                <div class="title">FIRM CANCEL</div>
+                <div class="price-content">
+                    <div class="price">
+                        Current Price:
+                        <span class="number"
+                            >{{ formatValue(orderInfo.price) }} UART</span
+                        >
+                    </div>
+                    <div class="price">
+                        <div>
+                            Total price:
+                            <span style="color: #c61e1e; font-size: 24px"
+                                >{{
+                                    totalPrice(
+                                        orderInfo.price,
+                                        orderInfo.balance
+                                    )
+                                }}
+                                UART</span
+                            >
+                        </div>
+                    </div>
+                </div>
+                <el-form ref="form" label-width="0px" label-position="left">
+                    <el-form-item>
+                        <div class="input-body volume">
+                            <Input
+                                :disabled="true"
+                                :value="orderInfo.balance"
+                                :placeholder="'the number of splits purchased'"
+                            />
+                            <span class="code"
+                                >{{
+                                    orderInfo.balance ? orderInfo.balance : 0
+                                }}
+                                / {{ orderInfo.value }}</span
+                            >
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <div class="input-body">
+                            <Input
+                                :disabled="true"
+                                type="number"
+                                :value="formatValue(orderInfo.price)"
+                                :placeholder="'price'"
+                            />
+                            <span class="code">UART</span>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <button
+                            class="submit-button"
+                            @click.prevent="submitCancel"
+                            v-loading="isSubmitingCancel"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(0, 0, 0, 0.8)"
+                        >
+                            CANCEL NOW
+                        </button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </Dialog>
     </div>
 </template>
 <script>
@@ -118,7 +192,9 @@ export default {
         };
         return {
             dialogVisible: false,
+            dialogVisibleCancel: false,
             isSubmiting: false,
+            isSubmitingCancel: false,
             orderInfo: {},
             form: {
                 price: "",
@@ -135,14 +211,28 @@ export default {
         };
     },
     methods: {
+        isOwner(address) {
+            return this.$store.state.user.info.address == address;
+        },
         buyOrder(item) {
             this.orderInfo = item;
             this.dialogVisible = true;
+        },
+        cancelOrder(item) {
+            this.orderInfo = item;
+            this.dialogVisibleCancel = true;
         },
         handleClose() {
             this.dialogVisible = false;
         },
         handleClosed() {
+            this.orderInfo = {};
+            this.$refs.form.resetFields();
+        },
+        handleCancelClose() {
+            this.dialogVisibleCancel = false;
+        },
+        handleCancelClosed() {
             this.orderInfo = {};
         },
         formatValue(value) {
@@ -185,6 +275,36 @@ export default {
                 },
                 err: () => {
                     this.isSubmiting = false;
+                    this.$notify.error("Submission Failed");
+                },
+            });
+        },
+        async submitCancel() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
+            if (this.isSubmitingCancel) {
+                return;
+            }
+            console.log("取消挂单");
+            this.isSubmitingCancel = true;
+            let extrinsic = this.$rpc.api.tx.nft.cancelSeparableSaleOrder(
+                this.orderInfo.order_id
+            );
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
+                extrinsic,
+                cb: () => {
+                    this.isSubmitingCancel = false;
+                    this.$notify.info("Submitted");
+                    this.dialogVisible = false;
+                },
+                done: () => {
+                    this.$notify.success("Success");
+                },
+                err: () => {
+                    this.isSubmitingCancel = false;
                     this.$notify.error("Submission Failed");
                 },
             });
@@ -244,18 +364,14 @@ export default {
                 cursor: pointer;
                 background: transparent;
                 width: 10%;
-                font-size: 20px;
+                font-size: 18px;
                 padding: 4px;
                 border: 2px solid black;
                 transition: all 0.3s ease;
             }
             > button:hover {
-                cursor: pointer;
                 background: black;
-                width: 10%;
                 color: white;
-                font-size: 20px;
-                padding: 4px;
                 border: 2px solid black;
             }
         }

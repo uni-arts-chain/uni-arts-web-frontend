@@ -3,10 +3,15 @@
     <div class="info">
         <div class="title">{{ art.name }}</div>
         <div class="price">{{ art.price ? art.price : 0 }} UART</div>
-        <p class="intro">
-            {{ getMaterial(art.material_id).title }}，{{ art.size_width }} x
-            {{ art.size_length }}
-        </p>
+        <div class="intro">
+            <div v-if="isSeparable">
+                On-sale:
+                <span style="font-weight: 500"
+                    >{{ separableOrderInfo.total }} /
+                    {{ separableOwnInfo.total }}</span
+                >
+            </div>
+        </div>
         <div class="block-title" style="min-height: 37px">
             BLOCK INFORMATION
         </div>
@@ -108,10 +113,11 @@
             </div>
         </div>
         <div class="button-group">
-            <CreateSell v-if="isOwner && !isOwnerOrder" />
-            <CancelSell v-if="isOwner && isOwnerOrder" />
-            <Buy v-if="!isOwner" />
-            <CreateAuction v-if="isOwner && !isAuction" />
+            <CreateSeparableSell v-if="isOwner && isSeparable" />
+            <CreateSell v-if="isOwner && !isOwnerOrder && !isSeparable" />
+            <CancelSell v-if="isOwner && isOwnerOrder && !isSeparable" />
+            <Buy v-if="!isOwner && !isSeparable" />
+            <CreateAuction v-if="isOwner && !isAuction && !isSeparable" />
             <BidAuction v-if="!isOwner && isAuction" />
             <CancelAuction v-if="isOwner && !isFinished && isAuction" />
             <FinishAuction v-if="isOwner && isFinished && isAuction" />
@@ -139,6 +145,7 @@ import CreateAuction from "./Buttons/CreateAuction";
 import BidAuction from "./Buttons/BidAuction";
 import CancelAuction from "./Buttons/CancelAuction";
 import FinishAuction from "./Buttons/FinishAuction";
+import CreateSeparableSell from "./Buttons/CreateSeparableSell";
 import Buy from "./Buttons/Buy";
 import { Tooltip } from "element-ui";
 
@@ -155,6 +162,7 @@ export default {
         CancelAuction,
         FinishAuction,
         Buy,
+        CreateSeparableSell,
         [Tooltip.name]: Tooltip,
     },
     data() {
@@ -187,7 +195,7 @@ export default {
             );
         },
         isOwner() {
-            return this.art.is_owner;
+            return this.$store.getters["art/isOwner"];
         },
         isOwnerOrder() {
             return (
@@ -224,12 +232,20 @@ export default {
                 this.$store.state.art.ART_WAITING_AUCTION
             );
         },
+        isSeparable() {
+            return (
+                this.$store.getters["art/artType"] ==
+                this.$store.state.art.ART_TYPE_SEPERABLE
+            );
+        },
+        separableOrderInfo() {
+            return this.$store.getters["art/separableOrderInfo"];
+        },
+        separableOwnInfo() {
+            return this.$store.getters["art/separableOwnInfo"];
+        },
     },
     methods: {
-        getMaterial(id) {
-            let item = this.$store.state.art.materials.find((v) => v.id == id);
-            return item ? item : {};
-        },
         copyLeave() {
             setTimeout(() => (this.copyStatus = false), 500);
         },
@@ -404,6 +420,7 @@ export default {
     }
 
     .intro {
+        min-height: 23px;
         font-size: 20px;
         font-weight: 400;
         text-align: left;

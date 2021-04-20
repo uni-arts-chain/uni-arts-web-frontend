@@ -55,6 +55,11 @@ export default {
             this.inputData = value;
         },
     },
+    mounted() {
+        if (this.value) {
+            this.inputData = this.value;
+        }
+    },
     methods: {
         onBlur() {
             this.$emit("blur", this.inputData);
