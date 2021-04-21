@@ -150,7 +150,6 @@ export default {
         collection_id: "u64",
         item_id: "u64",
         value: "u64",
-        balance: "u64",
         seller: "AccountId",
         buyer: "AccountId",
         price: "u64",
