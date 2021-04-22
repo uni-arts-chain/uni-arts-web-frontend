@@ -12,6 +12,14 @@ const routes = [
             import(/* webpackChunkName: "market" */ "@/views/Market/Index.vue"),
     },
     {
+        path: "/blindbox",
+        name: "BlindBox",
+        component: () =>
+            import(
+                /* webpackChunkName: "blindbox" */ "@/views/BlindBox/Index.vue"
+            ),
+    },
+    {
         path: "/auction/:id",
         name: "AuctionIndex",
         meta: {

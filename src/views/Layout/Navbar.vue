@@ -18,6 +18,13 @@
                 </li>
                 <li>
                     <router-link
+                        to="/blindbox"
+                        :class="{ active: activeTab == 'BlindBox' }"
+                        >Blind Box</router-link
+                    >
+                </li>
+                <li>
+                    <router-link
                         to="/artist"
                         :class="{ active: activeTab == 'Artist' }"
                         >Artist</router-link
@@ -87,6 +94,9 @@ export default {
                     break;
                 case "Market":
                     routeName = "Market";
+                    break;
+                case "BlindBox":
+                    routeName = "BlindBox";
                     break;
                 case "Authority":
                     routeName = "Authority";
