@@ -20,6 +20,27 @@ const routes = [
             ),
     },
     {
+        path: "/blindbox/detail",
+        name: "BlindBox",
+        redirect: "/blindbox",
+    },
+    {
+        path: "/blindbox/detail/:id",
+        name: "BlindBox",
+        component: () =>
+            import(
+                /* webpackChunkName: "blindbox" */ "@/views/BlindBox/Detail.vue"
+            ),
+    },
+    {
+        path: "/blindbox/history",
+        name: "BlindBox",
+        component: () =>
+            import(
+                /* webpackChunkName: "blindbox" */ "@/views/BlindBox/History.vue"
+            ),
+    },
+    {
         path: "/auction/:id",
         name: "AuctionIndex",
         meta: {

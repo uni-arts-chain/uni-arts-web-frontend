@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2020-11-17 18:22:12. */
 <template>
-    <nav>
+    <nav :class="theme">
         <div class="container">
             <div class="logo" @click="goHome">Uniarts</div>
             <ul class="link-group">
@@ -39,7 +39,11 @@
                 </li>
                 <li class="li-search">
                     <router-link to="/market" class="market">
-                        <img src="@/assets/images/search@2x.png" />
+                        <img
+                            v-if="theme == 'light'"
+                            src="@/assets/images/search@2x.png"
+                        />
+                        <img v-else src="@/assets/images/search1@2x.png" />
                     </router-link>
                 </li>
                 <li v-if="user.token">
@@ -71,7 +75,11 @@
                 </li>
                 <li class="li-login" v-if="!user.token">
                     <router-link to="/login" class="login">
-                        <img src="@/assets/images/profile@2x.png" />
+                        <img
+                            v-if="theme == 'light'"
+                            src="@/assets/images/profile@2x.png"
+                        />
+                        <img v-else src="@/assets/images/profile1@2x.png" />
                     </router-link>
                 </li>
             </ul>
@@ -82,7 +90,13 @@
 <script>
 export default {
     name: "navbar",
+    data() {
+        return {};
+    },
     computed: {
+        theme() {
+            return this.$store.state.global.theme;
+        },
         user() {
             return this.$store.state.user.info;
         },
@@ -133,6 +147,13 @@ export default {
 <style lang="scss" scoped>
 nav {
     min-height: 91px;
+}
+nav.dark {
+    background-color: black;
+    .logo,
+    ul li > a {
+        color: white;
+    }
 }
 .logo {
     font-family: "Broadway";
