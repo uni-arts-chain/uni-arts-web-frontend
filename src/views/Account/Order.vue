@@ -50,13 +50,13 @@
             >
                 Auction Now
             </router-link>
-            <router-link
+            <!-- <router-link
                 :to="`/account/edit/${v.id}`"
                 class="action"
                 v-else-if="type == 'all' && getArtAasmState(v) == 'prepare'"
             >
                 Edit
-            </router-link>
+            </router-link> -->
             <div class="action" v-if="type == 'signature'" @click="show(v)">
                 Check
             </div>
