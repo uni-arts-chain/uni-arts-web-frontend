@@ -206,7 +206,7 @@ export default {
 }
 
 .price {
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 600;
     text-align: left;
     line-height: 30px;
