@@ -60,6 +60,14 @@
             <div class="action" v-if="type == 'signature'" @click="show(v)">
                 Check
             </div>
+            <div
+                class="action"
+                v-if="type == 'all'"
+                :class="{ disabled: getArtAasmState(v) != 'online' }"
+                @click="show(v)"
+            >
+                Transfer
+            </div>
         </div>
     </div>
 </template>
