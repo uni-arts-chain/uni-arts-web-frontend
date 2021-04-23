@@ -10,8 +10,10 @@
                 collection and resale
             </div>
             <div class="button-group">
-                <button class="open">Open 1 time</button>
-                <button class="open10">Open 10 times</button>
+                <button class="open" @click="openClick()">Open 1 time</button>
+                <button class="open10" @click="openClick(10)">
+                    Open 10 times
+                </button>
             </div>
             <div class="open-record">
                 <div class="record" @click="openRecord">
@@ -68,22 +70,53 @@
             </div>
             <img src="@/assets/images/di@2x.png" class="di" />
         </div>
+        <Dialog
+            :visible.sync="dialogVisible"
+            type="small"
+            :close="handleClose"
+            @closed="handleClosed"
+        >
+            <div class="dialog-content">
+                <div class="title">OPEN BOX</div>
+                <div class="price">
+                    Total Price:
+                    <span class="number">{{ 0 }} UART</span>
+                </div>
+                <button
+                    @click="submitOpen"
+                    v-loading="isSubmiting"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)"
+                >
+                    OPEN
+                </button>
+            </div>
+        </Dialog>
+        <OpenBox :visible.sync="dialogVisibleBoxOpen" />
     </div>
 </template>
 <script>
+import Dialog from "@/components/Dialog/Dialog";
+import OpenBox from "@/components/OpenBox";
 import HomePage1 from "@/assets/images/temp/home-page1.jpg";
 import AdaptiveImage from "@/components/AdaptiveImage";
 import bg2 from "@/assets/images/blind-box-bg2@2x.png";
+
 export default {
     name: "detail",
     components: {
         AdaptiveImage,
+        Dialog,
+        OpenBox,
     },
     data() {
         return {
             bg2,
             HomePage1,
             list: [1, 2, 3, 4, 5, 6],
+            dialogVisible: false,
+            dialogVisibleBoxOpen: false,
+            isSubmiting: false,
         };
     },
     mounted() {
@@ -96,11 +129,23 @@ export default {
         openRecord() {
             this.$router.push("/blindbox/history");
         },
+        openClick() {
+            this.dialogVisible = true;
+        },
+        handleClose() {
+            this.dialogVisible = false;
+        },
+        handleClosed() {},
+        submitOpen() {
+            this.handleClose();
+            this.dialogVisibleBoxOpen = true;
+        },
     },
 };
 </script>
 <style lang="scss" scoped>
 .detail {
+    position: relative;
     background-color: black;
     overflow: hidden;
     .title-img {
@@ -279,6 +324,80 @@ export default {
         position: absolute;
         bottom: -30px;
         left: 0;
+    }
+}
+
+.dialog ::v-deep .el-dialog {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 10px;
+}
+.dialog-content {
+    font-size: 26px;
+    text-align: left;
+    letter-spacing: 0px;
+    text-align: center;
+    color: #020202;
+    .title {
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+    .price {
+        font-size: 20px;
+        font-weight: 400;
+        min-height: 30px;
+        margin-bottom: 25px;
+    }
+    .number {
+        font-size: 24px;
+        color: #c61e1e;
+    }
+    .desc {
+        font-size: 20px;
+        font-weight: 400;
+        margin-bottom: 37px;
+        min-height: 30px;
+    }
+    .input-body {
+        position: relative;
+        margin-bottom: 37px;
+        height: 40px;
+        input {
+            width: 100%;
+            height: 75px;
+            font-size: 26px;
+            border: 2px solid #020202;
+            padding: 14px 34px;
+            text-align: center;
+        }
+        .code {
+            font-size: 26px;
+            font-weight: 600;
+            text-align: left;
+            letter-spacing: 0px;
+            position: absolute;
+            right: 34px;
+            top: 19px;
+        }
+    }
+    .note {
+        font-size: 20px;
+        margin-bottom: 25px;
+    }
+    > button {
+        background: #020202;
+        width: 307px;
+        height: 75px;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        color: #ffffff;
+        letter-spacing: 0px;
+        cursor: pointer;
+    }
+    > button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
     }
 }
 </style>
