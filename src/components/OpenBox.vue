@@ -196,7 +196,7 @@ export default {
     font-size: 35px;
     position: absolute;
     cursor: pointer;
-    top: 15%;
-    right: 10%;
+    top: 22%;
+    right: 15%;
 }
 </style>
