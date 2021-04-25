@@ -224,6 +224,28 @@ const apiList = [
             unSignature: false,
         },
     },
+    {
+        name: "getBlindBoxList",
+        method: "GET",
+        desc: "获取盲盒列表",
+        path: "/blind_boxes",
+        mockPath: "/blind_boxes",
+        params: {},
+        options: {
+            unSignature: false,
+        },
+    },
+    {
+        name: "getBlindBoxArtList",
+        method: "GET",
+        desc: "获取指定盲盒作品列表",
+        path: "/blind_boxes/{:id}/arts",
+        mockPath: "/blind_boxes/{:id}/arts",
+        params: {},
+        options: {
+            unSignature: false,
+        },
+    },
 ];
 
 export default apiList;

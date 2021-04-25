@@ -23,13 +23,13 @@
             </div>
             <div class="list">
                 <div class="title">Possible access</div>
-                <div class="nft-list">
+                <div class="nft-list" v-loading="isLoading">
                     <div class="item" v-for="(v, i) in list" :key="i">
                         <div class="img-wrapper">
                             <AdaptiveImage
                                 width="100%"
                                 height="100%"
-                                :url="HomePage1"
+                                :url="v.art.img_main_file1.url"
                             />
                         </div>
                         <div class="label rare">
@@ -98,7 +98,6 @@
 <script>
 import Dialog from "@/components/Dialog/Dialog";
 import OpenBox from "@/components/OpenBox";
-import HomePage1 from "@/assets/images/temp/home-page1.jpg";
 import AdaptiveImage from "@/components/AdaptiveImage";
 import bg2 from "@/assets/images/blind-box-bg2@2x.png";
 
@@ -112,8 +111,9 @@ export default {
     data() {
         return {
             bg2,
-            HomePage1,
-            list: [1, 2, 3, 4, 5, 6],
+            isLoading: false,
+            id: this.$route.params.id,
+            list: [],
             dialogVisible: false,
             dialogVisibleBoxOpen: false,
             isSubmiting: false,
@@ -121,11 +121,24 @@ export default {
     },
     mounted() {
         this.$store.dispatch("global/SetTheme", "dark");
+        this.requestData();
     },
     destroyed() {
         this.$store.dispatch("global/SetTheme", "light");
     },
     methods: {
+        requestData() {
+            this.$http["globalGetBlindBoxArtList"]({}, { id: this.id })
+                .then((res) => {
+                    this.isLoading = false;
+                    this.list = res;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
         openRecord() {
             this.$router.push("/blindbox/history");
         },
@@ -237,6 +250,7 @@ export default {
         }
     }
     .list {
+        min-height: 500px;
         .title {
             font-size: 30px;
             font-family: Broadway;

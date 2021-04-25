@@ -10,12 +10,22 @@
                     :key="i"
                     @click="goDetail(v)"
                 >
-                    <AdaptiveImage width="100%" height="400px" :url="v.url" />
+                    <AdaptiveImage
+                        width="100%"
+                        height="400px"
+                        :url="v.img_path"
+                    />
                     <div class="info">
-                        <div class="name">{{ v.name }}</div>
+                        <div class="name-body">
+                            <div class="name">{{ v.title }}</div>
+                            <span class="date"
+                                >{{ v.start_time | dateDayFormat }} ~
+                                {{ v.end_time | dateDayFormat }}</span
+                            >
+                        </div>
                         <RowText
                             class="desc"
-                            :text="v.text"
+                            :text="v.desc"
                             :textLength="170"
                         />
                     </div>
@@ -27,7 +37,6 @@
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
 import RowText from "@/components/RowText";
-import HomePage1 from "@/assets/images/temp/home-page1.jpg";
 export default {
     name: "index",
     components: {
@@ -36,26 +45,32 @@ export default {
     },
     data() {
         return {
-            HomePage1,
-            list: [
-                {
-                    name: "Ice Box",
-                    url: HomePage1,
-                    id: 1,
-                    text:
-                        "A total of 59 heroes participate in this game. Once opened, one NFT owner will be randomly obtained, which can be used for collection and resaleA total of 59 heroes participate in this game. Once opened, one NFT owner will be randomly obtained, which can be used for collection and resaleA total of 59 heroes participate in this game. Once opened, one NFT owner will be randomly obtained, which can be used for collection and resale",
-                },
-                {
-                    name: "Ice Box",
-                    url: HomePage1,
-                    di: 2,
-                    text:
-                        "A total of 59 heroes participate in this game. Once opened, one NFT owner will be randomly obtained, which can be used for collection and resaleA total of 59 heroes participate in this game. Once opened, one NFT owner will be randomly obtained, which can be used for collection and resaleA total of 59 heroes participate in this game. Once opened, one NFT owner will be randomly obtained, which can be used for collection and resale",
-                },
-            ],
+            isLoading: false,
+            list: [],
+            // total_count: 0,
+            // total_pages: 0,
         };
     },
+    mounted() {
+        this.requestData();
+    },
     methods: {
+        requestData() {
+            this.$http["globalGetBlindBoxList"]({})
+                .then((res) => {
+                    this.isLoading = false;
+                    this.list = res;
+                    // this.total_count = res.total_count;
+                    // this.total_pages = Math.ceil(
+                    //     res.total_count / this.per_page
+                    // );
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isLoading = false;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
         goDetail(item) {
             this.$router.push("/blindbox/detail/" + item.id);
         },
@@ -88,13 +103,27 @@ export default {
             height: calc(100% - 400px);
             padding: 30px 18px;
         }
+        .name-body {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
         .name {
+            width: calc(100% - 400px);
             font-size: 34px;
             font-weight: 400;
             text-align: left;
             font-family: Broadway;
             margin-bottom: 12px;
             color: #020202;
+        }
+        .date {
+            width: 400px;
+            font-family: Broadway;
+            display: block;
+            font-size: 18px;
+            text-align: right;
         }
         .desc {
             font-size: 24px;

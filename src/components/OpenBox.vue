@@ -120,6 +120,7 @@ export default {
         left: 29px;
         width: 360px;
         height: 537px;
+        z-index: 0;
         background: url(~@/assets/images/caidai@2x.png) no-repeat;
         background-size: 360px 537px;
         background-position: center;
@@ -129,6 +130,8 @@ export default {
         margin-right: auto;
         margin-top: 73px;
         border-radius: 10px;
+        position: relative;
+        z-index: 1;
     }
     .name {
         max-width: 100%;
@@ -140,6 +143,8 @@ export default {
         text-align: center;
         color: #101010;
         margin-top: 36px;
+        position: relative;
+        z-index: 1;
     }
     .checkout {
         margin-top: 34px;
@@ -154,6 +159,7 @@ export default {
         text-align: center;
         color: #ffffff;
         position: relative;
+        cursor: pointer;
         z-index: 1;
     }
     .desc {
@@ -163,6 +169,8 @@ export default {
         color: #101010;
         line-height: 22px;
         margin-top: 33px;
+        position: relative;
+        z-index: 1;
     }
 }
 
