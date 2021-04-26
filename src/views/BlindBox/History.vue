@@ -51,7 +51,7 @@ export default {
         requestData() {
             this.isLoading = true;
             this.$http
-                .userOwnArts({
+                .userGetBoxDraws({
                     page: this.page,
                     per_page: this.per_page,
                 })

@@ -236,12 +236,36 @@ const apiList = [
         },
     },
     {
+        name: "getBlindBox",
+        method: "GET",
+        desc: "获取盲盒列表",
+        path: "/blind_boxes/{:id}",
+        mockPath: "/blind_boxes/{:id}",
+        params: {},
+        options: {
+            unSignature: false,
+        },
+    },
+    {
         name: "getBlindBoxArtList",
         method: "GET",
         desc: "获取指定盲盒作品列表",
         path: "/blind_boxes/{:id}/arts",
         mockPath: "/blind_boxes/{:id}/arts",
         params: {},
+        options: {
+            unSignature: false,
+        },
+    },
+    {
+        name: "getOpenBlindBoxArtList",
+        method: "GET",
+        desc: "获取指定盲盒作品列表",
+        path: "/card_groups/detail",
+        mockPath: "/card_groups/detail",
+        params: {
+            ids: "",
+        },
         options: {
             unSignature: false,
         },

@@ -59,11 +59,11 @@ export default {
             this.$http["globalGetBlindBoxList"]({})
                 .then((res) => {
                     this.isLoading = false;
-                    this.list = res;
-                    // this.total_count = res.total_count;
-                    // this.total_pages = Math.ceil(
-                    //     res.total_count / this.per_page
-                    // );
+                    this.list = res.list;
+                    this.total_count = res.total_count;
+                    this.total_pages = Math.ceil(
+                        res.total_count / this.per_page
+                    );
                 })
                 .catch((err) => {
                     console.log(err);

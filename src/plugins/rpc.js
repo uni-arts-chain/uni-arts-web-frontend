@@ -76,7 +76,7 @@ class Rpc {
     setErrorListener(callback) {
         this.apiErrorListener = callback;
     }
-    async signAndSend(address, extrinsic, cb, done, err) {
+    async signAndSend(address, extrinsic, cb, done, err, eventCb) {
         let notifyIns = "";
         const injector = await extension.getInjector(address);
         extrinsic
@@ -105,12 +105,21 @@ class Rpc {
                             console.log(
                                 `\t' ${phase}: ${section}.${method}:: ${data}`
                             );
-                            if (method === "ExtrinsicSuccess") {
-                                notification.dismiss(notifyIns);
-                                done && done();
-                            } else if (method === "ExtrinsicFailed") {
-                                notification.dismiss(notifyIns);
-                                err && err();
+                            if (eventCb) {
+                                eventCb(
+                                    { phase, method, section, data },
+                                    () => {
+                                        notification.dismiss(notifyIns);
+                                    }
+                                );
+                            } else {
+                                if (method === "ExtrinsicSuccess") {
+                                    notification.dismiss(notifyIns);
+                                    done && done();
+                                } else if (method === "ExtrinsicFailed") {
+                                    notification.dismiss(notifyIns);
+                                    err && err();
+                                }
                             }
                         }
                     );

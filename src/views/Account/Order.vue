@@ -29,7 +29,8 @@
                 {{ getOrganizationName(v) }}
             </div>
             <div class="price" v-if="type !== 'signature'">
-                {{ getArtPrice(v) }} {{ $store.state.global.chain.tokenSymbol }}
+                {{ getArtPrice(v) || 0 }}
+                {{ $store.state.global.chain.tokenSymbol }}
             </div>
             <div class="date" v-if="type == 'sold' || type == 'bought'">
                 {{ type == "bought" ? "Purchased on " : "Sold on " }}

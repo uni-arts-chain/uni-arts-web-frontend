@@ -2,9 +2,17 @@
 <template>
     <div class="open-box" v-if="visible">
         <i class="el-icon-close" @click="close"></i>
-        <div class="content">
-            <el-carousel type="card" :autoplay="false" :loop="false">
-                <el-carousel-item v-for="item in list" :key="item">
+        <div class="loading" v-if="isOpening">
+            Data transmission on the chain, please wait patiently...
+        </div>
+        <div class="content" v-else>
+            <el-carousel
+                type="card"
+                :autoplay="false"
+                :loop="false"
+                v-if="list.length > 0"
+            >
+                <el-carousel-item v-for="(item, i) in list" :key="i">
                     <div class="item">
                         <div class="bg"></div>
                         <AdaptiveImage
@@ -35,6 +43,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        list: {
+            type: Array,
+            default: () => [],
+        },
+        isOpening: {
+            type: Boolean,
+            default: false,
+        },
     },
     components: {
         [Carousel.name]: Carousel,
@@ -43,7 +59,6 @@ export default {
     },
     data() {
         return {
-            list: [1],
             HomePage1,
         };
     },
@@ -92,6 +107,19 @@ export default {
     height: 710px;
     background-color: transparent;
     animation: enter 0.3s ease;
+}
+
+.loading {
+    height: 300px;
+    width: 700px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: 2px solid white;
+    font-size: 20px;
+    border-radius: 8px;
+    background-color: black;
 }
 
 @keyframes enter {
@@ -193,6 +221,7 @@ export default {
 .el-icon-close {
     background: black;
     color: white;
+    border: 2px solid white;
     font-size: 35px;
     position: absolute;
     cursor: pointer;

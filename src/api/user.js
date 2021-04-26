@@ -357,6 +357,17 @@ const apiList = [
             upload: ["live2d_file"],
         },
     },
+    {
+        name: "getBoxDraws",
+        method: "GET",
+        desc: "获取开启盲盒结果",
+        path: "/blind_box_draws",
+        mockPath: "/blind_box_draws",
+        params: {
+            id: "",
+        },
+        options: {},
+    },
 ];
 
 export default apiList;

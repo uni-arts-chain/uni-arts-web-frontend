@@ -1,16 +1,17 @@
 /** * Created by Lay Hunt on 2021-04-22 15:30:15. */
 <template>
     <div class="detail">
-        <div class="title-img" :style="`background-image: url(${bg2})`" />
+        <div
+            class="title-img"
+            :style="`background-image: url(${blindBoxInfo.background_img_path})`"
+        />
         <div class="container">
-            <div class="title">Harry Potter and the Order of the Phoenix</div>
+            <div class="title">{{ blindBoxInfo.title }}</div>
             <div class="desc">
-                A total of 59 heroes participate in this game. Once opened, one
-                NFT owner will be randomly obtained, which can be used for
-                collection and resale
+                {{ blindBoxInfo.desc }}
             </div>
             <div class="button-group">
-                <button class="open" @click="openClick()">Open 1 time</button>
+                <button class="open" @click="openClick(1)">Open 1 time</button>
                 <button class="open10" @click="openClick(10)">
                     Open 10 times
                 </button>
@@ -24,49 +25,32 @@
             <div class="list">
                 <div class="title">Possible access</div>
                 <div class="nft-list" v-loading="isLoading">
-                    <div class="item" v-for="(v, i) in list" :key="i">
-                        <div class="img-wrapper">
-                            <AdaptiveImage
-                                width="100%"
-                                height="100%"
-                                :url="v.art.img_main_file1.url"
-                            />
+                    <div class="nft-list-body">
+                        <div class="item" v-for="(v, i) in list" :key="i">
+                            <div class="img-wrapper">
+                                <AdaptiveImage
+                                    width="100%"
+                                    height="100%"
+                                    :url="v.art.img_main_file1.url"
+                                />
+                            </div>
+                            <div class="label rare">
+                                <img
+                                    class="icon"
+                                    src="@/assets/images/rare@2x.png"
+                                />
+                                <span>Rare</span>
+                            </div>
+                            <!-- <div class="label own">
+                                <span>Own</span>
+                            </div> -->
                         </div>
-                        <div class="label rare">
-                            <img
-                                class="icon"
-                                src="@/assets/images/rare@2x.png"
-                            />
-                            <span>Rare</span>
-                        </div>
-                        <!-- <div class="label own">
-                            <span>Own</span>
-                        </div> -->
                     </div>
                 </div>
             </div>
             <div class="rule">
                 <div class="title">Rule description</div>
-                <p>
-                    1.A total of 59 heroes participate in this game. Once
-                    opened, one NFT owner will be randomly obtained, which can
-                    be used for collection and resale
-                </p>
-                <p>
-                    2.A total of 59 heroes participate in this game. Once
-                    opened, one NFT owner will be randomly obtained, which can
-                    be used for collection and resale
-                </p>
-                <p>
-                    3.A total of 59 heroes participate in this game. Once
-                    opened, one NFT owner will be randomly obtained, which can
-                    be used for collection and resale
-                </p>
-                <p>
-                    4.A total of 59 heroes participate in this game. Once
-                    opened, one NFT owner will be randomly obtained, which can
-                    be used for collection and resale
-                </p>
+                <p v-html="blindBoxInfo.rule"></p>
             </div>
             <img src="@/assets/images/di@2x.png" class="di" />
         </div>
@@ -80,7 +64,12 @@
                 <div class="title">OPEN BOX</div>
                 <div class="price">
                     Total Price:
-                    <span class="number">{{ 0 }} UART</span>
+                    <span class="number"
+                        >{{
+                            totalPrice(blindBoxInfo.price, this.openCount)
+                        }}
+                        UART</span
+                    >
                 </div>
                 <button
                     @click="submitOpen"
@@ -92,11 +81,18 @@
                 </button>
             </div>
         </Dialog>
-        <OpenBox :visible.sync="dialogVisibleBoxOpen" />
+        <OpenBox
+            v-loading="isLoadingResult"
+            :isOpening="isOpening"
+            :visible.sync="dialogVisibleBoxOpen"
+            :list="openList"
+        />
     </div>
 </template>
 <script>
+import { BigNumber } from "bignumber.js";
 import Dialog from "@/components/Dialog/Dialog";
+import { notification } from "@/components/Notification";
 import OpenBox from "@/components/OpenBox";
 import AdaptiveImage from "@/components/AdaptiveImage";
 import bg2 from "@/assets/images/blind-box-bg2@2x.png";
@@ -113,11 +109,29 @@ export default {
             bg2,
             isLoading: false,
             id: this.$route.params.id,
-            list: [],
+            blindBoxInfo: {},
             dialogVisible: false,
             dialogVisibleBoxOpen: false,
             isSubmiting: false,
+            isOpening: false,
+            openCount: 1,
+            openList: [],
+            isLoadingResult: false,
         };
+    },
+    computed: {
+        list() {
+            return this.blindBoxInfo.onchain_card_groups
+                ? this.blindBoxInfo.onchain_card_groups
+                : [];
+        },
+    },
+    watch: {
+        dialogVisibleBoxOpen(value) {
+            if (!value) {
+                this.openList = [];
+            }
+        },
     },
     mounted() {
         this.$store.dispatch("global/SetTheme", "dark");
@@ -127,11 +141,17 @@ export default {
         this.$store.dispatch("global/SetTheme", "light");
     },
     methods: {
+        // async requestBlindBox() {
+        //     let result = await this.$rpc.api.query.blindBox.blindBoxList(this.blindBoxInfo.id)
+        //     console.log(result.toJSON());
+        // },
         requestData() {
-            this.$http["globalGetBlindBoxArtList"]({}, { id: this.id })
+            this.isLoading = true;
+            this.$http["globalGetBlindBox"]({}, { id: this.id })
                 .then((res) => {
                     this.isLoading = false;
-                    this.list = res;
+                    this.blindBoxInfo = res;
+                    // this.requestBlindBox();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -139,19 +159,145 @@ export default {
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
+        requestOpenList() {
+            if (this.isLoadingResult) {
+                return;
+            }
+            this.isLoadingResult = true;
+            this.$http["globalGetOpenBlindBoxArtList"]({
+                ids: this.openList.map((v) => v[1] + "_" + v[2]).concat(","),
+            })
+                .then((res) => {
+                    console.log(res);
+                    this.isLoadingResult = false;
+                    this.openList = res;
+                    this.isOpening = false;
+                    this.dialogVisibleBoxOpen = true;
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.isLoadingResult = false;
+                    this.dialogVisibleBoxOpen = false;
+                    this.isOpening = true;
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
+        },
         openRecord() {
             this.$router.push("/blindbox/history");
         },
-        openClick() {
+        openClick(number) {
+            if (this.blindBoxInfo.remain_count <= 0) {
+                this.$notify.info(
+                    "The number of prizes in the blind box is not enough to open"
+                );
+                return;
+            }
             this.dialogVisible = true;
+            this.openCount = number;
         },
         handleClose() {
             this.dialogVisible = false;
         },
         handleClosed() {},
-        submitOpen() {
-            this.handleClose();
-            this.dialogVisibleBoxOpen = true;
+        async submitOpen() {
+            if (!this.$store.state.user.info.address) {
+                this.$router.push("/login");
+                return;
+            }
+            if (this.isSubmiting) {
+                return;
+            }
+            console.log("创建开启");
+            this.isSubmiting = true;
+            const txs = [];
+            for (let i = 0; i < this.openCount; i++) {
+                txs.push(
+                    this.$rpc.api.tx.blindBox.buyBlindBox(
+                        this.blindBoxInfo.box_id
+                    )
+                );
+            }
+
+            let extrinsic = this.$rpc.api.tx.utility.batch(txs);
+            console.log(txs);
+            /* 
+                {
+                    section: "blindBox",
+                    method: "BlindBoxDraw",
+                }
+                utility.BatchCompleted
+            */
+            this.$store.dispatch("art/SendExtrinsic", {
+                address: this.$store.state.user.info.address,
+                extrinsic,
+                cb: () => {
+                    this.isSubmiting = false;
+                    this.isOpening = true;
+                    this.dialogVisibleBoxOpen = true;
+                    this.$notify.info("Submitted");
+                    this.dialogVisible = false;
+                },
+                done: null,
+                err: () => {
+                    this.isOpening = false;
+                    this.dialogVisibleBoxOpen = false;
+                    this.isSubmiting = false;
+                    this.$notify.error("Submission Failed");
+                },
+                eventCb: ({ method, section, data }, completeCb) => {
+                    if (
+                        section === "utility" &&
+                        method === "BatchInterrupted"
+                    ) {
+                        console.log(JSON.parse(data.toString()));
+                        let result = JSON.parse(data.toString());
+                        let successNumber =
+                            result[0] - 1 > 0 ? result[0] - 1 : 0;
+                        let failedNumber = this.openCount - result[0];
+
+                        notification.notice(
+                            {
+                                title: "Interrupted",
+                                message: `The number of blind boxes was insufficient.${successNumber} successes and ${failedNumber} failures.`,
+                                type: "info",
+                            },
+                            {
+                                closeOnClick: true,
+                                draggable: true,
+                                timeout: 0,
+                            }
+                        );
+                        if (successNumber > 0) {
+                            this.requestOpenList();
+                        } else {
+                            this.isOpening = false;
+                            this.dialogVisibleBoxOpen = false;
+                        }
+                    }
+                    if (section === "utility" && method === "BatchCompleted") {
+                        completeCb();
+                        this.$notify.success("Success");
+                        this.requestOpenList();
+                    }
+                    if (section === "blindBox" && method === "BlindBoxDraw") {
+                        this.openList.push(JSON.parse(data.toString()));
+                    }
+                    if (method === "ExtrinsicSuccess") {
+                        completeCb();
+                        this.isOpening = false;
+                        this.$notify.success("Success");
+                    } else if (method === "ExtrinsicFailed") {
+                        completeCb();
+                        this.isOpening = false;
+                        this.isSubmiting = false;
+                        this.dialogVisibleBoxOpen = false;
+                        this.$notify.error("Submission Failed");
+                    }
+                },
+            });
+        },
+        totalPrice(price, amount) {
+            return new BigNumber(price || 0).times(amount || 0).toNumber();
         },
     },
 };
@@ -262,13 +408,18 @@ export default {
             margin-bottom: 79px;
         }
         .nft-list {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
             margin-bottom: 36px;
+            .nft-list-body {
+                overflow: hidden;
+            }
+            .item:nth-child(3n) {
+                margin-right: 0;
+            }
             .item {
                 width: 360px;
                 height: 270px;
+                float: left;
+                margin-right: 60px;
                 cursor: pointer;
                 margin-bottom: 70px;
                 position: relative;

@@ -227,7 +227,10 @@ export default {
         SetAuctionList({ commit }, list) {
             commit("SET_AUCTION_LIST", list);
         },
-        async SendExtrinsic({ commit }, { address, extrinsic, cb, done, err }) {
+        async SendExtrinsic(
+            { commit },
+            { address, extrinsic, cb, done, err, eventCb }
+        ) {
             await commit("SET_IS_SENDING", true);
             await commit("RESET_SUB_QUEUE");
             rpc.signAndSend(
@@ -243,7 +246,8 @@ export default {
                 () => {
                     commit("SET_IS_SENDING", false);
                     err();
-                }
+                },
+                eventCb
             );
         },
         // async QueryStorage({ state, commit }, { query, args = [] }) {
@@ -278,14 +282,18 @@ export default {
                 );
             };
             let result = "";
-            result = await rpc.api.query.nft.saleOrderList(
-                state.art.collection_id,
-                state.art.item_id,
-                state.isSending ? null : cb
-            );
             if (state.isSending) {
+                result = await rpc.api.query.nft.saleOrderList(
+                    state.art.collection_id,
+                    state.art.item_id
+                );
                 cb(result ? result : {});
             } else {
+                result = await rpc.api.query.nft.saleOrderList(
+                    state.art.collection_id,
+                    state.art.item_id,
+                    cb
+                );
                 commit("ADD_SUB_QUEUE", result ? result : () => {});
             }
         },
