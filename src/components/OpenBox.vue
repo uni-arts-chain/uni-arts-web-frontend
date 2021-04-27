@@ -5,7 +5,7 @@
         <div class="loading" v-if="isOpening">
             Data transmission on the chain, please wait patiently...
         </div>
-        <div class="content" v-else>
+        <div class="content" v-else v-loading="isLoading">
             <el-carousel
                 type="card"
                 :autoplay="false"
@@ -18,10 +18,12 @@
                         <AdaptiveImage
                             width="229px"
                             height="332px"
-                            :url="HomePage1"
+                            :url="item.img_main_file1.url"
                         />
-                        <div class="name">Harry Potter</div>
-                        <button class="checkout">Check it out</button>
+                        <div class="name">{{ item.name }}</div>
+                        <button class="checkout" @click="goDetail(item)">
+                            Check it out
+                        </button>
                         <p class="desc">
                             The NFT works obtained can be viewed in "my home
                             page"
@@ -51,6 +53,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        isLoading: {
+            type: Boolean,
+            default: false,
+        },
     },
     components: {
         [Carousel.name]: Carousel,
@@ -77,6 +83,9 @@ export default {
     },
     mounted() {},
     methods: {
+        goDetail(item) {
+            window.open("/art/" + item.art_id);
+        },
         lockScreen(e) {
             console.log(1);
             e.preventDefault();

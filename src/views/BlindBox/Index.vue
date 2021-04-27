@@ -25,7 +25,7 @@
                         </div>
                         <RowText
                             class="desc"
-                            :text="v.desc"
+                            :html="v.desc"
                             :textLength="170"
                         />
                     </div>

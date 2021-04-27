@@ -7,9 +7,7 @@
         />
         <div class="container">
             <div class="title">{{ blindBoxInfo.title }}</div>
-            <div class="desc">
-                {{ blindBoxInfo.desc }}
-            </div>
+            <div class="desc" v-html="blindBoxInfo.desc"></div>
             <div class="button-group">
                 <button class="open" @click="openClick(1)">Open 1 time</button>
                 <button class="open10" @click="openClick(10)">
@@ -50,7 +48,7 @@
             </div>
             <div class="rule">
                 <div class="title">Rule description</div>
-                <p v-html="blindBoxInfo.rule"></p>
+                <div v-html="blindBoxInfo.rule"></div>
             </div>
             <img src="@/assets/images/di@2x.png" class="di" />
         </div>
@@ -82,7 +80,7 @@
             </div>
         </Dialog>
         <OpenBox
-            v-loading="isLoadingResult"
+            :isLoading="isLoadingResult"
             :isOpening="isOpening"
             :visible.sync="dialogVisibleBoxOpen"
             :list="openList"
@@ -164,21 +162,35 @@ export default {
                 return;
             }
             this.isLoadingResult = true;
+            let ids = this.openList
+                .map((v) => {
+                    if (v[2] > 0 && v[3] > 0) {
+                        return v[2] + "_" + v[3];
+                    }
+                })
+                .join(",");
+            if (ids.length < 0) {
+                this.isLoadingResult = false;
+                this.closeOpenBox();
+                return;
+            }
             this.$http["globalGetOpenBlindBoxArtList"]({
-                ids: this.openList.map((v) => v[1] + "_" + v[2]).concat(","),
+                ids: ids,
             })
                 .then((res) => {
                     console.log(res);
                     this.isLoadingResult = false;
-                    this.openList = res;
-                    this.isOpening = false;
-                    this.dialogVisibleBoxOpen = true;
+                    if (res.length < 0) {
+                        this.closeOpenBox();
+                    } else {
+                        this.openList = res;
+                        this.showOpenBoxResult();
+                    }
                 })
                 .catch((err) => {
                     console.log(err);
                     this.isLoadingResult = false;
-                    this.dialogVisibleBoxOpen = false;
-                    this.isOpening = true;
+                    this.closeOpenBox();
                     this.$notify.error(err.head ? err.head.msg : err);
                 });
         },
@@ -232,15 +244,13 @@ export default {
                 extrinsic,
                 cb: () => {
                     this.isSubmiting = false;
-                    this.isOpening = true;
-                    this.dialogVisibleBoxOpen = true;
+                    this.openOpenBox();
                     this.$notify.info("Submitted");
                     this.dialogVisible = false;
                 },
                 done: null,
                 err: () => {
-                    this.isOpening = false;
-                    this.dialogVisibleBoxOpen = false;
+                    this.closeOpenBox();
                     this.isSubmiting = false;
                     this.$notify.error("Submission Failed");
                 },
@@ -270,8 +280,7 @@ export default {
                         if (successNumber > 0) {
                             this.requestOpenList();
                         } else {
-                            this.isOpening = false;
-                            this.dialogVisibleBoxOpen = false;
+                            this.closeOpenBox();
                         }
                     }
                     if (section === "utility" && method === "BatchCompleted") {
@@ -284,17 +293,27 @@ export default {
                     }
                     if (method === "ExtrinsicSuccess") {
                         completeCb();
-                        this.isOpening = false;
                         this.$notify.success("Success");
                     } else if (method === "ExtrinsicFailed") {
                         completeCb();
-                        this.isOpening = false;
                         this.isSubmiting = false;
-                        this.dialogVisibleBoxOpen = false;
+                        this.closeOpenBox();
                         this.$notify.error("Submission Failed");
                     }
                 },
             });
+        },
+        closeOpenBox() {
+            this.dialogVisibleBoxOpen = false;
+            this.isOpening = true;
+        },
+        openOpenBox() {
+            this.dialogVisibleBoxOpen = true;
+            this.isOpening = true;
+        },
+        showOpenBoxResult() {
+            this.dialogVisibleBoxOpen = true;
+            this.isOpening = false;
         },
         totalPrice(price, amount) {
             return new BigNumber(price || 0).times(amount || 0).toNumber();
@@ -475,7 +494,7 @@ export default {
             letter-spacing: 1px;
             margin-bottom: 59px;
         }
-        > p {
+        > div {
             font-size: 26px;
             font-weight: 400;
             text-align: left;

@@ -1,13 +1,14 @@
 /** * Created by Lay Hunt on 2021-01-07 16:17:47. */
 <template>
     <div class="row-text">
-        {{ cropText(content) }}
+        <div v-html="cropText(html)" v-if="html"></div>
+        <div v-else>{{ cropText(content) }}</div>
     </div>
 </template>
 <script>
 export default {
     name: "row-text",
-    props: ["text", "textLength"],
+    props: ["text", "textLength", "html"],
     watch: {
         text(value) {
             this.content = value;

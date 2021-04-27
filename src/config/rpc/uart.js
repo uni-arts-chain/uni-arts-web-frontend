@@ -239,7 +239,7 @@ export default {
         draw_start: "u64",
         draw_end: "u64",
     },
-    BlindBox: {
+    BlindboxItem: {
         id: "u64",
         owner: "AccountId",
         card_group: "Vec<u64>",

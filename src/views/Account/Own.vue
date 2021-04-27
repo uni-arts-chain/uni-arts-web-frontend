@@ -238,6 +238,7 @@ export default {
                         },
                         done: () => {
                             this.$notify.success("Success");
+                            this.requestData();
                         },
                         err: () => {
                             this.isSubmiting = false;
@@ -252,6 +253,7 @@ export default {
         },
         handleClosed() {
             this.currentTransfer = "";
+            this.$refs.form.resetFields();
         },
         computeAmount(sell, total) {
             return new BigNumber(isNaN(total) ? 0 : total)
