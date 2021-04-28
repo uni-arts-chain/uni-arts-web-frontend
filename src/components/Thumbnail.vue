@@ -78,6 +78,10 @@ export default {
 <style lang="scss" scoped>
 .thumbnail {
     overflow: hidden;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 .thumbnail.group {
     .item {
@@ -85,9 +89,8 @@ export default {
     }
 }
 .item {
-    float: left;
     width: 30%;
-    margin-right: 5%;
+    margin-right: 60px;
     margin-bottom: 35px;
 }
 .item:nth-child(3n) {
