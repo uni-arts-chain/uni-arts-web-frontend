@@ -139,17 +139,20 @@ export default {
         this.$store.dispatch("global/SetTheme", "light");
     },
     methods: {
-        // async requestBlindBox() {
-        //     let result = await this.$rpc.api.query.blindBox.blindBoxList(this.blindBoxInfo.id)
-        //     console.log(result.toJSON());
-        // },
+        async requestBlindBox() {
+            let result = await this.$rpc.api.query.blindBox.blindBoxList(
+                this.blindBoxInfo.box_id
+            );
+            result = result.toJSON();
+            this.blindBoxInfo.remain_count = result.remaind_count;
+        },
         requestData() {
             this.isLoading = true;
             this.$http["globalGetBlindBox"]({}, { id: this.id })
                 .then((res) => {
                     this.isLoading = false;
                     this.blindBoxInfo = res;
-                    // this.requestBlindBox();
+                    this.requestBlindBox();
                 })
                 .catch((err) => {
                     console.log(err);
@@ -411,6 +414,7 @@ export default {
             font-size: 22px;
             font-weight: 500;
             text-align: center;
+            white-space: nowrap;
             color: #2f8ccc;
         }
     }

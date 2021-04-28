@@ -10,6 +10,7 @@
                 type="card"
                 :autoplay="false"
                 :loop="false"
+                indicator-position="none"
                 v-if="list.length > 0"
             >
                 <el-carousel-item v-for="(item, i) in list" :key="i">
@@ -37,7 +38,6 @@
 <script>
 import { Carousel, CarouselItem } from "element-ui";
 import AdaptiveImage from "@/components/AdaptiveImage";
-import HomePage1 from "@/assets/images/temp/home-page1.jpg";
 export default {
     name: "open-box",
     props: {
@@ -64,9 +64,7 @@ export default {
         AdaptiveImage,
     },
     data() {
-        return {
-            HomePage1,
-        };
+        return {};
     },
     watch: {
         visible(value) {
@@ -234,7 +232,8 @@ export default {
     font-size: 35px;
     position: absolute;
     cursor: pointer;
-    top: 22%;
-    right: 15%;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-420px) translateX(440px);
 }
 </style>
