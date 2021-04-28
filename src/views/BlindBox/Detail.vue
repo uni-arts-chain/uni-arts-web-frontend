@@ -189,6 +189,7 @@ export default {
                         this.openList = res;
                         this.showOpenBoxResult();
                     }
+                    this.requestData();
                 })
                 .catch((err) => {
                     console.log(err);
