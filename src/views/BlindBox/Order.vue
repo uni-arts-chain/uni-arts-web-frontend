@@ -5,7 +5,7 @@
         <div class="art-item" v-for="(v, i) in list" :key="i">
             <router-link :to="`/art/${getArtId(v)}`" class="img-container">
                 <AdaptiveView
-                    :nft="getImageResource(v)"
+                    :nft="v.art"
                     :isResponsive="true"
                     :isPreview="true"
                     width="100%"
@@ -62,17 +62,14 @@ export default {
                 this.requestData();
             }
         },
-        getImageResource(item) {
-            return item;
-        },
         getArtId(item) {
-            return item.id;
+            return item.art.id;
         },
         getArtName(item) {
-            return item.name;
+            return item.art.name;
         },
         getItemHash(item) {
-            return item.item_hash;
+            return item.art.item_hash;
         },
         getArtPrice(item) {
             return item.price ? item.price : 0;
