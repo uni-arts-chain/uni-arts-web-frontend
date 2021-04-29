@@ -2,7 +2,7 @@
 <template>
     <nav :class="theme">
         <div class="container">
-            <div class="logo" @click="goHome">Uniarts</div>
+            <div class="logo" @click="goHome">UniArts</div>
             <ul class="link-group">
                 <li>
                     <router-link to="/" :class="{ active: activeTab == 'Home' }"

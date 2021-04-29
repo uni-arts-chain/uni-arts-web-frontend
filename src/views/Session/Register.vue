@@ -5,7 +5,7 @@
             <h2 class="title">Connect a account to get started</h2>
             <div class="wallet-list">
                 <div class="polkadot">
-                    <div class="wallet-chain">Uniarts</div>
+                    <div class="wallet-chain">UniArts</div>
                     <button class="wallet-button" @click="showList">
                         <icon-svg icon-class="polkadot"></icon-svg>
                         <span class="wallet-name">Polkadot Extension</span>

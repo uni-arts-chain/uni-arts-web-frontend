@@ -3,7 +3,7 @@
     <footer>
         <div class="container">
             <div class="bottom-logo">
-                <span class="logo">Uniarts</span>
+                <span class="logo">UniArts</span>
                 <span class="desc">@2019-2020 uniarts.me</span>
             </div>
             <div class="bottom-community">

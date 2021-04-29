@@ -263,7 +263,7 @@ export default {
                 "/art/" +
                 this.currentArtId;
             this.shareArt = this.art.name;
-            this.shareContent = `Uniarts chain - Art encryption Tour \n\nArt：${this.art.name} \n\nView the homepage：${this.url}
+            this.shareContent = `UniArts chain - Art encryption Tour \n\nArt：${this.art.name} \n\nView the homepage：${this.url}
             `;
         },
         showCertificate(collection_id, item_id, item_hash) {

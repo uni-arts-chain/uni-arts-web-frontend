@@ -4,7 +4,7 @@
         <div class="title">SHARE</div>
         <div class="content">
             <div style="color: #5d96ff">
-                Uniarts chain - Art encryption Tour
+                UniArts chain - Art encryption Tour
             </div>
             <div v-if="type == 'art'">Art：{{ art }}</div>
             <div v-else>Author：{{ author }}</div>

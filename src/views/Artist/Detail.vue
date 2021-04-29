@@ -171,7 +171,7 @@ export default {
                 this.authorId;
             this.shareAuthor = this.author.display_name;
 
-            this.shareContent = `Uniarts chain - Art encryption Tour \n\nAuthor：${this.shareAuthor} \n\nView the homepage：${this.shareUrl}
+            this.shareContent = `UniArts chain - Art encryption Tour \n\nAuthor：${this.shareAuthor} \n\nView the homepage：${this.shareUrl}
             `;
         },
         follow() {
