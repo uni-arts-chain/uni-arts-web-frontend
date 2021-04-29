@@ -3,6 +3,7 @@
     <div class="open-box" v-if="visible">
         <i class="el-icon-close" @click="close"></i>
         <div class="loading" v-if="isOpening">
+            <img src="@/assets/images/opening.gif" />
             Data transmission on the chain, please wait patiently...
         </div>
         <div class="content" v-else v-loading="isLoading">
@@ -117,9 +118,10 @@ export default {
 }
 
 .loading {
-    height: 300px;
+    height: 350px;
     width: 700px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: white;
@@ -127,6 +129,11 @@ export default {
     font-size: 20px;
     border-radius: 8px;
     background-color: black;
+    > img {
+        width: 160px;
+        height: 160px;
+        margin-bottom: 30px;
+    }
 }
 
 @keyframes enter {
