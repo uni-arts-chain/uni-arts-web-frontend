@@ -3,7 +3,7 @@
     <div class="index">
         <div class="container">
             <div class="title">Blind Box</div>
-            <div class="card-list">
+            <div class="card-list" v-loading="isLoading">
                 <div
                     class="card"
                     v-for="(v, i) in list"
@@ -13,7 +13,7 @@
                     <AdaptiveImage
                         width="100%"
                         height="400px"
-                        :url="v.img_path"
+                        :url="v.body_background_img_path"
                     />
                     <div class="info">
                         <div class="name-body">
@@ -56,6 +56,7 @@ export default {
     },
     methods: {
         requestData() {
+            this.isLoading = true;
             this.$http["globalGetBlindBoxList"]({})
                 .then((res) => {
                     this.isLoading = false;

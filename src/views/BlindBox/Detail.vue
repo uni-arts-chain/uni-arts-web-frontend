@@ -1,16 +1,38 @@
 /** * Created by Lay Hunt on 2021-04-22 15:30:15. */
 <template>
-    <div class="detail">
+    <div
+        class="detail"
+        :class="{ light: theme === 'light' }"
+        :style="`background-image: url(${blindBoxInfo.background_img_path})`"
+    >
         <div
             class="title-img"
-            :style="`background-image: url(${blindBoxInfo.background_img_path})`"
+            :style="`background-image: url(${blindBoxInfo.img_path})`"
         />
         <div class="container">
             <div class="title">{{ blindBoxInfo.title }}</div>
             <div class="desc" v-html="blindBoxInfo.desc"></div>
             <div class="button-group">
-                <button class="open" @click="openClick(1)">Open 1 time</button>
-                <button class="open10" @click="openClick(10)">
+                <button
+                    class="open"
+                    :style="`background-image: url(${
+                        blindBoxInfo.background_1x_img_path
+                            ? blindBoxInfo.background_1x_img_path
+                            : button1x
+                    })`"
+                    @click="openClick(1)"
+                >
+                    Open 1 time
+                </button>
+                <button
+                    class="open10"
+                    :style="`background-image: url(${
+                        blindBoxInfo.background_10x_img_path
+                            ? blindBoxInfo.background_10x_img_path
+                            : button10x
+                    })`"
+                    @click="openClick(10)"
+                >
                     Open 10 times
                 </button>
             </div>
@@ -50,7 +72,10 @@
                 <div class="title">Rule description</div>
                 <div v-html="blindBoxInfo.rule"></div>
             </div>
-            <img src="@/assets/images/di@2x.png" class="di" />
+            <div
+                :style="`background-image: url(${blindBoxInfo.cover_img_path})`"
+                class="di"
+            ></div>
         </div>
         <Dialog
             :visible.sync="dialogVisible"
@@ -94,6 +119,8 @@ import { notification } from "@/components/Notification";
 import OpenBox from "@/components/OpenBox";
 import AdaptiveImage from "@/components/AdaptiveImage";
 import bg2 from "@/assets/images/blind-box-bg2@2x.png";
+import button1x from "@/assets/images/button-open@2x.png";
+import button10x from "@/assets/images/button-open10@2x.png";
 
 export default {
     name: "detail",
@@ -105,6 +132,8 @@ export default {
     data() {
         return {
             bg2,
+            button1x,
+            button10x,
             isLoading: false,
             id: this.$route.params.id,
             blindBoxInfo: {},
@@ -122,6 +151,9 @@ export default {
             return this.blindBoxInfo.onchain_card_groups
                 ? this.blindBoxInfo.onchain_card_groups
                 : [];
+        },
+        theme() {
+            return this.blindBoxInfo.background_color === 2 ? "dark" : "light";
         },
     },
     watch: {
@@ -328,7 +360,7 @@ export default {
 <style lang="scss" scoped>
 .detail {
     position: relative;
-    background-color: black;
+    background-color: transparent;
     overflow: hidden;
     .title-img {
         width: 100%;
@@ -366,13 +398,16 @@ export default {
         margin-bottom: 34px;
         display: flex;
         justify-content: space-between;
+        button {
+            background-color: transparent;
+        }
         .open {
             text-align: center;
             cursor: pointer;
             width: 321px;
             height: 88px;
-            background: url(~@/assets/images/button-open@2x.png) no-repeat;
             background-position: center;
+            background-repeat: no-repeat;
             background-size: 321px 88px;
             font-size: 30px;
             font-weight: 500;
@@ -384,7 +419,7 @@ export default {
             cursor: pointer;
             width: 321px;
             height: 86px;
-            background: url(~@/assets/images/button-open10@2x.png) no-repeat;
+            background-repeat: no-repeat;
             background-position: center;
             background-size: 321px 86px;
             font-size: 30px;
@@ -510,6 +545,10 @@ export default {
     }
     .di {
         width: 100%;
+        height: 180px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         position: absolute;
         bottom: -30px;
         left: 0;
@@ -587,6 +626,18 @@ export default {
     > button:disabled {
         cursor: not-allowed;
         opacity: 0.5;
+    }
+}
+
+.detail.light {
+    .container .title {
+        color: #020202;
+    }
+    .container .desc {
+        color: #020202;
+    }
+    .container .rule > div {
+        color: #020202;
     }
 }
 </style>
