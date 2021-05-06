@@ -7,6 +7,7 @@
                     <AdaptiveImage
                         width="100%"
                         height="100%"
+                        :isOrigin="false"
                         :url="item.img_file.url"
                     />
                     <div class="bg"></div>

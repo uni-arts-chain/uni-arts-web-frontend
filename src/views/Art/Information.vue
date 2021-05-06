@@ -6,8 +6,7 @@
             <div class="img-container">
                 <div class="img-content">
                     <AdaptiveView
-                        width="100%"
-                        height="100%"
+                        @imgLoadedSize="imgLoaded"
                         :nft="art"
                         :isPreview="true"
                     />
@@ -43,12 +42,19 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+            width: "",
+            height: "",
+        };
     },
     methods: {
         getMaterial(id) {
             let item = this.$store.state.art.materials.find((v) => v.id == id);
             return item ? item : {};
+        },
+        imgLoaded(info) {
+            this.width = info.width;
+            this.height = info.height;
         },
     },
 };
@@ -82,6 +88,12 @@ export default {
                 overflow: hidden;
                 height: 210px;
                 width: 208px;
+            }
+            .adaptive-view ::v-deep .adaptive-image img {
+                border-left: 2px solid #aa8740;
+                border-top: 2px solid #dbdbdb;
+                border-right: 2px solid #ffffff;
+                border-bottom: 2px solid #e6e6e6;
             }
             img {
                 height: 100%;

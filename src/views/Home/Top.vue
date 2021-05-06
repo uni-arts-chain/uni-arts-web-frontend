@@ -4,7 +4,12 @@
         <el-carousel arrow="never" height="760px" :autoplay="false">
             <el-carousel-item>
                 <router-link to="/" class="item-container">
-                    <AdaptiveImage width="100%" height="100%" :url="bg1" />
+                    <AdaptiveImage
+                        :isOrigin="false"
+                        width="100%"
+                        height="100%"
+                        :url="bg1"
+                    />
                     <div class="info-body">
                         <div class="container">
                             <h1 style="padding-left: 200px">Link Credit</h1>

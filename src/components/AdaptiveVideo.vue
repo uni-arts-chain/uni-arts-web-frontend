@@ -73,15 +73,15 @@ export default {
     methods: {
         canplay() {
             if (!this.isResponsive) {
-                let width = this.$refs.video.width;
-                let height = this.$refs.video.height;
+                let width = this.$refs.video.offsetWidth;
+                let height = this.$refs.video.offsetHeight;
                 this.isHorizontal = width > height ? true : false;
                 this.isLoading = false;
                 this.isPlay ? this.$refs.video.play() : "";
             } else {
                 let obj = this.$refs.video;
-                let width = obj ? obj.width : "100%";
-                let height = obj ? obj.height : "230px";
+                let width = obj ? obj.offsetWidth : "100%";
+                let height = obj ? obj.offsetHeight : "230px";
                 let boxWidth = this.width;
                 let boxHeight = this.height;
                 boxWidth = this.$refs.videoContainer
@@ -99,6 +99,47 @@ export default {
                 }
                 this.isLoading = false;
             }
+            let width = this.$refs.video.offsetWidth;
+            let height = this.$refs.video.offsetHeight;
+
+            if (width < height) {
+                if (
+                    this.$refs.video.offsetHeight >
+                    this.$refs.videoContainer.offsetHeight
+                ) {
+                    let rato =
+                        this.$refs.video.offsetHeight /
+                        this.$refs.video.offsetWidth;
+                    this.$emit("ImgLoaded", {
+                        height: this.$refs.videoContainer.offsetHeight,
+                        width: this.$refs.videoContainer.offsetHeight / rato,
+                    });
+                } else {
+                    this.$emit("ImgLoaded", {
+                        height: this.$refs.video.offsetHeight,
+                        width: this.$refs.video.offsetWidth,
+                    });
+                }
+            } else {
+                if (
+                    this.$refs.video.offsetWidth >
+                    this.$refs.videoContainer.offsetWidth
+                ) {
+                    let rato =
+                        this.$refs.video.offsetWidth /
+                        this.$refs.video.offsetHeight;
+                    this.$emit("ImgLoaded", {
+                        height: this.$refs.videoContainer.offsetWidth / rato,
+                        width: this.$refs.videoContainer.offsetWidth,
+                    });
+                } else {
+                    this.$emit("ImgLoaded", {
+                        height: this.$refs.video.offsetHeight,
+                        width: this.$refs.video.offsetWidth,
+                    });
+                }
+            }
+            console.log();
         },
         replay() {
             this.$refs.video.currentTime = 0;
@@ -124,7 +165,9 @@ export default {
     position: relative;
 }
 .video-player-container {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
     video {

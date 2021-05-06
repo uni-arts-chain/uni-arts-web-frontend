@@ -3,6 +3,7 @@
     <div class="index container" v-loading="isSubmiting">
         <div class="banner">
             <AdaptiveImage
+                :isOrigin="false"
                 width="100%"
                 height="100%"
                 :url="auctionInfo.img_file ? auctionInfo.img_file.url : ''"

@@ -38,7 +38,7 @@ export default {
         },
         isOrigin: {
             type: Boolean,
-            default: false,
+            default: true,
         },
     },
     data() {
@@ -49,14 +49,19 @@ export default {
     },
     methods: {
         imgOnLoad() {
-            if (this.isOrigin) {
-                this.isLoading = false;
-                return;
-            }
-
             let obj = this.$refs.img;
             let width = obj ? obj.width : "100%";
             let height = obj ? obj.height : "230px";
+
+            if (this.isOrigin) {
+                this.isLoading = false;
+                this.$emit("ImgLoaded", {
+                    width: width,
+                    height: height,
+                });
+                return;
+            }
+
             let boxWidth = this.width;
             let boxHeight = this.height;
             boxWidth = boxWidth.includes("px")

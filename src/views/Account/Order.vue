@@ -6,7 +6,7 @@
             <router-link :to="`/art/${getArtId(v)}`" class="img-container">
                 <AdaptiveView
                     :nft="getImageResource(v)"
-                    :isResponsive="true"
+                    :isResponsive="false"
                     :isPreview="true"
                     width="100%"
                     height="230px"

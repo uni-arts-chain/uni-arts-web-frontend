@@ -1,16 +1,22 @@
 /** * Created by Lay Hunt on 2021-04-15 15:30:17. */
 <template>
-    <div class="adaptive-view" :style="`width: ${width};height: ${height}`">
+    <div
+        class="adaptive-view"
+        ref="adaptiveView"
+        :style="`width: ${width};height: ${height}`"
+    >
         <div class="img-container" :class="{ preview: isPreview }">
             <Live2DView
                 :width="width"
                 :height="height"
+                @ImgLoaded="imgLoaded"
                 :path="nft.live2d_ipfs_url ? nft.live2d_ipfs_url : ''"
                 :modelName="nft.live2d_file ? nft.live2d_file : ''"
                 v-if="viewType == 'live2d' && !isPreview"
             />
             <AdaptiveImage
                 @click.native="showPreview"
+                @ImgLoaded="imgLoaded"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'live2d' && isPreview"
@@ -18,6 +24,7 @@
             />
             <AdaptiveImage
                 @click.native="showPreview"
+                @ImgLoaded="imgLoaded"
                 :width="width"
                 :height="height"
                 v-else-if="viewType == 'img'"
@@ -26,13 +33,19 @@
             <AdaptiveVideo
                 @click.native="showPreview"
                 :width="width"
+                @ImgLoaded="imgLoaded"
                 :height="height"
+                :preload="preload"
                 v-else-if="viewType == 'video'"
                 :isResponsive="isResponsive"
                 :isPlay="!isPreview"
                 :source="nft.img_main_file1 ? nft.img_main_file1.url : ''"
             />
-            <div class="auction-label" v-if="!isPreview && isAuction">
+            <div
+                class="auction-label"
+                :style="`left: ${auctionLabelPosition.left}px;top: ${auctionLabelPosition.top}px`"
+                v-if="!isPreview && isAuction"
+            >
                 IN AUCTION
             </div>
             <div
@@ -57,6 +70,7 @@
             <icon-svg
                 v-if="isPreview && viewType == 'video'"
                 class="video-label"
+                :style="`top: ${typeLabelPosition.top}px;right: ${typeLabelPosition.right}px`"
                 icon-class="video"
             />
         </div>
@@ -131,11 +145,23 @@ export default {
             type: Boolean,
             default: false,
         },
+        preload: {
+            type: String,
+            default: "metadata",
+        },
     },
     data() {
         return {
             isDialogPreview: false,
             dialogPreviewUrl: "",
+            auctionLabelPosition: {
+                left: 0,
+                top: 0,
+            },
+            typeLabelPosition: {
+                left: 0,
+                top: 0,
+            },
         };
     },
     computed: {
@@ -171,6 +197,25 @@ export default {
                     break;
             }
             this.isDialogPreview = true;
+        },
+        imgLoaded(info) {
+            let imgWidth = info.width;
+            let imgHeight = info.height;
+            let boxWidth = this.$refs.adaptiveView.offsetWidth;
+            let boxHeight = this.$refs.adaptiveView.offsetHeight;
+            this.auctionLabelPosition.left = (boxWidth - imgWidth) / 2;
+            this.auctionLabelPosition.top = (boxHeight - imgHeight) / 2 + 15;
+            if (this.viewType === "video") {
+                console.log(this.viewType, info);
+                this.typeLabelPosition.right = (boxWidth - imgWidth) / 2 + 5;
+                this.typeLabelPosition.top = (boxHeight - imgHeight) / 2 + 5;
+            }
+
+            this.$emit("imgLoaded", this.auctionLabelPosition);
+            this.$emit("imgLoadedSize", {
+                width: imgWidth,
+                height: imgHeight,
+            });
         },
     },
 };

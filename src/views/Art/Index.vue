@@ -8,6 +8,8 @@
                         :nft="art"
                         width="100%"
                         height="100%"
+                        :isResponsive="false"
+                        preload="auto"
                         :isAuction="isAuction"
                         :isWaiting="isWaiting"
                         :countdown="countdown"

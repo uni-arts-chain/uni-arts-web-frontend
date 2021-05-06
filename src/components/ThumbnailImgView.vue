@@ -1,27 +1,56 @@
 /** * Created by Lay Hunt on 2020-11-19 11:37:45. */
 <template>
-    <div class="thumbnail" :class="{ group: isGroup }">
-        <div class="no-data" v-if="list.length == 0">No artworks</div>
-        <ThumbnailImgView
-            :item="v"
-            :isGroup="isGroup"
-            :isAuction="isAuction"
-            v-for="(v, i) in list"
-            :key="i"
-        />
+    <div class="item">
+        <router-link :to="`/art/${item.id}`" class="img-container">
+            <AdaptiveView
+                @imgLoaded="imgLoaded"
+                :nft="item"
+                :isResponsive="false"
+                :isPreview="true"
+            />
+            <div class="aution-view" v-if="item.aasm_state == 'auctioning'">
+                {{
+                    computeBlockTimestamp(item.auction_start_time) | dateFormat
+                }}
+                ~
+                {{ computeBlockTimestamp(item.auction_end_time) | dateFormat }}
+            </div>
+            <div
+                class="aution-label"
+                :style="`left: ${labelPostion.left}px;top: ${labelPostion.top}px;`"
+                v-if="item.aasm_state == 'auctioning'"
+            >
+                IN AUCTION
+            </div>
+            <div class="copyright-icon" v-if="item.has_royalty">
+                <div class="icon-sub">
+                    <div class="sub"></div>
+                    <icon-svg icon-class="copyright" />
+                </div>
+            </div>
+        </router-link>
+        <h5 class="title">{{ item.name }}</h5>
+        <div class="desc">{{ materialType(item.material_id) }}</div>
+        <div class="address-label">
+            Certificate Address:
+            <span class="address">{{ item.item_hash }}</span>
+        </div>
+        <div class="price" v-if="!isAuction">{{ item.price }} UART</div>
+        <div class="price" v-else>Starting at {{ item.price }} UART</div>
     </div>
 </template>
 <script>
-import ThumbnailImgView from "@/components/ThumbnailImgView";
+import AdaptiveView from "./AdaptiveView";
+import { ComputeBlockTimestamp } from "@/utils";
 export default {
     name: "thumbnail",
     components: {
-        ThumbnailImgView,
+        AdaptiveView,
     },
     props: {
-        list: {
-            type: Array,
-            default: () => [],
+        item: {
+            type: Object,
+            default: () => {},
         },
         isGroup: {
             type: Boolean,
@@ -33,9 +62,33 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+            labelPostion: {
+                left: 0,
+                top: 0,
+            },
+        };
     },
-    methods: {},
+    methods: {
+        materialType(id) {
+            let item = this.$store.state.art.materials.find(
+                (v) => v.code == id + ""
+            );
+            return item ? item.title : "";
+        },
+        computeBlockTimestamp(blockNumber) {
+            return ComputeBlockTimestamp(
+                blockNumber,
+                this.$store.state.global.chain.timestamp,
+                this.$store.state.global.chain.blockHeight
+            );
+        },
+        imgLoaded(info) {
+            info.top = info.top + 15;
+            this.labelPostion.left = info.left;
+            this.labelPostion.top = info.top;
+        },
+    },
 };
 </script>
 <style lang="scss" scoped>
