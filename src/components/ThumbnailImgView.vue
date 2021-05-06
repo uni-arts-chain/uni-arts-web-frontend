@@ -192,6 +192,7 @@ export default {
     text-align: left;
     line-height: 35px;
     letter-spacing: 0px;
+    min-height: 35px;
 }
 
 .address-label {

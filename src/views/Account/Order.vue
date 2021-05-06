@@ -295,6 +295,7 @@ export default {
     margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
+    min-height: 18px;
 }
 .action {
     border: 2px solid #020202;
