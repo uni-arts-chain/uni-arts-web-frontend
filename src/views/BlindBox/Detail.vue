@@ -372,7 +372,7 @@ export default {
     }
     .container {
         position: relative;
-        padding-bottom: 140px;
+        padding-bottom: 205px;
         .title {
             opacity: 1;
             font-size: 34px;
@@ -545,12 +545,12 @@ export default {
     }
     .di {
         width: 100%;
-        height: 180px;
+        height: 205px;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         position: absolute;
-        bottom: -30px;
+        bottom: 0;
         left: 0;
     }
 }
