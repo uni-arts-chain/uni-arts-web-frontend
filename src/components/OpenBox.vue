@@ -17,10 +17,10 @@
                 <el-carousel-item v-for="(item, i) in list" :key="i">
                     <div class="item">
                         <div class="bg"></div>
-                        <AdaptiveImage
+                        <BlindBoxCardView
                             width="229px"
                             height="332px"
-                            :url="item.img_main_file1.url"
+                            :item="item"
                         />
                         <div class="name">{{ item.name }}</div>
                         <button class="checkout" @click="goDetail(item)">
@@ -38,7 +38,7 @@
 </template>
 <script>
 import { Carousel, CarouselItem } from "element-ui";
-import AdaptiveImage from "@/components/AdaptiveImage";
+import BlindBoxCardView from "@/components/BlindBoxCardView";
 export default {
     name: "open-box",
     props: {
@@ -62,7 +62,7 @@ export default {
     components: {
         [Carousel.name]: Carousel,
         [CarouselItem.name]: CarouselItem,
-        AdaptiveImage,
+        BlindBoxCardView,
     },
     data() {
         return {};
@@ -167,10 +167,9 @@ export default {
         background-size: 360px 537px;
         background-position: center;
     }
-    .adaptive-image {
-        margin-left: auto;
-        margin-right: auto;
+    .blind-box-item {
         margin-top: 73px;
+        margin-bottom: 0;
         border-radius: 10px;
         position: relative;
         z-index: 1;

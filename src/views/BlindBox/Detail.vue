@@ -46,25 +46,11 @@
                 <div class="title">Possible access</div>
                 <div class="nft-list" v-loading="isLoading">
                     <div class="nft-list-body">
-                        <div class="item" v-for="(v, i) in list" :key="i">
-                            <div class="img-wrapper">
-                                <AdaptiveImage
-                                    width="100%"
-                                    height="100%"
-                                    :url="v.art.img_main_file1.url"
-                                />
-                            </div>
-                            <div class="label rare">
-                                <img
-                                    class="icon"
-                                    src="@/assets/images/rare@2x.png"
-                                />
-                                <span>Rare</span>
-                            </div>
-                            <!-- <div class="label own">
-                                <span>Own</span>
-                            </div> -->
-                        </div>
+                        <BlindBoxCardView
+                            :item="v"
+                            v-for="(v, i) in list"
+                            :key="i"
+                        />
                     </div>
                 </div>
             </div>
@@ -117,7 +103,7 @@ import { BigNumber } from "bignumber.js";
 import Dialog from "@/components/Dialog/Dialog";
 import { notification } from "@/components/Notification";
 import OpenBox from "@/components/OpenBox";
-import AdaptiveImage from "@/components/AdaptiveImage";
+import BlindBoxCardView from "@/components/BlindBoxCardView";
 import bg2 from "@/assets/images/blind-box-bg2@2x.png";
 import button1x from "@/assets/images/button-open@2x.png";
 import button10x from "@/assets/images/button-open10@2x.png";
@@ -125,7 +111,7 @@ import button10x from "@/assets/images/button-open10@2x.png";
 export default {
     name: "detail",
     components: {
-        AdaptiveImage,
+        BlindBoxCardView,
         Dialog,
         OpenBox,
     },
@@ -471,54 +457,12 @@ export default {
             .nft-list-body {
                 overflow: hidden;
             }
-            .item:nth-child(3n) {
-                margin-right: 0;
-            }
-            .item {
-                width: 360px;
-                height: 270px;
+            .blind-box-item {
                 float: left;
                 margin-right: 60px;
-                cursor: pointer;
-                margin-bottom: 70px;
-                position: relative;
-                .img-wrapper {
-                    width: 100%;
-                    height: 100%;
-                }
-                .label {
-                    background-color: black;
-                    height: 30px;
-                    min-width: 73px;
-                    position: absolute;
-                    display: flex;
-                    align-items: center;
-                }
-                .label .icon {
-                    width: 17px;
-                    height: 16px;
-                    margin-right: 7px;
-                }
-                .label.rare {
-                    left: 0px;
-                    top: 35px;
-                    font-size: 18px;
-                    font-weight: 600;
-                    text-align: left;
-                    color: #ffcc5e;
-                    line-height: 60px;
-                    letter-spacing: 1px;
-                }
-                .label.own {
-                    left: 0px;
-                    top: 35px;
-                    font-size: 18px;
-                    font-weight: 600;
-                    text-align: left;
-                    color: #00debc;
-                    line-height: 60px;
-                    letter-spacing: 1px;
-                }
+            }
+            .blind-box-item:nth-child(3n) {
+                margin-right: 0;
             }
         }
     }

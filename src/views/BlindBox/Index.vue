@@ -57,7 +57,9 @@ export default {
     methods: {
         requestData() {
             this.isLoading = true;
-            this.$http["globalGetBlindBoxList"]({})
+            this.$http["globalGetBlindBoxList"]({
+                platform: "web",
+            })
                 .then((res) => {
                     this.isLoading = false;
                     this.list = res.list;
