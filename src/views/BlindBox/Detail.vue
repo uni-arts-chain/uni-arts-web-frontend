@@ -220,7 +220,7 @@ export default {
             this.$router.push("/blindbox/history");
         },
         openClick(number) {
-            if (this.blindBoxInfo.remain_count <= 0) {
+            if (this.blindBoxInfo.remain_count < number) {
                 this.$notify.info(
                     "The number of prizes in the blind box is not enough to open"
                 );
