@@ -283,7 +283,17 @@ const routes = [
         path: "/login",
         name: "Login",
         component: () =>
-            import(/* webpackChunkName: "Login" */ "@/views/Session/Login.vue"),
+            import(
+                /* webpackChunkName: "Session" */ "@/views/Session/Login.vue"
+            ),
+    },
+    {
+        path: "/faucet",
+        name: "Faucet",
+        component: () =>
+            import(
+                /* webpackChunkName: "Session" */ "@/views/Session/Faucet.vue"
+            ),
     },
 ];
 

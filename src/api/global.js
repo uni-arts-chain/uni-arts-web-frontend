@@ -270,6 +270,20 @@ const apiList = [
             unSignature: false,
         },
     },
+    {
+        name: "postFaucet",
+        method: "POST",
+        desc: "申请水龙头",
+        path: "/faucets",
+        mockPath: "/faucets",
+        baseURL: "/api/v1",
+        params: {
+            address: "",
+        },
+        options: {
+            unSignature: false,
+        },
+    },
 ];
 
 export default apiList;

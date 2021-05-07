@@ -62,6 +62,11 @@
                             >Chain Network</a
                         >
                     </li>
+                    <li>
+                        <router-link to="/faucet"
+                            >Authenticated Faucet</router-link
+                        >
+                    </li>
                 </ul>
             </div>
         </div>
