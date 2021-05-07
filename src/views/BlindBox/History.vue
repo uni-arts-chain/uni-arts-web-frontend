@@ -1,9 +1,9 @@
 /** * Created by Lay Hunt on 2021-04-22 17:44:27. */
 <template>
     <div class="history">
-        <div class="container">
+        <div class="container" v-loading="isLoading">
             <div class="title">Open Record</div>
-            <Order v-loading="isLoading" :list="list" />
+            <Order :list="list" />
             <div class="pagenation" v-if="hasPrev || hasNext">
                 <div
                     class="prev"
@@ -96,6 +96,35 @@ export default {
         text-transform: uppercase;
         letter-spacing: 0px;
         margin-bottom: 50px;
+    }
+}
+.pagenation {
+    margin-top: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 133px;
+    .prev {
+        width: 110px;
+        height: 70px;
+        background: url("~@/assets/images/zuo@2x.png") no-repeat;
+        background-size: 100% auto;
+        margin: 0 91px;
+        cursor: pointer;
+    }
+    .next {
+        width: 110px;
+        height: 70px;
+        background: url("~@/assets/images/you@2x.png") no-repeat;
+        background-size: 100% auto;
+        margin: 0 91px;
+        cursor: pointer;
+    }
+    .prev.no-prev,
+    .next.no-next {
+        opacity: 0.3;
+        cursor: not-allowed;
     }
 }
 </style>
