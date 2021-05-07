@@ -12,7 +12,7 @@
             <el-form-item label="Name" prop="name">
                 <Input v-model="form.name" />
             </el-form-item>
-            <el-form-item label="Category" prop="category_id">
+            <el-form-item label="Theme" prop="category_id">
                 <Select
                     v-model="form.category_id"
                     placeholder="select"
@@ -22,66 +22,10 @@
                     optionKey="id"
                 ></Select>
             </el-form-item>
-            <el-form-item label="Theme" prop="theme_id">
-                <Select
-                    v-model="form.theme_id"
-                    placeholder="select"
-                    :options="themes"
-                    optionLabel="title"
-                    optionValue="id"
-                    optionKey="id"
-                ></Select>
-            </el-form-item>
-            <el-form-item label="Material" prop="material_id">
-                <Select
-                    v-model="form.material_id"
-                    placeholder="select"
-                    :options="materials"
-                    optionLabel="title"
-                    optionValue="id"
-                    optionKey="id"
-                ></Select>
-            </el-form-item>
-            <el-form-item label="Date" prop="produce_at">
-                <DatePicker v-model="form.produce_at" placeholder="select" />
-            </el-form-item>
-            <el-form-item label="Size" required class="size-form-item">
-                <el-form-item class="size-length" prop="size_length">
-                    <Input
-                        class="size-input"
-                        style="margin-right: 10px"
-                        v-model="form.size_length"
-                        type="number"
-                    />
-                </el-form-item>
-                cm X
-                <el-form-item class="size-width" prop="size_width">
-                    <Input
-                        class="size-input"
-                        style="margin-left: 10px; margin-right: 10px"
-                        v-model="form.size_width"
-                        type="number"
-                    />
-                </el-form-item>
-                cm
-            </el-form-item>
-            <el-form-item label="Royalty" prop="royalty">
-                <Input
-                    style="width: 140px"
-                    v-model="form.royalty"
-                    type="number"
-                    append="%"
-                />
-            </el-form-item>
-            <el-form-item label="Royalty Date" prop="royalty_expired_at">
-                <DatePicker
-                    v-model="form.royalty_expired_at"
-                    placeholder="select"
-                />
-            </el-form-item>
             <el-form-item label="Price" prop="price">
                 <Input v-model="form.price" append="UART" />
             </el-form-item>
+            <el-form-item />
             <el-form-item label="Description" prop="details">
                 <Textarea
                     v-model="form.details"
@@ -129,19 +73,59 @@
                         class="upload-form-item"
                         prop="img_main_file1"
                     >
-                        <Upload v-model="form.img_main_file1" />
+                        <Upload
+                            :type="uploadType"
+                            v-model="form.img_main_file1"
+                        />
                     </el-form-item>
                     <el-form-item
                         class="upload-form-item"
                         prop="img_main_file2"
                     >
-                        <Upload v-model="form.img_main_file2" />
+                        <Upload
+                            :type="uploadType"
+                            v-model="form.img_main_file2"
+                        />
                     </el-form-item>
                     <el-form-item
                         class="upload-form-item"
                         prop="img_main_file3"
                     >
-                        <Upload v-model="form.img_main_file3" />
+                        <Upload
+                            :type="uploadType"
+                            v-model="form.img_main_file3"
+                        />
+                    </el-form-item>
+                </el-form-item>
+            </div>
+            <div v-if="uploadType == 'gif'">
+                <el-form-item class="main-upload" required label="Main">
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_main_file1"
+                    >
+                        <Upload
+                            :type="uploadType"
+                            v-model="form.img_main_file1"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_main_file2"
+                    >
+                        <Upload
+                            :type="uploadType"
+                            v-model="form.img_main_file2"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        class="upload-form-item"
+                        prop="img_main_file3"
+                    >
+                        <Upload
+                            :type="uploadType"
+                            v-model="form.img_main_file3"
+                        />
                     </el-form-item>
                 </el-form-item>
             </div>
@@ -295,7 +279,6 @@ import { Form, FormItem, Button, Dialog } from "element-ui";
 import { BigNumber } from "bignumber.js";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
-import DatePicker from "@/components/DatePicker";
 import Textarea from "@/components/Textarea";
 import Upload from "@/components/Upload";
 import FileUpload from "@/components/File";
@@ -313,7 +296,6 @@ export default {
         [Dialog.name]: Dialog,
         Input,
         Select,
-        DatePicker,
         Textarea,
         Upload,
         // Tab,
@@ -367,7 +349,7 @@ export default {
                     value: 10000,
                 },
             ],
-            typeList: ["art", "live2d"],
+            typeList: ["art", "gif", "live2d"],
             canvasInstance: {},
             isUploadLive2D: false,
             isLive2dUploadDone: false,
@@ -380,15 +362,8 @@ export default {
             form: {
                 name: "",
                 category_id: "",
-                theme_id: "",
-                material_id: "",
-                produce_at: "",
-                size_length: "",
-                size_width: "",
                 details: "",
                 price: "",
-                royalty: "",
-                royalty_expired_at: "",
                 live2d_file: "",
                 live2d_ipfs_hash: "",
                 fee: "",
@@ -508,6 +483,11 @@ export default {
                 this.rules.royalty_expired_at[0].required = false;
             }
         },
+        uploadType() {
+            this.form.img_main_file1 = [];
+            this.form.img_main_file2 = [];
+            this.form.img_main_file3 = [];
+        },
     },
     methods: {
         uploadZip(fileData) {
@@ -556,24 +536,24 @@ export default {
                     let obj = {
                         name: this.form.name,
                         category_id: this.form.category_id,
-                        theme_id: this.form.theme_id,
-                        material_id: this.form.material_id,
-                        produce_at: this.form.produce_at / 1000,
-                        size_length: this.form.size_length,
-                        size_width: this.form.size_width,
-                        details: this.form.details,
+                        // theme_id: this.form.theme_id,
+                        // material_id: this.form.material_id,
+                        // produce_at: this.form.produce_at / 1000,
+                        // size_length: this.form.size_length,
+                        // size_width: this.form.size_width,
+                        // details: this.form.details,
                         price: this.form.price,
                         is_refungible:
                             this.splitType == "single" ? "false" : "true",
                         refungible_decimal: this.form.refungible_decimal,
-                        royalty: this.form.royalty
-                            ? this.form.royalty / 100
-                            : "",
-                        royalty_expired_at: this.form.royalty_expired_at
-                            ? parseInt(
-                                  this.form.royalty_expired_at.getTime() / 1000
-                              ) * 1000
-                            : "",
+                        // royalty: this.form.royalty
+                        //     ? this.form.royalty / 100
+                        //     : "",
+                        // royalty_expired_at: this.form.royalty_expired_at
+                        //     ? parseInt(
+                        //           this.form.royalty_expired_at.getTime() / 1000
+                        //       ) * 1000
+                        //     : "",
                         img_main_file1: this.form.img_main_file1[0]
                             ? this.form.img_main_file1
                             : "",
@@ -636,6 +616,20 @@ export default {
                             (obj.img_main_file3 = this.form.img_main_file3[0]
                                 ? this.form.img_main_file3
                                 : "");
+                    }
+                    switch (this.uploadType) {
+                        case "art":
+                            obj.resource_type = 1;
+                            break;
+                        case "gif":
+                            obj.resource_type = 2;
+                            break;
+                        case "live2d":
+                            obj.resource_type = 3;
+                            break;
+                        case "movie":
+                            obj.resource_type = 4;
+                            break;
                     }
                     this.$http
                         .userPostArt(obj)

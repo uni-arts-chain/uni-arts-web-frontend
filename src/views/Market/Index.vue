@@ -14,14 +14,14 @@
             </div>
             <div class="filter">
                 <div class="name">
-                    <div
+                    <!-- <div
                         class="name-item"
                         :class="{ active: active_cate == 'markets' }"
                         @click="active_cate = 'markets'"
                     >
                         Market
-                    </div>
-                    <div
+                    </div> -->
+                    <!-- <div
                         class="name-item"
                         :class="{ active: active_cate == 'materials' }"
                         @click="active_cate = 'materials'"
@@ -34,22 +34,28 @@
                         :class="{ active: active_cate == 'themes' }"
                     >
                         Theme
-                    </div>
+                    </div> -->
                     <div
                         class="name-item"
                         @click="active_cate = 'categories'"
                         :class="{ active: active_cate == 'categories' }"
                     >
-                        Category
+                        Theme
                     </div>
-
                     <div
+                        class="name-item"
+                        :class="{ active: active_cate == 'filter' }"
+                        @click="active_cate = 'filter'"
+                    >
+                        Type
+                    </div>
+                    <!-- <div
                         class="name-item"
                         @click="active_cate = 'royalty'"
                         :class="{ active: active_cate == 'royalty' }"
                     >
                         Royalty
-                    </div>
+                    </div> -->
                 </div>
                 <div class="catetory">
                     <div
@@ -122,6 +128,7 @@ export default {
             per_page: 18,
             total_pages: 0,
             total_count: 0,
+            filter_id: "",
             category_id: "",
             theme_id: "",
             material_id: "",
@@ -154,6 +161,24 @@ export default {
                         cate_label: "royalty",
                         id: "royalty1",
                         title: "Royalty",
+                    },
+                ];
+            } else if (this.active_cate == "filter") {
+                return [
+                    {
+                        cate_label: "filter",
+                        id: "1",
+                        title: "Paintings",
+                    },
+                    {
+                        cate_label: "filter",
+                        id: "2",
+                        title: "Gif",
+                    },
+                    {
+                        cate_label: "filter",
+                        id: "3",
+                        title: "Live2D",
                     },
                 ];
             } else {
@@ -198,6 +223,9 @@ export default {
             }
             if (this.isRoyalty) {
                 obj.has_royalty = true;
+            }
+            if (this.filter_id) {
+                obj.resource_type = this.filter_id;
             }
             // if (this.price_gte) {
             //     obj.price_gte = this.price_gte;
@@ -296,6 +324,7 @@ export default {
             this.price_gte = "";
             this.price_lt = "";
             this.theme_id = "";
+            this.filter_id = "";
             this.isRoyalty = false;
         },
         resetActive_cate(item) {
@@ -322,6 +351,9 @@ export default {
                     break;
                 case "markets":
                     this.currentMarket = item.id;
+                    break;
+                case "filter":
+                    this.filter_id = item.id;
                     break;
             }
         },

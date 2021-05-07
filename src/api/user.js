@@ -43,6 +43,7 @@ const apiList = [
         name: "postArt",
         method: "POST",
         desc: "上传艺术品",
+        baseURL: "/api/v2",
         path: "/arts",
         mockPath: "/arts",
         params: {},

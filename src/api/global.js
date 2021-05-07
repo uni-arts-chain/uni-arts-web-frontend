@@ -27,6 +27,7 @@ const apiList = [
         desc: "获取作品分类",
         path: "/arts/categories",
         mockPath: "/arts/categories",
+        baseURL: "/api/v2",
         params: {},
         options: {
             unSignature: true,

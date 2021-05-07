@@ -34,8 +34,8 @@ export default {
                 await this.$store.dispatch("user/GetInfo");
             }
             await this.$store.dispatch("art/GetCategories");
-            await this.$store.dispatch("art/GetThemes");
-            await this.$store.dispatch("art/GetMaterials");
+            // await this.$store.dispatch("art/GetThemes");
+            // await this.$store.dispatch("art/GetMaterials");
         },
         async initChainInfo() {
             let specVersion = await this.$rpc.api.runtimeVersion.specVersion;

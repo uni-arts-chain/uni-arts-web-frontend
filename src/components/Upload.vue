@@ -20,7 +20,7 @@ export default {
         prop: "value",
         event: "change",
     },
-    props: ["value", "limit"],
+    props: ["value", "limit", "type"],
     components: {
         AdaptiveImage,
     },
@@ -49,14 +49,32 @@ export default {
             this.getTheFile();
         },
         async getTheFile() {
+            let accept = {};
+            switch (this.type) {
+                case "art":
+                    accept = {
+                        "image/jpeg": [".jpeg", ".jpg"],
+                        "image/png": [".png"],
+                    };
+                    break;
+                case "gif":
+                    accept = {
+                        "image/gif": [".gif"],
+                    };
+                    break;
+                default:
+                    accept = {
+                        "image/*": [".png", ".gif", ".jpeg", ".jpg"],
+                        "video/mp4": [".mp4"],
+                    };
+                    break;
+            }
+            console.log(accept);
             const pickerOpts = {
                 types: [
                     {
                         description: "Image Or Video",
-                        accept: {
-                            "image/*": [".png", ".gif", ".jpeg", ".jpg"],
-                            "video/*": [".mp4"],
-                        },
+                        accept: accept,
                     },
                 ],
                 excludeAcceptAllOption: true,
