@@ -238,8 +238,9 @@ export default {
     font-size: 35px;
     position: absolute;
     cursor: pointer;
+    z-index: 10;
     top: 50%;
     left: 50%;
-    transform: translateY(-410px) translateX(260px);
+    transform: translateY(-370px) translateX(260px);
 }
 </style>
