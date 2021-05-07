@@ -240,6 +240,6 @@ export default {
     cursor: pointer;
     top: 50%;
     left: 50%;
-    transform: translateY(-420px) translateX(440px);
+    transform: translateY(-410px) translateX(260px);
 }
 </style>
