@@ -20,7 +20,7 @@
                     <router-link
                         to="/blindbox"
                         :class="{ active: activeTab == 'BlindBox' }"
-                        >Blind Box</router-link
+                        >Mystery Box</router-link
                     >
                 </li>
                 <li>

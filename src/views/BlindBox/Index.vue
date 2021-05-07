@@ -2,7 +2,7 @@
 <template>
     <div class="index">
         <div class="container">
-            <div class="title">Blind Box</div>
+            <div class="title">Mystery Box</div>
             <div class="card-list" v-loading="isLoading">
                 <div
                     class="card"

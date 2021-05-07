@@ -222,7 +222,7 @@ export default {
         openClick(number) {
             if (this.blindBoxInfo.remain_count < number) {
                 this.$notify.info(
-                    "The number of prizes in the blind box is not enough to open"
+                    "The number of prizes in the mystery box is not enough to open"
                 );
                 return;
             }
@@ -290,7 +290,7 @@ export default {
                         notification.notice(
                             {
                                 title: "Interrupted",
-                                message: `The number of blind boxes was insufficient.${successNumber} successes and ${failedNumber} failures.`,
+                                message: `The number of mystery boxes was insufficient.${successNumber} successes and ${failedNumber} failures.`,
                                 type: "info",
                             },
                             {
