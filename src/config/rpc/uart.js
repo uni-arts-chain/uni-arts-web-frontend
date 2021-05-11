@@ -1,4 +1,5 @@
 export default {
+    AccountInfo: "AccountInfoWithRefCount",
     Keys: "SessionKeys2",
     Address: "AccountId",
     LookupSource: "AccountId",
@@ -133,6 +134,7 @@ export default {
         order_id: "u64",
         collection_id: "u64",
         item_id: "u64",
+        currency_id: "CurrencyId",
         value: "u64",
         owner: "AccountId",
         price: "u64",
@@ -141,6 +143,7 @@ export default {
         order_id: "u64",
         collection_id: "u64",
         item_id: "u64",
+        currency_id: "CurrencyId",
         value: "u64",
         balance: "u64",
         owner: "AccountId",
@@ -149,6 +152,7 @@ export default {
     SaleOrderHistory: {
         collection_id: "u64",
         item_id: "u64",
+        currency_id: "CurrencyId",
         value: "u64",
         seller: "AccountId",
         buyer: "AccountId",
@@ -191,6 +195,7 @@ export default {
         id: "u64",
         collection_id: "u64",
         item_id: "u64",
+        currency_id: "CurrencyId",
         value: "u64",
         owner: "AccountId",
         start_price: "u64",
@@ -201,6 +206,7 @@ export default {
     },
     BidHistory: {
         auction_id: "u64",
+        currency_id: "CurrencyId",
         bidder: "AccountId",
         bid_price: "u64",
         bid_time: "BlockNumber",
@@ -245,6 +251,7 @@ export default {
         card_group: "Vec<u64>",
         total_count: "u64",
         remaind_count: "u64",
+        currency_id: "CurrencyId",
         price: "u64",
         start_time: "BlockNumber",
         end_time: "BlockNumber",
