@@ -14,7 +14,12 @@
                 <div class="title">FIRM CANCEL</div>
                 <div class="price">
                     Current Price:
-                    <span class="number">{{ art.price }} UART</span>
+                    <span class="number"
+                        >{{ art.price }}
+                        {{
+                            $store.getters["art/currencyCode"].toUpperCase()
+                        }}</span
+                    >
                 </div>
                 <button
                     @click="submitCancel"

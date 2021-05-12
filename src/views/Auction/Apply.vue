@@ -15,7 +15,10 @@
                         Certificate Address:
                         <span class="address">{{ v.item_hash }}</span>
                     </div>
-                    <div class="price">{{ v.price }} UART</div>
+                    <div class="price">
+                        {{ v.price }}
+                        {{ $store.state.global.symbol.toUpperCase() }}
+                    </div>
                     <div
                         class="status"
                         v-if="
@@ -61,7 +64,12 @@
                 <div class="title">FIRM AUCTION</div>
                 <div class="price">
                     Current Price:
-                    <span class="number">{{ art.price || 0 }} UART</span>
+                    <span class="number"
+                        >{{ art.price || 0 }}
+                        {{
+                            $store.getters["art/currencyCode"].toUpperCase()
+                        }}</span
+                    >
                 </div>
                 <el-form
                     ref="form"

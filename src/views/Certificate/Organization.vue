@@ -19,7 +19,7 @@
                             <span style="color: #c61e1e">{{
                                 v.value.fee || 0
                             }}</span>
-                            UART/time
+                            {{ $store.state.global.symbol.toUpperCase() }}/time
                         </div>
                     </div>
                     <div class="right">

@@ -106,10 +106,10 @@ export default {
             markets: [
                 {
                     cate_label: "markets",
-                    code: "uart",
-                    desc: "UART",
+                    code: this.$store.state.global.symbol.toLowerCase(),
+                    desc: this.$store.state.global.symbol.toUpperCase(),
                     id: "uart",
-                    title: "UART",
+                    title: this.$store.state.global.symbol.toUpperCase(),
                 },
                 // {
                 //     cate_label: "markets",

@@ -15,7 +15,10 @@
                         Certificate Address:
                         <span class="address">{{ v.item_hash }}</span>
                     </div>
-                    <div class="price">Starting at {{ v.price }} UART</div>
+                    <div class="price">
+                        Starting at {{ v.price }}
+                        {{ v.currency_code.toUpperCase() }}
+                    </div>
                     <div class="button-group">
                         <el-button
                             @click="approve(v)"

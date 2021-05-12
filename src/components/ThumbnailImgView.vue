@@ -35,8 +35,12 @@
             Certificate Address:
             <span class="address">{{ item.item_hash }}</span>
         </div>
-        <div class="price" v-if="!isAuction">{{ item.price }} UART</div>
-        <div class="price" v-else>Starting at {{ item.price }} UART</div>
+        <div class="price" v-if="!isAuction">
+            {{ item.price }} {{ item.currency_code.toUpperCase() }}
+        </div>
+        <div class="price" v-else>
+            Starting at {{ item.price }} {{ item.currency_code.toUpperCase() }}
+        </div>
     </div>
 </template>
 <script>

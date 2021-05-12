@@ -19,17 +19,22 @@
                     <div class="price">
                         Current Price:
                         <span class="number"
-                            >{{ art.price ? art.price : 0 }} UART</span
+                            >{{ art.price ? art.price : 0 }}
+                            {{
+                                $store.getters["art/currencyCode"].toUpperCase()
+                            }}</span
                         >
                     </div>
                     <div class="price">
                         <div>
                             Total price:
                             <span style="color: #c61e1e; font-size: 24px"
-                                >{{
-                                    totalPrice(form.price, form.volume)
-                                }}
-                                UART</span
+                                >{{ totalPrice(form.price, form.volume) }}
+                                {{
+                                    $store.getters[
+                                        "art/currencyCode"
+                                    ].toUpperCase()
+                                }}</span
                             >
                         </div>
                     </div>
@@ -63,7 +68,9 @@
                                 v-model="form.price"
                                 :placeholder="'price'"
                             />
-                            <span class="code">UART</span>
+                            <span class="code">{{
+                                $store.getters["art/currencyCode"].toUpperCase()
+                            }}</span>
                         </div>
                     </el-form-item>
                     <!-- <div class="note" style="min-height: 56px"></div> -->

@@ -80,7 +80,7 @@
                 />
             </el-form-item>
             <el-form-item label="Price" prop="price">
-                <Input v-model="form.price" append="UART" />
+                <Input v-model="form.price" :append="symbol.toUpperCase()" />
             </el-form-item>
             <el-form-item label="Description" prop="details">
                 <Textarea
@@ -487,6 +487,9 @@ export default {
         };
     },
     computed: {
+        symbol() {
+            return this.$store.state.global.symbol;
+        },
         categories() {
             return this.$store.state.art.categories;
         },

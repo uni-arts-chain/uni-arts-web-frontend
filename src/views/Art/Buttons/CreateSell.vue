@@ -15,7 +15,10 @@
                 <div class="price">
                     Current Price:
                     <span class="number"
-                        >{{ art.price ? art.price : 0 }} UART</span
+                        >{{ art.price ? art.price : 0 }}
+                        {{
+                            $store.getters["art/currencyCode"].toUpperCase()
+                        }}</span
                     >
                 </div>
                 <div class="desc">
@@ -35,7 +38,9 @@
                                 v-model="form.price"
                                 :placeholder="'price'"
                             />
-                            <span class="code">UART</span>
+                            <span class="code">{{
+                                $store.getters["art/currencyCode"].toUpperCase()
+                            }}</span>
                         </div>
                     </el-form-item>
                     <div class="note" style="min-height: 56px"></div>
@@ -118,6 +123,9 @@ export default {
         art() {
             return this.$store.state.art.art;
         },
+        currencyId() {
+            return this.$store.state.global.currencyId;
+        },
         isOffline() {
             return !this.art.item_id;
         },
@@ -155,6 +163,7 @@ export default {
                         this.art.collection_id,
                         this.art.item_id,
                         0,
+                        this.currencyId,
                         new BigNumber(10)
                             .pow(this.$store.state.global.chain.tokenDecimals)
                             .times(this.form.price)

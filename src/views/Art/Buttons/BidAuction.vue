@@ -22,7 +22,9 @@
                             auction.current_price ||
                             auction.start_price | priceFormat
                         }}
-                        UART</span
+                        {{
+                            $store.getters["art/currencyCode"].toUpperCase()
+                        }}</span
                     >
                 </div>
                 <div class="desc">

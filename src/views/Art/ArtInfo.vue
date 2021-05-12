@@ -2,7 +2,10 @@
 <template>
     <div class="info">
         <div class="title">{{ art.name }}</div>
-        <div class="price">{{ art.price ? art.price : 0 }} UART</div>
+        <div class="price">
+            {{ art.price ? art.price : 0 }}
+            {{ $store.getters["art/currencyCode"].toUpperCase() }}
+        </div>
         <div class="intro">
             <div v-if="isSeparable && separableOrderInfo.total > 0">
                 On-sale:

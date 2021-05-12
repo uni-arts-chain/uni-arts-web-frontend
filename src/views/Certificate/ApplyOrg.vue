@@ -20,9 +20,9 @@
                         </el-form-item>
                         <el-form-item label="Fee" prop="fee">
                             <Input style="width: 307px" v-model="form.fee" />
-                            <span style="font-size: 16px; margin-left: 15px"
-                                >UART</span
-                            >
+                            <span style="font-size: 16px; margin-left: 15px">{{
+                                $store.state.global.symbol.toUpperCase()
+                            }}</span>
                         </el-form-item>
                         <el-form-item label="Picture" prop="img_file">
                             <Upload v-model="form.img_file" />

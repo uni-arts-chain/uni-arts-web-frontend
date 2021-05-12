@@ -127,6 +127,11 @@ export default {
         },
     },
     getters: {
+        currencyCode(state, getters, rootState) {
+            return state.art.currency_code
+                ? state.art.currency_code
+                : rootState.global.symbol;
+        },
         artStatus(state, getters, rootState) {
             if (!state.art.item_id) {
                 return state.ART_OFFLINE;

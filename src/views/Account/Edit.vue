@@ -66,7 +66,10 @@
                 cm
             </el-form-item>
             <el-form-item label="Price" prop="price">
-                <Input v-model="form.price" append="UART" />
+                <Input
+                    v-model="form.price"
+                    :append="currency_code.toUpperCase()"
+                />
             </el-form-item>
             <el-form-item label="Description" prop="details">
                 <Textarea
@@ -242,6 +245,7 @@ export default {
         };
         return {
             id: this.$route.params.id,
+            currency_code: this.$store.state.global.symbol,
             form: {
                 name: "",
                 category_id: "",
@@ -349,6 +353,7 @@ export default {
             this.$http
                 .globalGetArtById({}, { id: this.id })
                 .then(async (res) => {
+                    this.currency_code = res.currency_code;
                     this.form.name = res.name;
                     this.form.category_id = res.category_id;
                     this.form.theme_id = res.theme_id;

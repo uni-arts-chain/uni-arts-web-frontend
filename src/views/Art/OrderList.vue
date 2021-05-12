@@ -14,7 +14,9 @@
                     <span class="address">{{ v.owner }}</span>
                     <span class="own-order" v-if="isOwner(v.owner)">own</span>
                 </div>
-                <div class="price">{{ formatValue(v.price) }} UART</div>
+                <div class="price">
+                    {{ formatValue(v.price) }} {{ currencyCode.toUpperCase() }}
+                </div>
                 <div class="quantity">{{ v.balance }} / {{ v.value }}</div>
                 <button v-if="isOwner(v.owner)" @click="cancelOrder(v)">
                     CANCEL
@@ -34,17 +36,16 @@
                     <div class="price">
                         Current Price:
                         <span class="number"
-                            >{{ formatValue(orderInfo.price) }} UART</span
+                            >{{ formatValue(orderInfo.price) }}
+                            {{ currencyCode.toUpperCase() }}</span
                         >
                     </div>
                     <div class="price">
                         <div>
                             Total price:
                             <span style="color: #c61e1e; font-size: 24px"
-                                >{{
-                                    totalPrice(orderInfo.price, form.volume)
-                                }}
-                                UART</span
+                                >{{ totalPrice(orderInfo.price, form.volume) }}
+                                {{ currencyCode.toUpperCase() }}</span
                             >
                         </div>
                     </div>
@@ -93,7 +94,8 @@
                     <div class="price">
                         Current Price:
                         <span class="number"
-                            >{{ formatValue(orderInfo.price) }} UART</span
+                            >{{ formatValue(orderInfo.price) }}
+                            {{ currencyCode.toUpperCase() }}</span
                         >
                     </div>
                     <div class="price">
@@ -106,7 +108,7 @@
                                         orderInfo.balance
                                     )
                                 }}
-                                UART</span
+                                {{ currencyCode.toUpperCase() }}</span
                             >
                         </div>
                     </div>
@@ -135,7 +137,9 @@
                                 :value="formatValue(orderInfo.price)"
                                 :placeholder="'price'"
                             />
-                            <span class="code">UART</span>
+                            <span class="code">{{
+                                currencyCode.toUpperCase()
+                            }}</span>
                         </div>
                     </el-form-item>
                     <el-form-item>
@@ -169,6 +173,9 @@ export default {
         [FormItem.name]: FormItem,
     },
     computed: {
+        currencyCode() {
+            return this.$store.getters["art/currencyCode"];
+        },
         orderList() {
             let ownList = this.$store.state.art.saleSeparableOrderList.filter(
                 (v) => this.isOwner(v.owner)

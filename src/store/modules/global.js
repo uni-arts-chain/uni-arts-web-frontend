@@ -12,6 +12,10 @@ export default {
             blockHeight: "",
             timestamp: "",
         },
+        symbol: "UART",
+        currencyId: {
+            Native: "Null",
+        },
     },
     mutations: {
         SET_CHAIN(state, data) {

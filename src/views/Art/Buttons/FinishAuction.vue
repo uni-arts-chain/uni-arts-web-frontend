@@ -15,7 +15,12 @@
                 <div class="auction">
                     <div class="price">
                         Current Price:
-                        <span class="number">{{ art.price || 0 }} UART</span>
+                        <span class="number"
+                            >{{ art.price || 0 }}
+                            {{
+                                $store.getters["art/currencyCode"].toUpperCase()
+                            }}</span
+                        >
                     </div>
                     <button
                         @click="finishAuction"

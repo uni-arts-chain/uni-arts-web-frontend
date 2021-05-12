@@ -16,7 +16,8 @@
                             "
                             >{{ v.buyer }}</span
                         >
-                        bought it for {{ v.price | priceFormat }} UART,
+                        bought it for {{ v.price | priceFormat }}
+                        {{ currencyCode.toUpperCase() }},
                         {{ v.sign_timestamp | dateFormat }}
                     </li>
                 </div>
@@ -43,6 +44,9 @@ export default {
     computed: {
         transactionList() {
             return this.$store.state.art.transactionList;
+        },
+        currencyCode() {
+            return this.$store.getters["art/currencyCode"];
         },
     },
     data() {
