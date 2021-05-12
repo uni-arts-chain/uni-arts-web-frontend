@@ -314,7 +314,7 @@ export default {
                 cb: () => {
                     this.isSubmitingCancel = false;
                     this.$notify.info("Submitted");
-                    this.dialogVisible = false;
+                    this.dialogVisibleCancel = false;
                 },
                 done: () => {
                     this.$notify.success("Success");
