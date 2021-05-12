@@ -177,6 +177,7 @@ export default {
                 this.art.collection_id,
                 this.art.item_id,
                 0,
+                this.$store.state.global.currencyId,
                 new BigNumber(10)
                     .pow(this.$store.state.global.chain.tokenDecimals)
                     .times(this.form.start_price)

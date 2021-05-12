@@ -54,6 +54,16 @@ export default {
                 "GenesisHash: ",
                 await this.$rpc.api.genesisHash.toHex()
             );
+
+            this.$http
+                .globalGetCurrencies({})
+                .then((res) => {
+                    this.$store.dispatch("global/SetSymbol", res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    this.$notify.error(err.head ? err.head.msg : err);
+                });
         },
     },
 };

@@ -74,10 +74,12 @@
                 <div class="price">
                     Total Price:
                     <span class="number"
-                        >{{
-                            totalPrice(blindBoxInfo.price, this.openCount)
-                        }}
-                        UART</span
+                        >{{ totalPrice(blindBoxInfo.price, this.openCount) }}
+                        {{
+                            blindBoxInfo.currency_code
+                                ? blindBoxInfo.currency_code.toUpperCase()
+                                : ""
+                        }}</span
                     >
                 </div>
                 <button

@@ -12,10 +12,8 @@ export default {
             blockHeight: "",
             timestamp: "",
         },
-        symbol: "UART",
-        currencyId: {
-            Native: "Null",
-        },
+        symbol: "uart",
+        currencyId: window.UniArtsEnvConfig.currencyId,
     },
     mutations: {
         SET_CHAIN(state, data) {
@@ -24,6 +22,9 @@ export default {
         SET_THEME(state, theme) {
             state.theme = theme;
         },
+        SET_SYMBOL(state, obj) {
+            state.symbol = obj.symbol ? obj.symbol : "uart";
+        },
     },
     actions: {
         SetChain({ commit }, data) {
@@ -31,6 +32,9 @@ export default {
         },
         SetTheme({ commit }, theme) {
             commit("SET_THEME", theme);
+        },
+        SetSymbol({ commit }, symbol) {
+            commit("SET_SYMBOL", symbol);
         },
     },
 };

@@ -153,6 +153,9 @@ export default {
         art() {
             return this.$store.state.art.art;
         },
+        currencyId() {
+            return this.$store.state.global.currencyId;
+        },
         isOffline() {
             return !this.art.item_id;
         },
@@ -180,6 +183,7 @@ export default {
                         this.art.collection_id,
                         this.art.item_id,
                         parseInt(this.form.volume),
+                        this.currencyId,
                         new BigNumber(10)
                             .pow(this.$store.state.global.chain.tokenDecimals)
                             .times(this.form.price)

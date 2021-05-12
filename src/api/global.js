@@ -284,6 +284,18 @@ const apiList = [
             unSignature: false,
         },
     },
+    {
+        name: "getCurrencies",
+        method: "GET",
+        desc: "获取币种信息",
+        path: "/currencies",
+        mockPath: "/currencies",
+        baseURL: "/api/v1",
+        params: {},
+        options: {
+            unSignature: false,
+        },
+    },
 ];
 
 export default apiList;

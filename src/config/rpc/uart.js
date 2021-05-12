@@ -40,6 +40,9 @@ export default {
     TokenSymbol: {
         _enum: ["USDT", "DAI"],
     },
+    StorageVersion: {
+        _enum: ["V1_0_0", "V2_0_0"],
+    },
     CurrencyIdOf: "CurrencyId",
     Amount: "i128",
     AmountOf: "Amount",
