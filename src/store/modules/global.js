@@ -13,7 +13,7 @@ export default {
             timestamp: "",
         },
         symbol: "uart",
-        currencyId: window.UniArtsEnvConfig.currencyId,
+        currencyId: window.NODE_CONFIG.currencyId,
     },
     mutations: {
         SET_CHAIN(state, data) {

@@ -81,7 +81,7 @@ export default {
         isProd() {
             return (
                 NODE_ENV === "production" &&
-                window.UniArtsEnvConfig.env !== "development"
+                window.NODE_CONFIG.env !== "development"
             );
         },
     },

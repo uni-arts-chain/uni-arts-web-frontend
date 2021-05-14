@@ -3,4 +3,8 @@ window.NODE_CONFIG = {
     url: "testnet.uniarts.me",
     port: "",
     dappName: "Uni-Arts",
+    currencyId: {
+        Native: "Null",
+    },
+    env: "production",
 };

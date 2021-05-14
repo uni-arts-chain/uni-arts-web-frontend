@@ -291,10 +291,7 @@ const routes = [
     },
 ];
 
-if (
-    NODE_ENV !== "production" ||
-    window.UniArtsEnvConfig.env === "development"
-) {
+if (NODE_ENV !== "production" || window.NODE_CONFIG.env === "development") {
     routes.push({
         path: "/faucet",
         name: "Faucet",
