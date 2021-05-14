@@ -62,7 +62,7 @@
                             >Chain Network</a
                         >
                     </li>
-                    <li>
+                    <li v-if="!isProd">
                         <router-link to="/faucet"
                             >Authenticated Faucet</router-link
                         >
@@ -74,8 +74,17 @@
 </template>
 
 <script>
+import { NODE_ENV } from "@/config";
 export default {
     name: "footerbar",
+    computed: {
+        isProd() {
+            return (
+                NODE_ENV === "production" &&
+                window.UniArtsEnvConfig.env !== "development"
+            );
+        },
+    },
 };
 </script>
 

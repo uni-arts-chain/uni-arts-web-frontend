@@ -2,6 +2,7 @@ let UniArtsEnvConfig = {
     currencyId: {
         Native: "Null",
     },
+    env: "development",
 };
 
 window.UniArtsEnvConfig = UniArtsEnvConfig;

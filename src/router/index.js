@@ -1,3 +1,5 @@
+import { NODE_ENV } from "@/config";
+
 const routes = [
     {
         path: "/",
@@ -287,14 +289,29 @@ const routes = [
                 /* webpackChunkName: "Session" */ "@/views/Session/Login.vue"
             ),
     },
-    {
+];
+
+if (
+    NODE_ENV !== "production" ||
+    window.UniArtsEnvConfig.env === "development"
+) {
+    routes.push({
         path: "/faucet",
         name: "Faucet",
         component: () =>
             import(
                 /* webpackChunkName: "Session" */ "@/views/Session/Faucet.vue"
             ),
-    },
-];
+    });
+}
+
+routes.push({
+    path: "*",
+    name: "NotFound",
+    component: () =>
+        import(
+            /* webpackChunkName: "Session" */ "@/views/Session/NotFound.vue"
+        ),
+});
 
 export default routes;
