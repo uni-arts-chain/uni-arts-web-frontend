@@ -59,36 +59,37 @@
             }
         })
     };
-
-    setTimeout(() => {
-        const formData = new FormData();
-        formData.append("pid", searchObj.prepay_id);
-        fetch("/api/v2/trades/wepay/check", {
-            body: formData,
-            headers: {
-                'Authorization': searchObj.token,
-            },
-            method: 'POST',
-        }).then(res => res.json()).then(res => {
-            console.log(res);
-            if (res.body.checked) {
-                statusSuccess.style.display = "block";
-                statusFail.style.display = "none";
-                statusLoading.style.display = "none";
-                document.title = "支付成功"
-            } else {
+    if (searchObj.token && searchObj.prepay_id) {
+        setTimeout(() => {
+            const formData = new FormData();
+            formData.append("pid", searchObj.prepay_id);
+            fetch("/api/v2/trades/wepay/check", {
+                body: formData,
+                headers: {
+                    'Authorization': searchObj.token,
+                },
+                method: 'POST',
+            }).then(res => res.json()).then(res => {
+                console.log(res);
+                if (res.body.checked) {
+                    statusSuccess.style.display = "block";
+                    statusFail.style.display = "none";
+                    statusLoading.style.display = "none";
+                    document.title = "支付成功"
+                } else {
+                    statusSuccess.style.display = "none";
+                    statusFail.style.display = "block";
+                    statusLoading.style.display = "none";
+                    document.title = "支付失败"
+                }
+            }).catch(e => {
+                console.log(e)
                 statusSuccess.style.display = "none";
                 statusFail.style.display = "block";
                 statusLoading.style.display = "none";
-                document.title = "支付失败"
-            }
-        }).catch(e => {
-            console.log(e)
-            statusSuccess.style.display = "none";
-            statusFail.style.display = "block";
-            statusLoading.style.display = "none";
-            document.title = "支付失败";
-        })
-    }, 3000)
+                document.title = "支付失败";
+            })
+        }, 3000)
+    }
 </script>
 </html>
