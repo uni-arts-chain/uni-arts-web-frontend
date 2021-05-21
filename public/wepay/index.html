@@ -60,10 +60,10 @@
     };
 
     setTimeout(() => {
+        const formData = new FormData();
+        formData.append("pid", searchObj.prepay_id);
         fetch("/api/v2/trades/wepay/check", {
-            body: JSON.stringify({
-                pid: searchObj.prepay_id,
-            }),
+            body: formData,
             headers: {
                 'Authorization': searchObj.token,
             },
