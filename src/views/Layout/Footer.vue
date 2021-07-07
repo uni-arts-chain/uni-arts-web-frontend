@@ -110,7 +110,7 @@ footer {
         font-family: "Broadway";
         font-size: 33px;
         font-weight: 400;
-        width: 160px;
+        width: 302px;
         height: 160px;
         background-image: url(~@/assets/images/bottom-logo.png);
         background-repeat: no-repeat;

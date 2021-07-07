@@ -159,8 +159,8 @@ nav.dark {
     font-family: "Broadway";
     font-size: 34px;
     font-weight: 400;
-    width: 252px;
-    height: 126px;
+    width: 302px;
+    height: 170px;
     cursor: pointer;
     background-image: url(~@/assets/images/logo.png);
     background-repeat: no-repeat;
