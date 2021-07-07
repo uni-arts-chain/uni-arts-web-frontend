@@ -4,7 +4,7 @@
         <div class="banner-top">
             <Top />
         </div>
-        <div class="guide container">
+        <!-- <div class="guide container">
             <h2 class="title">How To use the product?</h2>
             <div class="guide-body">
                 <div class="guide-item">
@@ -34,7 +34,7 @@
                     </p>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="guide container">
             <h2 class="title" style="text-transform: none; margin-bottom: 97px">
                 Time limited auction

@@ -3,8 +3,8 @@
     <footer>
         <div class="container">
             <div class="bottom-logo">
-                <span class="logo">UniArts</span>
-                <span class="desc">@2019-2020 uniarts.me</span>
+                <span class="logo"></span>
+                <span class="desc">@2019-2021 uniarts.network</span>
             </div>
             <div class="bottom-community">
                 <div class="text">Community</div>
@@ -100,7 +100,7 @@ footer {
     color: white;
 }
 .bottom-logo {
-    width: 25%;
+    width: 28%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -110,7 +110,11 @@ footer {
         font-family: "Broadway";
         font-size: 33px;
         font-weight: 400;
-        margin-bottom: 30px;
+        width: 160px;
+        height: 160px;
+        background-image: url(~@/assets/images/bottom-logo.png);
+        background-repeat: no-repeat;
+        background-size: 100%;
     }
     .desc {
         font-size: 17px;

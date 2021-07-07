@@ -12,9 +12,11 @@
                     />
                     <div class="info-body">
                         <div class="container">
-                            <h1 style="padding-left: 200px">Link Credit</h1>
+                            <h1 style="padding-left: 200px">
+                                Value Network For
+                            </h1>
                             <h1 style="text-align: right; padding-right: 200px">
-                                Assist <span class="tip">Originality</span>
+                                <span class="tip">Original</span> Fine Art
                             </h1>
                             <div class="input-body">
                                 <div class="input-box">

@@ -2,7 +2,7 @@
 <template>
     <nav :class="theme">
         <div class="container">
-            <div class="logo" @click="goHome">UniArts</div>
+            <div class="logo" @click="goHome"></div>
             <ul class="link-group">
                 <li>
                     <router-link to="/" :class="{ active: activeTab == 'Home' }"
@@ -159,7 +159,12 @@ nav.dark {
     font-family: "Broadway";
     font-size: 34px;
     font-weight: 400;
+    width: 252px;
+    height: 126px;
     cursor: pointer;
+    background-image: url(~@/assets/images/logo.png);
+    background-repeat: no-repeat;
+    background-size: 100% auto;
 }
 
 .container {
