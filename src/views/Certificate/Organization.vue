@@ -37,7 +37,7 @@
 </template>
 <script>
 import AdaptiveImage from "@/components/AdaptiveImage";
-import img from "@/assets/images/temp/home-page1.jpg";
+import img from "@/assets/images/temp/home-page1.jpeg";
 export default {
     name: "organization",
     components: {

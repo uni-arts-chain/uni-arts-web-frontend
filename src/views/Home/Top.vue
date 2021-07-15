@@ -10,7 +10,7 @@
                         height="100%"
                         :url="bg1"
                     />
-                    <div class="info-body">
+                    <!-- <div class="info-body">
                         <div class="container">
                             <h1 style="padding-left: 200px">
                                 Value Network For
@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </router-link>
             </el-carousel-item>
             <el-carousel-item v-for="(item, index) in list" :key="index">
@@ -54,7 +54,8 @@
 <script>
 import { Carousel, CarouselItem } from "element-ui";
 import AdaptiveImage from "@/components/AdaptiveImage";
-import bg1 from "@/assets/images/temp/home-page1.jpg";
+import bg1 from "@/assets/images/temp/home-page1.jpeg";
+
 export default {
     name: "top",
     components: {
