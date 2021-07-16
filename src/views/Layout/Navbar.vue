@@ -160,7 +160,7 @@ nav.dark {
     font-size: 34px;
     font-weight: 400;
     width: 302px;
-    height: 40px;
+    height: 170px;
     cursor: pointer;
     background-image: url(~@/assets/images/logo.png);
     background-repeat: no-repeat;
