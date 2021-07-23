@@ -1,8 +1,8 @@
 export default {
     AccountInfo: "AccountInfoWithRefCount",
     Keys: "SessionKeys2",
-    Address: "AccountId",
-    LookupSource: "AccountId",
+    Address: "MultiAddress",
+    LookupSource: "MultiAddress",
     WorkId: "u32",
     Id: "u32",
     Name: "Vec<u8>",
