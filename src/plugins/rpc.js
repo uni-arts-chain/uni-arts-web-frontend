@@ -13,7 +13,7 @@ class Rpc {
             ...RPC_DEFAULT_CONFIG,
         };
         this.registry = new TypeRegistry();
-        this.ss58Format = 42;
+        this.ss58Format = 45;
         this.api = new ApiPromise({
             provider: new WsProvider(
                 `${protocol}://${url}${port ? ":" + port : ""}`

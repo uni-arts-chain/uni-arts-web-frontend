@@ -49,12 +49,12 @@
                         :key="i"
                         @click="selectAccount(v)"
                     >
-                        <Identicon
-                            class="icon"
-                            :size="50"
-                            :theme="'polkadot'"
-                            :value="v.address"
-                        />
+                        <!--                        <Identicon-->
+                        <!--                            class="icon"-->
+                        <!--                            :size="50"-->
+                        <!--                            :theme="'polkadot'"-->
+                        <!--                            :value="v.address"-->
+                        <!--                        />-->
                         <div class="address-content">
                             <div class="address-name">
                                 <span class="name">{{ v.meta.name }}</span>
@@ -98,13 +98,13 @@
 </template>
 <script>
 import Dialog from "@/components/Dialog/Dialog";
-import Identicon from "@polkadot/vue-identicon";
+// import Identicon from "@polkadot/vue-identicon";
 import store from "@/store";
 export default {
     name: "login",
     components: {
         Dialog,
-        Identicon,
+        // Identicon,
     },
     data() {
         return {
