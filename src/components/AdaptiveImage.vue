@@ -109,7 +109,7 @@ export default {
 
     > img.img-horizontal {
         width: 100%;
-        height: auto;
+        height: 100%;
     }
 
     > img.img-vertical {

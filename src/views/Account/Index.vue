@@ -242,15 +242,25 @@ export default {
 .index {
     padding-top: 80px;
     padding-bottom: 80px;
+    @media screen and (max-width: 970px) {
+        padding-top: 40px;
+        padding-bottom: 40px;
+    }
 }
 .container {
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width: 970px) {
+        flex-direction: column;
+    }
 }
 .header {
     display: flex;
     flex-direction: column;
     width: calc(100% - 230px);
+    @media screen and (max-width: 970px) {
+        width: 100%;
+    }
     .option {
         display: flex;
         align-items: center;
@@ -314,6 +324,9 @@ export default {
     width: 230px;
     display: flex;
     flex-direction: column;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+    }
     .menu {
         width: 100%;
         display: flex;
@@ -326,6 +339,9 @@ export default {
             font-weight: 400;
             letter-spacing: 0px;
             margin-bottom: 51px;
+            @media screen and (max-width: 970px) {
+                margin-bottom: 25px;
+            }
         }
     }
     .profile {

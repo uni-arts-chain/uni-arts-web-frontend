@@ -1,7 +1,12 @@
 /** * Created by Lay Hunt on 2021-02-24 17:15:08. */
 <template>
     <div class="carousel">
-        <el-carousel arrow="never" height="760px" :autoplay="false">
+        <el-carousel
+            arrow="never"
+            height="100%"
+            :autoplay="false"
+            class="top-carousel"
+        >
             <el-carousel-item>
                 <router-link to="/" class="item-container">
                     <AdaptiveImage
@@ -169,6 +174,12 @@ export default {
             justify-content: flex-end;
             margin-right: 150px;
         }
+    }
+}
+.top-carousel {
+    height: 760px;
+    @media screen and (max-width: 970px) {
+        height: 200px;
     }
 }
 </style>

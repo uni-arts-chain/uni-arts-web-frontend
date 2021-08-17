@@ -23,7 +23,16 @@ export default {
 <style lang="scss" scoped>
 .comments {
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -32,6 +41,13 @@ export default {
         margin-bottom: 110px;
     }
     .comment-content {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            margin-bottom: 30px;
+            font-size: 18px;
+            margin-left: 5%;
+            margin-right: 5%;
+        }
         font-size: 23px;
         font-weight: 400;
         text-align: left;

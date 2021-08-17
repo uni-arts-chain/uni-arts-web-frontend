@@ -85,6 +85,9 @@ export default {
     margin-bottom: 180px;
     padding-top: 35px;
     .title {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;

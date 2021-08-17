@@ -98,6 +98,9 @@ footer {
     align-items: center;
     justify-content: space-between;
     color: white;
+    @media screen and (max-width: 970px) {
+        flex-direction: column-reverse;
+    }
 }
 .bottom-logo {
     width: 28%;
@@ -106,6 +109,9 @@ footer {
     justify-content: center;
     align-items: center;
     border-right: 1px solid white;
+    @media screen and (max-width: 970px) {
+        border-right: none;
+    }
     .logo {
         font-family: "Broadway";
         font-size: 33px;
@@ -122,6 +128,9 @@ footer {
     }
 }
 .bottom-community {
+    @media screen and (max-width: 970px) {
+        padding-top: 20px;
+    }
     margin-left: 23px;
     .text {
         font-size: 23px;
@@ -141,6 +150,12 @@ footer {
     }
 }
 .bottom-nav {
+    @media screen and (max-width: 970px) {
+        display: none;
+        padding-top: 20px;
+        width: 90%;
+        text-align: center;
+    }
     width: 66%;
     display: flex;
     align-items: flex-start;
@@ -150,6 +165,9 @@ footer {
         width: 33%;
         display: block;
         text-align: right;
+        @media screen and (max-width: 970px) {
+            text-align: center;
+        }
         .title {
             display: inline-block;
             font-size: 18px;
@@ -157,10 +175,18 @@ footer {
             font-weight: 600;
             line-height: 30px;
             padding-bottom: 23px;
+            @media screen and (max-width: 970px) {
+                border-bottom: none;
+                min-width: unset;
+                text-align: center;
+            }
             border-bottom: 1px solid #cfb9b9;
             min-width: 137px;
         }
         li {
+            @media screen and (max-width: 970px) {
+                text-align: center;
+            }
             display: block;
             margin-top: 23px;
             text-align: right;

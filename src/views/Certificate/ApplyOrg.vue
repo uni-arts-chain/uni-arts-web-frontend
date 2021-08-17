@@ -20,9 +20,13 @@
                         </el-form-item>
                         <el-form-item label="Fee" prop="fee">
                             <Input style="width: 307px" v-model="form.fee" />
-                            <span style="font-size: 16px; margin-left: 15px">{{
-                                $store.state.global.symbol.toUpperCase()
-                            }}</span>
+                            <span
+                                style="font-size: 16px; margin-left: 15px"
+                                class="fee-price"
+                                >{{
+                                    $store.state.global.symbol.toUpperCase()
+                                }}</span
+                            >
                         </el-form-item>
                         <el-form-item label="Picture" prop="img_file">
                             <Upload v-model="form.img_file" />
@@ -138,7 +142,13 @@ export default {
 <style lang="scss" scoped>
 .sign-item {
     margin-top: 109px;
+    @media screen and (max-width: 970px) {
+        margin-top: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
@@ -149,16 +159,49 @@ export default {
         margin-bottom: 63px;
     }
     > .content {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+        }
         .el-form-item {
             text-align: left;
             margin-bottom: 75px;
+            @media screen and (max-width: 970px) {
+                margin-bottom: 30px;
+            }
             ::v-deep .el-form-item__label {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                    width: 30% !important;
+                    position: relative;
+                }
                 font-size: 18px;
                 line-height: 45px;
+            }
+            @media screen and (max-width: 970px) {
+                ::v-deep .el-form-item__content {
+                    width: 70% !important;
+                    margin-left: 30% !important;
+                    position: relative;
+                    > div {
+                        width: 90% !important;
+                    }
+                    .fee-price {
+                        font-size: 16px;
+                        margin-left: 15px;
+                        position: absolute;
+                        left: calc(90% - 65px);
+                        line-height: 45px;
+                    }
+                }
             }
         }
     }
     button {
+        @media screen and (max-width: 970px) {
+            width: 70%;
+            height: 55px;
+            font-size: 20px;
+        }
         width: 307px;
         height: 75px;
         cursor: pointer;
@@ -168,7 +211,7 @@ export default {
         font-weight: 600;
         text-align: center;
         color: #ffffff;
-        letter-spacing: 0px;
+        letter-spacing: 0;
     }
 }
 </style>

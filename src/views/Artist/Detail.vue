@@ -244,6 +244,10 @@ export default {
 
 <style lang="scss" scoped>
 .detail {
+    @media screen and (max-width: 970px) {
+        padding-top: 0;
+        margin-bottom: 40px;
+    }
     padding-top: 80px;
     padding-bottom: 80px;
 }
@@ -254,7 +258,15 @@ export default {
     background-size: auto 100%;
     margin-bottom: 120px;
     position: relative;
+    @media screen and (max-width: 970px) {
+        margin-bottom: 40px;
+    }
     .avatar-container {
+        @media screen and (max-width: 970px) {
+            width: 30vh;
+            height: 30vh;
+            transform: translateX(15vh) translateY(15vh);
+        }
         transform: translateX(185px) translateY(105px);
         width: 262px;
         height: 262px;
@@ -263,18 +275,40 @@ export default {
         border-radius: 50%;
     }
     .avatar {
+        @media screen and (max-width: 970px) {
+            width: calc(30vh - 24px);
+            height: calc(30vh - 24px);
+            position: relative;
+            //transform: translateX(15vh) translateY(15vh);
+            ::v-deep .adaptive-image {
+                width: 100% !important;
+                height: 100% !important;
+            }
+        }
         width: 236px;
         height: 236px;
         border-radius: 50%;
         overflow: hidden;
     }
     .info {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            max-width: 100%;
+            left: 0;
+            top: calc(30vh + 115px);
+        }
+
         position: absolute;
         color: white;
         text-align: left;
         left: 550px;
         top: 120px;
         > h2 {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                max-width: 100%;
+                font-size: 20px;
+            }
             font-size: 40px;
             font-family: "Broadway";
             font-weight: 400;
@@ -298,6 +332,11 @@ export default {
             margin-bottom: 40px;
         }
         .button-group {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                max-width: 100%;
+                flex-direction: row-reverse;
+            }
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -324,6 +363,7 @@ export default {
             }
         }
         .share {
+            margin-right: 5%;
             display: flex;
             align-items: center;
             justify-content: flex-start;
@@ -346,6 +386,11 @@ export default {
 .content {
     min-height: 400px;
     .title {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;

@@ -45,6 +45,9 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
+    @media screen and (max-width: 970px) {
+        flex-direction: column;
+    }
 }
 .thumbnail.group {
     .item {
@@ -52,6 +55,11 @@ export default {
     }
 }
 .item {
+    @media screen and (max-width: 970px) {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
     width: 30%;
     margin-right: 60px;
     margin-bottom: 35px;

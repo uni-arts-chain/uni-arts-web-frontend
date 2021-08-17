@@ -165,7 +165,16 @@ export default {
 <style lang="scss" scoped>
 .details {
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -177,12 +186,26 @@ export default {
         min-height: 100px;
     }
     .img-content {
+        @media screen and (max-width: 970px) {
+            width: 35vh;
+            height: 35vh;
+        }
         width: 456px;
         height: 456px;
         cursor: pointer;
     }
+    .item:last-child {
+        @media screen and (max-width: 970px) {
+            border-bottom: unset;
+        }
+    }
     .item {
         display: flex;
+        @media screen and (max-width: 970px) {
+            display: block;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #020202;
+        }
         align-items: center;
         justify-content: space-between;
         padding-bottom: 130px;
@@ -200,6 +223,9 @@ export default {
         letter-spacing: 1px;
     }
     .xq {
+        @media screen and (max-width: 970px) {
+            display: none;
+        }
         position: absolute;
         height: 230px;
         z-index: -1;

@@ -105,14 +105,20 @@ export default {
 <style lang="scss" scoped>
 .cancel-sell {
     > button {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            padding: 13px 0;
+            border: 2px solid #020202;
+            margin-bottom: 5px;
+        }
         cursor: pointer;
         border: 3px solid #020202;
         font-size: 20px;
         font-weight: bold;
         text-align: center;
         color: #020202;
-        letter-spacing: 0px;
-        padding: 17px 0px;
+        letter-spacing: 0;
+        padding: 17px 0;
         width: 260px;
         background: transparent;
     }

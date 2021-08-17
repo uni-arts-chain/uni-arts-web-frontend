@@ -232,6 +232,9 @@ export default {
 
 .recommendations {
     .title {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         text-transform: uppercase;
         font-size: 39px;
         font-family: "Broadway";

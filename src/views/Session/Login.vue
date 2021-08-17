@@ -175,6 +175,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+    @media screen and (max-width: 970px) {
+        padding-top: 5vh;
+    }
     padding-top: 15vh;
 }
 
@@ -191,6 +194,10 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 70px;
+    @media screen and (max-width: 970px) {
+        margin-top: 30px;
+        flex-direction: row;
+    }
 }
 
 .polkadot,
@@ -198,8 +205,17 @@ export default {
     padding: 0 12px;
     margin-left: 50px;
     margin-right: 50px;
+    @media screen and (max-width: 970px) {
+        margin-left: unset;
+        margin-right: unset;
+        flex: 1;
+    }
     /* max-width: 268px; */
     .wallet-chain {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+            margin-right: unset;
+        }
         font-size: 26px;
         font-weight: 400;
         margin-bottom: 20px;
@@ -223,6 +239,13 @@ export default {
         display: flex;
         align-items: center;
         padding: 10px 20px;
+        @media screen and (max-width: 970px) {
+            min-width: unset;
+            min-height: unset;
+            margin-left: auto;
+            margin-right: auto;
+            width: 90%;
+        }
     }
     .wallet-logo {
         width: 35px;
@@ -255,7 +278,7 @@ export default {
 
 .address-list {
     margin: 0 30px;
-    width: 550px;
+    width: 80%;
     border: solid 1px rgba(194, 96, 96, 0.537);
     margin-top: 15px;
     margin-bottom: 35px;

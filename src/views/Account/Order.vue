@@ -193,12 +193,19 @@ export default {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+    @media screen and (max-width: 970px) {
+        min-height: unset;
+        flex-direction: column;
+    }
 }
 .art-item {
     float: left;
     width: 30%;
     margin-right: 5%;
     margin-bottom: 35px;
+    @media screen and (max-width: 970px) {
+        width: 90%;
+    }
 }
 .art-item:nth-child(3n) {
     margin-right: 0;

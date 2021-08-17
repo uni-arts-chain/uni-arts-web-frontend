@@ -123,7 +123,7 @@
                 <Radio v-model="uploadType" :list="typeList" />
             </el-form-item>
             <el-form-item />
-            <div v-if="uploadType == 'art'">
+            <div v-if="uploadType == 'art'" class="main-upload-parent">
                 <el-form-item class="main-upload" required label="Main">
                     <el-form-item
                         class="upload-form-item"
@@ -145,7 +145,7 @@
                     </el-form-item>
                 </el-form-item>
             </div>
-            <div v-if="uploadType == 'live2d'">
+            <div v-if="uploadType == 'live2d'" class="main-upload-parent">
                 <el-form-item
                     class="live2d-upload-form-item"
                     required
@@ -668,12 +668,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .upload {
-    padding: 40px;
-    padding-top: 70px;
-    padding-left: 0px;
-    padding-right: 0px;
+    @media screen and (max-width: 970px) {
+        padding: 15px 0px 20px;
+    }
+    padding: 70px 0px 40px;
     text-align: left;
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
@@ -688,31 +693,71 @@ export default {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    @media screen and (max-width: 970px) {
+        flex-direction: column;
+    }
 }
 .el-form-item {
     width: 40%;
+    @media screen and (max-width: 970px) {
+        width: 98%;
+        margin-bottom: 40px;
+        margin-right: 0;
+    }
     margin-right: 10%;
     margin-bottom: 50px;
     ::v-deep .el-form-item__label {
+        @media screen and (max-width: 970px) {
+            width: 30% !important;
+        }
         font-size: 17px;
         font-weight: 400;
-        text-align: center;
+        text-align: right;
         color: #020202;
-        letter-spacing: 0px;
+        letter-spacing: 0;
+    }
+    ::v-deep .el-form-item__content {
+        @media screen and (max-width: 970px) {
+            width: 70% !important;
+            margin-left: 30% !important;
+        }
     }
     .size-input {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            position: relative;
+        }
         width: 90px;
+        margin: 0 !important;
     }
 }
 .size-form-item {
     .size-length,
     .size-width {
+        @media screen and (max-width: 970px) {
+            width: 33%;
+            //margin-left: 30%;
+            margin-right: 0;
+        }
         width: 90px;
         margin-right: 10px;
         display: inline-block;
         margin-bottom: 0;
+        ::v-deep .el-form-item__content {
+            @media screen and (max-width: 970px) {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
     }
     ::v-deep .el-form-item__content {
+        @media screen and (max-width: 970px) {
+            position: relative;
+            margin-left: 30% !important;
+            display: flex;
+            flex-direction: row;
+        }
+        margin-left: 0;
         font-size: 17px;
         font-weight: 400;
         color: #020202;
@@ -725,11 +770,27 @@ export default {
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        @media screen and (max-width: 970px) {
+            flex-direction: column;
+        }
     }
     .uni-upload {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            position: relative;
+        }
         width: 300px;
     }
     .upload-form-item {
+        ::v-deep .el-form-item__content {
+            @media screen and (max-width: 970px) {
+                margin-left: 0 !important;
+            }
+        }
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            position: relative;
+        }
         width: 300px;
         margin-right: 0;
         margin-bottom: 0;
@@ -751,6 +812,11 @@ export default {
         background: white;
         border: 2px solid #020202;
     }
+    .upload-form-item {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+        }
+    }
     .uni-file {
         width: 300px;
     }
@@ -758,19 +824,38 @@ export default {
 .detail-upload {
     width: 100%;
     .detail-box {
+        ::v-deep .el-form-item__content {
+            @media screen and (max-width: 970px) {
+                margin-left: 0 !important;
+            }
+        }
+        @media screen and (max-width: 970px) {
+            flex-direction: column;
+        }
         width: 100%;
         display: flex;
         align-items: center;
         .uni-upload {
-            width: 300px;
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                position: relative;
+            }
         }
         .upload-form-item {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                position: relative;
+            }
             width: 300px;
             margin-right: 0;
         }
         .textarea-form-item {
             margin-right: 0;
             width: calc(100% - 300px);
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                position: relative;
+            }
         }
     }
 }
@@ -780,6 +865,9 @@ export default {
 }
 
 .el-button.cancel-button {
+    @media screen and (max-width: 970px) {
+        width: 40%;
+    }
     height: 65px;
     width: 300px;
     background: transparent;
@@ -795,6 +883,9 @@ export default {
     }
 }
 .el-button.submit-button {
+    @media screen and (max-width: 970px) {
+        width: 40%;
+    }
     height: 65px;
     width: 300px;
     margin-right: 30px;
@@ -804,9 +895,15 @@ export default {
     font-weight: 600;
     text-align: center;
     color: #ffffff;
-    letter-spacing: 0px;
+    letter-spacing: 0;
     ::v-deep .el-loading-spinner {
         margin-top: -7px;
+    }
+}
+.main-upload-parent {
+    @media screen and (max-width: 970px) {
+        position: relative;
+        width: 100%;
     }
 }
 </style>

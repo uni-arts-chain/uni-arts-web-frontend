@@ -36,9 +36,7 @@
             </div>
         </div> -->
         <div class="guide container">
-            <h2 class="title" style="text-transform: none; margin-bottom: 97px">
-                Time limited auction
-            </h2>
+            <h2 class="title2">Time limited auction</h2>
             <div class="guide-body">
                 <Carousel />
             </div>
@@ -142,6 +140,10 @@ export default {
 
 <style lang="scss" scoped>
 .banner-top {
+    @media screen and (max-width: 970px) {
+        height: unset;
+        margin-bottom: 35px;
+    }
     background: white;
     height: 760px;
     margin-bottom: 105px;
@@ -209,7 +211,25 @@ export default {
 .recommendation,
 .authors {
     padding-bottom: 130px;
+    .title2 {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 27px;
+            font-size: 20px;
+        }
+        text-transform: none;
+        margin-bottom: 97px;
+        font-family: "Broadway";
+        font-size: 38px;
+        font-weight: 400;
+        text-align: left;
+        color: #020202;
+        letter-spacing: 2px;
+    }
     .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 37px;
+            font-size: 20px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
@@ -229,6 +249,12 @@ export default {
         text-transform: uppercase;
         margin-top: 93px;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            margin-top: 93px;
+            padding: 10px 40px;
+            font-size: 20px;
+            border: 2px solid black;
+        }
     }
 }
 

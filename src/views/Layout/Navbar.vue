@@ -2,7 +2,7 @@
 <template>
     <nav :class="theme">
         <div class="container">
-            <div class="logo" @click="goHome"></div>
+            <div class="logo" @click="goHome">123123123</div>
             <ul class="link-group">
                 <li>
                     <router-link to="/" :class="{ active: activeTab == 'Home' }"
@@ -146,16 +146,21 @@ export default {
 
 <style lang="scss" scoped>
 nav {
+    @media screen and (max-width: 970px) {
+        min-height: 51px;
+    }
     min-height: 91px;
 }
 nav.dark {
     background-color: black;
-    .logo,
     ul li > a {
         color: white;
     }
 }
 .logo {
+    @media screen and (max-width: 970px) {
+        display: none;
+    }
     font-family: "Broadway";
     font-size: 34px;
     font-weight: 400;
@@ -168,6 +173,11 @@ nav.dark {
 }
 
 .container {
+    @media screen and (max-width: 970px) {
+        padding-top: 13px;
+        padding-bottom: 13px;
+        height: 51px;
+    }
     display: flex;
     align-items: center;
     justify-content: space-between;

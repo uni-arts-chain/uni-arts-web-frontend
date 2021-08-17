@@ -97,6 +97,9 @@ input {
     font-size: 1em;
 }
 input.unit-input {
+    @media screen and (max-width: 970px) {
+        padding-right: unset;
+    }
     padding-right: 55px;
 }
 input:hover {

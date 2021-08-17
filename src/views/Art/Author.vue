@@ -64,7 +64,16 @@ export default {
 .author-info {
     overflow: hidden;
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -73,6 +82,11 @@ export default {
         margin-bottom: 110px;
     }
     .author {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            float: unset;
+            border-right: unset;
+        }
         float: left;
         width: 500px;
         display: flex;
@@ -104,6 +118,11 @@ export default {
         }
     }
     .author-intro-info {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            float: unset;
+            height: unset;
+        }
         float: left;
         width: calc(100% - 501px);
         padding-left: 103px;
@@ -113,6 +132,10 @@ export default {
         align-items: center;
         justify-content: center;
         .author-intro {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                font-size: 19px;
+            }
             font-size: 24px;
             font-weight: 400;
             text-align: left;
@@ -123,6 +146,11 @@ export default {
             text-transform: uppercase;
         }
         .go-detail {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                font-size: 19px;
+                margin-left: 3%;
+            }
             font-size: 24px;
             font-weight: 600;
             text-align: left;

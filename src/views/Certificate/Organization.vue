@@ -70,23 +70,45 @@ export default {
 </script>
 <style lang="scss" scoped>
 .item {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 40px;
+        width: 100%;
+    }
     overflow: hidden;
     margin-bottom: 100px;
     .img {
+        @media screen and (max-width: 970px) {
+            float: unset;
+            width: 100%;
+        }
         float: left;
         width: 360px;
         height: 270px;
     }
     .content {
+        @media screen and (max-width: 970px) {
+            float: unset;
+            width: 90%;
+            padding: 0 5%;
+            display: flex;
+            flex-direction: column-reverse;
+        }
         float: right;
         width: calc(100% - 360px);
         padding-left: 43px;
     }
     .content-top {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+        }
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
         .left {
             .title {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                }
                 font-size: 22px;
                 font-weight: 600;
                 text-align: left;
@@ -101,6 +123,9 @@ export default {
                 align-items: center;
             }
             .mine-org {
+                @media screen and (max-width: 970px) {
+                    font-size: 14px;
+                }
                 border: 1px solid #c61e1e;
                 padding-top: 1px;
                 padding-bottom: 1px;
@@ -112,6 +137,9 @@ export default {
                 font-size: 16px;
             }
             .cost {
+                @media screen and (max-width: 970px) {
+                    font-size: 16px;
+                }
                 font-size: 18px;
                 font-weight: 600;
                 text-align: left;
@@ -122,6 +150,13 @@ export default {
         }
         .right {
             button {
+                @media screen and (max-width: 970px) {
+                    font-size: 19px;
+                    border-width: 2px;
+                    min-width: 150px;
+                    padding-top: 7px;
+                    padding-bottom: 7px;
+                }
                 cursor: pointer;
                 border: 3px solid black;
                 font-size: 24px;
@@ -133,10 +168,17 @@ export default {
                 letter-spacing: 0px;
                 background-color: white;
             }
+            @media screen and (max-width: 970px) {
+                text-align: left;
+            }
         }
     }
     .content-bottom {
         .signed-time {
+            @media screen and (max-width: 970px) {
+                display: none;
+                margin-top: 15px;
+            }
             font-size: 18px;
             font-weight: 400;
             text-align: left;
@@ -146,6 +188,9 @@ export default {
             margin-top: 30px;
         }
         .desc {
+            @media screen and (max-width: 970px) {
+                margin-top: 10px;
+            }
             height: 112px;
             overflow: hidden;
             margin-top: 23px;

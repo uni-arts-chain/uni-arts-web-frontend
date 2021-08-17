@@ -234,15 +234,28 @@ export default {
 
 <style lang="scss" scoped>
 .art {
+    @media screen and (max-width: 970px) {
+        padding-top: 15px;
+    }
     padding-top: 80px;
 }
 
 .art-info {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 25px;
+    }
     overflow: hidden;
     margin-bottom: 100px;
     width: 100%;
 
     .adaptive-view-wrapper {
+        @media screen and (max-width: 970px) {
+            float: unset;
+            width: 100%;
+            margin-right: 0;
+            //margin-bottom: 50%;
+            height: 30vh;
+        }
         float: left;
         width: 620px;
         height: 580px;

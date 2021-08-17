@@ -155,12 +155,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .following {
-    padding: 40px;
-    padding-top: 70px;
-    padding-left: 0px;
-    padding-right: 0px;
+    @media screen and (max-width: 970px) {
+        padding: 30px 0px 20px;
+    }
+    padding: 70px 0px 40px;
     text-align: left;
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;

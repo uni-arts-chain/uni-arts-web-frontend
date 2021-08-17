@@ -332,6 +332,9 @@ export default {
 <style lang="scss" scoped>
 .index {
     padding-top: 60px;
+    @media screen and (max-width: 970px) {
+        padding-top: 30px;
+    }
 }
 .container {
     min-height: 100px;
@@ -342,12 +345,20 @@ h2.title {
     font-weight: 400;
     text-transform: uppercase;
     margin-bottom: 60px;
+    @media screen and (max-width: 970px) {
+        font-size: 34px;
+        margin-bottom: 30px;
+    }
 }
 .search {
     width: 100%;
     position: relative;
     text-align: left;
     margin-bottom: 60px;
+    @media screen and (max-width: 970px) {
+        margin-bottom: 30px;
+        text-align: center;
+    }
     > img {
         cursor: pointer;
         width: 34px;
@@ -356,9 +367,15 @@ h2.title {
         left: 840px;
         top: 50%;
         transform: translateY(-50%);
+        @media screen and (max-width: 970px) {
+            left: calc(77% - 15px);
+        }
     }
     .input {
         width: 900px;
+        @media screen and (max-width: 970px) {
+            width: 70%;
+        }
         height: 69px;
         font-size: 22px;
         ::v-deep input {
@@ -371,6 +388,9 @@ h2.title {
     flex-direction: column;
     .name {
         display: flex;
+        @media screen and (max-width: 970px) {
+            flex-wrap: wrap;
+        }
         justify-content: flex-start;
         align-items: center;
         margin-bottom: 40px;
@@ -378,10 +398,13 @@ h2.title {
     .name-item {
         font-size: 24px;
         font-weight: 600;
-        letter-spacing: 0px;
+        letter-spacing: 0;
         margin-right: 82px;
         color: #606060;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            margin: 0 20px;
+        }
     }
     .name-item.active {
         color: black;
@@ -395,6 +418,9 @@ h2.title {
         flex-wrap: wrap;
         align-items: center;
         margin-bottom: 71px;
+        @media screen and (max-width: 970px) {
+            margin-bottom: 30px;
+        }
     }
     .catetory-item {
         border: 2px solid #606060;
@@ -408,6 +434,10 @@ h2.title {
         min-width: 150px;
         color: #606060;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            margin: 5px 12px;
+            padding: 3px 0;
+        }
     }
     .catetory-item.active {
         color: black;

@@ -489,13 +489,19 @@ export default {
 </script>
 <style lang="scss" scoped>
 .profile {
-    padding: 40px;
-    padding-top: 70px;
-    padding-left: 0px;
-    padding-right: 0px;
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+        margin-bottom: 30px;
+        padding: 30px 0 20px;
+    }
+    padding: 70px 0 40px;
     text-align: left;
     margin-bottom: 70px;
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
@@ -546,12 +552,33 @@ export default {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    @media screen and (max-width: 970px) {
+        flex-direction: column;
+    }
 }
 .el-form-item {
     width: 45%;
     margin-right: 5%;
     margin-bottom: 60px;
+    @media screen and (max-width: 970px) {
+        margin-bottom: 10px;
+        margin-right: 2%;
+        width: 98%;
+    }
+    ::v-deep .el-form-item__content {
+        @media screen and (max-width: 970px) {
+            margin-left: 35% !important;
+        }
+    }
     ::v-deep .el-form-item__label {
+        @media screen and (max-width: 970px) {
+            text-align: right !important;
+            font-size: 14px;
+            min-width: 100px !important;
+            max-width: 30% !important;
+            width: 35% !important;
+            padding-right: 20px;
+        }
         font-size: 18px;
         font-weight: 400;
         color: #020202;
@@ -580,6 +607,9 @@ export default {
         }
     }
     .code-send {
+        @media screen and (max-width: 970px) {
+            display: contents;
+        }
         font-size: 18px;
         font-weight: 400;
         color: #020202;
@@ -621,6 +651,9 @@ export default {
     display: flex;
     align-items: flex-end;
     button {
+        @media screen and (max-width: 970px) {
+            margin-left: 10px;
+        }
         margin-left: 35px;
         background: #272727;
         font-size: 15px;
@@ -638,10 +671,17 @@ export default {
 }
 
 .input-box {
+    @media screen and (max-width: 970px) {
+        width: unset;
+    }
     width: 290px;
 }
 
 .el-button.cancel-button {
+    @media screen and (max-width: 970px) {
+        height: 40px;
+        width: 40%;
+    }
     height: 65px;
     width: 290px;
     background: transparent;
@@ -657,6 +697,10 @@ export default {
     }
 }
 .el-button.submit-button {
+    @media screen and (max-width: 970px) {
+        height: 40px;
+        width: 40%;
+    }
     height: 65px;
     width: 290px;
     margin-right: 30px;
