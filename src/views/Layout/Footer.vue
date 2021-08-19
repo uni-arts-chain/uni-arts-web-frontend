@@ -100,6 +100,7 @@ footer {
     color: white;
     @media screen and (max-width: 970px) {
         flex-direction: column-reverse;
+        min-height: unset;
     }
 }
 .bottom-logo {
@@ -111,6 +112,7 @@ footer {
     border-right: 1px solid white;
     @media screen and (max-width: 970px) {
         border-right: none;
+        width: 100%;
     }
     .logo {
         font-family: "Broadway";
@@ -121,15 +123,26 @@ footer {
         background-image: url(~@/assets/images/bottom-logo.png);
         background-repeat: no-repeat;
         background-size: 100%;
+        @media screen and (max-width: 970px) {
+            background-position: center;
+            background-size: 60%;
+            width: 100%;
+            height: 40px;
+        }
     }
     .desc {
         font-size: 17px;
         line-height: 30px;
+        @media screen and (max-width: 970px) {
+            font-size: 11px;
+        }
     }
 }
 .bottom-community {
     @media screen and (max-width: 970px) {
         padding-top: 20px;
+        width: 100%;
+        margin-left: 0;
     }
     margin-left: 23px;
     .text {
@@ -137,11 +150,21 @@ footer {
         text-align: left;
         font-weight: 500;
         margin-bottom: 30px;
+        @media screen and (max-width: 970px) {
+            display: none;
+        }
     }
     .icons {
         display: flex;
         align-items: center;
+        @media screen and (max-width: 970px) {
+            justify-content: space-evenly;
+        }
         a {
+            @media screen and (max-width: 970px) {
+                font-size: 30px;
+                margin: 0 !important;
+            }
             display: block;
             font-size: 50px;
             margin: 0 7px;

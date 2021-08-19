@@ -70,9 +70,10 @@ export default {
     }
     > .title {
         @media screen and (max-width: 970px) {
-            width: 100%;
+            width: 90%;
             font-size: 24px;
             margin-bottom: 30px;
+            margin-left: 5%;
         }
         font-size: 48px;
         font-family: "Broadway";
@@ -95,6 +96,9 @@ export default {
         justify-content: center;
         border-right: 1px solid #020202;
         .author-container {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0px;
+            }
             width: 103px;
             height: 103px;
             overflow: hidden;
@@ -135,6 +139,7 @@ export default {
             @media screen and (max-width: 970px) {
                 width: 100%;
                 font-size: 19px;
+                display: none;
             }
             font-size: 24px;
             font-weight: 400;
@@ -148,8 +153,10 @@ export default {
         .go-detail {
             @media screen and (max-width: 970px) {
                 width: 100%;
-                font-size: 19px;
-                margin-left: 3%;
+                font-size: 16px;
+                margin-left: -45%;
+                min-width: unset;
+                text-transform: unset;
             }
             font-size: 24px;
             font-weight: 600;

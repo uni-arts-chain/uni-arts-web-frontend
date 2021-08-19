@@ -142,7 +142,7 @@ export default {
 .banner-top {
     @media screen and (max-width: 970px) {
         height: unset;
-        margin-bottom: 35px;
+        margin-bottom: 20px;
     }
     background: white;
     height: 760px;
@@ -210,11 +210,16 @@ export default {
 .worklist,
 .recommendation,
 .authors {
+    @media screen and (max-width: 970px) {
+        padding-bottom: 20px;
+    }
     padding-bottom: 130px;
     .title2 {
         @media screen and (max-width: 970px) {
             margin-bottom: 27px;
-            font-size: 20px;
+            font-size: 24px;
+            padding-left: 5%;
+            padding-right: 5%;
         }
         text-transform: none;
         margin-bottom: 97px;
@@ -227,8 +232,10 @@ export default {
     }
     .title {
         @media screen and (max-width: 970px) {
-            margin-bottom: 37px;
-            font-size: 20px;
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding-left: 5%;
+            padding-right: 5%;
         }
         font-family: "Broadway";
         font-size: 38px;
@@ -250,7 +257,7 @@ export default {
         margin-top: 93px;
         cursor: pointer;
         @media screen and (max-width: 970px) {
-            margin-top: 93px;
+            margin-top: 10px;
             padding: 10px 40px;
             font-size: 20px;
             border: 2px solid black;
@@ -260,6 +267,9 @@ export default {
 
 .guide {
     .guide-body {
+        @media screen and (max-width: 970px) {
+            margin: 0 5%;
+        }
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
@@ -325,12 +335,19 @@ export default {
         margin-bottom: 0;
     }
     .recommendation-body {
+        @media screen and (max-width: 970px) {
+            margin-top: 20px;
+        }
         margin-top: 150px;
     }
     .postmoder {
         margin-bottom: 57px;
         position: relative;
         .name-text {
+            @media screen and (max-width: 970px) {
+                top: 50%;
+                font-size: 20px;
+            }
             position: absolute;
             top: 130px;
             transform: translateY(-50%);
@@ -341,6 +358,11 @@ export default {
             color: white;
         }
         .bg {
+            @media screen and (max-width: 970px) {
+                margin: 0 5%;
+                width: 90%;
+                height: 80px;
+            }
             width: 100%;
             height: 250px;
             background-image: url(~@/assets/images/topic@3x.png);

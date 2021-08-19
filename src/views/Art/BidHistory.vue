@@ -98,7 +98,17 @@ export default {
 <style lang="scss" scoped>
 .bid-history {
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            font-size: 24px;
+            margin-bottom: 30px;
+            margin-left: 5%;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -109,10 +119,19 @@ export default {
 }
 .bid-history {
     .content {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            font-size: 18px;
+            margin-bottom: 30px;
+            margin-left: 5%;
+        }
         .table {
             display: flex;
             flex-direction: column;
             margin-bottom: 80px;
+            @media screen and (max-width: 970px) {
+                margin-bottom: 10px;
+            }
         }
         .tr {
             width: 100%;
@@ -152,10 +171,20 @@ export default {
             text-overflow: ellipsis;
         }
         .bid-info {
+            border: 2px solid #020202;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             .item {
+                @media screen and (max-width: 970px) {
+                    padding: 6px 0;
+                    width: 100%;
+                    font-size: 16px;
+                    margin-bottom: 16px;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
                 background-color: #eee;
                 padding: 16px 0px;
                 width: 540px;

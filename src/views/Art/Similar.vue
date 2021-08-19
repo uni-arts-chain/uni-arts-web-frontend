@@ -51,8 +51,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .similar {
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     margin-bottom: 180px;
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+            margin-left: 5%;
+            margin-bottom: 30px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;

@@ -305,9 +305,12 @@ export default {
         top: 120px;
         > h2 {
             @media screen and (max-width: 970px) {
-                width: 100%;
+                width: 80%;
                 max-width: 100%;
                 font-size: 20px;
+                margin-bottom: 0;
+                margin-left: 10%;
+                margin-right: 10%;
             }
             font-size: 40px;
             font-family: "Broadway";
@@ -335,7 +338,8 @@ export default {
             @media screen and (max-width: 970px) {
                 width: 100%;
                 max-width: 100%;
-                flex-direction: row-reverse;
+                flex-direction: row;
+                justify-content: center;
             }
             display: flex;
             align-items: center;
@@ -387,9 +391,9 @@ export default {
     min-height: 400px;
     .title {
         @media screen and (max-width: 970px) {
-            width: 100%;
             font-size: 24px;
             margin-bottom: 30px;
+            margin-left: 5%;
         }
         font-size: 48px;
         font-family: "Broadway";

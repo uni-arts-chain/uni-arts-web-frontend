@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2021-04-15 19:37:14. */
 <template>
-    <div class="comments">
+    <div class="comments" v-if="art.details">
         <div class="title">Comments on works</div>
         <div class="comment-content">
             {{ art.details }}
@@ -29,9 +29,9 @@ export default {
     }
     > .title {
         @media screen and (max-width: 970px) {
-            width: 100%;
             margin-bottom: 30px;
             font-size: 24px;
+            margin-left: 5%;
         }
         font-size: 48px;
         font-family: "Broadway";
@@ -47,6 +47,8 @@ export default {
             font-size: 18px;
             margin-left: 5%;
             margin-right: 5%;
+            letter-spacing: 0;
+            line-height: 20px;
         }
         font-size: 23px;
         font-weight: 400;

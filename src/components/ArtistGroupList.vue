@@ -43,9 +43,15 @@ export default {
     justify-content: space-between;
 }
 .card {
+    @media screen and (max-width: 970px) {
+        width: 40%;
+        margin: 0 5%;
+        border: 2px solid black;
+        border-radius: 8px;
+    }
     width: 30%;
     height: 364px;
-    box-shadow: 0px 0px 30px 0px #ddd;
+    box-shadow: 0 0 30px 0 #ddd;
     display: flex;
     flex-direction: column;
     align-items: center;

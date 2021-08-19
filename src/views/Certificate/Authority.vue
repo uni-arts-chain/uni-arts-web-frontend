@@ -47,9 +47,9 @@ export default {
 <style lang="scss" scoped>
 .title {
     @media screen and (max-width: 970px) {
-        font-size: 34px;
+        font-size: 24px;
         margin-bottom: 30px;
-        margin-top: 30px;
+        margin-top: 10px;
     }
     margin-top: 60px;
     margin-bottom: 102px;

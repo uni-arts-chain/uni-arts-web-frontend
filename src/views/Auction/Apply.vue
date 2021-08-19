@@ -16,7 +16,7 @@
                         <span class="address">{{ v.item_hash }}</span>
                     </div>
                     <div class="price">
-                        {{ v.price }}
+                        <span>{{ v.price }}</span>
                         {{ $store.state.global.symbol.toUpperCase() }}
                     </div>
                     <div
@@ -319,22 +319,37 @@ export default {
 </script>
 <style lang="scss" scoped>
 .apply {
+    @media screen and (max-width: 970px) {
+        padding: 0;
+    }
     padding: 60px 0;
     > .title {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
         margin-top: 70px;
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
         line-height: 40px;
-        text-align: left;
+        text-align: center;
         letter-spacing: 0px;
         margin-bottom: 103px;
     }
 }
 
 .thumbnail {
+    @media screen and (max-width: 970px) {
+        display: flex;
+        flex-direction: column;
+    }
     overflow: hidden;
     .title {
+        @media screen and (max-width: 970px) {
+            font-size: 18px;
+        }
         text-transform: uppercase;
         font-size: 22px;
         font-weight: 600;
@@ -342,6 +357,11 @@ export default {
         letter-spacing: 0px;
     }
     .item {
+        @media screen and (max-width: 970px) {
+            float: unset;
+            width: 90%;
+            margin-left: 5%;
+        }
         float: left;
         width: 30%;
         margin-right: 5%;
@@ -380,6 +400,11 @@ export default {
     }
     .desc,
     .address-label {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+            min-height: unset !important;
+            line-height: 20px;
+        }
         font-size: 18px;
         font-weight: 400;
         text-align: left;
@@ -388,6 +413,11 @@ export default {
         min-height: 35px;
     }
     .action {
+        @media screen and (max-width: 970px) {
+            margin-top: 0px;
+            width: 100%;
+            height: 37px;
+        }
         width: 100%;
         border: 2px solid #020202;
         font-size: 16px;
@@ -419,6 +449,13 @@ export default {
     }
 
     .price {
+        @media screen and (max-width: 970px) {
+            margin-top: 0px;
+            margin-bottom: 0;
+        }
+        span {
+            color: red;
+        }
         font-size: 22px;
         font-weight: 600;
         text-align: left;
@@ -457,6 +494,9 @@ export default {
 }
 .thumbnail.group {
     .item {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 40px;
+        }
         margin-bottom: 115px;
     }
 }
@@ -525,8 +565,8 @@ export default {
     }
     .el-form {
         width: 450px;
-        margin: 0 auto;
-        margin-bottom: 60px;
+        margin: 0 auto 60px;
+        max-width: 100%;
     }
     .el-form-item {
         margin-bottom: 30px;

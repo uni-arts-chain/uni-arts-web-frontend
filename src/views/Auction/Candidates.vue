@@ -153,6 +153,9 @@ export default {
     }
     .thumbnail.group {
         .item {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 40px;
+            }
             margin-bottom: 115px;
         }
     }

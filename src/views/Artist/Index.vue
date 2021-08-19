@@ -150,6 +150,12 @@ export default {
 
 <style lang="scss" scoped>
 .index {
+    @media screen and (max-width: 970px) {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        margin-top: 10px;
+        margin-bottom: 30px;
+    }
     padding-top: 50px;
     padding-bottom: 50px;
 }
@@ -233,14 +239,15 @@ export default {
 .recommendations {
     .title {
         @media screen and (max-width: 970px) {
-            font-size: 20px;
+            font-size: 24px;
+            margin-bottom: 30px;
         }
         text-transform: uppercase;
         font-size: 39px;
         font-family: "Broadway";
         font-weight: 400;
         letter-spacing: 2px;
-        text-align: left;
+        text-align: center;
         margin-bottom: 115px;
     }
 

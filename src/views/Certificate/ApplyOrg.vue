@@ -148,11 +148,12 @@ export default {
     > .title {
         @media screen and (max-width: 970px) {
             font-size: 24px;
+            margin-bottom: 30px;
         }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
-        text-align: left;
+        text-align: center;
         color: #020202;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -170,9 +171,10 @@ export default {
             }
             ::v-deep .el-form-item__label {
                 @media screen and (max-width: 970px) {
-                    font-size: 17px;
+                    font-size: 15px;
                     width: 30% !important;
                     position: relative;
+                    text-align: right;
                 }
                 font-size: 18px;
                 line-height: 45px;

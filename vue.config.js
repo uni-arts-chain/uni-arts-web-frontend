@@ -52,7 +52,7 @@ module.exports = {
                 })
             );
             // 添加source map
-            config.devtool = "cheap-module-source-map";
+            config.devtool = "source-map";
             config.optimization = {
                 minimize: true,
                 minimizer: [
@@ -97,6 +97,7 @@ module.exports = {
         },
     },
     css: {
+        sourceMap: true,
         loaderOptions: {
             sass: {
                 prependData: `@import "@/assets/styles/var.scss";`,

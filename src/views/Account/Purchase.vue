@@ -1,29 +1,33 @@
 /** * Created by Lay Hunt on 2020-12-14 14:12:54. */
 <template>
     <div class="purchase container">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/account' }"
-                >Profile</el-breadcrumb-item
-            >
-            <el-breadcrumb-item>Purchase Order</el-breadcrumb-item>
-        </el-breadcrumb>
-        <Order v-loading="isLoading" type="bought" :list="list"></Order>
-        <div class="pagenation" v-if="hasPrev || hasNext">
+        <div class="pc">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/account' }"
+                    >Profile
+                </el-breadcrumb-item>
+                <el-breadcrumb-item>Purchase Order</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="title">Purchase Order</div>
+        <Order v-loading="isLoading" :list="list" type="bought"></Order>
+        <div v-if="hasPrev || hasNext" class="pagenation">
             <div
+                :class="{ 'no-prev': !hasPrev }"
                 class="prev"
                 @click="prev"
-                :class="{ 'no-prev': !hasPrev }"
             ></div>
             <div
+                :class="{ 'no-next': !hasNext }"
                 class="next"
                 @click="next"
-                :class="{ 'no-next': !hasNext }"
             ></div>
         </div>
     </div>
 </template>
 <script>
 import Order from "./Order";
+
 export default {
     name: "purchase",
     components: {
@@ -90,5 +94,21 @@ export default {
 <style lang="scss" scoped>
 .purchase {
     margin-top: 20px;
+    > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+            margin-bottom: 0;
+            margin-top: 10px;
+        }
+        font-family: "Broadway";
+        font-size: 38px;
+        font-weight: 400;
+        text-align: center;
+        color: #020202;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 73px;
+        margin-top: 40px;
+    }
 }
 </style>

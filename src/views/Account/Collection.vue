@@ -1,12 +1,14 @@
 /** * Created by Lay Hunt on 2021-01-29 17:13:31. */
 <template>
     <div class="collection container">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/account' }"
-                >Profile</el-breadcrumb-item
-            >
-            <el-breadcrumb-item>Collection</el-breadcrumb-item>
-        </el-breadcrumb>
+        <div class="pc">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/account' }"
+                    >Profile</el-breadcrumb-item
+                >
+                <el-breadcrumb-item>Collection</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
         <div class="title">Collection</div>
         <Thumbnail v-loading="isLoading" :list="list" />
         <div class="pagenation" v-if="hasPrev || hasNext">
@@ -97,14 +99,14 @@ export default {
     text-align: left;
     > .title {
         @media screen and (max-width: 970px) {
-            font-size: 20px;
-            margin-bottom: 30px;
-            margin-top: 20px;
+            font-size: 24px;
+            margin-bottom: 10px;
+            margin-top: 10px;
         }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
-        text-align: left;
+        text-align: center;
         color: #020202;
         letter-spacing: 2px;
         text-transform: uppercase;

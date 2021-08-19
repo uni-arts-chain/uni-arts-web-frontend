@@ -100,8 +100,9 @@ export default {
     width: 360px;
     .box-boder {
         @media screen and (max-width: 970px) {
-            padding-bottom: 50%;
-            margin-bottom: -40%;
+            height: 200px;
+            width: 200px;
+            margin-right: unset;
         }
         width: 360px;
         max-width: 100%;

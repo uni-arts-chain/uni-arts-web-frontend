@@ -36,10 +36,11 @@
             <span class="address">{{ item.item_hash }}</span>
         </div>
         <div class="price" v-if="!isAuction">
-            {{ item.price }} {{ item.currency_code.toUpperCase() }}
+            <span>{{ item.price }}</span> {{ item.currency_code.toUpperCase() }}
         </div>
         <div class="price" v-else>
-            Starting at {{ item.price }} {{ item.currency_code.toUpperCase() }}
+            Starting at <span>{{ item.price }}</span>
+            {{ item.currency_code.toUpperCase() }}
         </div>
     </div>
 </template>
@@ -105,6 +106,9 @@ export default {
 }
 .thumbnail.group {
     .item {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 40px;
+        }
         margin-bottom: 115px;
     }
 }
@@ -118,6 +122,10 @@ export default {
 }
 
 .img-container {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 10px;
+        height: unset;
+    }
     display: block;
     width: 100%;
     height: 270px;
@@ -135,6 +143,12 @@ export default {
         background-color: rgba(134, 29, 57, 0.8);
     }
     .aution-label {
+        @media screen and (max-width: 970px) {
+            top: 10px !important;
+            left: 0 !important;
+            padding: 3px;
+            line-height: unset;
+        }
         line-height: 35px;
         position: absolute;
         top: 15px;
@@ -183,6 +197,10 @@ export default {
 }
 
 .title {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+        line-height: 20px;
+    }
     text-transform: uppercase;
     font-size: 22px;
     font-weight: 600;
@@ -191,6 +209,12 @@ export default {
 }
 .desc,
 .address-label {
+    @media screen and (max-width: 970px) {
+        margin-top: 10px;
+        font-size: 16px;
+        line-height: 16px;
+        min-height: unset;
+    }
     font-size: 18px;
     font-weight: 400;
     text-align: left;
@@ -200,6 +224,11 @@ export default {
 }
 
 .address-label {
+    @media screen and (max-width: 970px) {
+        font-size: 16px;
+        line-height: 16px;
+        min-height: unset;
+    }
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -207,6 +236,13 @@ export default {
 }
 
 .price {
+    span {
+        color: red;
+    }
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+        line-height: 20px;
+    }
     font-size: 22px;
     font-weight: 600;
     text-align: left;

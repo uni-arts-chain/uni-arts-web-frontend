@@ -79,7 +79,8 @@ export default {
     .img {
         @media screen and (max-width: 970px) {
             float: unset;
-            width: 100%;
+            width: 90%;
+            margin: 0 5%;
         }
         float: left;
         width: 360px;
@@ -170,6 +171,7 @@ export default {
             }
             @media screen and (max-width: 970px) {
                 text-align: left;
+                margin-top: 5px;
             }
         }
     }

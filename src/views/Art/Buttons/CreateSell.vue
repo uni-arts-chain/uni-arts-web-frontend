@@ -200,6 +200,13 @@ export default {
 <style lang="scss" scoped>
 .create-sell {
     > button {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            padding: 4px 0;
+            border: 2px solid #020202;
+            margin-bottom: 5px;
+            width: 40%;
+        }
         cursor: pointer;
         border: 3px solid #020202;
         font-size: 20px;

@@ -68,9 +68,9 @@ export default {
     margin-bottom: 180px;
     > .title {
         @media screen and (max-width: 970px) {
-            width: 100%;
             margin-bottom: 30px;
             font-size: 24px;
+            margin-left: 5%;
         }
         font-size: 48px;
         font-family: "Broadway";
@@ -125,12 +125,12 @@ export default {
 
         .art-information {
             @media screen and (max-width: 970px) {
-                margin-left: 4%;
+                margin-left: 5%;
             }
             .title {
                 @media screen and (max-width: 970px) {
                     font-size: 20px;
-                    margin-bottom: 20px;
+                    margin-bottom: 10px;
                 }
                 font-size: 30px;
                 font-weight: 600;
@@ -145,7 +145,7 @@ export default {
             .date {
                 @media screen and (max-width: 970px) {
                     font-size: 17px;
-                    margin-bottom: 12px;
+                    margin-bottom: 0;
                 }
                 font-size: 22px;
                 font-weight: 400;

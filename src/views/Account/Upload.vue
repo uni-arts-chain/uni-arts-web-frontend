@@ -2,130 +2,433 @@
 <template>
     <div class="upload container">
         <div class="title">Upload Works</div>
-        <el-form
-            ref="form"
-            :model="form"
-            label-width="130px"
-            :rules="rules"
-            label-position="left"
-        >
-            <el-form-item label="Name" prop="name">
-                <Input v-model="form.name" />
-            </el-form-item>
-            <el-form-item label="Category" prop="category_id">
-                <Select
-                    v-model="form.category_id"
-                    placeholder="select"
-                    :options="categories"
-                    optionLabel="title"
-                    optionValue="id"
-                    optionKey="id"
-                ></Select>
-            </el-form-item>
-            <el-form-item label="Theme" prop="theme_id">
-                <Select
-                    v-model="form.theme_id"
-                    placeholder="select"
-                    :options="themes"
-                    optionLabel="title"
-                    optionValue="id"
-                    optionKey="id"
-                ></Select>
-            </el-form-item>
-            <el-form-item label="Material" prop="material_id">
-                <Select
-                    v-model="form.material_id"
-                    placeholder="select"
-                    :options="materials"
-                    optionLabel="title"
-                    optionValue="id"
-                    optionKey="id"
-                ></Select>
-            </el-form-item>
-            <el-form-item label="Date" prop="produce_at">
-                <DatePicker v-model="form.produce_at" placeholder="select" />
-            </el-form-item>
-            <el-form-item label="Size" required class="size-form-item">
-                <el-form-item class="size-length" prop="size_length">
+        <div class="pc">
+            <el-form
+                ref="form"
+                :model="form"
+                :rules="rules"
+                class="pc"
+                label-position="left"
+                label-width="130px"
+            >
+                <el-form-item label="Name" prop="name">
+                    <Input v-model="form.name" />
+                </el-form-item>
+                <el-form-item label="Category" prop="category_id">
+                    <Select
+                        v-model="form.category_id"
+                        :options="categories"
+                        optionKey="id"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="select"
+                    ></Select>
+                </el-form-item>
+                <el-form-item label="Theme" prop="theme_id">
+                    <Select
+                        v-model="form.theme_id"
+                        :options="themes"
+                        optionKey="id"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="select"
+                    ></Select>
+                </el-form-item>
+                <el-form-item label="Material" prop="material_id">
+                    <Select
+                        v-model="form.material_id"
+                        :options="materials"
+                        optionKey="id"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="select"
+                    ></Select>
+                </el-form-item>
+                <el-form-item label="Date" prop="produce_at">
+                    <DatePicker
+                        v-model="form.produce_at"
+                        placeholder="select"
+                    />
+                </el-form-item>
+                <el-form-item class="size-form-item" label="Size" required>
+                    <el-form-item class="size-length" prop="size_length">
+                        <Input
+                            v-model="form.size_length"
+                            class="size-input"
+                            style="margin-right: 10px"
+                            type="number"
+                        />
+                    </el-form-item>
+                    cm X
+                    <el-form-item class="size-width" prop="size_width">
+                        <Input
+                            v-model="form.size_width"
+                            class="size-input"
+                            style="margin-left: 10px; margin-right: 10px"
+                            type="number"
+                        />
+                    </el-form-item>
+                    cm
+                </el-form-item>
+                <el-form-item label="Royalty" prop="royalty">
                     <Input
+                        v-model="form.royalty"
+                        append="%"
+                        style="width: 140px"
+                        type="number"
+                    />
+                </el-form-item>
+                <el-form-item label="Royalty Date" prop="royalty_expired_at">
+                    <DatePicker
+                        v-model="form.royalty_expired_at"
+                        placeholder="select"
+                    />
+                </el-form-item>
+                <el-form-item label="Price" prop="price">
+                    <Input
+                        v-model="form.price"
+                        :append="symbol.toUpperCase()"
+                    />
+                </el-form-item>
+                <el-form-item label="Description" prop="details">
+                    <Textarea
+                        v-model="form.details"
+                        :maxRows="5"
+                        :minRows="5"
+                        :rows="5"
+                    />
+                </el-form-item>
+                <el-form-item label="Refungible" required style="width: 100%">
+                    <div class="split-body" style="height: 45px">
+                        <Radio
+                            v-model="splitType"
+                            :list="splitList"
+                            style="width: 30%"
+                        />
+                        <div v-if="splitType == 'multiple'" style="width: 70%">
+                            <Select
+                                v-model="form.refungible_decimal"
+                                :options="refungibleList"
+                                optionKey="value"
+                                optionLabel="value"
+                                optionValue="value"
+                                placeholder="select"
+                                style="210px"
+                            ></Select>
+                            <span
+                                style="
+                                    font-size: 17px;
+                                    font-weight: 400;
+                                    margin-left: 30px;
+                                "
+                                >Split into
+                                {{ form.refungible_decimal }} parts</span
+                            >
+                        </div>
+                    </div>
+                </el-form-item>
+                <el-form-item label="Type" required>
+                    <Radio v-model="uploadType" :list="typeList" />
+                </el-form-item>
+                <el-form-item />
+                <div v-if="uploadType == 'art'" class="main-upload-parent">
+                    <el-form-item class="main-upload" label="Main" required>
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_main_file1"
+                        >
+                            <Upload v-model="form.img_main_file1" />
+                        </el-form-item>
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_main_file2"
+                        >
+                            <Upload v-model="form.img_main_file2" />
+                        </el-form-item>
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_main_file3"
+                        >
+                            <Upload v-model="form.img_main_file3" />
+                        </el-form-item>
+                    </el-form-item>
+                </div>
+                <div v-if="uploadType == 'live2d'" class="main-upload-parent">
+                    <el-form-item
+                        class="live2d-upload-form-item"
+                        label="Live2D"
+                        required
+                    >
+                        <File
+                            :fileObject="uploadLive2dFile"
+                            :isLoading="isUploadLive2D"
+                            :upload="uploadZip"
+                        />
+                        <div class="live2d-preview">
+                            <Live2DView
+                                ref="live2d"
+                                :canView="isLive2dUploadDone"
+                                :modelName="uploadLive2dFile.live2d_file"
+                                :path="uploadLive2dFile.live2d_ipfs_url"
+                                height="100%"
+                                width="100%"
+                                @shotCanvas="shotCanvas"
+                            />
+                        </div>
+                    </el-form-item>
+                </div>
+                <el-form-item class="detail-upload" label="Detail">
+                    <div class="detail-box">
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_detail_file1"
+                        >
+                            <Upload v-model="form.img_detail_file1" />
+                        </el-form-item>
+                        <el-form-item
+                            class="textarea-form-item"
+                            prop="img_detail_file1_desc"
+                        >
+                            <Textarea
+                                v-model="form.img_detail_file1_desc"
+                                :maxRows="10"
+                                :minRows="10"
+                                :rows="10"
+                                placeholder="Enter the Detailed description"
+                            />
+                        </el-form-item>
+                    </div>
+                    <div class="detail-box">
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_detail_file2"
+                        >
+                            <Upload v-model="form.img_detail_file2" />
+                        </el-form-item>
+                        <el-form-item
+                            class="textarea-form-item"
+                            prop="img_detail_file2_desc"
+                        >
+                            <Textarea
+                                v-model="form.img_detail_file2_desc"
+                                :maxRows="10"
+                                :minRows="10"
+                                :rows="10"
+                                placeholder="Enter the Detailed description"
+                            />
+                        </el-form-item>
+                    </div>
+                    <div class="detail-box">
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_detail_file3"
+                        >
+                            <Upload v-model="form.img_detail_file3" />
+                        </el-form-item>
+                        <el-form-item
+                            class="textarea-form-item"
+                            prop="img_detail_file3_desc"
+                        >
+                            <Textarea
+                                v-model="form.img_detail_file3_desc"
+                                :maxRows="10"
+                                :minRows="10"
+                                :rows="10"
+                                placeholder="Enter the Detailed description"
+                            />
+                        </el-form-item>
+                    </div>
+                    <div class="detail-box">
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_detail_file4"
+                        >
+                            <Upload v-model="form.img_detail_file4" />
+                        </el-form-item>
+                        <el-form-item
+                            class="textarea-form-item"
+                            prop="img_detail_file4_desc"
+                        >
+                            <Textarea
+                                v-model="form.img_detail_file4_desc"
+                                :maxRows="10"
+                                :minRows="10"
+                                :rows="10"
+                                placeholder="Enter the Detailed description"
+                            />
+                        </el-form-item>
+                    </div>
+                    <div class="detail-box">
+                        <el-form-item
+                            class="upload-form-item"
+                            prop="img_detail_file5"
+                        >
+                            <Upload v-model="form.img_detail_file5" />
+                        </el-form-item>
+                        <el-form-item
+                            class="textarea-form-item"
+                            prop="img_detail_file5_desc"
+                        >
+                            <Textarea
+                                v-model="form.img_detail_file5_desc"
+                                :maxRows="10"
+                                :minRows="10"
+                                :rows="10"
+                                placeholder="Enter the Detailed description"
+                            />
+                        </el-form-item>
+                    </div>
+                </el-form-item>
+                <el-form-item style="width: 100%">
+                    <el-button
+                        v-loading="isSubmiting"
+                        class="submit-button"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        element-loading-spinner="el-icon-loading"
+                        type="primary"
+                        @click="onSubmit"
+                        >Upload
+                    </el-button>
+                    <el-button
+                        class="cancel-button"
+                        @click="$router.push('/account')"
+                        >Cancel
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="mobile">
+            <el-form
+                ref="form"
+                :model="form"
+                :rules="rules"
+                class="mobile"
+                label-position="left"
+                label-width="130px"
+            >
+                <el-form-item label="Name" prop="name">
+                    <Input v-model="form.name" />
+                </el-form-item>
+                <el-form-item label="Category" prop="category_id">
+                    <Select
+                        v-model="form.category_id"
+                        :options="categories"
+                        optionKey="id"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="select"
+                    ></Select>
+                </el-form-item>
+                <el-form-item label="Theme" prop="theme_id">
+                    <Select
+                        v-model="form.theme_id"
+                        :options="themes"
+                        optionKey="id"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="select"
+                    ></Select>
+                </el-form-item>
+                <el-form-item label="Material" prop="material_id">
+                    <Select
+                        v-model="form.material_id"
+                        :options="materials"
+                        optionKey="id"
+                        optionLabel="title"
+                        optionValue="id"
+                        placeholder="select"
+                    ></Select>
+                </el-form-item>
+                <el-form-item label="Date" prop="produce_at">
+                    <DatePicker
+                        v-model="form.produce_at"
+                        placeholder="select"
+                    />
+                </el-form-item>
+                <el-form-item label="Size X" required prop="size_length">
+                    <Input
+                        v-model="form.size_length"
                         class="size-input"
                         style="margin-right: 10px"
-                        v-model="form.size_length"
+                        append="cm"
                         type="number"
                     />
                 </el-form-item>
-                cm X
-                <el-form-item class="size-width" prop="size_width">
+                <el-form-item label="Size Y" prop="size_width" required>
                     <Input
+                        v-model="form.size_width"
                         class="size-input"
                         style="margin-left: 10px; margin-right: 10px"
-                        v-model="form.size_width"
                         type="number"
+                        append="cm"
                     />
                 </el-form-item>
-                cm
-            </el-form-item>
-            <el-form-item label="Royalty" prop="royalty">
-                <Input
-                    style="width: 140px"
-                    v-model="form.royalty"
-                    type="number"
-                    append="%"
-                />
-            </el-form-item>
-            <el-form-item label="Royalty Date" prop="royalty_expired_at">
-                <DatePicker
-                    v-model="form.royalty_expired_at"
-                    placeholder="select"
-                />
-            </el-form-item>
-            <el-form-item label="Price" prop="price">
-                <Input v-model="form.price" :append="symbol.toUpperCase()" />
-            </el-form-item>
-            <el-form-item label="Description" prop="details">
-                <Textarea
-                    v-model="form.details"
-                    :minRows="5"
-                    :maxRows="5"
-                    :rows="5"
-                />
-            </el-form-item>
-            <el-form-item label="Refungible" required style="width: 100%">
-                <div class="split-body" style="height: 45px">
-                    <Radio
-                        style="width: 30%"
-                        v-model="splitType"
-                        :list="splitList"
+                <el-form-item label="Royalty" prop="royalty">
+                    <Input v-model="form.royalty" append="%" type="number" />
+                </el-form-item>
+                <el-form-item label="Royalty Date" prop="royalty_expired_at">
+                    <DatePicker
+                        v-model="form.royalty_expired_at"
+                        placeholder="select"
                     />
-                    <div v-if="splitType == 'multiple'" style="width: 70%">
-                        <Select
-                            style="210px"
-                            v-model="form.refungible_decimal"
-                            placeholder="select"
-                            :options="refungibleList"
-                            optionLabel="value"
-                            optionValue="value"
-                            optionKey="value"
-                        ></Select>
-                        <span
-                            style="
-                                font-size: 17px;
-                                font-weight: 400;
-                                margin-left: 30px;
-                            "
-                            >Split into
-                            {{ form.refungible_decimal }} parts</span
-                        >
-                    </div>
-                </div>
-            </el-form-item>
-            <el-form-item label="Type" required>
-                <Radio v-model="uploadType" :list="typeList" />
-            </el-form-item>
-            <el-form-item />
-            <div v-if="uploadType == 'art'" class="main-upload-parent">
-                <el-form-item class="main-upload" required label="Main">
+                </el-form-item>
+                <el-form-item label="Price" prop="price">
+                    <Input
+                        v-model="form.price"
+                        :append="symbol.toUpperCase()"
+                    />
+                </el-form-item>
+                <el-form-item label="Description" prop="details">
+                    <Textarea
+                        v-model="form.details"
+                        :maxRows="5"
+                        :minRows="5"
+                        :rows="5"
+                    />
+                </el-form-item>
+                <el-form-item label="Refungible" required>
+                    <el-radio
+                        v-model="splitType"
+                        :label="v"
+                        v-for="(v, i) in splitList"
+                        :key="i"
+                    >
+                        {{ v }}
+                    </el-radio>
+                </el-form-item>
+                <el-form-item v-if="splitType == 'multiple'" label="Parts">
+                    <Select
+                        v-model="form.refungible_decimal"
+                        :options="refungibleList"
+                        optionKey="value"
+                        optionLabel="value"
+                        optionValue="value"
+                        placeholder="select"
+                    ></Select>
+                    <span
+                        style="
+                            font-size: 13px;
+                            font-weight: 400;
+                            margin-left: 0;
+                        "
+                    >
+                        Split into {{ form.refungible_decimal }} parts
+                    </span>
+                </el-form-item>
+                <el-form-item label="Type" required>
+                    <el-radio
+                        v-model="uploadType"
+                        :label="v"
+                        v-for="(v, i) in typeList"
+                        :key="i"
+                    >
+                        {{ v }}
+                    </el-radio>
+                </el-form-item>
+                <el-form-item />
+                <div v-if="uploadType == 'art'" class="main-upload-parent">
                     <el-form-item
+                        label="Main"
                         class="upload-form-item"
                         prop="img_main_file1"
                     >
@@ -143,151 +446,151 @@
                     >
                         <Upload v-model="form.img_main_file3" />
                     </el-form-item>
-                </el-form-item>
-            </div>
-            <div v-if="uploadType == 'live2d'" class="main-upload-parent">
-                <el-form-item
-                    class="live2d-upload-form-item"
-                    required
-                    label="Live2D"
-                >
-                    <File
-                        :isLoading="isUploadLive2D"
-                        :fileObject="uploadLive2dFile"
-                        :upload="uploadZip"
-                    />
-                    <div class="live2d-preview">
-                        <Live2DView
-                            width="100%"
-                            height="100%"
-                            ref="live2d"
-                            @shotCanvas="shotCanvas"
-                            :canView="isLive2dUploadDone"
-                            :path="uploadLive2dFile.live2d_ipfs_url"
-                            :modelName="uploadLive2dFile.live2d_file"
+                </div>
+                <div v-if="uploadType == 'live2d'" class="main-upload-parent">
+                    <el-form-item
+                        class="live2d-upload-form-item"
+                        label="Live2D"
+                        required
+                    >
+                        <File
+                            :fileObject="uploadLive2dFile"
+                            :isLoading="isUploadLive2D"
+                            :upload="uploadZip"
                         />
+                        <div class="live2d-preview">
+                            <Live2DView
+                                ref="live2d"
+                                :canView="isLive2dUploadDone"
+                                :modelName="uploadLive2dFile.live2d_file"
+                                :path="uploadLive2dFile.live2d_ipfs_url"
+                                height="100%"
+                                width="100%"
+                                @shotCanvas="shotCanvas"
+                            />
+                        </div>
+                    </el-form-item>
+                </div>
+                <el-form-item class="detail-upload" label="Detail">
+                    <div class="detail-box">
+                        <!--                        <el-form-item-->
+                        <!--                            class="upload-form-item"-->
+                        <!--                            prop="img_detail_file1"-->
+                        <!--                        >-->
+                        <Upload v-model="form.img_detail_file1" />
+                        <!--                        </el-form-item>-->
+                        <!--                        <el-form-item-->
+                        <!--                            class="textarea-form-item"-->
+                        <!--                            prop="img_detail_file1_desc"-->
+                        <!--                        >-->
+                        <Textarea
+                            v-model="form.img_detail_file1_desc"
+                            :maxRows="10"
+                            :minRows="10"
+                            :rows="10"
+                            placeholder="Enter the Detailed description"
+                        />
+                        <!--                        </el-form-item>-->
+                    </div>
+                    <div class="detail-box">
+                        <!--                        <el-form-item-->
+                        <!--                            class="upload-form-item"-->
+                        <!--                            prop="img_detail_file2"-->
+                        <!--                        >-->
+                        <Upload v-model="form.img_detail_file2" />
+                        <!--                        </el-form-item>-->
+                        <!--                        <el-form-item-->
+                        <!--                            class="textarea-form-item"-->
+                        <!--                            prop="img_detail_file2_desc"-->
+                        <!--                        >-->
+                        <Textarea
+                            v-model="form.img_detail_file2_desc"
+                            :maxRows="10"
+                            :minRows="10"
+                            :rows="10"
+                            placeholder="Enter the Detailed description"
+                        />
+                        <!--                        </el-form-item>-->
+                    </div>
+                    <div class="detail-box">
+                        <!--                        <el-form-item-->
+                        <!--                            class="upload-form-item"-->
+                        <!--                            prop="img_detail_file3"-->
+                        <!--                        >-->
+                        <Upload v-model="form.img_detail_file3" />
+                        <!--                        </el-form-item>-->
+                        <!--                        <el-form-item-->
+                        <!--                            class="textarea-form-item"-->
+                        <!--                            prop="img_detail_file3_desc"-->
+                        <!--                        >-->
+                        <Textarea
+                            v-model="form.img_detail_file3_desc"
+                            :maxRows="10"
+                            :minRows="10"
+                            :rows="10"
+                            placeholder="Enter the Detailed description"
+                        />
+                        <!--                        </el-form-item>-->
+                    </div>
+                    <div class="detail-box">
+                        <!--                        <el-form-item-->
+                        <!--                            class="upload-form-item"-->
+                        <!--                            prop="img_detail_file4"-->
+                        <!--                        >-->
+                        <Upload v-model="form.img_detail_file4" />
+                        <!--                        </el-form-item>-->
+                        <!--                        <el-form-item-->
+                        <!--                            class="textarea-form-item"-->
+                        <!--                            prop="img_detail_file4_desc"-->
+                        <!--                        >-->
+                        <Textarea
+                            v-model="form.img_detail_file4_desc"
+                            :maxRows="10"
+                            :minRows="10"
+                            :rows="10"
+                            placeholder="Enter the Detailed description"
+                        />
+                        <!--                        </el-form-item>-->
+                    </div>
+                    <div class="detail-box">
+                        <!--                        <el-form-item-->
+                        <!--                            class="upload-form-item"-->
+                        <!--                            prop="img_detail_file5"-->
+                        <!--                        >-->
+                        <Upload v-model="form.img_detail_file5" />
+                        <!--                        </el-form-item>-->
+                        <!--                        <el-form-item-->
+                        <!--                            class="textarea-form-item"-->
+                        <!--                            prop="img_detail_file5_desc"-->
+                        <!--                        >-->
+                        <Textarea
+                            v-model="form.img_detail_file5_desc"
+                            :maxRows="10"
+                            :minRows="10"
+                            :rows="10"
+                            placeholder="Enter the Detailed description"
+                        />
+                        <!--                        </el-form-item>-->
                     </div>
                 </el-form-item>
-            </div>
-            <el-form-item class="detail-upload" label="Detail">
-                <div class="detail-box">
-                    <el-form-item
-                        class="upload-form-item"
-                        prop="img_detail_file1"
-                    >
-                        <Upload v-model="form.img_detail_file1" />
-                    </el-form-item>
-                    <el-form-item
-                        class="textarea-form-item"
-                        prop="img_detail_file1_desc"
-                    >
-                        <Textarea
-                            placeholder="Enter the Detailed description"
-                            v-model="form.img_detail_file1_desc"
-                            :rows="10"
-                            :minRows="10"
-                            :maxRows="10"
-                        />
-                    </el-form-item>
-                </div>
-                <div class="detail-box">
-                    <el-form-item
-                        class="upload-form-item"
-                        prop="img_detail_file2"
-                    >
-                        <Upload v-model="form.img_detail_file2" />
-                    </el-form-item>
-                    <el-form-item
-                        class="textarea-form-item"
-                        prop="img_detail_file2_desc"
-                    >
-                        <Textarea
-                            placeholder="Enter the Detailed description"
-                            v-model="form.img_detail_file2_desc"
-                            :rows="10"
-                            :minRows="10"
-                            :maxRows="10"
-                        />
-                    </el-form-item>
-                </div>
-                <div class="detail-box">
-                    <el-form-item
-                        class="upload-form-item"
-                        prop="img_detail_file3"
-                    >
-                        <Upload v-model="form.img_detail_file3" />
-                    </el-form-item>
-                    <el-form-item
-                        class="textarea-form-item"
-                        prop="img_detail_file3_desc"
-                    >
-                        <Textarea
-                            placeholder="Enter the Detailed description"
-                            v-model="form.img_detail_file3_desc"
-                            :rows="10"
-                            :minRows="10"
-                            :maxRows="10"
-                        />
-                    </el-form-item>
-                </div>
-                <div class="detail-box">
-                    <el-form-item
-                        class="upload-form-item"
-                        prop="img_detail_file4"
-                    >
-                        <Upload v-model="form.img_detail_file4" />
-                    </el-form-item>
-                    <el-form-item
-                        class="textarea-form-item"
-                        prop="img_detail_file4_desc"
-                    >
-                        <Textarea
-                            placeholder="Enter the Detailed description"
-                            v-model="form.img_detail_file4_desc"
-                            :rows="10"
-                            :minRows="10"
-                            :maxRows="10"
-                        />
-                    </el-form-item>
-                </div>
-                <div class="detail-box">
-                    <el-form-item
-                        class="upload-form-item"
-                        prop="img_detail_file5"
-                    >
-                        <Upload v-model="form.img_detail_file5" />
-                    </el-form-item>
-                    <el-form-item
-                        class="textarea-form-item"
-                        prop="img_detail_file5_desc"
-                    >
-                        <Textarea
-                            placeholder="Enter the Detailed description"
-                            v-model="form.img_detail_file5_desc"
-                            :rows="10"
-                            :minRows="10"
-                            :maxRows="10"
-                        />
-                    </el-form-item>
-                </div>
-            </el-form-item>
-            <el-form-item style="width: 100%">
-                <el-button
-                    class="submit-button"
-                    type="primary"
-                    @click="onSubmit"
-                    v-loading="isSubmiting"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)"
-                    >Upload</el-button
-                >
-                <el-button
-                    class="cancel-button"
-                    @click="$router.push('/account')"
-                    >Cancel</el-button
-                >
-            </el-form-item>
-        </el-form>
+                <el-form-item>
+                    <el-button
+                        v-loading="isSubmiting"
+                        class="submit-button"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        element-loading-spinner="el-icon-loading"
+                        type="primary"
+                        @click="onSubmit"
+                        >Upload
+                    </el-button>
+                    <el-button
+                        class="cancel-button"
+                        @click="$router.push('/account')"
+                        >Cancel
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
     </div>
 </template>
 <script>
@@ -673,22 +976,24 @@ export default {
     }
     padding: 70px 0px 40px;
     text-align: left;
+
     > .title {
         @media screen and (max-width: 970px) {
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 30px;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
-        text-align: left;
+        text-align: center;
         color: #020202;
         letter-spacing: 2px;
         text-transform: uppercase;
         margin-bottom: 83px;
     }
 }
+
 .el-form {
     width: 100%;
     display: flex;
@@ -697,18 +1002,21 @@ export default {
         flex-direction: column;
     }
 }
+
 .el-form-item {
     width: 40%;
     @media screen and (max-width: 970px) {
-        width: 98%;
-        margin-bottom: 40px;
+        width: 100%;
+        margin-bottom: 20px;
         margin-right: 0;
     }
     margin-right: 10%;
     margin-bottom: 50px;
+
     ::v-deep .el-form-item__label {
         @media screen and (max-width: 970px) {
             width: 30% !important;
+            font-size: 15px;
         }
         font-size: 17px;
         font-weight: 400;
@@ -716,12 +1024,17 @@ export default {
         color: #020202;
         letter-spacing: 0;
     }
+
     ::v-deep .el-form-item__content {
         @media screen and (max-width: 970px) {
             width: 70% !important;
             margin-left: 30% !important;
+            > div {
+                width: 90%;
+            }
         }
     }
+
     .size-input {
         @media screen and (max-width: 970px) {
             width: 100%;
@@ -731,6 +1044,7 @@ export default {
         margin: 0 !important;
     }
 }
+
 .size-form-item {
     .size-length,
     .size-width {
@@ -743,6 +1057,7 @@ export default {
         margin-right: 10px;
         display: inline-block;
         margin-bottom: 0;
+
         ::v-deep .el-form-item__content {
             @media screen and (max-width: 970px) {
                 margin-left: 0 !important;
@@ -750,6 +1065,7 @@ export default {
             }
         }
     }
+
     ::v-deep .el-form-item__content {
         @media screen and (max-width: 970px) {
             position: relative;
@@ -764,8 +1080,10 @@ export default {
         letter-spacing: 0px;
     }
 }
+
 .main-upload {
     width: 100%;
+
     ::v-deep .el-form-item__content {
         display: flex;
         align-items: center;
@@ -774,6 +1092,7 @@ export default {
             flex-direction: column;
         }
     }
+
     .uni-upload {
         @media screen and (max-width: 970px) {
             width: 100%;
@@ -781,12 +1100,14 @@ export default {
         }
         width: 300px;
     }
+
     .upload-form-item {
         ::v-deep .el-form-item__content {
             @media screen and (max-width: 970px) {
                 margin-left: 0 !important;
             }
         }
+
         @media screen and (max-width: 970px) {
             width: 100%;
             position: relative;
@@ -795,52 +1116,73 @@ export default {
         margin-right: 0;
         margin-bottom: 0;
     }
+
     .textarea-form-item {
         margin-right: 0;
         width: calc(100% - 300px);
     }
 }
+
 .live2d-upload-form-item {
     width: 100%;
+
     ::v-deep .el-form-item__content {
         display: flex;
         align-items: flex-start;
     }
+
     .live2d-preview {
         width: 500px;
         height: 500px;
         background: white;
         border: 2px solid #020202;
     }
+
     .upload-form-item {
         @media screen and (max-width: 970px) {
             margin-bottom: 20px;
         }
     }
+
     .uni-file {
         width: 300px;
     }
 }
+
 .detail-upload {
     width: 100%;
+
     .detail-box {
         ::v-deep .el-form-item__content {
             @media screen and (max-width: 970px) {
                 margin-left: 0 !important;
             }
         }
+        ::v-deep .el-textarea {
+            @media screen and (max-width: 970px) {
+                height: 200px;
+            }
+            .el-textarea__inner {
+                height: 100% !important;
+                min-height: unset !important;
+            }
+        }
+
         @media screen and (max-width: 970px) {
-            flex-direction: column;
+            flex-direction: row;
+            margin-bottom: 15px;
         }
         width: 100%;
         display: flex;
         align-items: center;
+
         .uni-upload {
             @media screen and (max-width: 970px) {
-                width: 100%;
+                width: 40%;
                 position: relative;
             }
         }
+
         .upload-form-item {
             @media screen and (max-width: 970px) {
                 width: 100%;
@@ -849,6 +1191,7 @@ export default {
             width: 300px;
             margin-right: 0;
         }
+
         .textarea-form-item {
             margin-right: 0;
             width: calc(100% - 300px);
@@ -859,6 +1202,7 @@ export default {
         }
     }
 }
+
 .split-body {
     display: flex;
     align-items: flex-start;
@@ -867,6 +1211,8 @@ export default {
 .el-button.cancel-button {
     @media screen and (max-width: 970px) {
         width: 40%;
+        height: unset;
+        font-size: 16px;
     }
     height: 65px;
     width: 300px;
@@ -878,13 +1224,17 @@ export default {
     text-align: center;
     color: #020202;
     letter-spacing: 0px;
+
     ::v-deep .el-loading-spinner {
         margin-top: -7px;
     }
 }
+
 .el-button.submit-button {
     @media screen and (max-width: 970px) {
         width: 40%;
+        height: unset;
+        font-size: 16px;
     }
     height: 65px;
     width: 300px;
@@ -896,14 +1246,37 @@ export default {
     text-align: center;
     color: #ffffff;
     letter-spacing: 0;
+
     ::v-deep .el-loading-spinner {
         margin-top: -7px;
     }
 }
+
 .main-upload-parent {
     @media screen and (max-width: 970px) {
         position: relative;
         width: 100%;
+    }
+}
+@media screen and (max-width: 970px) {
+    .el-radio {
+        ::v-deep .el-radio__label {
+            font-size: 17px;
+            font-weight: 400;
+            color: #020202;
+            letter-spacing: 0px;
+        }
+        ::v-deep .el-radio__inner::after {
+            background-color: transparent;
+        }
+        ::v-deep .el-radio__inner.is-checked {
+            background-color: #020202;
+            border-color: #020202;
+        }
+
+        ::v-deep .el-radio__inner {
+            border-color: #b7b7b7;
+        }
     }
 }
 </style>

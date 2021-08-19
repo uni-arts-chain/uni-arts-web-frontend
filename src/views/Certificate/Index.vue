@@ -149,7 +149,14 @@ export default {
 
 .sign-item {
     margin-top: 109px;
+    @media screen and (max-width: 970px) {
+        margin-top: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;

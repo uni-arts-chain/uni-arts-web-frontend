@@ -269,6 +269,10 @@ export default {
         margin: 0;
         min-width: 200px;
         min-height: 200px;
+        @media screen and (max-width: 970px) {
+            min-width: 90%;
+            min-height: 100px;
+        }
     }
     ::v-deep .el-dialog__body {
         padding: 0;

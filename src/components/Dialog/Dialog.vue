@@ -102,6 +102,9 @@ export default {
         background: #ffffff;
         box-shadow: 0px 5px 31px 0px rgba(135, 135, 135, 0.73);
         padding: 10px 100px 66px;
+        @media screen and (max-width: 970px) {
+            padding: 10px;
+        }
     }
     ::v-deep .el-dialog .el-dialog__header {
         padding: 0;

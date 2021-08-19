@@ -3,11 +3,11 @@
     <div class="info">
         <div class="title">{{ art.name }}</div>
         <div class="price">
-            {{ art.price ? art.price : 0 }}
+            <span>{{ art.price ? art.price : 0 }}</span>
             {{ $store.getters["art/currencyCode"].toUpperCase() }}
         </div>
-        <div class="intro">
-            <div v-if="isSeparable && separableOrderInfo.total > 0">
+        <div class="intro" v-if="isSeparable && separableOrderInfo.total > 0">
+            <div>
                 On-sale:
                 <span style="font-weight: 500"
                     >{{ separableOrderInfo.total }} /
@@ -61,14 +61,13 @@
         <div class="signature" style="min-height: 28px">
             Number of signatures: {{ signatureList.length }}
         </div>
-        <div class="royalty">
-            <span v-if="art.has_royalty"
-                >Royalty: {{ percentFormat(art.royalty) }}%</span
-            >
-            <span v-if="art.has_royalty"
-                >Royalty Date:
-                {{ art.royalty_expired_at | dateDayFormat }}</span
-            >
+        <div class="royalty" v-if="art.has_royalty">
+            <span v-if="art.has_royalty">
+                Royalty: {{ percentFormat(art.royalty) }}%
+            </span>
+            <span v-if="art.has_royalty">
+                Royalty Date:{{ art.royalty_expired_at | dateDayFormat }}
+            </span>
         </div>
         <div class="function" :class="{ separable: !isOwner && isSeparable }">
             <div class="action-item">
@@ -401,7 +400,9 @@ export default {
 .info {
     @media screen and (max-width: 970px) {
         width: 100%;
-        margin-bottom: 30px;
+        margin-bottom: 0;
+        margin-left: 5%;
+        float: none;
     }
     float: left;
     width: calc(100% - 620px - 50px);
@@ -412,6 +413,7 @@ export default {
         @media screen and (max-width: 970px) {
             width: 100%;
             font-size: 24px;
+            margin-bottom: 0px;
         }
         font-size: 48px;
         font-family: "Broadway";
@@ -423,9 +425,13 @@ export default {
     }
 
     .price {
+        span {
+            color: red;
+        }
         @media screen and (max-width: 970px) {
             width: 100%;
             font-size: 19px;
+            margin-bottom: 0px;
         }
         font-size: 24px;
         font-weight: 600;
@@ -439,6 +445,7 @@ export default {
             width: 100%;
             font-size: 15px;
             margin-bottom: 15px;
+            margin-bottom: 0px;
         }
         min-height: 23px;
         font-size: 20px;
@@ -452,6 +459,7 @@ export default {
         @media screen and (max-width: 970px) {
             width: 100%;
             font-size: 20px;
+            margin-bottom: 0px;
         }
         font-size: 26px;
         font-weight: 600;
@@ -464,6 +472,7 @@ export default {
         @media screen and (max-width: 970px) {
             width: 100%;
             font-size: 15px;
+            margin-bottom: 0px;
         }
         font-size: 20px;
         font-weight: 400;
@@ -535,6 +544,9 @@ export default {
         display: flex;
         align-items: center;
         margin-bottom: 35px;
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+        }
         .action-item {
             margin-right: 35px;
             display: flex;

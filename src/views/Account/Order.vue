@@ -205,6 +205,7 @@ export default {
     margin-bottom: 35px;
     @media screen and (max-width: 970px) {
         width: 90%;
+        margin-left: 5%;
     }
 }
 .art-item:nth-child(3n) {

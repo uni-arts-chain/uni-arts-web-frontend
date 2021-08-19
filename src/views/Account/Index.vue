@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="menu-container">
+                <div class="menu-container pc">
                     <ul class="menu">
                         <li>
                             <router-link to="/account/profile"
@@ -265,7 +265,15 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+            justify-content: space-around;
+        }
         .option-title {
+            @media screen and (max-width: 970px) {
+                font-size: 16px;
+                margin: 0;
+            }
             font-size: 20px;
             font-weight: 400;
             letter-spacing: 0px;
@@ -358,11 +366,17 @@ export default {
             margin-right: 40px;
             margin-left: 30px;
             margin-bottom: 41px;
+            @media screen and (max-width: 970px) {
+                margin-bottom: 5px;
+            }
         }
         .profile-info {
             display: flex;
             flex-direction: column;
             .name {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                }
                 font-size: 22px;
                 font-weight: 600;
                 letter-spacing: 0px;
@@ -374,6 +388,9 @@ export default {
                 white-space: nowrap;
             }
             .score {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                }
                 font-size: 22px;
                 font-weight: 400;
                 letter-spacing: 0px;
@@ -382,6 +399,9 @@ export default {
                 align-items: center;
             }
             .balance {
+                @media screen and (max-width: 970px) {
+                    font-size: 15px;
+                }
                 font-size: 20px;
                 font-weight: 400;
                 letter-spacing: 0px;

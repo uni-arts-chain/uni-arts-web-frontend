@@ -333,7 +333,8 @@ export default {
 .index {
     padding-top: 60px;
     @media screen and (max-width: 970px) {
-        padding-top: 30px;
+        padding-top: 0px;
+        margin-top: 10px;
     }
 }
 .container {
@@ -346,7 +347,7 @@ h2.title {
     text-transform: uppercase;
     margin-bottom: 60px;
     @media screen and (max-width: 970px) {
-        font-size: 34px;
+        font-size: 24px;
         margin-bottom: 30px;
     }
 }
@@ -356,7 +357,7 @@ h2.title {
     text-align: left;
     margin-bottom: 60px;
     @media screen and (max-width: 970px) {
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         text-align: center;
     }
     > img {
@@ -368,13 +369,19 @@ h2.title {
         top: 50%;
         transform: translateY(-50%);
         @media screen and (max-width: 970px) {
-            left: calc(77% - 15px);
+            left: calc(89% - 15px);
+            width: 25px;
+            height: 25px;
         }
     }
     .input {
         width: 900px;
         @media screen and (max-width: 970px) {
-            width: 70%;
+            width: 90%;
+            height: 34px;
+            margin-left: 5%;
+            margin-right: 5%;
+            font-size: 15px;
         }
         height: 69px;
         font-size: 22px;
@@ -390,6 +397,9 @@ h2.title {
         display: flex;
         @media screen and (max-width: 970px) {
             flex-wrap: wrap;
+            margin-bottom: 10px;
+            margin-left: 5%;
+            margin-right: 1%;
         }
         justify-content: flex-start;
         align-items: center;
@@ -403,7 +413,8 @@ h2.title {
         color: #606060;
         cursor: pointer;
         @media screen and (max-width: 970px) {
-            margin: 0 20px;
+            margin: 0 4% 0 0;
+            font-size: 15px;
         }
     }
     .name-item.active {
@@ -419,7 +430,9 @@ h2.title {
         align-items: center;
         margin-bottom: 71px;
         @media screen and (max-width: 970px) {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            margin-left: 5%;
+            margin-right: 1%;
         }
     }
     .catetory-item {
@@ -435,8 +448,11 @@ h2.title {
         color: #606060;
         cursor: pointer;
         @media screen and (max-width: 970px) {
-            margin: 5px 12px;
-            padding: 3px 0;
+            margin-right: 4%;
+            margin-bottom: 5px;
+            padding: 3px;
+            min-width: unset;
+            font-size: 15px;
         }
     }
     .catetory-item.active {
@@ -450,6 +466,9 @@ h2.title {
 }
 
 .content {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 0px;
+    }
     margin-bottom: 100px;
     min-height: 100px;
 }

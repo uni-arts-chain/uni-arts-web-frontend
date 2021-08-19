@@ -2,7 +2,7 @@
 <template>
     <div class="profile container">
         <div class="title">Personal Account</div>
-        <div class="body">
+        <div class="body pc">
             <el-form
                 ref="form"
                 :model="form"
@@ -177,6 +177,193 @@
                     </button>
                 </el-form-item>
                 <el-form-item style="width: 100%" label-width="190px">
+                    <el-button
+                        class="submit-button"
+                        type="primary"
+                        @click="onSubmit"
+                        v-loading="isSubmiting"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.8)"
+                        >Save</el-button
+                    >
+                    <el-button
+                        class="cancel-button"
+                        @click="$router.push('/account')"
+                        >Cancel</el-button
+                    >
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="body mobile">
+            <el-form
+                ref="form"
+                :model="form"
+                @submit.prevent="onSubmit"
+                :rules="rules"
+                label-position="right"
+            >
+                <el-form-item
+                    label="Head image"
+                    prop="avatar"
+                    label-width="190px"
+                    class="avatar-form-item"
+                >
+                    <div class="avatar" @click="uploadAvatar">
+                        <AdaptiveImage
+                            :url="
+                                form.avatar.length > 0 ? form.avatar[2] : yin_2x
+                            "
+                        />
+                        <div class="mask">Upload</div>
+                        <Upload
+                            ref="upload"
+                            v-show="false"
+                            v-model="form.avatar"
+                        />
+                    </div>
+                    <button
+                        v-if="form.avatar.length <= 0"
+                        @click.prevent="uploadAvatar"
+                    >
+                        choose
+                    </button>
+                </el-form-item>
+                <el-form-item
+                    class="gender-form-item"
+                    label="Gender"
+                    label-width="251px"
+                    prop="sex"
+                >
+                    <el-radio v-model="form.sex" label="1">Men</el-radio>
+                    <el-radio v-model="form.sex" label="2">Women</el-radio>
+                </el-form-item>
+                <el-form-item
+                    label="Nickname"
+                    prop="display_name"
+                    label-width="190px"
+                >
+                    <Input v-model="form.display_name" />
+                </el-form-item>
+                <el-form-item
+                    label="Phone"
+                    prop="phone_number"
+                    label-width="190px"
+                >
+                    <Input
+                        :disabled="isActivedPhone"
+                        v-model="form.phone_number"
+                        type="number"
+                    />
+                </el-form-item>
+                <el-form-item
+                    prop="token"
+                    v-if="!isActivedPhone"
+                    label-width="190px"
+                >
+                    <Input
+                        class="code-number"
+                        placeholder="Code"
+                        v-model="form.token"
+                        type="number"
+                    />
+                    <button
+                        @click.prevent="sendCode"
+                        v-loading="sending"
+                        class="code-send"
+                    >
+                        Send
+                    </button>
+                </el-form-item>
+                <el-form-item
+                    label-width="251px"
+                    v-if="!isActivedPhone"
+                ></el-form-item>
+                <el-form-item
+                    label="College"
+                    prop="college"
+                    label-width="190px"
+                >
+                    <Input v-model="form.college" />
+                </el-form-item>
+                <el-form-item
+                    label="Residential Address"
+                    prop="residential_address"
+                    label-width="251px"
+                >
+                    <Input v-model="form.residential_address" />
+                </el-form-item>
+                <el-form-item
+                    label="Profile"
+                    class="profile-form-item"
+                    label-width="190px"
+                    prop="desc"
+                >
+                    <Textarea
+                        v-model="form.desc"
+                        :minRows="7"
+                        :maxRows="7"
+                        :rows="7"
+                    />
+                </el-form-item>
+                <el-form-item
+                    label="Real name"
+                    prop="real_name"
+                    label-width="190px"
+                >
+                    <Input v-model="form.real_name" />
+                </el-form-item>
+                <el-form-item
+                    label-width="251px"
+                    label="ID Number"
+                    prop="id_document_number"
+                >
+                    <Input v-model="form.id_document_number" type="number" />
+                </el-form-item>
+                <el-form-item
+                    label="Description of Recommendation"
+                    class="desc-form-item"
+                    label-width="190px"
+                    prop="artist_desc"
+                >
+                    <Textarea
+                        v-model="form.artist_desc"
+                        :minRows="7"
+                        :maxRows="7"
+                        :rows="7"
+                    />
+                </el-form-item>
+                <el-form-item
+                    label="Photo image"
+                    prop="recommend_image"
+                    label-width="190px"
+                    class="photo-form-item"
+                >
+                    <div class="photo" @click="uploadPhoto">
+                        <AdaptiveImage
+                            width="133px"
+                            height="176px"
+                            isBorder="false"
+                            :url="
+                                form.recommend_image.length > 0
+                                    ? form.recommend_image[2]
+                                    : photo_image
+                            "
+                        />
+                        <div class="mask">Upload</div>
+                        <Upload
+                            ref="uploadPhoto"
+                            v-show="false"
+                            v-model="form.recommend_image"
+                        />
+                    </div>
+                    <button
+                        v-if="form.recommend_image.length <= 0"
+                        @click.prevent="uploadPhoto"
+                    >
+                        choose
+                    </button>
+                </el-form-item>
+                <el-form-item label-width="190px">
                     <el-button
                         class="submit-button"
                         type="primary"
@@ -499,13 +686,13 @@ export default {
     margin-bottom: 70px;
     > .title {
         @media screen and (max-width: 970px) {
-            font-size: 20px;
+            font-size: 24px;
             margin-bottom: 30px;
         }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
-        text-align: left;
+        text-align: center;
         color: #020202;
         letter-spacing: 2px;
         text-transform: uppercase;
@@ -561,23 +748,31 @@ export default {
     margin-right: 5%;
     margin-bottom: 60px;
     @media screen and (max-width: 970px) {
-        margin-bottom: 10px;
-        margin-right: 2%;
-        width: 98%;
+        margin-bottom: 20px !important;
+        margin-right: 0;
+        width: 100%;
     }
     ::v-deep .el-form-item__content {
         @media screen and (max-width: 970px) {
-            margin-left: 35% !important;
+            margin-left: 40% !important;
+            width: 60%;
+            .el-textarea {
+                width: 90%;
+            }
+            .code-number {
+                width: 50%;
+            }
         }
     }
     ::v-deep .el-form-item__label {
         @media screen and (max-width: 970px) {
             text-align: right !important;
-            font-size: 14px;
-            min-width: 100px !important;
-            max-width: 30% !important;
-            width: 35% !important;
-            padding-right: 20px;
+            font-size: 16px;
+            min-width: unset !important;
+            max-width: unset !important;
+            width: 40% !important;
+            padding-right: 10px;
+            white-space: nowrap;
         }
         font-size: 18px;
         font-weight: 400;
@@ -672,7 +867,7 @@ export default {
 
 .input-box {
     @media screen and (max-width: 970px) {
-        width: unset;
+        width: 90%;
     }
     width: 290px;
 }
