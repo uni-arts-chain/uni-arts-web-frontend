@@ -89,7 +89,7 @@ module.exports = {
                 },
             },
             "/api": {
-                target: "https://app.uniarts.me", // 接口的域名 测试
+                target: "https://app.uniarts.network", // 接口的域名 测试
                 pathRewrite: {
                     "^api": "/api",
                 },

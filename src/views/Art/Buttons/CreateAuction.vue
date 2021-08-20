@@ -218,13 +218,16 @@ export default {
 </script>
 <style lang="scss" scoped>
 .create-auction {
+    @media screen and (max-width: 970px) {
+        margin-right: 5px;
+    }
     > button {
         @media screen and (max-width: 970px) {
             font-size: 15px;
-            padding: 4px 0;
+            padding: 4px;
             border: 2px solid #020202;
             margin-bottom: 5px;
-            width: 40%;
+            width: 100%;
         }
         cursor: pointer;
         border: 3px solid #020202;

@@ -414,9 +414,12 @@ export default {
     }
     .action {
         @media screen and (max-width: 970px) {
-            margin-top: 0px;
-            width: 100%;
-            height: 37px;
+            font-size: 15px;
+            padding: 4px;
+            border: 2px solid #020202;
+            height: unset;
+            width: 50%;
+            margin-top: 3px;
         }
         width: 100%;
         border: 2px solid #020202;

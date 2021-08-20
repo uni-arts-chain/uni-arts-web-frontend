@@ -200,9 +200,10 @@ export default {
     }
     button {
         @media screen and (max-width: 970px) {
-            width: 70%;
-            height: 55px;
-            font-size: 20px;
+            width: unset;
+            height: unset;
+            font-size: 18px;
+            padding: 5px 15px;
         }
         width: 307px;
         height: 75px;

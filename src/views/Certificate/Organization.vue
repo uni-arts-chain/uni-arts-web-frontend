@@ -191,7 +191,10 @@ export default {
         }
         .desc {
             @media screen and (max-width: 970px) {
-                margin-top: 10px;
+                margin-top: 0px;
+                height: auto;
+                font-size: 16px;
+                line-height: 20px;
             }
             height: 112px;
             overflow: hidden;
