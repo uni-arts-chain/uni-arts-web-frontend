@@ -772,7 +772,7 @@ export default {
             max-width: unset !important;
             width: 40% !important;
             padding-right: 10px;
-            white-space: nowrap;
+            //white-space: nowrap;
         }
         font-size: 18px;
         font-weight: 400;
