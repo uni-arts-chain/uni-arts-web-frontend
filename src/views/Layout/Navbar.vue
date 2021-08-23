@@ -332,7 +332,7 @@ nav.dark {
         width: 100%;
         background-position: center;
         height: 100%;
-        background-size: 55% auto;
+        background-size: auto 580%;
     }
     font-family: "Broadway";
     font-size: 34px;

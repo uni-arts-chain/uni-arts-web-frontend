@@ -399,9 +399,10 @@ export default {
 <style lang="scss" scoped>
 .info {
     @media screen and (max-width: 970px) {
-        width: 100%;
+        width: 90%;
         margin-bottom: 0;
         margin-left: 5%;
+        margin-right: 5%;
         float: none;
     }
     float: left;
@@ -519,6 +520,7 @@ export default {
         @media screen and (max-width: 970px) {
             width: 100%;
             font-size: 15px;
+            margin-bottom: 10px;
         }
         font-size: 20px;
         font-weight: 400;
@@ -545,6 +547,7 @@ export default {
         align-items: center;
         margin-bottom: 35px;
         @media screen and (max-width: 970px) {
+            width: calc(90% - 5px);
             margin-bottom: 20px;
         }
         .action-item {
@@ -552,11 +555,17 @@ export default {
             display: flex;
             align-items: center;
             > img {
+                @media screen and (max-width: 970px) {
+                    width: 15px;
+                }
                 width: 20px;
                 margin-right: 10px;
                 cursor: pointer;
             }
             .action-text {
+                @media screen and (max-width: 970px) {
+                    font-size: 16px;
+                }
                 font-size: 17px;
             }
         }
@@ -564,6 +573,9 @@ export default {
 }
 
 .dialog-content {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
     text-align: left;
     letter-spacing: 0px;
@@ -574,16 +586,25 @@ export default {
         margin-bottom: 30px;
     }
     .price {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 25px;
     }
     .number {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         font-size: 24px;
         color: #c61e1e;
     }
     .desc {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
@@ -616,6 +637,11 @@ export default {
         margin-bottom: 25px;
     }
     > button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;
@@ -650,7 +676,11 @@ export default {
     justify-content: space-between;
 
     @media screen and (max-width: 970px) {
-        flex-direction: column;
+        justify-content: unset;
+        display: flex;
+        flex-wrap: unset;
+        flex-basis: unset;
+        flex-direction: row;
     }
 }
 </style>

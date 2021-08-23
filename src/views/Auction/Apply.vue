@@ -505,6 +505,9 @@ export default {
 }
 
 .auction {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
     letter-spacing: 0px;
     text-align: center;
@@ -514,26 +517,42 @@ export default {
         margin-bottom: 30px;
     }
     .price {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+        }
         font-size: 20px;
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 35px;
     }
     .number {
-        font-size: 24px;
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         color: #c61e1e;
     }
     .note {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+        }
         font-size: 20px;
         margin-bottom: 25px;
     }
     .desc {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+        }
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
         min-height: 30px;
     }
     button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;
@@ -567,16 +586,26 @@ export default {
         }
     }
     .el-form {
+        @media screen and (max-width: 970px) {
+            margin: 0 auto 20px;
+        }
         width: 450px;
         margin: 0 auto 60px;
         max-width: 100%;
     }
     .el-form-item {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+        }
         margin-bottom: 30px;
         ::v-deep .el-form-item__content {
             text-align: left;
         }
         ::v-deep .el-form-item__label {
+            @media screen and (max-width: 970px) {
+                font-size: 16px;
+                line-height: 35px;
+            }
             font-size: 17px;
             font-weight: 400;
             line-height: 45px;
@@ -585,6 +614,9 @@ export default {
     .el-date-editor,
     .input-box {
         width: 100%;
+        ::v-deep input {
+            height: 35px;
+        }
     }
 }
 </style>

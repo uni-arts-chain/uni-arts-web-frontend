@@ -333,6 +333,9 @@ export default {
 }
 
 .tag {
+    @media screen and (max-width: 970px) {
+        padding: 2px;
+    }
     border: 2px solid #c3c3c3;
     font-size: 14px;
     font-weight: 400;

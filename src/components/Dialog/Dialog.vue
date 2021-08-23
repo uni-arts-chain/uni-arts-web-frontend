@@ -104,6 +104,7 @@ export default {
         padding: 10px 100px 66px;
         @media screen and (max-width: 970px) {
             padding: 10px;
+            top: 50%;
         }
     }
     ::v-deep .el-dialog .el-dialog__header {
@@ -132,6 +133,11 @@ export default {
     ::v-deep .el-dialog {
         width: 780px;
         min-height: 506px;
+        @media screen and (max-width: 970px) {
+            margin-top: 5px;
+            min-height: unset;
+            width: calc(100% - 20px);
+        }
     }
 }
 
@@ -139,6 +145,10 @@ export default {
     ::v-deep .el-dialog {
         width: 500px;
         min-height: 300px;
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            min-height: unset;
+        }
     }
 }
 

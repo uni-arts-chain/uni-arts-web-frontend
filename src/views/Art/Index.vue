@@ -235,7 +235,7 @@ export default {
 <style lang="scss" scoped>
 .art {
     @media screen and (max-width: 970px) {
-        padding-top: 15px;
+        padding-top: 0px;
     }
     padding-top: 80px;
 }

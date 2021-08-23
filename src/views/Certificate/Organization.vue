@@ -152,11 +152,11 @@ export default {
         .right {
             button {
                 @media screen and (max-width: 970px) {
-                    font-size: 19px;
+                    font-size: 17px;
                     border-width: 2px;
-                    min-width: 150px;
-                    padding-top: 7px;
-                    padding-bottom: 7px;
+                    min-width: 40%;
+                    padding-top: 2px;
+                    padding-bottom: 2px;
                 }
                 cursor: pointer;
                 border: 3px solid black;

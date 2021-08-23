@@ -312,6 +312,9 @@ export default {
     text-align: center;
     color: #020202;
     .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 15px;
+        }
         font-weight: 600;
         margin-bottom: 30px;
     }
@@ -344,6 +347,9 @@ export default {
         position: relative;
         /* margin-bottom: 37px; */
         border: 2px solid #020202;
+        @media screen and (max-width: 970px) {
+            height: 44px;
+        }
         height: 79px;
         .code {
             font-size: 26px;
@@ -359,8 +365,17 @@ export default {
             float: left;
             width: 100%;
             height: 75px;
+            @media screen and (max-width: 970px) {
+                height: 40px;
+            }
             ::v-deep {
                 .el-input__inner {
+                    @media screen and (max-width: 970px) {
+                        width: 90%;
+                        height: 30px;
+                        font-size: 16px;
+                        padding: 0;
+                    }
                     border: none;
                     height: 100%;
                     width: 100%;
@@ -374,14 +389,25 @@ export default {
         }
     }
     .note-info {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
         font-size: 20px;
         margin-bottom: 25px;
     }
     .el-form {
         .el-form-item {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 20px;
+            }
             margin-bottom: 40px;
         }
         .address-form-item {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 20px;
+                margin-top: unset;
+            }
             margin-top: 60px;
             margin-bottom: 100px;
         }
@@ -394,6 +420,11 @@ export default {
         }
     }
     button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;

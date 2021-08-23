@@ -334,7 +334,7 @@ export default {
     padding-top: 60px;
     @media screen and (max-width: 970px) {
         padding-top: 0px;
-        margin-top: 10px;
+        margin-top: 0px;
     }
 }
 .container {

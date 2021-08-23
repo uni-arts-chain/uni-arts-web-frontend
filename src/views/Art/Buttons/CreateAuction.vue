@@ -220,6 +220,7 @@ export default {
 .create-auction {
     @media screen and (max-width: 970px) {
         margin-right: 5px;
+        flex: 1;
     }
     > button {
         @media screen and (max-width: 970px) {

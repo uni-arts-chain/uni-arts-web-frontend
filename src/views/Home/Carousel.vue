@@ -128,6 +128,7 @@ export default {
             };
             let curTime = new Date().getTime() / 1000;
             let time = "";
+            console.log(curTime, item.start_at, item.end_at);
             if (curTime < parseInt(item.start_at)) {
                 time = item.start_at;
                 obj.timeWorkId = setInterval(() => {
@@ -248,6 +249,7 @@ export default {
             @media screen and (max-width: 970px) {
                 margin-bottom: 0;
                 font-size: 16px;
+                line-height: 40px;
             }
             font-size: 24px;
             font-family: "Broadway";
@@ -284,6 +286,10 @@ export default {
         .time-parse {
             @media screen and (max-width: 970px) {
                 margin-bottom: 0;
+                margin-left: 0;
+                max-width: 93%;
+                line-height: 30px;
+                height: 30px;
             }
             font-family: "Broadway";
             display: flex;
@@ -293,6 +299,12 @@ export default {
             .hour,
             .minute,
             .second {
+                @media screen and (max-width: 970px) {
+                    font-size: 16px;
+                    line-height: 30px;
+                    height: 100%;
+                    width: auto;
+                }
                 width: 54px;
                 height: 37px;
                 font-size: 22px;

@@ -243,7 +243,7 @@ export default {
     padding-top: 80px;
     padding-bottom: 80px;
     @media screen and (max-width: 970px) {
-        padding-top: 40px;
+        padding-top: 0px;
         padding-bottom: 40px;
     }
 }

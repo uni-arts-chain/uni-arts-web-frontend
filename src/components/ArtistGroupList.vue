@@ -44,10 +44,11 @@ export default {
 }
 .card {
     @media screen and (max-width: 970px) {
-        width: 40%;
+        width: 90%;
         margin: 0 5%;
         border: 2px solid black;
         border-radius: 8px;
+        height: unset;
     }
     width: 30%;
     height: 364px;
@@ -57,6 +58,9 @@ export default {
     align-items: center;
     justify-content: center;
     .avatar {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+        }
         width: 120px;
         height: 120px;
         overflow: hidden;
@@ -68,6 +72,9 @@ export default {
         border-color: transparent;
     }
     .name {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+        }
         margin-top: 50px;
         font-size: 22px;
         font-weight: 600;
@@ -80,6 +87,9 @@ export default {
         text-transform: uppercase;
     }
     > .desc {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+        }
         margin-top: 29px;
         font-size: 14px;
         font-weight: 400;

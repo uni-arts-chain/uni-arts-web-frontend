@@ -190,6 +190,9 @@ export default {
 }
 
 .tag {
+    @media screen and (max-width: 970px) {
+        padding: 2px;
+    }
     border: 2px solid #c3c3c3;
     font-size: 14px;
     font-weight: 400;
@@ -203,6 +206,9 @@ export default {
 }
 
 .price {
+    span {
+        color: red;
+    }
     font-size: 20px;
     font-weight: 600;
     text-align: left;

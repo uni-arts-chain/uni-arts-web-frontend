@@ -236,6 +236,12 @@ export default {
         position: relative;
 
         .auction-label {
+            @media screen and (max-width: 970px) {
+                height: unset;
+                letter-spacing: unset;
+                font-size: 14px;
+                padding: 5px 10px;
+            }
             position: absolute;
             top: 34px;
             left: 0;
@@ -251,6 +257,12 @@ export default {
         }
 
         .auction-date {
+            @media screen and (max-width: 970px) {
+                height: unset;
+                padding: 5px 5%;
+                letter-spacing: unset;
+                font-size: 14px;
+            }
             width: 100%;
             height: 50px;
             position: absolute;

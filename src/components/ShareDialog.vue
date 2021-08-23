@@ -52,16 +52,27 @@ export default {
 </script>
 <style lang="scss" scoped>
 .share-dialog {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
     text-align: left;
     letter-spacing: 0px;
     text-align: center;
     color: #020202;
     .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 15px;
+        }
         font-weight: 600;
         margin-bottom: 60px;
     }
     > button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;
@@ -81,6 +92,10 @@ export default {
         padding: 25px 35px;
         border-radius: 10px;
         > div {
+            @media screen and (max-width: 970px) {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
             font-size: 20px;
             font-weight: 400;
             text-align: left;

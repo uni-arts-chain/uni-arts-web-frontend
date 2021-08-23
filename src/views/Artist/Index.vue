@@ -169,14 +169,23 @@ export default {
         width: 100%;
         height: 340px;
         background: url("~@/assets/images/ren-bg@2x.png") no-repeat;
-        background-size: 100% auto;
+        @media screen and (max-width: 970px) {
+            background-size: 100% 100%;
+            height: 20vh;
+        }
     }
     .profile {
+        @media screen and (max-width: 970px) {
+            padding-top: 10vh;
+        }
         padding-top: 94px;
         position: relative;
         display: flex;
         justify-content: flex-start;
         .avatar-container {
+            @media screen and (max-width: 970px) {
+                display: none;
+            }
             position: relative;
             overflow: hidden;
             margin-left: 120px;
@@ -192,9 +201,18 @@ export default {
             transform: translateX(-50%) translateY(-50%);
         }
         .info {
+            @media screen and (max-width: 970px) {
+                margin: 0 5%;
+                width: 90%;
+            }
             margin-top: 100px;
             margin-left: 76px;
             .name {
+                @media screen and (max-width: 970px) {
+                    font-size: 18px;
+                    text-align: center;
+                    margin-bottom: 10vh;
+                }
                 font-size: 36px;
                 font-family: "Broadway";
                 font-weight: 400;
@@ -204,6 +222,12 @@ export default {
                 margin-bottom: 157px;
             }
             .intro {
+                @media screen and (max-width: 970px) {
+                    padding: 0px 23px;
+                    font-size: 15px;
+                    font-weight: 400;
+                    max-width: unset;
+                }
                 padding: 20px 78px 0px 78px;
                 font-size: 28px;
                 font-weight: 400;
@@ -213,6 +237,10 @@ export default {
                 max-width: 607px;
             }
             i.quote1 {
+                @media screen and (max-width: 970px) {
+                    width: 20px;
+                    height: 15px;
+                }
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -223,6 +251,10 @@ export default {
                 background-size: 100%;
             }
             i.quote2 {
+                @media screen and (max-width: 970px) {
+                    width: 20px;
+                    height: 15px;
+                }
                 position: absolute;
                 right: 0;
                 bottom: 0;
@@ -241,6 +273,9 @@ export default {
         @media screen and (max-width: 970px) {
             font-size: 24px;
             margin-bottom: 30px;
+            text-align: left;
+            width: 90%;
+            margin-left: 5%;
         }
         text-transform: uppercase;
         font-size: 39px;

@@ -259,7 +259,7 @@ export default {
         @media screen and (max-width: 970px) {
             margin-top: 10px;
             padding: 10px 40px;
-            font-size: 20px;
+            font-size: 16px;
             border: 2px solid black;
         }
     }
