@@ -29,7 +29,7 @@
                 {{ getOrganizationName(v) }}
             </div>
             <div class="price" v-if="type !== 'signature'">
-                {{ getArtPrice(v) || 0 }}
+                <span>{{ getArtPrice(v) || 0 }}</span>
                 {{ $store.state.global.chain.tokenSymbol }}
             </div>
             <div class="date" v-if="type == 'sold' || type == 'bought'">
@@ -46,27 +46,24 @@
                     getArtAasmState(v) == 'prepare' ? '' : `/art/${getArtId(v)}`
                 "
                 class="action"
-                :class="{ disabled: getArtAasmState(v) != 'online' }"
                 v-if="type == 'all' && getArtAasmState(v) != 'prepare'"
             >
                 Auction Now
             </router-link>
+            <!--                :class="{ disabled: getArtAasmState(v) != 'online' }"-->
+
             <!-- <router-link
-                :to="`/account/edit/${v.id}`"
-                class="action"
-                v-else-if="type == 'all' && getArtAasmState(v) == 'prepare'"
-            >
-                Edit
-            </router-link> -->
+              :to="`/account/edit/${v.id}`"
+              class="action"
+              v-else-if="type == 'all' && getArtAasmState(v) == 'prepare'"
+          >
+              Edit
+          </router-link> -->
             <div class="action" v-if="type == 'signature'" @click="show(v)">
                 Check
             </div>
-            <div
-                class="action"
-                v-if="type == 'all'"
-                :class="{ disabled: getArtAasmState(v) != 'online' }"
-                @click="show(v)"
-            >
+            <div class="action" v-if="type == 'all'" @click="show(v)">
+                <!--              :class="{ disabled: getArtAasmState(v) != 'online' }"-->
                 Transfer
             </div>
         </div>
@@ -193,12 +190,20 @@ export default {
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
+    @media screen and (max-width: 970px) {
+        min-height: unset;
+        flex-direction: column;
+    }
 }
 .art-item {
     float: left;
     width: 30%;
     margin-right: 5%;
     margin-bottom: 35px;
+    @media screen and (max-width: 970px) {
+        width: 90%;
+        margin-left: 5%;
+    }
 }
 .art-item:nth-child(3n) {
     margin-right: 0;
@@ -298,6 +303,10 @@ export default {
     min-height: 18px;
 }
 .action {
+    @media screen and (max-width: 970px) {
+        float: left;
+        margin-top: 5px;
+    }
     border: 2px solid #020202;
     font-size: 16px;
     margin-top: 20px;
@@ -324,6 +333,9 @@ export default {
 }
 
 .tag {
+    @media screen and (max-width: 970px) {
+        padding: 2px;
+    }
     border: 2px solid #c3c3c3;
     font-size: 14px;
     font-weight: 400;
@@ -337,6 +349,9 @@ export default {
 }
 
 .price {
+    span {
+        color: red;
+    }
     font-size: 17px;
     font-weight: 600;
     text-align: left;

@@ -199,7 +199,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .create-sell {
+    @media screen and (max-width: 970px) {
+        margin-right: 5px;
+        flex: 1;
+    }
     > button {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            padding: 4px;
+            border: 2px solid #020202;
+            margin-bottom: 5px;
+            width: 100%;
+        }
         cursor: pointer;
         border: 3px solid #020202;
         font-size: 20px;
@@ -222,6 +233,9 @@ export default {
     padding-bottom: 10px;
 }
 .dialog-content {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
     text-align: left;
     letter-spacing: 0px;
@@ -232,16 +246,25 @@ export default {
         margin-bottom: 30px;
     }
     .price {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 25px;
     }
     .number {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         font-size: 24px;
         color: #c61e1e;
     }
     .desc {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
@@ -299,6 +322,11 @@ export default {
         }
     }
     button.submit-button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;

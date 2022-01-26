@@ -121,15 +121,26 @@ export default {
 </script>
 <style lang="scss" scoped>
 .buy {
+    @media screen and (max-width: 970px) {
+        margin-right: 5px;
+        flex: 1;
+    }
     > button {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            padding: 4px;
+            border: 2px solid #020202;
+            margin-bottom: 5px;
+            width: 100%;
+        }
         cursor: pointer;
         border: 3px solid #020202;
         font-size: 20px;
         font-weight: bold;
         text-align: center;
         color: #020202;
-        letter-spacing: 0px;
-        padding: 17px 0px;
+        letter-spacing: 0;
+        padding: 17px 0;
         width: 260px;
         background: transparent;
     }
@@ -144,26 +155,44 @@ export default {
     padding-bottom: 10px;
 }
 .dialog-content {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
-    text-align: left;
     letter-spacing: 0px;
     text-align: center;
     color: #020202;
     .title {
         font-weight: 600;
         margin-bottom: 30px;
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+        }
     }
     .price {
+        @media screen and (max-width: 970px) {
+            min-height: unset;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 25px;
     }
     .number {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         font-size: 24px;
         color: #c61e1e;
     }
     .desc {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            margin-bottom: 20px;
+            min-height: unset;
+        }
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
@@ -205,6 +234,11 @@ export default {
         color: #ffffff;
         letter-spacing: 0px;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
     }
     > button:disabled {
         cursor: not-allowed;

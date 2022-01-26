@@ -2,8 +2,6 @@
 node_modules
 /dist
 
-src/assets/images/temp
-
 
 # local env files
 .env.local

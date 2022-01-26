@@ -1,7 +1,12 @@
 /** * Created by Lay Hunt on 2021-02-24 17:15:08. */
 <template>
     <div class="carousel">
-        <el-carousel arrow="never" height="760px" :autoplay="false">
+        <el-carousel
+            arrow="never"
+            height="100%"
+            :autoplay="false"
+            class="top-carousel"
+        >
             <el-carousel-item>
                 <router-link to="/" class="item-container">
                     <AdaptiveImage
@@ -10,11 +15,13 @@
                         height="100%"
                         :url="bg1"
                     />
-                    <div class="info-body">
+                    <!-- <div class="info-body">
                         <div class="container">
-                            <h1 style="padding-left: 200px">Link Credit</h1>
+                            <h1 style="padding-left: 200px">
+                                Value Network For
+                            </h1>
                             <h1 style="text-align: right; padding-right: 200px">
-                                Assist <span class="tip">Originality</span>
+                                <span class="tip">Original</span> Fine Art
                             </h1>
                             <div class="input-body">
                                 <div class="input-box">
@@ -23,7 +30,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </router-link>
             </el-carousel-item>
             <el-carousel-item v-for="(item, index) in list" :key="index">
@@ -52,7 +59,8 @@
 <script>
 import { Carousel, CarouselItem } from "element-ui";
 import AdaptiveImage from "@/components/AdaptiveImage";
-import bg1 from "@/assets/images/temp/home-page1.jpg";
+import bg1 from "@/assets/images/temp/home-page1.jpeg";
+
 export default {
     name: "top",
     components: {
@@ -166,6 +174,12 @@ export default {
             justify-content: flex-end;
             margin-right: 150px;
         }
+    }
+}
+.top-carousel {
+    height: 760px;
+    @media screen and (max-width: 970px) {
+        height: 200px;
     }
 }
 </style>

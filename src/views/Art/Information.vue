@@ -61,8 +61,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 .infomation {
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     margin-bottom: 180px;
     > .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 30px;
+            font-size: 24px;
+            margin-left: 5%;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -73,7 +82,17 @@ export default {
     .information-body {
         display: flex;
         justify-content: center;
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            flex-direction: column;
+        }
         .img-container {
+            @media screen and (max-width: 970px) {
+                //width: 100%;
+                //margin: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
             margin-right: 100px;
             width: 320px;
             height: 320px;
@@ -105,7 +124,14 @@ export default {
         }
 
         .art-information {
+            @media screen and (max-width: 970px) {
+                margin-left: 5%;
+            }
             .title {
+                @media screen and (max-width: 970px) {
+                    font-size: 20px;
+                    margin-bottom: 10px;
+                }
                 font-size: 30px;
                 font-weight: 600;
                 text-align: left;
@@ -117,6 +143,10 @@ export default {
             .size,
             .type,
             .date {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                    margin-bottom: 0;
+                }
                 font-size: 22px;
                 font-weight: 400;
                 text-align: left;

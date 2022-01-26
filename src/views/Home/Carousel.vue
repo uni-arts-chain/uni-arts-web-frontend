@@ -128,6 +128,7 @@ export default {
             };
             let curTime = new Date().getTime() / 1000;
             let time = "";
+            console.log(curTime, item.start_at, item.end_at);
             if (curTime < parseInt(item.start_at)) {
                 time = item.start_at;
                 obj.timeWorkId = setInterval(() => {
@@ -184,8 +185,20 @@ export default {
         bottom: 10px;
     }
 }
+::v-deep .el-carousel__container {
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        height: unset !important;
+    }
+}
 
 .item-container {
+    @media screen and (max-width: 970px) {
+        width: unset;
+        height: unset;
+        border: 3px solid black;
+        border-radius: 8px;
+    }
     width: 100%;
     height: 100%;
     display: block;
@@ -202,6 +215,11 @@ export default {
 }
 
 .el-carousel__item {
+    @media screen and (max-width: 970px) {
+        width: unset;
+        height: unset;
+        position: relative;
+    }
     height: 100%;
     width: 100%;
     .info-body {
@@ -215,6 +233,10 @@ export default {
         align-items: center;
         justify-content: center;
         > div {
+            @media screen and (max-width: 970px) {
+                flex: 1;
+                font-size: 16px;
+            }
             font-family: "Broadway";
             font-size: 30px;
             font-weight: 400;
@@ -224,6 +246,11 @@ export default {
         }
 
         .topic {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0;
+                font-size: 16px;
+                line-height: 40px;
+            }
             font-size: 24px;
             font-family: "Broadway";
             font-weight: 400;
@@ -239,6 +266,12 @@ export default {
         }
 
         .time {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0;
+                line-height: 40px;
+                flex-direction: column;
+                font-size: 16px;
+            }
             color: white;
             font-size: 22px;
             font-family: "Broadway";
@@ -251,6 +284,13 @@ export default {
             margin-bottom: 30px;
         }
         .time-parse {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0;
+                margin-left: 0;
+                max-width: 93%;
+                line-height: 30px;
+                height: 30px;
+            }
             font-family: "Broadway";
             display: flex;
             align-items: center;
@@ -259,6 +299,12 @@ export default {
             .hour,
             .minute,
             .second {
+                @media screen and (max-width: 970px) {
+                    font-size: 16px;
+                    line-height: 30px;
+                    height: 100%;
+                    width: auto;
+                }
                 width: 54px;
                 height: 37px;
                 font-size: 22px;
@@ -278,6 +324,10 @@ export default {
             }
         }
         .date {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0;
+                font-size: 16px;
+            }
             font-size: 18px;
             font-weight: 400;
             font-family: "PingFang SC Regular, PingFang SC Regular-Regular";
@@ -295,6 +345,9 @@ export default {
             }
         }
         .enter {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0;
+            }
             font-size: 18px;
             font-family: PingFang SC Semibold, PingFang SC Semibold-Semibold;
             font-weight: 600;

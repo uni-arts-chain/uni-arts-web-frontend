@@ -43,14 +43,24 @@ export default {
     justify-content: space-between;
 }
 .card {
+    @media screen and (max-width: 970px) {
+        width: 90%;
+        margin: 0 5%;
+        border: 2px solid black;
+        border-radius: 8px;
+        height: unset;
+    }
     width: 30%;
     height: 364px;
-    box-shadow: 0px 0px 30px 0px #ddd;
+    box-shadow: 0 0 30px 0 #ddd;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     .avatar {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+        }
         width: 120px;
         height: 120px;
         overflow: hidden;
@@ -62,6 +72,9 @@ export default {
         border-color: transparent;
     }
     .name {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+        }
         margin-top: 50px;
         font-size: 22px;
         font-weight: 600;
@@ -74,6 +87,9 @@ export default {
         text-transform: uppercase;
     }
     > .desc {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+        }
         margin-top: 29px;
         font-size: 14px;
         font-weight: 400;

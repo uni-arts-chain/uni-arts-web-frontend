@@ -185,11 +185,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .banner {
+    @media screen and (max-width: 970px) {
+        height: unset;
+    }
     height: 469px;
     width: 100%;
     margin-top: 40px;
     position: relative;
     .info-body {
+        @media screen and (max-width: 970px) {
+            width: 300px;
+            height: 100px;
+        }
         position: absolute;
         width: 384px;
         height: 150px;
@@ -202,6 +209,9 @@ export default {
         align-items: center;
         justify-content: center;
         > div {
+            @media screen and (max-width: 970px) {
+                font-size: 15px;
+            }
             font-family: "Broadway";
             font-size: 20px;
             font-weight: 400;
@@ -212,6 +222,10 @@ export default {
     }
 }
 .title {
+    @media screen and (max-width: 970px) {
+        font-size: 24px;
+        margin-top: 0px;
+    }
     margin-top: 98px;
     font-size: 39px;
     font-family: "Broadway";
@@ -223,9 +237,18 @@ export default {
     text-transform: uppercase;
 }
 .date {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 0;
+        margin-top: 0px;
+    }
     margin-top: 50px;
     margin-bottom: 72px;
     .date-time {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+            line-height: 30px;
+            margin-bottom: 0;
+        }
         font-size: 28px;
         font-family: "Broadway";
         font-weight: 400;
@@ -236,6 +259,10 @@ export default {
         margin-bottom: 10px;
     }
     .time {
+        @media screen and (max-width: 970px) {
+            flex-direction: column;
+            font-size: 20px;
+        }
         color: #c61e1e;
         font-size: 30px;
         font-family: "Broadway";
@@ -255,6 +282,12 @@ export default {
         .hour,
         .minute,
         .second {
+            @media screen and (max-width: 970px) {
+                flex-direction: column;
+                font-size: 20px;
+                padding: 0;
+                margin: 0 5px;
+            }
             width: 76px;
             height: 47px;
             font-size: 28px;
@@ -274,17 +307,33 @@ export default {
     }
 }
 .content {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 10px;
+    }
     margin-bottom: 120px;
     .content-list {
+        @media screen and (max-width: 970px) {
+            min-height: 0;
+        }
         min-height: 300px;
     }
 }
 .entrance {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 10px;
+    }
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 102px;
     a {
+        @media screen and (max-width: 970px) {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            min-width: 50%;
+            height: 40px;
+            font-size: 17px;
+        }
         display: flex;
         align-items: center;
         justify-content: center;

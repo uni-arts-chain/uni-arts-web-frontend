@@ -246,6 +246,8 @@ export default {
     padding-bottom: 10px;
 }
 .dialog-content {
+    @media screen and (max-width: 970px) {
+    }
     font-size: 26px;
     text-align: left;
     letter-spacing: 0px;

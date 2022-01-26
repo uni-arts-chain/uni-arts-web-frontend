@@ -82,13 +82,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 .index {
+    @media screen and (max-width: 970px) {
+        padding-top: 0px;
+        margin-top: 10px;
+    }
     margin-bottom: 180px;
     padding-top: 35px;
     .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
-        text-align: left;
+        text-align: center;
         text-transform: uppercase;
         letter-spacing: 0px;
         margin-bottom: 50px;

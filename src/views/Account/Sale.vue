@@ -86,5 +86,8 @@ export default {
 .sale {
     padding-left: 10%;
     padding-top: 40px;
+    @media screen and (max-width: 970px) {
+        padding: 0 !important;
+    }
 }
 </style>

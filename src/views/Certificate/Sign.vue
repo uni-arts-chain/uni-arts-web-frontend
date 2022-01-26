@@ -219,7 +219,15 @@ export default {
 <style lang="scss" scoped>
 .sign-item {
     margin-top: 109px;
+    @media screen and (max-width: 970px) {
+        margin-top: 30px;
+        margin-left: 5%;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
@@ -232,6 +240,9 @@ export default {
     .content {
         text-align: left;
         overflow: hidden;
+        @media screen and (max-width: 970px) {
+            text-align: center;
+        }
         .address {
             font-size: 26px;
             font-weight: 400;
@@ -240,6 +251,12 @@ export default {
             letter-spacing: 0px;
         }
         .item {
+            @media screen and (max-width: 970px) {
+                margin-left: auto;
+                margin-right: auto;
+                float: unset;
+                margin-bottom: 25px;
+            }
             /* display: inline-block; */
             float: left;
             width: 250px;
@@ -325,19 +342,24 @@ export default {
         }
     }
     button.apply {
+        @media screen and (max-width: 970px) {
+            width: 50%;
+            height: 50px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
         display: block;
         font-size: 26px;
         font-weight: 600;
         text-align: center;
         color: #020202;
-        letter-spacing: 0px;
+        letter-spacing: 0;
         border: 3px solid #020202;
         width: 381px;
         height: 82px;
         cursor: pointer;
-        margin: 0 auto;
-        margin-top: 100px;
-        margin-bottom: 100px;
+        margin: 100px auto;
         background-color: transparent;
     }
 }

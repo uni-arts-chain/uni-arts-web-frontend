@@ -99,6 +99,11 @@ export default {
     display: flex;
     width: 360px;
     .box-boder {
+        @media screen and (max-width: 970px) {
+            height: 200px;
+            width: 200px;
+            margin-right: unset;
+        }
         width: 360px;
         max-width: 100%;
         max-height: 100%;

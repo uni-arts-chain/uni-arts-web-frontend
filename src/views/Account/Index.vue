@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="menu-container">
+                <div class="menu-container pc">
                     <ul class="menu">
                         <li>
                             <router-link to="/account/profile"
@@ -242,20 +242,38 @@ export default {
 .index {
     padding-top: 80px;
     padding-bottom: 80px;
+    @media screen and (max-width: 970px) {
+        padding-top: 0px;
+        padding-bottom: 40px;
+    }
 }
 .container {
     display: flex;
     justify-content: space-between;
+    @media screen and (max-width: 970px) {
+        flex-direction: column;
+    }
 }
 .header {
     display: flex;
     flex-direction: column;
     width: calc(100% - 230px);
+    @media screen and (max-width: 970px) {
+        width: 100%;
+    }
     .option {
         display: flex;
         align-items: center;
         justify-content: center;
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+            justify-content: space-around;
+        }
         .option-title {
+            @media screen and (max-width: 970px) {
+                font-size: 16px;
+                margin: 0;
+            }
             font-size: 20px;
             font-weight: 400;
             letter-spacing: 0px;
@@ -314,6 +332,9 @@ export default {
     width: 230px;
     display: flex;
     flex-direction: column;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+    }
     .menu {
         width: 100%;
         display: flex;
@@ -326,6 +347,9 @@ export default {
             font-weight: 400;
             letter-spacing: 0px;
             margin-bottom: 51px;
+            @media screen and (max-width: 970px) {
+                margin-bottom: 25px;
+            }
         }
     }
     .profile {
@@ -342,11 +366,17 @@ export default {
             margin-right: 40px;
             margin-left: 30px;
             margin-bottom: 41px;
+            @media screen and (max-width: 970px) {
+                margin-bottom: 5px;
+            }
         }
         .profile-info {
             display: flex;
             flex-direction: column;
             .name {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                }
                 font-size: 22px;
                 font-weight: 600;
                 letter-spacing: 0px;
@@ -358,6 +388,9 @@ export default {
                 white-space: nowrap;
             }
             .score {
+                @media screen and (max-width: 970px) {
+                    font-size: 17px;
+                }
                 font-size: 22px;
                 font-weight: 400;
                 letter-spacing: 0px;
@@ -366,6 +399,9 @@ export default {
                 align-items: center;
             }
             .balance {
+                @media screen and (max-width: 970px) {
+                    font-size: 15px;
+                }
                 font-size: 20px;
                 font-weight: 400;
                 letter-spacing: 0px;

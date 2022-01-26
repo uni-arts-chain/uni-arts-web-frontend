@@ -57,7 +57,16 @@ export default {
 <style lang="scss" scoped>
 .transaction-info {
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 30px;
+            font-size: 24px;
+            margin-left: 5%;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -66,12 +75,22 @@ export default {
         margin-bottom: 110px;
     }
     .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 10px;
+        }
         margin-bottom: 70px;
     }
     .transaction-body {
+        width: 90%;
+        margin: 0 5%;
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
         .bid-title {
+            @media screen and (max-width: 970px) {
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
             font-size: 22px;
             font-weight: 600;
             text-align: left;
@@ -80,12 +99,21 @@ export default {
         }
         .ul {
             li {
+                @media screen and (max-width: 970px) {
+                    font-size: 15px;
+                    flex-direction: column;
+                }
                 font-size: 18px;
                 font-weight: 400;
                 text-align: left;
                 margin-bottom: 25px;
                 color: #020202;
                 display: flex;
+                span {
+                    @media screen and (max-width: 970px) {
+                        width: 100% !important;
+                    }
+                }
             }
         }
     }

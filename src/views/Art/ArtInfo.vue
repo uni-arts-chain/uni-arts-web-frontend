@@ -3,11 +3,11 @@
     <div class="info">
         <div class="title">{{ art.name }}</div>
         <div class="price">
-            {{ art.price ? art.price : 0 }}
+            <span>{{ art.price ? art.price : 0 }}</span>
             {{ $store.getters["art/currencyCode"].toUpperCase() }}
         </div>
-        <div class="intro">
-            <div v-if="isSeparable && separableOrderInfo.total > 0">
+        <div class="intro" v-if="isSeparable && separableOrderInfo.total > 0">
+            <div>
                 On-sale:
                 <span style="font-weight: 500"
                     >{{ separableOrderInfo.total }} /
@@ -61,14 +61,13 @@
         <div class="signature" style="min-height: 28px">
             Number of signatures: {{ signatureList.length }}
         </div>
-        <div class="royalty">
-            <span v-if="art.has_royalty"
-                >Royalty: {{ percentFormat(art.royalty) }}%</span
-            >
-            <span v-if="art.has_royalty"
-                >Royalty Date:
-                {{ art.royalty_expired_at | dateDayFormat }}</span
-            >
+        <div class="royalty" v-if="art.has_royalty">
+            <span v-if="art.has_royalty">
+                Royalty: {{ percentFormat(art.royalty) }}%
+            </span>
+            <span v-if="art.has_royalty">
+                Royalty Date:{{ art.royalty_expired_at | dateDayFormat }}
+            </span>
         </div>
         <div class="function" :class="{ separable: !isOwner && isSeparable }">
             <div class="action-item">
@@ -399,12 +398,24 @@ export default {
 </script>
 <style lang="scss" scoped>
 .info {
+    @media screen and (max-width: 970px) {
+        width: 90%;
+        margin-bottom: 0;
+        margin-left: 5%;
+        margin-right: 5%;
+        float: none;
+    }
     float: left;
     width: calc(100% - 620px - 50px);
     margin-left: 25px;
     text-align: left;
     margin-bottom: 51px;
     .title {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 24px;
+            margin-bottom: 0px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -415,6 +426,14 @@ export default {
     }
 
     .price {
+        span {
+            color: red;
+        }
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 19px;
+            margin-bottom: 0px;
+        }
         font-size: 24px;
         font-weight: 600;
         text-align: left;
@@ -423,23 +442,39 @@ export default {
     }
 
     .intro {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 15px;
+            margin-bottom: 15px;
+            margin-bottom: 0px;
+        }
         min-height: 23px;
         font-size: 20px;
         font-weight: 400;
         text-align: left;
-        letter-spacing: 0px;
+        letter-spacing: 0;
         margin-bottom: 65px;
     }
 
     .block-title {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 20px;
+            margin-bottom: 0px;
+        }
         font-size: 26px;
         font-weight: 600;
         text-align: left;
-        letter-spacing: 0px;
+        letter-spacing: 0;
         margin-bottom: 34px;
     }
 
     .address {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 15px;
+            margin-bottom: 0px;
+        }
         font-size: 20px;
         font-weight: 400;
         text-align: left;
@@ -482,6 +517,11 @@ export default {
 
     .signature,
     .royalty {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
         font-size: 20px;
         font-weight: 400;
         text-align: left;
@@ -506,16 +546,26 @@ export default {
         display: flex;
         align-items: center;
         margin-bottom: 35px;
+        @media screen and (max-width: 970px) {
+            width: calc(90% - 5px);
+            margin-bottom: 20px;
+        }
         .action-item {
             margin-right: 35px;
             display: flex;
             align-items: center;
             > img {
+                @media screen and (max-width: 970px) {
+                    width: 15px;
+                }
                 width: 20px;
                 margin-right: 10px;
                 cursor: pointer;
             }
             .action-text {
+                @media screen and (max-width: 970px) {
+                    font-size: 16px;
+                }
                 font-size: 17px;
             }
         }
@@ -523,6 +573,9 @@ export default {
 }
 
 .dialog-content {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
     text-align: left;
     letter-spacing: 0px;
@@ -533,16 +586,25 @@ export default {
         margin-bottom: 30px;
     }
     .price {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 25px;
     }
     .number {
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         font-size: 24px;
         color: #c61e1e;
     }
     .desc {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+        }
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
@@ -575,6 +637,11 @@ export default {
         margin-bottom: 25px;
     }
     > button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;
@@ -607,6 +674,14 @@ export default {
 .button-group {
     display: flex;
     justify-content: space-between;
+
+    @media screen and (max-width: 970px) {
+        justify-content: unset;
+        display: flex;
+        flex-wrap: unset;
+        flex-basis: unset;
+        flex-direction: row;
+    }
 }
 </style>
 

@@ -4,7 +4,7 @@
         <div class="banner-top">
             <Top />
         </div>
-        <div class="guide container">
+        <!-- <div class="guide container">
             <h2 class="title">How To use the product?</h2>
             <div class="guide-body">
                 <div class="guide-item">
@@ -34,11 +34,9 @@
                     </p>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="guide container">
-            <h2 class="title" style="text-transform: none; margin-bottom: 97px">
-                Time limited auction
-            </h2>
+            <h2 class="title2">Time limited auction</h2>
             <div class="guide-body">
                 <Carousel />
             </div>
@@ -142,6 +140,10 @@ export default {
 
 <style lang="scss" scoped>
 .banner-top {
+    @media screen and (max-width: 970px) {
+        height: unset;
+        margin-bottom: 20px;
+    }
     background: white;
     height: 760px;
     margin-bottom: 105px;
@@ -208,8 +210,33 @@ export default {
 .worklist,
 .recommendation,
 .authors {
+    @media screen and (max-width: 970px) {
+        padding-bottom: 20px;
+    }
     padding-bottom: 130px;
+    .title2 {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 27px;
+            font-size: 24px;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+        text-transform: none;
+        margin-bottom: 97px;
+        font-family: "Broadway";
+        font-size: 38px;
+        font-weight: 400;
+        text-align: left;
+        color: #020202;
+        letter-spacing: 2px;
+    }
     .title {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+            font-size: 24px;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
         font-family: "Broadway";
         font-size: 38px;
         font-weight: 400;
@@ -229,11 +256,20 @@ export default {
         text-transform: uppercase;
         margin-top: 93px;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+            padding: 10px 40px;
+            font-size: 16px;
+            border: 2px solid black;
+        }
     }
 }
 
 .guide {
     .guide-body {
+        @media screen and (max-width: 970px) {
+            margin: 0 5%;
+        }
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
@@ -299,12 +335,19 @@ export default {
         margin-bottom: 0;
     }
     .recommendation-body {
+        @media screen and (max-width: 970px) {
+            margin-top: 20px;
+        }
         margin-top: 150px;
     }
     .postmoder {
         margin-bottom: 57px;
         position: relative;
         .name-text {
+            @media screen and (max-width: 970px) {
+                top: 50%;
+                font-size: 20px;
+            }
             position: absolute;
             top: 130px;
             transform: translateY(-50%);
@@ -315,6 +358,11 @@ export default {
             color: white;
         }
         .bg {
+            @media screen and (max-width: 970px) {
+                margin: 0 5%;
+                width: 90%;
+                height: 80px;
+            }
             width: 100%;
             height: 250px;
             background-image: url(~@/assets/images/topic@3x.png);

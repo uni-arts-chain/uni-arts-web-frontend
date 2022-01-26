@@ -3,8 +3,8 @@
     <footer>
         <div class="container">
             <div class="bottom-logo">
-                <span class="logo">UniArts</span>
-                <span class="desc">@2019-2020 uniarts.me</span>
+                <span class="logo"></span>
+                <span class="desc">@2019-2021 uniarts.network</span>
             </div>
             <div class="bottom-community">
                 <div class="text">Community</div>
@@ -98,37 +98,73 @@ footer {
     align-items: center;
     justify-content: space-between;
     color: white;
+    @media screen and (max-width: 970px) {
+        flex-direction: column-reverse;
+        min-height: unset;
+    }
 }
 .bottom-logo {
-    width: 25%;
+    width: 28%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border-right: 1px solid white;
+    @media screen and (max-width: 970px) {
+        border-right: none;
+        width: 100%;
+    }
     .logo {
         font-family: "Broadway";
         font-size: 33px;
         font-weight: 400;
-        margin-bottom: 30px;
+        width: 302px;
+        height: 160px;
+        background-image: url(~@/assets/images/bottom-logo.png);
+        background-repeat: no-repeat;
+        background-size: 100%;
+        @media screen and (max-width: 970px) {
+            background-position: center;
+            background-size: 60%;
+            width: 100%;
+            height: 40px;
+        }
     }
     .desc {
         font-size: 17px;
         line-height: 30px;
+        @media screen and (max-width: 970px) {
+            font-size: 11px;
+        }
     }
 }
 .bottom-community {
+    @media screen and (max-width: 970px) {
+        padding-top: 20px;
+        width: 100%;
+        margin-left: 0;
+    }
     margin-left: 23px;
     .text {
         font-size: 23px;
         text-align: left;
         font-weight: 500;
         margin-bottom: 30px;
+        @media screen and (max-width: 970px) {
+            display: none;
+        }
     }
     .icons {
         display: flex;
         align-items: center;
+        @media screen and (max-width: 970px) {
+            justify-content: space-evenly;
+        }
         a {
+            @media screen and (max-width: 970px) {
+                font-size: 30px;
+                margin: 0 !important;
+            }
             display: block;
             font-size: 50px;
             margin: 0 7px;
@@ -137,6 +173,12 @@ footer {
     }
 }
 .bottom-nav {
+    @media screen and (max-width: 970px) {
+        display: none;
+        padding-top: 20px;
+        width: 90%;
+        text-align: center;
+    }
     width: 66%;
     display: flex;
     align-items: flex-start;
@@ -146,6 +188,9 @@ footer {
         width: 33%;
         display: block;
         text-align: right;
+        @media screen and (max-width: 970px) {
+            text-align: center;
+        }
         .title {
             display: inline-block;
             font-size: 18px;
@@ -153,10 +198,18 @@ footer {
             font-weight: 600;
             line-height: 30px;
             padding-bottom: 23px;
+            @media screen and (max-width: 970px) {
+                border-bottom: none;
+                min-width: unset;
+                text-align: center;
+            }
             border-bottom: 1px solid #cfb9b9;
             min-width: 137px;
         }
         li {
+            @media screen and (max-width: 970px) {
+                text-align: center;
+            }
             display: block;
             margin-top: 23px;
             text-align: right;

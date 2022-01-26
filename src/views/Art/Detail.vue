@@ -1,6 +1,6 @@
 /** * Created by Lay Hunt on 2021-04-15 19:39:54. */
 <template>
-    <div class="details">
+    <div class="details" v-if="isShow">
         <div class="title">Artwork Details</div>
         <div class="comment-content">
             <div class="item" v-if="art.img_detail_file1.url">
@@ -138,6 +138,15 @@ export default {
         Dialog,
     },
     computed: {
+        isShow() {
+            for (let i = 1; i <= 4; i++) {
+                let hasImg = this.art["img_detail_file" + i]?.url;
+                if (!hasImg) {
+                    return false;
+                }
+            }
+            return true;
+        },
         art() {
             return this.$store.state.art.art;
         },
@@ -165,7 +174,16 @@ export default {
 <style lang="scss" scoped>
 .details {
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            margin-left: 5%;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -177,12 +195,21 @@ export default {
         min-height: 100px;
     }
     .img-content {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            height: unset;
+        }
         width: 456px;
         height: 456px;
         cursor: pointer;
     }
     .item {
         display: flex;
+        @media screen and (max-width: 970px) {
+            display: block;
+            margin-bottom: 30px;
+            padding: 0 5%;
+        }
         align-items: center;
         justify-content: space-between;
         padding-bottom: 130px;
@@ -191,6 +218,12 @@ export default {
         padding: 0 70px;
     }
     .img-desc {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            max-width: 100%;
+            line-height: 20px;
+            letter-spacing: 0px;
+        }
         max-width: 489px;
         font-size: 24px;
         font-weight: 400;
@@ -200,6 +233,9 @@ export default {
         letter-spacing: 1px;
     }
     .xq {
+        @media screen and (max-width: 970px) {
+            display: none;
+        }
         position: absolute;
         height: 230px;
         z-index: -1;

@@ -73,6 +73,9 @@ export default {
 @import "@/assets/styles/index.scss";
 
 #app {
+    @media screen and (max-width: 970px) {
+        width: 100%;
+    }
     text-align: center;
     color: #020202;
     min-height: 100%;

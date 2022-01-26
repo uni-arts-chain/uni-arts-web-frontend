@@ -55,6 +55,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .alert-content {
+    @media screen and (max-width: 970px) {
+        padding: 2px 0;
+        width: unset;
+        margin: auto;
+        text-align: center;
+    }
     width: 100%;
     padding: 12px 16px;
     margin: 0;

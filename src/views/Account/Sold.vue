@@ -1,12 +1,15 @@
 /** * Created by Lay Hunt on 2020-12-14 14:12:54. */
 <template>
     <div class="purchase container">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/account' }"
-                >Profile</el-breadcrumb-item
-            >
-            <el-breadcrumb-item>Sold Order</el-breadcrumb-item>
-        </el-breadcrumb>
+        <div class="pc">
+            <el-breadcrumb separator-class="el-icon-arrow-right">
+                <el-breadcrumb-item :to="{ path: '/account' }"
+                    >Profile</el-breadcrumb-item
+                >
+                <el-breadcrumb-item>Sold Order</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="title">Sold Order</div>
         <Order v-loading="isLoading" type="sold" :list="list"></Order>
         <div class="pagenation" v-if="hasPrev || hasNext">
             <div
@@ -89,6 +92,26 @@ export default {
 </script>
 <style lang="scss" scoped>
 .purchase {
-    margin-top: 20px;
+    @media screen and (max-width: 970px) {
+        padding: 10px 0 10px;
+    }
+    padding: 70px 0 40px;
+    text-align: left;
+    > .title {
+        @media screen and (max-width: 970px) {
+            font-size: 24px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+        font-family: "Broadway";
+        font-size: 38px;
+        font-weight: 400;
+        text-align: center;
+        color: #020202;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 73px;
+        margin-top: 40px;
+    }
 }
 </style>

@@ -16,7 +16,7 @@
                         <span class="address">{{ v.item_hash }}</span>
                     </div>
                     <div class="price">
-                        {{ v.price }}
+                        <span>{{ v.price }}</span>
                         {{ $store.state.global.symbol.toUpperCase() }}
                     </div>
                     <div
@@ -319,22 +319,37 @@ export default {
 </script>
 <style lang="scss" scoped>
 .apply {
+    @media screen and (max-width: 970px) {
+        padding: 0;
+    }
     padding: 60px 0;
     > .title {
+        @media screen and (max-width: 970px) {
+            margin-top: 10px;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
         margin-top: 70px;
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
         line-height: 40px;
-        text-align: left;
+        text-align: center;
         letter-spacing: 0px;
         margin-bottom: 103px;
     }
 }
 
 .thumbnail {
+    @media screen and (max-width: 970px) {
+        display: flex;
+        flex-direction: column;
+    }
     overflow: hidden;
     .title {
+        @media screen and (max-width: 970px) {
+            font-size: 18px;
+        }
         text-transform: uppercase;
         font-size: 22px;
         font-weight: 600;
@@ -342,6 +357,11 @@ export default {
         letter-spacing: 0px;
     }
     .item {
+        @media screen and (max-width: 970px) {
+            float: unset;
+            width: 90%;
+            margin-left: 5%;
+        }
         float: left;
         width: 30%;
         margin-right: 5%;
@@ -380,6 +400,11 @@ export default {
     }
     .desc,
     .address-label {
+        @media screen and (max-width: 970px) {
+            font-size: 16px;
+            min-height: unset !important;
+            line-height: 20px;
+        }
         font-size: 18px;
         font-weight: 400;
         text-align: left;
@@ -388,6 +413,14 @@ export default {
         min-height: 35px;
     }
     .action {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+            padding: 4px;
+            border: 2px solid #020202;
+            height: unset;
+            width: 50%;
+            margin-top: 3px;
+        }
         width: 100%;
         border: 2px solid #020202;
         font-size: 16px;
@@ -419,6 +452,13 @@ export default {
     }
 
     .price {
+        @media screen and (max-width: 970px) {
+            margin-top: 0px;
+            margin-bottom: 0;
+        }
+        span {
+            color: red;
+        }
         font-size: 22px;
         font-weight: 600;
         text-align: left;
@@ -457,11 +497,17 @@ export default {
 }
 .thumbnail.group {
     .item {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 40px;
+        }
         margin-bottom: 115px;
     }
 }
 
 .auction {
+    @media screen and (max-width: 970px) {
+        font-size: 20px;
+    }
     font-size: 26px;
     letter-spacing: 0px;
     text-align: center;
@@ -471,26 +517,42 @@ export default {
         margin-bottom: 30px;
     }
     .price {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+        }
         font-size: 20px;
         font-weight: 400;
         min-height: 30px;
         margin-bottom: 35px;
     }
     .number {
-        font-size: 24px;
+        @media screen and (max-width: 970px) {
+            font-size: 20px;
+        }
         color: #c61e1e;
     }
     .note {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+        }
         font-size: 20px;
         margin-bottom: 25px;
     }
     .desc {
+        @media screen and (max-width: 970px) {
+            font-size: 15px;
+        }
         font-size: 20px;
         font-weight: 400;
         margin-bottom: 37px;
         min-height: 30px;
     }
     button {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 30px;
+            font-size: 16px;
+        }
         background: #020202;
         width: 307px;
         height: 75px;
@@ -524,16 +586,26 @@ export default {
         }
     }
     .el-form {
+        @media screen and (max-width: 970px) {
+            margin: 0 auto 20px;
+        }
         width: 450px;
-        margin: 0 auto;
-        margin-bottom: 60px;
+        margin: 0 auto 60px;
+        max-width: 100%;
     }
     .el-form-item {
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+        }
         margin-bottom: 30px;
         ::v-deep .el-form-item__content {
             text-align: left;
         }
         ::v-deep .el-form-item__label {
+            @media screen and (max-width: 970px) {
+                font-size: 16px;
+                line-height: 35px;
+            }
             font-size: 17px;
             font-weight: 400;
             line-height: 45px;
@@ -542,6 +614,9 @@ export default {
     .el-date-editor,
     .input-box {
         width: 100%;
+        ::v-deep input {
+            height: 35px;
+        }
     }
 }
 </style>

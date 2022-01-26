@@ -64,7 +64,17 @@ export default {
 .author-info {
     overflow: hidden;
     margin-bottom: 180px;
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        margin-bottom: 30px;
+    }
     > .title {
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            font-size: 24px;
+            margin-bottom: 30px;
+            margin-left: 5%;
+        }
         font-size: 48px;
         font-family: "Broadway";
         font-weight: 400;
@@ -73,6 +83,11 @@ export default {
         margin-bottom: 110px;
     }
     .author {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            float: unset;
+            border-right: unset;
+        }
         float: left;
         width: 500px;
         display: flex;
@@ -81,6 +96,9 @@ export default {
         justify-content: center;
         border-right: 1px solid #020202;
         .author-container {
+            @media screen and (max-width: 970px) {
+                margin-bottom: 0px;
+            }
             width: 103px;
             height: 103px;
             overflow: hidden;
@@ -104,6 +122,11 @@ export default {
         }
     }
     .author-intro-info {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            float: unset;
+            height: unset;
+        }
         float: left;
         width: calc(100% - 501px);
         padding-left: 103px;
@@ -113,6 +136,11 @@ export default {
         align-items: center;
         justify-content: center;
         .author-intro {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                font-size: 19px;
+                display: none;
+            }
             font-size: 24px;
             font-weight: 400;
             text-align: left;
@@ -123,6 +151,13 @@ export default {
             text-transform: uppercase;
         }
         .go-detail {
+            @media screen and (max-width: 970px) {
+                width: 100%;
+                font-size: 16px;
+                margin-left: -45%;
+                min-width: unset;
+                text-transform: unset;
+            }
             font-size: 24px;
             font-weight: 600;
             text-align: left;

@@ -99,25 +99,37 @@ export default {
     border-radius: 4px;
     position: relative;
     > img {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateY(-50%) translateX(-50%);
-        transition: opacity 0.3s ease;
-        opacity: 1;
+        @media screen and (min-width: 970px) {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%) translateX(-50%);
+            transition: opacity 0.3s ease;
+            opacity: 1;
+        }
     }
 
     > img.img-horizontal {
         width: 100%;
-        height: auto;
+        height: 100%;
     }
 
     > img.img-vertical {
         height: 100%;
         width: auto;
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            height: auto;
+        }
     }
 
     > img.img-origin {
+        @media screen and (max-width: 970px) {
+            width: 100%;
+            max-height: unset;
+            max-width: unset;
+            height: 100%;
+        }
         max-height: 100%;
         max-width: 100%;
     }

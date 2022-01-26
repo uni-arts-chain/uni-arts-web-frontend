@@ -37,11 +37,31 @@ body{
     height: 100%;
 }
 
+.mobile{
+    @media screen and (min-width: 970px) {
+        display: none;
+    }
+}
+.pc{
+    @media screen and (max-width: 970px) {
+        display: none;
+    }
+}
+
 .container {
+    @media screen and (max-width: 970px) {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
     width: 1200px;
     margin: 0 auto;
 }
 
 body #nprogress .bar{
     background: #c61e1e;
+}
+
+.el-dialog{
+    max-width: 95%;
 }

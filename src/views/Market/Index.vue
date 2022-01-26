@@ -332,6 +332,10 @@ export default {
 <style lang="scss" scoped>
 .index {
     padding-top: 60px;
+    @media screen and (max-width: 970px) {
+        padding-top: 0px;
+        margin-top: 0px;
+    }
 }
 .container {
     min-height: 100px;
@@ -342,12 +346,20 @@ h2.title {
     font-weight: 400;
     text-transform: uppercase;
     margin-bottom: 60px;
+    @media screen and (max-width: 970px) {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
 }
 .search {
     width: 100%;
     position: relative;
     text-align: left;
     margin-bottom: 60px;
+    @media screen and (max-width: 970px) {
+        margin-bottom: 15px;
+        text-align: center;
+    }
     > img {
         cursor: pointer;
         width: 34px;
@@ -356,9 +368,21 @@ h2.title {
         left: 840px;
         top: 50%;
         transform: translateY(-50%);
+        @media screen and (max-width: 970px) {
+            left: calc(89% - 15px);
+            width: 25px;
+            height: 25px;
+        }
     }
     .input {
         width: 900px;
+        @media screen and (max-width: 970px) {
+            width: 90%;
+            height: 34px;
+            margin-left: 5%;
+            margin-right: 5%;
+            font-size: 15px;
+        }
         height: 69px;
         font-size: 22px;
         ::v-deep input {
@@ -371,6 +395,12 @@ h2.title {
     flex-direction: column;
     .name {
         display: flex;
+        @media screen and (max-width: 970px) {
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            margin-left: 5%;
+            margin-right: 1%;
+        }
         justify-content: flex-start;
         align-items: center;
         margin-bottom: 40px;
@@ -378,10 +408,14 @@ h2.title {
     .name-item {
         font-size: 24px;
         font-weight: 600;
-        letter-spacing: 0px;
+        letter-spacing: 0;
         margin-right: 82px;
         color: #606060;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            margin: 0 4% 0 0;
+            font-size: 15px;
+        }
     }
     .name-item.active {
         color: black;
@@ -395,6 +429,11 @@ h2.title {
         flex-wrap: wrap;
         align-items: center;
         margin-bottom: 71px;
+        @media screen and (max-width: 970px) {
+            margin-bottom: 20px;
+            margin-left: 5%;
+            margin-right: 1%;
+        }
     }
     .catetory-item {
         border: 2px solid #606060;
@@ -408,6 +447,13 @@ h2.title {
         min-width: 150px;
         color: #606060;
         cursor: pointer;
+        @media screen and (max-width: 970px) {
+            margin-right: 4%;
+            margin-bottom: 5px;
+            padding: 3px;
+            min-width: unset;
+            font-size: 15px;
+        }
     }
     .catetory-item.active {
         color: black;
@@ -420,6 +466,9 @@ h2.title {
 }
 
 .content {
+    @media screen and (max-width: 970px) {
+        margin-bottom: 0px;
+    }
     margin-bottom: 100px;
     min-height: 100px;
 }

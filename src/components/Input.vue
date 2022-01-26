@@ -88,6 +88,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 input {
+    @media screen and (max-width: 970px) {
+        min-height: unset;
+    }
     min-height: 45px;
     height: 100%;
     border: 2px solid #020202;
@@ -97,6 +100,9 @@ input {
     font-size: 1em;
 }
 input.unit-input {
+    @media screen and (max-width: 970px) {
+        padding-right: unset;
+    }
     padding-right: 55px;
 }
 input:hover {
