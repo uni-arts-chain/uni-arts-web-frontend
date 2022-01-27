@@ -1,4 +1,4 @@
-FROM node as web_assets
+FROM node:16.13 as web_assets
 
 LABEL maintainer="lixiumiao@gmail.com"
 ENV LANG C.UTF-8
