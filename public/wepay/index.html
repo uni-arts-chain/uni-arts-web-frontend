@@ -147,20 +147,20 @@
     function BackMall() {
         if (os == "AndroidOS") {
             console.log("AndroidOS")
-            window.jsMethod.BackMall(1);
+            window.jsMethod.BackMall();
         } else if (os == "iOS"){
             console.log("iOS")
-            window.webkit.messageHandlers["BackMall"].postMessage(1);
+            window.webkit.messageHandlers["BackMall"].postMessage();
         }
     }
 
     function ViewFavorites() {
         if (os == "AndroidOS") {
             console.log("AndroidOS")
-            window.jsMethod.ViewFavorites(1);
+            window.jsMethod.ViewFavorites();
         } else if (os == "iOS"){
             console.log("iOS")
-            window.webkit.messageHandlers["ViewFavorites"].postMessage(1);
+            window.webkit.messageHandlers["ViewFavorites"].postMessage();
         }
     }
 
