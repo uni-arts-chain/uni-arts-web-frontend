@@ -150,7 +150,7 @@
             window.jsMethod.BackMall();
         } else if (os == "iOS"){
             console.log("iOS")
-            window.webkit.messageHandlers["BackMall"].postMessage();
+            window.webkit.messageHandlers["BackMall"].postMessage(1);
         }
     }
 
@@ -160,7 +160,7 @@
             window.jsMethod.ViewFavorites();
         } else if (os == "iOS"){
             console.log("iOS")
-            window.webkit.messageHandlers["ViewFavorites"].postMessage();
+            window.webkit.messageHandlers["ViewFavorites"].postMessage(1);
         }
     }
 
