@@ -78,7 +78,7 @@
             <div class="status-title">支付成功</div>
             <div class="button-groups">
                 <button class="back" onclick="BackMall()">返回商城</button>
-                <button class="view" onclick="ViewFavorites()">查看收藏</button>
+                <button class="view" onclick="ViewFavorites()">查看订单</button>
             </div>
         </div>
         <div class="content-body" id="status-fail">
@@ -86,7 +86,7 @@
             <div class="status-title">支付失败</div>
             <div class="button-groups">
                 <button class="back" onclick="BackMall()">返回商城</button>
-                <button class="view" onclick="ViewFavorites()">查看收藏</button>
+                <button class="view" onclick="ViewFavorites()">查看订单</button>
             </div>
         </div>
     </div>
@@ -157,10 +157,10 @@
     function ViewFavorites() {
         if (os == "AndroidOS") {
             console.log("AndroidOS")
-            window.jsMethod.ViewFavorites();
+            window.jsMethod.ViewOrders();
         } else if (os == "iOS"){
             console.log("iOS")
-            window.webkit.messageHandlers["ViewFavorites"].postMessage(1);
+            window.webkit.messageHandlers["ViewOrders"].postMessage(1);
         }
     }
 
